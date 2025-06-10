@@ -35,6 +35,14 @@ public class ArmoryManager : MonoBehaviour
     public void SelectSlot(GameObject Slot)
     {
         // Logic to select a slot in the armory
+    ;
+
+        if (currentSlot != null && currentSlot == Slot)
+        {
+            
+            DeselectSlot(); // If the same slot is clicked, deselect it
+            return;
+        }
         currentSlot = Slot;
         Slot.GetComponentInChildren<Image>().color = Slot.GetComponentInChildren<Button>().colors.selectedColor; // Change the color of the slot to indicate selection
         EventSystem.current.SetSelectedGameObject(Slot); // Set the selected GameObject in the EventSystem
@@ -45,10 +53,13 @@ public class ArmoryManager : MonoBehaviour
     /// </summary>
     public void DeselectSlot()
     {
-        // Logic to deselect the currently selected slot
-        currentSlot = null;
-        currentSlot.GetComponentInChildren<Image>().color = Color.black; // Reset the color of the slot to default
-        EventSystem.current.SetSelectedGameObject(null); // Clear the selected GameObject in the EventSystem
+        //Check if there is a currently selected slot
+        if (currentSlot != null)
+        {
+            currentSlot.GetComponentInChildren<Image>().color = Color.black; //Deselect the slot by changing its color back to black
+            EventSystem.current.SetSelectedGameObject(null); // Clear the selected GameObject and the current slot
+            currentSlot = null;
+        }
     }
 
     /// <summary>
@@ -68,6 +79,8 @@ public class ArmoryManager : MonoBehaviour
         {
             // Logic to select the weapon in the currently selected slot
             currentSlot.transform.GetComponent<Image>().sprite = Weapon.GetComponent<Image>().sprite; // Set the slot's image to the weapon's image
+
+            //currentSlot.GetComponentInChildren<Image>().color = Color.red; 
         }
     }
 }

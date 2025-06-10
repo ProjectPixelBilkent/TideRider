@@ -43,6 +43,10 @@ public class ArmoryManager : MonoBehaviour
             DeselectSlot(); // If the same slot is clicked, deselect it
             return;
         }
+        if(currentSlot != null && currentSlot != Slot)
+        {
+            DeselectSlot(); // Deselect the previously selected slot if it's different
+        }
         currentSlot = Slot;
         Slot.GetComponentInChildren<Image>().color = Slot.GetComponentInChildren<Button>().colors.selectedColor; // Change the color of the slot to indicate selection
         EventSystem.current.SetSelectedGameObject(Slot); // Set the selected GameObject in the EventSystem

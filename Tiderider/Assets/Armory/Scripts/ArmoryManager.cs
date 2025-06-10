@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+
+
 /// <summary>
 /// Singleton class for managing the armory UI in the game.
 /// </summary>
@@ -11,12 +13,15 @@ using UnityEngine.UI;
 /// </remarks>
 public class ArmoryManager : MonoBehaviour
 {
+
     public static ArmoryManager Instance { get; private set; }
     private GameObject currentSlot = null; // To keep track of the currently selected slot index
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+
+
         if (Instance == null)
         {
             Instance = this;
@@ -35,15 +40,15 @@ public class ArmoryManager : MonoBehaviour
     public void SelectSlot(GameObject Slot)
     {
         // Logic to select a slot in the armory
-    ;
+        ;
 
         if (currentSlot != null && currentSlot == Slot)
         {
-            
+
             DeselectSlot(); // If the same slot is clicked, deselect it
             return;
         }
-        if(currentSlot != null && currentSlot != Slot)
+        if (currentSlot != null && currentSlot != Slot)
         {
             DeselectSlot(); // Deselect the previously selected slot if it's different
         }
@@ -73,18 +78,22 @@ public class ArmoryManager : MonoBehaviour
     /// <todo>
     /// Implement logic to show the weapon's info card when no slot is selected.
     /// </todo>
-    public void SelectWeapon(GameObject Weapon)
+    public void SelectWeapon(Weapon selectedWeapon)
     {
+        if (selectedWeapon == null) return;
+
+
         if (currentSlot == null)
         {
-            // Show Info Card of the Weapon
+             //Show Info Card of the Weapon
         }
         else
         {
-            // Logic to select the weapon in the currently selected slot
-            currentSlot.transform.GetComponent<Image>().sprite = Weapon.GetComponent<Image>().sprite; // Set the slot's image to the weapon's image
-
-            //currentSlot.GetComponentInChildren<Image>().color = Color.red; 
+            // Put the selected weapon into the currently selected slot
+            currentSlot.GetComponent<Image>().sprite = selectedWeapon.weaponIcon;
+            
+            DeselectSlot();
         }
     }
+
 }

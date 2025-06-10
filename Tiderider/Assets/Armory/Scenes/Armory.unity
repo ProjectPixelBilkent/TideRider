@@ -405,6 +405,7 @@ GameObject:
   - component: {fileID: 146080936}
   - component: {fileID: 146080935}
   - component: {fileID: 146080937}
+  - component: {fileID: 146080938}
   m_Layer: 5
   m_Name: Weapon
   m_TagString: Untagged
@@ -518,13 +519,30 @@ MonoBehaviour:
         m_MethodName: SelectWeapon
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 146080933}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 146080938}
+          m_ObjectArgumentAssemblyTypeName: Weapon, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &146080938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 146080933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7ebd7643f8f70148927253474e4ea7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponName: 
+  weaponColor: {r: 1, g: 1, b: 1, a: 1}
+  weaponIcon: {fileID: 0}
+  weaponDescription: 
+  weaponDamage: 0
 --- !u!1 &148713308
 GameObject:
   m_ObjectHideFlags: 0
@@ -616,6 +634,7 @@ GameObject:
   - component: {fileID: 191871159}
   - component: {fileID: 191871158}
   - component: {fileID: 191871160}
+  - component: {fileID: 191871161}
   m_Layer: 5
   m_Name: Weapon
   m_TagString: Untagged
@@ -729,13 +748,30 @@ MonoBehaviour:
         m_MethodName: SelectWeapon
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 191871156}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 191871161}
+          m_ObjectArgumentAssemblyTypeName: Weapon, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &191871161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 191871156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7ebd7643f8f70148927253474e4ea7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponName: 
+  weaponColor: {r: 1, g: 1, b: 1, a: 1}
+  weaponIcon: {fileID: 0}
+  weaponDescription: 
+  weaponDamage: 0
 --- !u!1 &249272299
 GameObject:
   m_ObjectHideFlags: 0
@@ -850,6 +886,7 @@ GameObject:
   - component: {fileID: 260739489}
   - component: {fileID: 260739488}
   - component: {fileID: 260739490}
+  - component: {fileID: 260739491}
   m_Layer: 5
   m_Name: Weapon
   m_TagString: Untagged
@@ -963,13 +1000,30 @@ MonoBehaviour:
         m_MethodName: SelectWeapon
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 260739486}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 260739491}
+          m_ObjectArgumentAssemblyTypeName: Weapon, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &260739491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 260739486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7ebd7643f8f70148927253474e4ea7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponName: 
+  weaponColor: {r: 1, g: 1, b: 1, a: 1}
+  weaponIcon: {fileID: 0}
+  weaponDescription: 
+  weaponDamage: 0
 --- !u!1 &276857880
 GameObject:
   m_ObjectHideFlags: 0
@@ -1350,6 +1404,7 @@ GameObject:
   - component: {fileID: 409018230}
   - component: {fileID: 409018229}
   - component: {fileID: 409018231}
+  - component: {fileID: 409018232}
   m_Layer: 5
   m_Name: Weapon
   m_TagString: Untagged
@@ -1463,13 +1518,30 @@ MonoBehaviour:
         m_MethodName: SelectWeapon
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 409018227}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 409018232}
+          m_ObjectArgumentAssemblyTypeName: Weapon, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &409018232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 409018227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7ebd7643f8f70148927253474e4ea7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponName: 
+  weaponColor: {r: 1, g: 1, b: 1, a: 1}
+  weaponIcon: {fileID: 0}
+  weaponDescription: 
+  weaponDamage: 0
 --- !u!1 &458243265
 GameObject:
   m_ObjectHideFlags: 0
@@ -2413,6 +2485,7 @@ GameObject:
   - component: {fileID: 775376156}
   - component: {fileID: 775376155}
   - component: {fileID: 775376157}
+  - component: {fileID: 775376158}
   m_Layer: 5
   m_Name: Weapon
   m_TagString: Untagged
@@ -2526,13 +2599,30 @@ MonoBehaviour:
         m_MethodName: SelectWeapon
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 775376153}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 775376158}
+          m_ObjectArgumentAssemblyTypeName: Weapon, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &775376158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 775376153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7ebd7643f8f70148927253474e4ea7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponName: 
+  weaponColor: {r: 1, g: 1, b: 1, a: 1}
+  weaponIcon: {fileID: 0}
+  weaponDescription: 
+  weaponDamage: 0
 --- !u!1 &779916405
 GameObject:
   m_ObjectHideFlags: 0
@@ -2793,6 +2883,7 @@ GameObject:
   - component: {fileID: 820749548}
   - component: {fileID: 820749547}
   - component: {fileID: 820749549}
+  - component: {fileID: 820749550}
   m_Layer: 5
   m_Name: Weapon
   m_TagString: Untagged
@@ -2906,13 +2997,30 @@ MonoBehaviour:
         m_MethodName: SelectWeapon
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 820749545}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 820749550}
+          m_ObjectArgumentAssemblyTypeName: Weapon, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &820749550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 820749545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7ebd7643f8f70148927253474e4ea7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponName: 
+  weaponColor: {r: 1, g: 1, b: 1, a: 1}
+  weaponIcon: {fileID: 0}
+  weaponDescription: 
+  weaponDamage: 0
 --- !u!1 &838298205
 GameObject:
   m_ObjectHideFlags: 0
@@ -3197,6 +3305,7 @@ GameObject:
   - component: {fileID: 1183398993}
   - component: {fileID: 1183398992}
   - component: {fileID: 1183398994}
+  - component: {fileID: 1183398995}
   m_Layer: 5
   m_Name: Weapon
   m_TagString: Untagged
@@ -3310,13 +3419,30 @@ MonoBehaviour:
         m_MethodName: SelectWeapon
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 1183398990}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 1183398995}
+          m_ObjectArgumentAssemblyTypeName: Weapon, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1183398995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1183398990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7ebd7643f8f70148927253474e4ea7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponName: 
+  weaponColor: {r: 1, g: 1, b: 1, a: 1}
+  weaponIcon: {fileID: 0}
+  weaponDescription: 
+  weaponDamage: 0
 --- !u!1 &1274330003
 GameObject:
   m_ObjectHideFlags: 0
@@ -3404,6 +3530,7 @@ GameObject:
   - component: {fileID: 1285042386}
   - component: {fileID: 1285042385}
   - component: {fileID: 1285042387}
+  - component: {fileID: 1285042388}
   m_Layer: 5
   m_Name: Weapon
   m_TagString: Untagged
@@ -3517,13 +3644,30 @@ MonoBehaviour:
         m_MethodName: SelectWeapon
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 1285042383}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 1285042388}
+          m_ObjectArgumentAssemblyTypeName: Weapon, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1285042388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1285042383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7ebd7643f8f70148927253474e4ea7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponName: 
+  weaponColor: {r: 0.94716984, g: 0, b: 0, a: 1}
+  weaponIcon: {fileID: 0}
+  weaponDescription: 
+  weaponDamage: 0
 --- !u!1 &1364734797
 GameObject:
   m_ObjectHideFlags: 0
@@ -3612,6 +3756,7 @@ GameObject:
   - component: {fileID: 1435858532}
   - component: {fileID: 1435858531}
   - component: {fileID: 1435858533}
+  - component: {fileID: 1435858534}
   m_Layer: 5
   m_Name: Weapon
   m_TagString: Untagged
@@ -3725,13 +3870,30 @@ MonoBehaviour:
         m_MethodName: SelectWeapon
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 1435858529}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 1435858534}
+          m_ObjectArgumentAssemblyTypeName: Weapon, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1435858534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1435858529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7ebd7643f8f70148927253474e4ea7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponName: 
+  weaponColor: {r: 1, g: 1, b: 1, a: 1}
+  weaponIcon: {fileID: 0}
+  weaponDescription: 
+  weaponDamage: 0
 --- !u!1 &1567527974
 GameObject:
   m_ObjectHideFlags: 0

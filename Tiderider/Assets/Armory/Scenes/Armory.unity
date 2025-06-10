@@ -406,6 +406,7 @@ GameObject:
   - component: {fileID: 146080935}
   - component: {fileID: 146080937}
   - component: {fileID: 146080938}
+  - component: {fileID: 146080939}
   m_Layer: 5
   m_Name: Weapon
   m_TagString: Untagged
@@ -543,6 +544,18 @@ MonoBehaviour:
   weaponIcon: {fileID: 0}
   weaponDescription: 
   weaponDamage: 0
+--- !u!114 &146080939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 146080933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f950f24c8f8303840b2d1ba3bcbfd2be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &148713308
 GameObject:
   m_ObjectHideFlags: 0
@@ -635,6 +648,7 @@ GameObject:
   - component: {fileID: 191871158}
   - component: {fileID: 191871160}
   - component: {fileID: 191871161}
+  - component: {fileID: 191871162}
   m_Layer: 5
   m_Name: Weapon
   m_TagString: Untagged
@@ -772,6 +786,18 @@ MonoBehaviour:
   weaponIcon: {fileID: 0}
   weaponDescription: 
   weaponDamage: 0
+--- !u!114 &191871162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 191871156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f950f24c8f8303840b2d1ba3bcbfd2be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &249272299
 GameObject:
   m_ObjectHideFlags: 0
@@ -887,6 +913,7 @@ GameObject:
   - component: {fileID: 260739488}
   - component: {fileID: 260739490}
   - component: {fileID: 260739491}
+  - component: {fileID: 260739492}
   m_Layer: 5
   m_Name: Weapon
   m_TagString: Untagged
@@ -1024,6 +1051,18 @@ MonoBehaviour:
   weaponIcon: {fileID: 0}
   weaponDescription: 
   weaponDamage: 0
+--- !u!114 &260739492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 260739486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f950f24c8f8303840b2d1ba3bcbfd2be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &276857880
 GameObject:
   m_ObjectHideFlags: 0
@@ -1405,6 +1444,7 @@ GameObject:
   - component: {fileID: 409018229}
   - component: {fileID: 409018231}
   - component: {fileID: 409018232}
+  - component: {fileID: 409018233}
   m_Layer: 5
   m_Name: Weapon
   m_TagString: Untagged
@@ -1542,6 +1582,18 @@ MonoBehaviour:
   weaponIcon: {fileID: 0}
   weaponDescription: 
   weaponDamage: 0
+--- !u!114 &409018233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 409018227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f950f24c8f8303840b2d1ba3bcbfd2be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &458243265
 GameObject:
   m_ObjectHideFlags: 0
@@ -2486,6 +2538,7 @@ GameObject:
   - component: {fileID: 775376155}
   - component: {fileID: 775376157}
   - component: {fileID: 775376158}
+  - component: {fileID: 775376159}
   m_Layer: 5
   m_Name: Weapon
   m_TagString: Untagged
@@ -2623,6 +2676,18 @@ MonoBehaviour:
   weaponIcon: {fileID: 0}
   weaponDescription: 
   weaponDamage: 0
+--- !u!114 &775376159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 775376153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f950f24c8f8303840b2d1ba3bcbfd2be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &779916405
 GameObject:
   m_ObjectHideFlags: 0
@@ -2884,6 +2949,7 @@ GameObject:
   - component: {fileID: 820749547}
   - component: {fileID: 820749549}
   - component: {fileID: 820749550}
+  - component: {fileID: 820749551}
   m_Layer: 5
   m_Name: Weapon
   m_TagString: Untagged
@@ -3017,10 +3083,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponName: 
-  weaponColor: {r: 1, g: 1, b: 1, a: 1}
+  weaponColor: {r: 0.28846562, g: 0.6981132, b: 0.29071257, a: 1}
   weaponIcon: {fileID: 0}
   weaponDescription: 
   weaponDamage: 0
+--- !u!114 &820749551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 820749545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f950f24c8f8303840b2d1ba3bcbfd2be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &838298205
 GameObject:
   m_ObjectHideFlags: 0
@@ -3306,6 +3384,7 @@ GameObject:
   - component: {fileID: 1183398992}
   - component: {fileID: 1183398994}
   - component: {fileID: 1183398995}
+  - component: {fileID: 1183398996}
   m_Layer: 5
   m_Name: Weapon
   m_TagString: Untagged
@@ -3443,6 +3522,18 @@ MonoBehaviour:
   weaponIcon: {fileID: 0}
   weaponDescription: 
   weaponDamage: 0
+--- !u!114 &1183398996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1183398990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f950f24c8f8303840b2d1ba3bcbfd2be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1274330003
 GameObject:
   m_ObjectHideFlags: 0
@@ -3531,6 +3622,7 @@ GameObject:
   - component: {fileID: 1285042385}
   - component: {fileID: 1285042387}
   - component: {fileID: 1285042388}
+  - component: {fileID: 1285042389}
   m_Layer: 5
   m_Name: Weapon
   m_TagString: Untagged
@@ -3668,6 +3760,18 @@ MonoBehaviour:
   weaponIcon: {fileID: 0}
   weaponDescription: 
   weaponDamage: 0
+--- !u!114 &1285042389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1285042383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f950f24c8f8303840b2d1ba3bcbfd2be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1364734797
 GameObject:
   m_ObjectHideFlags: 0
@@ -3757,6 +3861,7 @@ GameObject:
   - component: {fileID: 1435858531}
   - component: {fileID: 1435858533}
   - component: {fileID: 1435858534}
+  - component: {fileID: 1435858535}
   m_Layer: 5
   m_Name: Weapon
   m_TagString: Untagged
@@ -3894,6 +3999,18 @@ MonoBehaviour:
   weaponIcon: {fileID: 0}
   weaponDescription: 
   weaponDamage: 0
+--- !u!114 &1435858535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1435858529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f950f24c8f8303840b2d1ba3bcbfd2be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1567527974
 GameObject:
   m_ObjectHideFlags: 0

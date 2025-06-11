@@ -1,8 +1,13 @@
 using UnityEngine;
-using UnityEngine.UI; // Belki ileride UI elemanları eklersin diye
+using UnityEngine.UI; 
 
-// [System.Serializable] etiketini kaldırıyoruz.
-// Artık bu bir MonoBehaviour, yani bir Unity komponenti.
+
+/// <summary>
+/// Mother class for all weapons in the game.
+/// </summary>
+/// <remarks>
+/// Created by: Kaan Aydınlı
+/// </remarks>
 public class Weapon : MonoBehaviour
 {
     public string weaponName;

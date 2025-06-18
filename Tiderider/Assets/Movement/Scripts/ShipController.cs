@@ -7,7 +7,7 @@ using UnityEngine;
 /// <remarks>
 /// Maintained by: Mouse Tracking System
 /// </remarks>
-public class MouseTracker : MonoBehaviour
+public class ShipController : MonoBehaviour
 {
     [Header("Movement Settings")]
     [SerializeField] private float maxVelocity = 15f;

@@ -449,8 +449,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 727d5f728fd1a3f4b9c2d4e0ae1dae2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxVelocity: 10
+  maxVelocity: 15
   deceleration: 5
+  forwardSpeed: 20
+  maxRotationAngle: 90
+  rotationSmoothness: 5
   maxAccelerationDistance: 10
   minAccelerationDistance: 0.5
   accelerationCurve:

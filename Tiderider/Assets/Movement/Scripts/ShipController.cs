@@ -2,7 +2,7 @@
 
 /// <summary>
 /// Ship controller that follows mouse position with distance-based acceleration and momentum physics.
-/// The ship accelerates stronger when the mouse is farther away, creating realistic pull mechanics.
+/// The ship rotates based on the ratio between lateral movement speed and forward speed.
 /// </summary>
 /// <remarks>
 /// Maintained by: Mouse Tracking System
@@ -11,7 +11,12 @@ public class ShipController : MonoBehaviour
 {
     [Header("Movement Settings")]
     [SerializeField] private float maxVelocity = 15f;
-    [SerializeField] private float deceleration = 10f;
+    [SerializeField] private float deceleration = 5f;
+    
+    [Header("Forward Flight")]
+    [SerializeField] private float forwardSpeed = 20f;
+    [SerializeField] private float maxRotationAngle = 45f; // Maximum bank angle in degrees
+    [SerializeField] private float rotationSmoothness = 5f; // How smoothly the ship rotates
     
     [Header("Distance-Based Acceleration")]
     [SerializeField] private float maxAccelerationDistance = 10f;
@@ -19,29 +24,11 @@ public class ShipController : MonoBehaviour
     [SerializeField] private AnimationCurve accelerationCurve = AnimationCurve.Linear(0f, 0.1f, 1f, 1f);
     [SerializeField] private float accelerationMultiplier = 8f;
 
-    [Header("Rotation Settings")]
-    [SerializeField] private float minTurnSpeed = 90f; // degrees per second
-    [SerializeField] private float maxTurnSpeed = 360f; // degrees per second
-
-    [Header("Alignment Settings")]
-    [Tooltip("Distance to cursor at which the ship snaps to alignment.")]
-    [SerializeField] private float snapDistance = 0.3f; // Distance to snap to alignment
-
-    /// <summary>
-    /// Alignment mode to use when snapping near the cursor. Set in the Inspector.
-    /// </summary>
-    [Tooltip("Choose whether the ship snaps horizontally or vertically when close to the cursor.")]
-    [SerializeField] private AlignmentMode alignmentMode = AlignmentMode.Horizontal;
-
-    /// <summary>
-    /// Alignment modes for snapping the ship's upper part.
-    /// </summary>
-    private enum AlignmentMode { Horizontal, Vertical }
-
     private bool isTracking = false;
     private Camera mainCamera;
     private Vector3 targetWorldPosition;
     private Vector3 currentVelocity = Vector3.zero;
+    private float targetRotationZ = 0f;
     
     /// <summary>
     /// Initialize components and setup.
@@ -66,7 +53,6 @@ public class ShipController : MonoBehaviour
         
         HandleMovement();
         HandleRotation();
-        HandleAlignmentToggle();
     }
     
     /// <summary>
@@ -106,42 +92,31 @@ public class ShipController : MonoBehaviour
     /// </summary>
     private void HandleRotation()
     {
-        Vector3 directionToTarget = (targetWorldPosition - transform.position);
-        directionToTarget.z = 0f;
-        float distance = directionToTarget.magnitude;
-
-        if (directionToTarget.sqrMagnitude < 0.001f)
-            return;
-
-        // Hız büyüklüğüne göre dönüş hızı belirle
-        float speed = currentVelocity.magnitude;
-        float turnSpeed = Mathf.Lerp(minTurnSpeed, maxTurnSpeed, speed / maxVelocity);
-
-        // Hedef açıyı bul
-        float targetAngle = Mathf.Atan2(directionToTarget.y, directionToTarget.x) * Mathf.Rad2Deg - 90f;
-        float currentAngle = transform.eulerAngles.z;
-
-        if (distance < snapDistance)
+        // Calculate lateral speed (how fast we're moving toward cursor)
+        float lateralSpeed = currentVelocity.magnitude;
+        
+        // Calculate rotation based on ratio of lateral speed to forward speed
+        float speedRatio = lateralSpeed / forwardSpeed;
+        
+        // Determine rotation direction based on movement direction
+        Vector3 movementDirection = currentVelocity.normalized;
+        float rotationDirection = Vector3.Cross(Vector3.up, movementDirection).z;
+        
+        // Calculate target rotation angle
+        targetRotationZ = rotationDirection * speedRatio * maxRotationAngle;
+        
+        // If not moving, gradually return to level flight
+        if (lateralSpeed < 0.1f)
         {
-            if (alignmentMode == AlignmentMode.Horizontal)
-                targetAngle = Mathf.Abs(Mathf.DeltaAngle(targetAngle, 0f)) < Mathf.Abs(Mathf.DeltaAngle(targetAngle, 180f)) ? 0f : 180f;
-            else // Vertical
-                targetAngle = Mathf.Abs(Mathf.DeltaAngle(targetAngle, 90f)) < Mathf.Abs(Mathf.DeltaAngle(targetAngle, 270f)) ? 90f : 270f;
+            targetRotationZ = 0f;
         }
-
-        float newAngle = Mathf.MoveTowardsAngle(currentAngle, targetAngle, turnSpeed * Time.deltaTime);
-        transform.rotation = Quaternion.Euler(0f, 0f, newAngle);
-    }
-
-    /// <summary>
-    /// Toggles the alignment mode between horizontal and vertical when the user presses 'T'.
-    /// </summary>
-    private void HandleAlignmentToggle()
-    {
-        if (Input.GetKeyDown(KeyCode.T)) // Press 'T' to toggle
-        {
-            alignmentMode = alignmentMode == AlignmentMode.Horizontal ? AlignmentMode.Vertical : AlignmentMode.Horizontal;
-        }
+        
+        // Smoothly rotate toward target angle
+        float currentRotationZ = transform.eulerAngles.z;
+        if (currentRotationZ > 180f) currentRotationZ -= 360f; // Normalize to -180 to 180
+        
+        float newRotationZ = Mathf.LerpAngle(currentRotationZ, targetRotationZ, rotationSmoothness * Time.deltaTime);
+        transform.rotation = Quaternion.Euler(0f, 0f, newRotationZ);
     }
 
     /// <summary>

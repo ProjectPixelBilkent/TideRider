@@ -1,22 +1,33 @@
-using UnityEngine;
-using UnityEngine.UI; 
-
+﻿using UnityEngine;
+using System;
 
 /// <summary>
-/// Mother class for all weapons in the game.
+/// Serializable class representing a level of a weapon with its properties.
 /// </summary>
 /// <remarks>
-/// Created by: Kaan Aydınlı
+/// Created by: Işık Dönger
 /// </remarks>
-public class Weapon : MonoBehaviour
+[Serializable]
+public class WeaponLevel
+{
+    public float damage;
+    public float fireRate; // Time between shots in seconds
+    public float range; // Maximum range of the weapon in Unity distance units
+    public float HP; // Health points of the weapon
+    public float duration; // Duration for which the weapon can be used (e.g., for flamethrowers)
+    public GameObject projectilePrefab; // Prefab for the projectile fired by the weapon
+}
+
+/// <summary>
+/// ScriptableObject representing a weapon in the game.
+/// </summary>
+/// <remarks>
+/// Created by: Işık Dönger
+/// </remarks>
+[CreateAssetMenu(fileName = "Weapon", menuName = "Scriptable Objects/Weapon")]
+public class Weapon : ScriptableObject
 {
     public string weaponName;
-    public Color weaponColor = Color.white;
+    public WeaponLevel[] weaponLevels; // Array of levels for the weapon
     public Sprite weaponIcon;
-
-    public string weaponDescription;
-    
-    public int weaponDamage;
-
-
 }

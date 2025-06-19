@@ -13,15 +13,12 @@ using UnityEngine.UI;
 /// </remarks>
 public class ArmoryManager : MonoBehaviour
 {
-
     public static ArmoryManager Instance { get; private set; }
     private GameObject currentSlot = null; // To keep track of the currently selected slot index
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
-
         if (Instance == null)
         {
             Instance = this;
@@ -37,6 +34,9 @@ public class ArmoryManager : MonoBehaviour
     /// Selects the slot for weapons in the armory UI.
     /// </summary>
     /// <param name="Slot">Slot buttons parent frame</param>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
     public void SelectSlot(GameObject Slot)
     {
         // Logic to select a slot in the armory
@@ -60,6 +60,9 @@ public class ArmoryManager : MonoBehaviour
     /// <summary>
     /// Deselects the currently selected slot in the armory UI.
     /// </summary>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
     public void DeselectSlot()
     {
         //Check if there is a currently selected slot
@@ -78,10 +81,12 @@ public class ArmoryManager : MonoBehaviour
     /// <todo>
     /// Implement logic to show the weapon's info card when no slot is selected.
     /// </todo>
-    public void SelectWeapon(Weapon selectedWeapon)
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public void SelectWeapon()
     {
-        if (selectedWeapon == null) return;
-
+        //if (selectedWeapon == null) return;
 
         if (currentSlot == null)
         {
@@ -89,9 +94,7 @@ public class ArmoryManager : MonoBehaviour
         }
         else
         {
-            // Put the selected weapon into the currently selected slot
-            currentSlot.GetComponent<Image>().sprite = selectedWeapon.weaponIcon;
-            
+            // Put the selected weapon into the currently selected slot           
             DeselectSlot();
         }
     }

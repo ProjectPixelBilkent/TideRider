@@ -1,5 +1,11 @@
 using UnityEngine;
 
+/// <summary>
+/// Static class for managing game resources.
+/// </summary>
+/// <remarks>
+/// Created by: Ata Uzay Kuzey
+/// </remarks>
 public static class ResourceManager
 {
     private const string COIN_KEY = "CoinAmount";

@@ -29,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -47,6 +47,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
+  sprites:
+  - {fileID: -113242772494195844, guid: e0a19d70efbd5b84f8471e585a160d22, type: 3}
+  - {fileID: -7710698615371924945, guid: e0a19d70efbd5b84f8471e585a160d22, type: 3}
+  - {fileID: 684793518664104339, guid: e0a19d70efbd5b84f8471e585a160d22, type: 3}
+  - {fileID: 2986992680967063230, guid: e0a19d70efbd5b84f8471e585a160d22, type: 3}
+  - {fileID: -5809505325968387271, guid: e0a19d70efbd5b84f8471e585a160d22, type: 3}
+  - {fileID: 255076506691281890, guid: e0a19d70efbd5b84f8471e585a160d22, type: 3}
 --- !u!58 &6305738913952791274
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -82,7 +89,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.19504166
+  m_Radius: 0.5
 --- !u!212 &2505371606092800989
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -155,7 +155,12 @@ public class ShipController : MonoBehaviour
             currentVelocity = Vector3.zero;
         }
     }
-    
+
+    public void Bounce(Vector2 force)
+    {
+        currentVelocity = force;
+    }
+
     /// <summary>
     /// Apply velocity to ship position.
     /// </summary>

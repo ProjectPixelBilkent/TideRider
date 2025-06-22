@@ -1,5 +1,13 @@
+// ObstacleManager.cs
+
 using UnityEngine;
 
+/// <summary>
+/// Manages obstacle spawning at intervals, with random prefab selection and velocity assignment.
+/// </summary>
+/// <remarks>
+/// Maintained by: Obstacle System
+/// </remarks>
 public class ObstacleManager : MonoBehaviour
 {
     [Header("Obstacle Settings")]
@@ -11,11 +19,17 @@ public class ObstacleManager : MonoBehaviour
     private float timer = 0f;
     private Camera mainCamera;
 
+    /// <summary>
+    /// Initializes the main camera reference.
+    /// </summary>
     void Start()
     {
         mainCamera = Camera.main;
     }
 
+    /// <summary>
+    /// Handles obstacle spawn timing.
+    /// </summary>
     void Update()
     {
         timer += Time.deltaTime;
@@ -26,6 +40,9 @@ public class ObstacleManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Spawns a random obstacle prefab at a random X position above the screen.
+    /// </summary>
     void SpawnObstacle()
     {
         if (obstaclePrefabs == null || obstaclePrefabs.Length == 0)

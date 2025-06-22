@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Obstacle : MonoBehaviour
 {
-    [SerializeField] private float speed = 20f; // Match your ship's forwardSpeed
+    [SerializeField] private float speed = 5f; // Match your ship's forwardSpeed
     
     void Update()
     {

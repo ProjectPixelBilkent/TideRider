@@ -4,6 +4,119 @@ using static LocalBackupManager;
 public static class DataManager
 {
     /// <summary>
+    /// Increments the coin amount in game data.
+    /// </summary>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public static void IncrementCoinAmount(int amount)
+    {
+        GameData gameData = LoadGameData();
+        gameData.coinAmount += amount;
+        SaveGameData(gameData);
+    }
+
+    /// <summary>
+    /// Substracts from the coin amount in game data.
+    /// </summary>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public static void SubtractCoinAmount(int amount)
+    {
+        GameData gameData = LoadGameData();
+        gameData.coinAmount -= amount;
+        SaveGameData(gameData);
+    }
+
+    /// <summary>
+    /// Increments the canon level in weapon data.
+    /// </summary>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public static void IncrementCanonLevel()
+    {
+        WeaponData weaponData = LoadWeaponData();
+        weaponData.canonLevel++;
+        SaveWeaponData(weaponData);
+    }
+
+    /// <summary>
+    /// Increments the minigun level in weapon data.
+    /// </summary>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public static void IncrementMinigunLevel()
+    {
+        WeaponData weaponData = LoadWeaponData();
+        weaponData.minigunLevel++;
+        SaveWeaponData(weaponData);
+    }
+
+    /// <summary>
+    /// Increments the shield level in weapon data.
+    /// </summary>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public static void IncrementShieldLevel()
+    {
+        WeaponData weaponData = LoadWeaponData();
+        weaponData.shieldLevel++;
+        SaveWeaponData(weaponData);
+    }
+
+    /// <summary>
+    /// Increments the lasergun level in weapon data.
+    /// </summary>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public static void IncrementLasergunLevel()
+    {
+        WeaponData weaponData = LoadWeaponData();
+        weaponData.lasergunLevel++;
+        SaveWeaponData(weaponData);
+    }
+
+    /// <summary>
+    /// Increments the flamethrower level in weapon data.
+    /// </summary>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public static void IncrementFlamethrowerLevel()
+    {
+        WeaponData weaponData = LoadWeaponData();
+        weaponData.flamethrowerLevel++;
+        SaveWeaponData(weaponData);
+    }
+
+    /// <summary>
+    /// Increments the icegun level in weapon data.
+    /// </summary>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public static void IncrementIcegunLevel()
+    {
+        WeaponData weaponData = LoadWeaponData();
+        weaponData.icegunLevel++;
+        SaveWeaponData(weaponData);
+    }
+
+    /// <summary>
+    /// Loads the coin amount from the local backup.
+    /// </summary>
+    /// <returns>Coin Amount.</returns>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public static int GetCoinAmount() => LoadGameData().coinAmount;
+
+    /// <summary>
     /// Loads the current canon level from the local backup.
     /// </summary>
     /// <returns>Current Canon Level.</returns>
@@ -31,6 +144,15 @@ public static class DataManager
     public static int GetShieldLevel() => LoadWeaponData().shieldLevel;
 
     /// <summary>
+    /// Loads the current laser level from the local backup.
+    /// </summary>
+    /// <returns>Current Laser Level.</returns>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public static int GetLasergunLevel() => LoadWeaponData().lasergunLevel;
+
+    /// <summary>
     /// Loads the current flamethrower level from the local backup.
     /// </summary>
     /// <returns>Current Flamethrower Level.</returns>
@@ -47,13 +169,4 @@ public static class DataManager
     /// Maintained by: Işık Dönger
     /// </remarks>
     public static int GetIcegunLevel() => LoadWeaponData().icegunLevel;
-
-    /// <summary>
-    /// Loads the current laser level from the local backup.
-    /// </summary>
-    /// <returns>Current Laser Level.</returns>
-    /// <remarks>
-    /// Maintained by: Işık Dönger
-    /// </remarks>
-    public static int GetLaserLevel() => LoadWeaponData().laserLevel;
 }

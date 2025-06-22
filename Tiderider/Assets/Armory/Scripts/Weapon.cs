@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using Unity.VisualScripting;
 
 /// <summary>
 /// Serializable class representing a level of a weapon with its properties.
@@ -10,6 +11,7 @@ using System;
 [Serializable]
 public class WeaponLevel
 {
+    public int cost; // Cost to upgrade to this level
     public float damage;
     public float fireRate; // Time between shots in seconds
     public float range; // Maximum range of the weapon in Unity distance units

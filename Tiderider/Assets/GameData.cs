@@ -4,6 +4,18 @@ using System;
 using JetBrains.Annotations;
 
 /// <summary>
+/// Serializable class for managing game data.
+/// </summary>
+/// <remarks>
+/// Created by: Işık Dönger
+/// </remarks>
+[Serializable]
+public class GameData
+{
+    public int coinAmount;
+}
+
+/// <summary>
 /// Serializable class for managing weapon data.
 /// </summary>
 /// <remarks>
@@ -15,7 +27,7 @@ public class WeaponData
     public int canonLevel;
     public int minigunLevel;
     public int shieldLevel;
+    public int lasergunLevel;
     public int flamethrowerLevel;
     public int icegunLevel;
-    public int laserLevel;
 }

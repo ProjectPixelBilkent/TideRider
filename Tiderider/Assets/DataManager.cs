@@ -7,6 +7,7 @@ public static class DataManager
     /// Increments the coin amount in game data.
     /// </summary>
     /// <remarks>
+    /// Created by: Ata Uzay Kuzey
     /// Maintained by: Işık Dönger
     /// </remarks>
     public static void IncrementCoinAmount(int amount)
@@ -20,6 +21,7 @@ public static class DataManager
     /// Substracts from the coin amount in game data.
     /// </summary>
     /// <remarks>
+    /// Created by: Ata Uzay Kuzey
     /// Maintained by: Işık Dönger
     /// </remarks>
     public static void SubtractCoinAmount(int amount)
@@ -112,6 +114,7 @@ public static class DataManager
     /// </summary>
     /// <returns>Coin Amount.</returns>
     /// <remarks>
+    /// Created by: Ata Uzay Kuzey
     /// Maintained by: Işık Dönger
     /// </remarks>
     public static int GetCoinAmount() => LoadGameData().coinAmount;

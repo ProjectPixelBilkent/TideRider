@@ -30,6 +30,7 @@ public class WeaponLevel
 public class Weapon : ScriptableObject
 {
     public string weaponName;
+    public string weaponInfo; // Description of the weapon
     public WeaponLevel[] weaponLevels; // Array of levels for the weapon
     public Sprite weaponIcon;
 }

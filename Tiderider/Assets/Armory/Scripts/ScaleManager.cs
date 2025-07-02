@@ -16,6 +16,7 @@ public class ScaleManager : MonoBehaviour
     public RectTransform firstRow, secondRow;
     public RectTransform[] weaponSlots;
     public static float frameWidth, frameHeight;
+    private const float shipRatio = 0.65f, shipSlotOffset = 25f, shipSlotGap = 100f, armoryRowGap = 80f, armorySlotGap = 15f;
 
     private void Start()
     {
@@ -36,30 +37,31 @@ public class ScaleManager : MonoBehaviour
         topCanvas.anchoredPosition = new Vector2(0, -width / 2);
         bottomCanvas.sizeDelta = new Vector2(0, width);
         bottomCanvas.anchoredPosition = new Vector2(0, width / 2);
-        Ship.sizeDelta = new Vector2(Ship.rect.height * 0.65f, 0);
+        Ship.sizeDelta = new Vector2(Ship.rect.height * shipRatio, 0);
 
         foreach (RectTransform slot in shipSlots)
         {
-            slot.sizeDelta = new Vector2((Ship.rect.height - 250) / 3, (Ship.rect.height - 250) / 3);
+            float totalOffset = shipSlotOffset * 2 + shipSlotGap * 2;
+            slot.sizeDelta = new Vector2((Ship.rect.height - totalOffset) / 3, (Ship.rect.height - totalOffset) / 3);
 
             if (slot.transform.GetSiblingIndex() < 2)
             {
-                slot.anchoredPosition = new Vector2(slot.anchoredPosition.x, -slot.rect.height / 2 - 25);
+                slot.anchoredPosition = new Vector2(slot.anchoredPosition.x, -slot.rect.height / 2 - shipSlotOffset);
             }
             else if (slot.transform.GetSiblingIndex() > 3)
             {
-                slot.anchoredPosition = new Vector2(slot.anchoredPosition.x, slot.rect.height / 2 + 25);
+                slot.anchoredPosition = new Vector2(slot.anchoredPosition.x, slot.rect.height / 2 + shipSlotOffset);
             }
         }
 
-        firstRow.sizeDelta = new Vector2(0, (bottomCanvas.rect.height - 80) / 2);
+        firstRow.sizeDelta = new Vector2(0, (bottomCanvas.rect.height - armoryRowGap) / 2);
         firstRow.anchoredPosition = new Vector2(0, -firstRow.sizeDelta.y / 2);
-        secondRow.sizeDelta = new Vector2(0, (bottomCanvas.rect.height - 80) / 2);
+        secondRow.sizeDelta = new Vector2(0, (bottomCanvas.rect.height - armoryRowGap) / 2);
         secondRow.anchoredPosition = new Vector2(0, firstRow.sizeDelta.y / 2);
 
         foreach (RectTransform slot in weaponSlots)
         {
-            slot.sizeDelta = new Vector2((width - 30) / 3, 0);
+            slot.sizeDelta = new Vector2((width - armorySlotGap * 2) / 3, 0);
 
             if (slot.transform.GetSiblingIndex() == 0)
             {

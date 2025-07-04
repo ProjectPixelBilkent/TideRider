@@ -10,8 +10,8 @@
 public class ShipController : MonoBehaviour
 {
     [Header("Movement Settings")]
-    [SerializeField] private float maxVelocity = 15f;
-    [SerializeField] private float deceleration = 5f;
+    [SerializeField] public float maxVelocity = 15f;
+    [SerializeField] public float deceleration = 5f;
     
     [Header("Forward Flight")]
     [SerializeField] private float forwardSpeed = 20f;
@@ -24,10 +24,13 @@ public class ShipController : MonoBehaviour
     [SerializeField] private AnimationCurve accelerationCurve = AnimationCurve.Linear(0f, 0.1f, 1f, 1f);
     [SerializeField] private float accelerationMultiplier = 8f;
 
+    [Header("Ship Model")]
+    [SerializeField] private ShipModel model;
+
     private bool isTracking = false;
     private Camera mainCamera;
     private Vector3 targetWorldPosition;
-    private Vector3 currentVelocity = Vector3.zero;
+    public Vector3 currentVelocity = Vector3.zero;
     private float targetRotationZ = 0f;
     
     /// <summary>
@@ -35,6 +38,7 @@ public class ShipController : MonoBehaviour
     /// </summary>
     void Start()
     {
+        model.Restore();
         mainCamera = Camera.main;
         targetWorldPosition = transform.position;
     }
@@ -60,6 +64,11 @@ public class ShipController : MonoBehaviour
     /// </summary>
     private void HandleInput()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            model.Restore();
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             isTracking = true;

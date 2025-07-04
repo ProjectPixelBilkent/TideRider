@@ -20,7 +20,7 @@ public class Obstacle : MonoBehaviour
     /// <summary>
     /// Assigns a random sprite and updates collider to match.
     /// </summary>
-    void Start()
+    protected virtual void Start()
     {
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
         if (sprites != null && sprites.Length > 0 && sr != null)

@@ -16,6 +16,11 @@ public class CollisionController : MonoBehaviour
     [SerializeField] private float colorFlashDuration = 0.5f;
     [SerializeField] private Color flashColor = Color.white;
 
+
+    [Header("Ship Modal")]
+    [SerializeField] private ShipModel model;
+
+
     private ShipController shipController;
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
@@ -46,6 +51,7 @@ public class CollisionController : MonoBehaviour
             {
                 Vector2 bounceDir = (transform.position - collision.transform.position).normalized;
                 shipController.Bounce(bounceDir * bounceForce);
+                model.Decrement(10);
             }
 
             // Flash color

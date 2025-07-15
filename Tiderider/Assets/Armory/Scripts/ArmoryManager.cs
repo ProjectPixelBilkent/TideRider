@@ -18,10 +18,12 @@ public class ArmoryManager : MonoBehaviour
     public static ArmoryManager Instance { get; private set; }
     private GameObject armorySlot = null, weaponSlot = null; // To keep track of the currently selected slot index
     private Weapon selectedWeapon = null; // To keep track of the currently selected weapon
+    public Camera c1, c2;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        c2.enabled = false; // Disable the second camera at the start
         if (Instance == null)
         {
             Instance = this;
@@ -95,11 +97,13 @@ public class ArmoryManager : MonoBehaviour
             //Show Info Card of the Weapon
             if (weaponSlot == null)
             {
+                //Debug.Log("a");
                 weaponSlot = WeaponSlot; // Assign the selected weapon slot to the weapon slot variable
                 WeaponSlotManager.ExpandInfoCard(weaponSlot); // Expand the info card of the weapon
             }
             else if (weaponSlot != WeaponSlot)
             {
+                //Debug.Log("b");
                 DOTween.Sequence()
                 .AppendCallback(() => WeaponSlotManager.ShrinkInfoCard(weaponSlot))
                 .AppendInterval(0.5f) // Wait for shrink animation duration
@@ -110,8 +114,8 @@ public class ArmoryManager : MonoBehaviour
             }
             else
             {
-                WeaponSlotManager.ShrinkInfoCard(weaponSlot);
-                weaponSlot = null; // Clear the weapon slot variable
+                //Debug.Log("c");
+                DeselectWeapon(); // If the same weapon slot is clicked, deselect it
             }
         }
         else
@@ -120,6 +124,37 @@ public class ArmoryManager : MonoBehaviour
             selectedWeapon = WeaponSlot.GetComponent<WeaponSlotManager>().weapon; // Assign the selected weapon to the slot's manager
             armorySlot.GetComponent<Image>().sprite = selectedWeapon.weaponIcon; // Set the icon of the weapon in the slot
             DeselectSlot();
+            DeselectWeapon(); // Deselect the weapon slot after assigning the weapon
+        }
+    }
+
+    /// <summary>
+    /// Deselects the currently selected weapon slot in the armory UI.
+    /// </summary>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public void DeselectWeapon()
+    {
+        if (weaponSlot != null && weaponSlot != EventSystem.current.currentSelectedGameObject)
+        {
+            WeaponSlotManager.ShrinkInfoCard(weaponSlot); // Shrink the info card of the weapon
+            weaponSlot = null; // Clear the weapon slot variable
+        }
+    }
+
+    public void ChangeCamera()
+    {
+        Debug.Log("Changing camera view");
+        if (c1.enabled)
+        {
+            c1.enabled = false;
+            c2.enabled = true;
+        }
+        else
+        {
+            c1.enabled = true;
+            c2.enabled = false;
         }
     }
 }

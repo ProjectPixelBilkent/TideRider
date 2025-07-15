@@ -3,12 +3,14 @@ using System.Collections;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public class CentralUIController : MonoBehaviour
 {
     public static CentralUIController Instance { get; private set; }
 
     [Header("UI References")]
+    public RectTransform MainMenuCanvas, ArmoryCanvas, ShopCanvas;
     public CanvasGroup LevelMenu;
 
     private CanvasGroup _currentMenu;
@@ -62,16 +64,22 @@ public class CentralUIController : MonoBehaviour
 
     public void OpenArmory()
     {
-        SceneManager.LoadScene("Armory", LoadSceneMode.Single);
+        ArmoryCanvas.DOAnchorPosX(0f, 1f);
+        MainMenuCanvas.DOAnchorPosX(1080f, 1f);
+        ShopCanvas.DOAnchorPosX(2160f, 1f);
     }
 
     public void OpenMainMenu()
     {
-        SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+        ArmoryCanvas.DOAnchorPosX(-1080f, 1f);
+        MainMenuCanvas.DOAnchorPosX(0f, 1f);
+        ShopCanvas.DOAnchorPosX(1080f, 1f);
     }
 
     public void OpenShop()
     {
-        SceneManager.LoadScene("Shop", LoadSceneMode.Single);
+        ArmoryCanvas.DOAnchorPosX(-2160f, 1f);
+        MainMenuCanvas.DOAnchorPosX(-1080f, 1f);
+        ShopCanvas.DOAnchorPosX(0f, 1f);
     }
 }

@@ -160,6 +160,32 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -572,7 +598,25 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      RockPack384x384_0: 5788661207543383082
+      RockPack384x384_1: 4915686474784114967
+      RockPack384x384_10: 7196575523825741944
+      RockPack384x384_11: 8617577561198399632
+      RockPack384x384_12: 2451774875294540652
+      RockPack384x384_13: -7145822564284276109
+      RockPack384x384_14: 3570539674647970395
+      RockPack384x384_15: -1062159228532469405
+      RockPack384x384_16: -5043892923484725544
+      RockPack384x384_17: 952856246762690481
+      RockPack384x384_2: -1768234512546785264
+      RockPack384x384_3: -973362109679006513
+      RockPack384x384_4: 1437765169176078831
+      RockPack384x384_5: -6539708832699270577
+      RockPack384x384_6: 4424917819692545510
+      RockPack384x384_7: -61249809007537892
+      RockPack384x384_8: 4546361964806854493
+      RockPack384x384_9: 7236390547705194019
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System;
 using System.Reflection;
 using DG.Tweening;
+using TMPro;
 
 /// <summary>
 /// MonoBehaviour class for managing the weapon slots in the game.
@@ -13,12 +14,13 @@ using DG.Tweening;
 public class WeaponSlotManager : MonoBehaviour
 {
     public Weapon weapon;
-    private const float widthExpansion = 270f, heightExpansion = 350f; // Constants for the expansion of the weapon slot frame
+    private const float WIDTH_EXPANSION = 270f, HEIGHT_EXPANSION = 350f; // Constants for the expansion of the weapon slot frame
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        GetComponent<Image>().sprite = weapon.weaponIcon; // Set the icon of the weapon in the slot
+        transform.GetChild(0).GetComponent<TMP_Text>().text = weapon.weaponName; // Set the name of the weapon in the slot
+        transform.GetChild(2).GetComponent<Image>().sprite = weapon.weaponIcon; // Set the icon of the weapon in the slot
     }
 
     /// <summary>
@@ -46,13 +48,13 @@ public class WeaponSlotManager : MonoBehaviour
     public static void ExpandInfoCard(GameObject weaponSlot)
     {
         // Logic to animate the info card of the weapon
-        GameObject parentFrame = weaponSlot.transform.parent.gameObject; // Get the parent of the weapon slot
+        GameObject parentFrame = weaponSlot.transform.parent.gameObject, weaponDescription = weaponSlot.transform.GetChild(1).gameObject; // Get the parent of the weapon slot
         int slotIndex = parentFrame.transform.parent.gameObject.transform.GetSiblingIndex() * 3 + parentFrame.transform.GetSiblingIndex(); // Get the index of the slot in the parent
         GameObject slotRow = parentFrame.transform.parent.gameObject; // Get the row of slots
         RectTransform frameRect = parentFrame.GetComponent<RectTransform>(), weaponsPanel = slotRow.transform.parent.gameObject.GetComponent<RectTransform>(), rowRect = slotRow.GetComponent<RectTransform>();
         RectTransform firstSiblingFrame, secondSiblingFrame, firstRowRect, secondRowRect;
         Vector2 currentPos;
-        float newWidth = ScaleManager.frameWidth + widthExpansion; // New width for the frame
+        float newWidth = ScaleManager.frameWidth + WIDTH_EXPANSION; // New width for the frame
 
         switch (slotIndex)
         {
@@ -72,11 +74,11 @@ public class WeaponSlotManager : MonoBehaviour
                 secondSiblingFrame.anchorMin = new Vector2(1f, 0f);
                 secondSiblingFrame.anchorMax = new Vector2(1f, 1f); // Anchor the right slot to the right
                 secondSiblingFrame.position = currentPos; // Keep the position of the right slot
-                secondRowRect.DOAnchorPosY(secondRowRect.anchoredPosition.y - heightExpansion, 0.5f); // Move the second row of slots down
+                secondRowRect.DOAnchorPosY(secondRowRect.anchoredPosition.y - HEIGHT_EXPANSION, 0.5f); // Move the second row of slots down
                 DOTween.To(
                     () => rowRect.offsetMax,
                     x => rowRect.offsetMax = x,
-                    new Vector2(widthExpansion, rowRect.offsetMax.y),
+                    new Vector2(WIDTH_EXPANSION, rowRect.offsetMax.y),
                     0.5f
                 );
                 DOTween.To(
@@ -87,7 +89,7 @@ public class WeaponSlotManager : MonoBehaviour
                         frameRect.offsetMin = new Vector2(frameRect.offsetMin.x, x.y); // Set bottom
                         frameRect.offsetMax = new Vector2(frameRect.offsetMax.x, 0f); // Lock top
                     },
-                    new Vector2(newWidth, -heightExpansion),
+                    new Vector2(newWidth, -HEIGHT_EXPANSION),
                     0.5f
                 );
                 frameRect.DOAnchorPosX(newWidth / 2, 0.5f); // Move the selected slot to the left side
@@ -108,17 +110,17 @@ public class WeaponSlotManager : MonoBehaviour
                 secondSiblingFrame.anchorMin = new Vector2(1f, 0f);
                 secondSiblingFrame.anchorMax = new Vector2(1f, 1f); // Anchor the right slot to the right
                 secondSiblingFrame.position = currentPos; // Keep the position of the right slot
-                secondRowRect.DOAnchorPosY(secondRowRect.anchoredPosition.y - heightExpansion, 0.5f); // Move the second row of slots down
+                secondRowRect.DOAnchorPosY(secondRowRect.anchoredPosition.y - HEIGHT_EXPANSION, 0.5f); // Move the second row of slots down
                 DOTween.To(
                     () => rowRect.offsetMin,
                     x => rowRect.offsetMin = x,
-                    new Vector2(-widthExpansion / 2, rowRect.offsetMin.y),
+                    new Vector2(-WIDTH_EXPANSION / 2, rowRect.offsetMin.y),
                     0.5f
                 );
                 DOTween.To(
                     () => rowRect.offsetMax,
                     x => rowRect.offsetMax = x,
-                    new Vector2(widthExpansion / 2, rowRect.offsetMax.y),
+                    new Vector2(WIDTH_EXPANSION / 2, rowRect.offsetMax.y),
                     0.5f
                 );
                 DOTween.To(
@@ -129,7 +131,7 @@ public class WeaponSlotManager : MonoBehaviour
                         frameRect.offsetMin = new Vector2(frameRect.offsetMin.x, x.y); // Set bottom
                         frameRect.offsetMax = new Vector2(frameRect.offsetMax.x, 0f); // Lock top
                     },
-                    new Vector2(newWidth, -heightExpansion),
+                    new Vector2(newWidth, -HEIGHT_EXPANSION),
                     0.5f
                 );
                 break;
@@ -149,11 +151,11 @@ public class WeaponSlotManager : MonoBehaviour
                 frameRect.anchorMin = new Vector2(1f, 0f);
                 frameRect.anchorMax = new Vector2(1f, 1f); // Anchor the selected slot to the right
                 frameRect.position = currentPos; // Keep the position of the selected slot
-                secondRowRect.DOAnchorPosY(secondRowRect.anchoredPosition.y - heightExpansion, 0.5f); // Move the second row of slots down
+                secondRowRect.DOAnchorPosY(secondRowRect.anchoredPosition.y - HEIGHT_EXPANSION, 0.5f); // Move the second row of slots down
                 DOTween.To(
                     () => rowRect.offsetMin,
                     x => rowRect.offsetMin = x,
-                    new Vector2(-widthExpansion, rowRect.offsetMin.y),
+                    new Vector2(-WIDTH_EXPANSION, rowRect.offsetMin.y),
                     0.5f
                 );
                 DOTween.To(
@@ -164,7 +166,7 @@ public class WeaponSlotManager : MonoBehaviour
                         frameRect.offsetMin = new Vector2(frameRect.offsetMin.x, x.y); // Set bottom
                         frameRect.offsetMax = new Vector2(frameRect.offsetMax.x, 0f); // Lock top
                     },
-                    new Vector2(newWidth, -heightExpansion),
+                    new Vector2(newWidth, -HEIGHT_EXPANSION),
                     0.5f
                 );
                 frameRect.DOAnchorPosX(-newWidth / 2, 0.5f); // Move the selected slot to the right side
@@ -185,11 +187,11 @@ public class WeaponSlotManager : MonoBehaviour
                 secondSiblingFrame.anchorMin = new Vector2(1f, 0f);
                 secondSiblingFrame.anchorMax = new Vector2(1f, 1f); // Anchor the right slot to the right
                 secondSiblingFrame.position = currentPos; // Keep the position of the right slot
-                firstRowRect.DOAnchorPosY(firstRowRect.anchoredPosition.y + heightExpansion, 0.5f); // Move the first row of slots up
+                firstRowRect.DOAnchorPosY(firstRowRect.anchoredPosition.y + HEIGHT_EXPANSION, 0.5f); // Move the first row of slots up
                 DOTween.To(
                     () => rowRect.offsetMax,
                     x => rowRect.offsetMax = x,
-                    new Vector2(widthExpansion, rowRect.offsetMax.y),
+                    new Vector2(WIDTH_EXPANSION, rowRect.offsetMax.y),
                     0.5f
                 );
                 DOTween.To(
@@ -200,7 +202,7 @@ public class WeaponSlotManager : MonoBehaviour
                         frameRect.offsetMax = new Vector2(frameRect.offsetMax.x, x.y); // Set TOP
                         frameRect.offsetMin = new Vector2(frameRect.offsetMin.x, 0f); // Lock BOTTOM
                     },
-                    new Vector2(newWidth, heightExpansion),
+                    new Vector2(newWidth, HEIGHT_EXPANSION),
                     0.5f
                 );
                 frameRect.DOAnchorPosX(newWidth / 2, 0.5f); // Move the selected slot to the left side
@@ -221,17 +223,17 @@ public class WeaponSlotManager : MonoBehaviour
                 secondSiblingFrame.anchorMin = new Vector2(1f, 0f);
                 secondSiblingFrame.anchorMax = new Vector2(1f, 1f); // Anchor the right slot to the right
                 secondSiblingFrame.position = currentPos; // Keep the position of the right slot
-                firstRowRect.DOAnchorPosY(firstRowRect.anchoredPosition.y + heightExpansion, 0.5f); // Move the first row of slots up
+                firstRowRect.DOAnchorPosY(firstRowRect.anchoredPosition.y + HEIGHT_EXPANSION, 0.5f); // Move the first row of slots up
                 DOTween.To(
                     () => rowRect.offsetMin,
                     x => rowRect.offsetMin = x,
-                    new Vector2(-widthExpansion / 2, rowRect.offsetMin.y),
+                    new Vector2(-WIDTH_EXPANSION / 2, rowRect.offsetMin.y),
                     0.5f
                 );
                 DOTween.To(
                     () => rowRect.offsetMax,
                     x => rowRect.offsetMax = x,
-                    new Vector2(widthExpansion / 2, rowRect.offsetMax.y),
+                    new Vector2(WIDTH_EXPANSION / 2, rowRect.offsetMax.y),
                     0.5f
                 );
                 DOTween.To(
@@ -242,7 +244,7 @@ public class WeaponSlotManager : MonoBehaviour
                         frameRect.offsetMax = new Vector2(frameRect.offsetMax.x, x.y); // Set TOP
                         frameRect.offsetMin = new Vector2(frameRect.offsetMin.x, 0f); // Lock BOTTOM
                     },
-                    new Vector2(newWidth, heightExpansion),
+                    new Vector2(newWidth, HEIGHT_EXPANSION),
                     0.5f
                 );
                 break;
@@ -262,11 +264,11 @@ public class WeaponSlotManager : MonoBehaviour
                 frameRect.anchorMin = new Vector2(1f, 0f);
                 frameRect.anchorMax = new Vector2(1f, 1f); // Anchor the selected slot to the right
                 frameRect.position = currentPos; // Keep the position of the selected slot
-                firstRowRect.DOAnchorPosY(firstRowRect.anchoredPosition.y + heightExpansion, 0.5f); // Move the first row of slots up
+                firstRowRect.DOAnchorPosY(firstRowRect.anchoredPosition.y + HEIGHT_EXPANSION, 0.5f); // Move the first row of slots up
                 DOTween.To(
                     () => rowRect.offsetMin,
                     x => rowRect.offsetMin = x,
-                    new Vector2(-widthExpansion, rowRect.offsetMin.y),
+                    new Vector2(-WIDTH_EXPANSION, rowRect.offsetMin.y),
                     0.5f
                 );
                 DOTween.To(
@@ -277,12 +279,14 @@ public class WeaponSlotManager : MonoBehaviour
                         frameRect.offsetMax = new Vector2(frameRect.offsetMax.x, x.y); // Set TOP
                         frameRect.offsetMin = new Vector2(frameRect.offsetMin.x, 0f); // Lock BOTTOM
                     },
-                    new Vector2(newWidth, heightExpansion),
+                    new Vector2(newWidth, HEIGHT_EXPANSION),
                     0.5f
                 );
                 frameRect.DOAnchorPosX(-newWidth / 2, 0.5f); // Move the selected slot to the left side
                 break;
         }
+
+        weaponDescription.GetComponent<TMP_Text>().text = weaponSlot.GetComponent<WeaponSlotManager>().weapon.weaponDescription; // Set the description of the weapon in the slot
     }
 
     /// <summary>
@@ -298,7 +302,7 @@ public class WeaponSlotManager : MonoBehaviour
     public static void ShrinkInfoCard(GameObject weaponSlot)
     {
         // Logic to animate the info card of the weapon
-        GameObject parentFrame = weaponSlot.transform.parent.gameObject; // Get the parent of the weapon slot
+        GameObject parentFrame = weaponSlot.transform.parent.gameObject, weaponDescription = weaponSlot.transform.GetChild(1).gameObject; // Get the parent of the weapon slot
         int slotIndex = parentFrame.transform.parent.gameObject.transform.GetSiblingIndex() * 3 + parentFrame.transform.GetSiblingIndex(); // Get the index of the slot in the parent
         GameObject slotRow = parentFrame.transform.parent.gameObject; // Get the row of slots
         RectTransform frameRect = parentFrame.GetComponent<RectTransform>(), weaponsPanel = slotRow.transform.parent.gameObject.GetComponent<RectTransform>(),
@@ -330,7 +334,7 @@ public class WeaponSlotManager : MonoBehaviour
                 new Vector2(0f, firstRowRect.offsetMax.y),
                 0.5f
             );
-            secondRowRect.DOAnchorPosY(secondRowRect.anchoredPosition.y + heightExpansion, 0.5f); // Move the second row of slots back up
+            secondRowRect.DOAnchorPosY(secondRowRect.anchoredPosition.y + HEIGHT_EXPANSION, 0.5f); // Move the second row of slots back up
         }
         else
         {
@@ -357,7 +361,7 @@ public class WeaponSlotManager : MonoBehaviour
                 new Vector2(0f, secondRowRect.offsetMax.y),
                 0.5f
             );
-            firstRowRect.DOAnchorPosY(firstRowRect.anchoredPosition.y - heightExpansion, 0.5f); // Move the first row of slots back down
+            firstRowRect.DOAnchorPosY(firstRowRect.anchoredPosition.y - HEIGHT_EXPANSION, 0.5f); // Move the first row of slots back down
         }
 
         if (slotIndex == 0 || slotIndex == 3)
@@ -368,5 +372,7 @@ public class WeaponSlotManager : MonoBehaviour
         {
             frameRect.DOAnchorPosX(-ScaleManager.frameWidth / 2, 0.5f); // Move the selected slot back to the center
         }
+
+        weaponDescription.GetComponent<TMP_Text>().text = ""; // Clear the description of the weapon in the slot
     }
 }

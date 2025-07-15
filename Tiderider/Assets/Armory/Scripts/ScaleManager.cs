@@ -9,14 +9,11 @@
 public class ScaleManager : MonoBehaviour
 {
     public Camera Camera;
-    public RectTransform topCanvas;
-    public RectTransform bottomCanvas;
-    public RectTransform Ship;
-    public RectTransform[] shipSlots;
-    public RectTransform firstRow, secondRow;
-    public RectTransform[] weaponSlots;
+    public RectTransform topCanvas, bottomCanvas, Ship, weaponsPanel, firstRow, secondRow;
+    public RectTransform[] shipSlots, weaponSlots;
+    private const int SHIP_SLOT_COUNT = 3, SHIP_SLOT_OFFSET = 25, SHIP_SLOT_GAP = 100, ICON_MENU_HEIGHT = 200, ICON_MENU_MARGIN = 40, ARMORY_ROW_GAP = 40, ARMORY_SLOT_GAP = 15;
+    private const float SHIP_RATIO = 0.73f;
     public static float frameWidth, frameHeight;
-    private const float shipRatio = 0.65f, shipSlotOffset = 25f, shipSlotGap = 100f, armoryRowGap = 80f, armorySlotGap = 15f;
 
     private void Start()
     {
@@ -37,31 +34,32 @@ public class ScaleManager : MonoBehaviour
         topCanvas.anchoredPosition = new Vector2(0, -width / 2);
         bottomCanvas.sizeDelta = new Vector2(0, width);
         bottomCanvas.anchoredPosition = new Vector2(0, width / 2);
-        Ship.sizeDelta = new Vector2(Ship.rect.height * shipRatio, 0);
+        Ship.sizeDelta = new Vector2(Ship.rect.height * SHIP_RATIO, 0);
 
         foreach (RectTransform slot in shipSlots)
         {
-            float totalOffset = shipSlotOffset * 2 + shipSlotGap * 2;
-            slot.sizeDelta = new Vector2((Ship.rect.height - totalOffset) / 3, (Ship.rect.height - totalOffset) / 3);
+            float totalOffset = SHIP_SLOT_OFFSET * (SHIP_SLOT_COUNT - 1) + SHIP_SLOT_GAP * (SHIP_SLOT_COUNT - 1);
+            float slotDimension = (Ship.rect.height - totalOffset) / SHIP_SLOT_COUNT;
+            slot.sizeDelta = new Vector2(slotDimension, slotDimension);
 
             if (slot.transform.GetSiblingIndex() < 2)
             {
-                slot.anchoredPosition = new Vector2(slot.anchoredPosition.x, -slot.rect.height / 2 - shipSlotOffset);
+                slot.anchoredPosition = new Vector2(slot.anchoredPosition.x, -slot.rect.height / 2 - SHIP_SLOT_OFFSET);
             }
             else if (slot.transform.GetSiblingIndex() > 3)
             {
-                slot.anchoredPosition = new Vector2(slot.anchoredPosition.x, slot.rect.height / 2 + shipSlotOffset);
+                slot.anchoredPosition = new Vector2(slot.anchoredPosition.x, slot.rect.height / 2 + SHIP_SLOT_OFFSET);
             }
         }
 
-        firstRow.sizeDelta = new Vector2(0, (bottomCanvas.rect.height - armoryRowGap) / 2);
+        firstRow.sizeDelta = new Vector2(0, (bottomCanvas.rect.height - ICON_MENU_HEIGHT - ICON_MENU_MARGIN - ARMORY_ROW_GAP) / 2);
         firstRow.anchoredPosition = new Vector2(0, -firstRow.sizeDelta.y / 2);
-        secondRow.sizeDelta = new Vector2(0, (bottomCanvas.rect.height - armoryRowGap) / 2);
-        secondRow.anchoredPosition = new Vector2(0, firstRow.sizeDelta.y / 2);
+        secondRow.sizeDelta = new Vector2(0, (bottomCanvas.rect.height- ICON_MENU_HEIGHT - ICON_MENU_MARGIN - ARMORY_ROW_GAP) / 2);
+        secondRow.anchoredPosition = new Vector2(0, secondRow.sizeDelta.y / 2 + ICON_MENU_MARGIN);
 
         foreach (RectTransform slot in weaponSlots)
         {
-            slot.sizeDelta = new Vector2((width - armorySlotGap * 2) / 3, 0);
+            slot.sizeDelta = new Vector2((width - ARMORY_SLOT_GAP * 2) / 3, 0);
 
             if (slot.transform.GetSiblingIndex() == 0)
             {

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7ebd7643f8f70148927253474e4ea7f, type: 3}
   m_Name: FlameThrower
   m_EditorClassIdentifier: 
-  weaponName: 
+  weaponName: Flame Thrower
+  weaponDescription: This is a flamethrower
   weaponLevels: []
   weaponIcon: {fileID: -3006225129006118021, guid: 432618d99ee218847837634eed165688, type: 3}

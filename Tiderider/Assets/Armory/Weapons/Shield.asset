@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7ebd7643f8f70148927253474e4ea7f, type: 3}
   m_Name: Shield
   m_EditorClassIdentifier: 
-  weaponName: 
+  weaponName: Shield
+  weaponDescription: This is a shield
   weaponLevels: []
   weaponIcon: {fileID: 0}

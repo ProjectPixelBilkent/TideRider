@@ -14,13 +14,21 @@ using TMPro;
 public class WeaponSlotManager : MonoBehaviour
 {
     public Weapon weapon;
-    private const float WIDTH_EXPANSION = 270f, HEIGHT_EXPANSION = 350f; // Constants for the expansion of the weapon slot frame
+    private GameObject weaponName, weaponDescription, weaponIcon, upgradeBtn;
+    private const float SLOT_PADDING = 25f, SLOT_GAP = 25f, WIDTH_EXPANSION = 270f, HEIGHT_EXPANSION = 350f, 
+        NAME_EXPANSION = 50f, ICON_EXPANSION = 80f, UPGRADE_EXPANSION = 25f; // Constants for the expansion of the weapon slot frame
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        transform.GetChild(0).GetComponent<TMP_Text>().text = weapon.weaponName; // Set the name of the weapon in the slot
-        transform.GetChild(2).GetComponent<Image>().sprite = weapon.weaponIcon; // Set the icon of the weapon in the slot
+        weaponName = transform.GetChild(0).gameObject; // Get the name of the weapon in the slot
+        weaponDescription = transform.GetChild(1).gameObject; // Get the description of the weapon in the slot
+        weaponIcon = transform.GetChild(2).gameObject; // Get the icon of the weapon in the slot
+        upgradeBtn = transform.GetChild(3).gameObject; // Get the upgrade button of the weapon in the slot
+        weaponName.GetComponent<TMP_Text>().text = weapon.weaponName; // Set the name of the weapon in the slot
+        weaponDescription.GetComponent<TMP_Text>().text = weapon.weaponDescription; // Set the description of the weapon in the slot
+        weaponDescription.SetActive(false); // Initially hide the description of the weapon in the slot
+        weaponIcon.GetComponent<Image>().sprite = weapon.weaponIcon; // Set the icon of the weapon in the slot
     }
 
     /// <summary>
@@ -48,13 +56,13 @@ public class WeaponSlotManager : MonoBehaviour
     public static void ExpandInfoCard(GameObject weaponSlot)
     {
         // Logic to animate the info card of the weapon
-        GameObject parentFrame = weaponSlot.transform.parent.gameObject, weaponDescription = weaponSlot.transform.GetChild(1).gameObject; // Get the parent of the weapon slot
+        GameObject parentFrame = weaponSlot.transform.parent.gameObject; // Get the parent of the weapon slot
         int slotIndex = parentFrame.transform.parent.gameObject.transform.GetSiblingIndex() * 3 + parentFrame.transform.GetSiblingIndex(); // Get the index of the slot in the parent
         GameObject slotRow = parentFrame.transform.parent.gameObject; // Get the row of slots
         RectTransform frameRect = parentFrame.GetComponent<RectTransform>(), weaponsPanel = slotRow.transform.parent.gameObject.GetComponent<RectTransform>(), rowRect = slotRow.GetComponent<RectTransform>();
         RectTransform firstSiblingFrame, secondSiblingFrame, firstRowRect, secondRowRect;
         Vector2 currentPos;
-        float newWidth = ScaleManager.FrameWidth + WIDTH_EXPANSION; // New width for the frame
+        float newWidth = ScaleManager.FrameWidth + WIDTH_EXPANSION, newHeight = ScaleManager.FrameHeight - SLOT_PADDING * 2; // New width for the frame
 
         switch (slotIndex)
         {
@@ -286,7 +294,32 @@ public class WeaponSlotManager : MonoBehaviour
                 break;
         }
 
-        weaponDescription.GetComponent<TMP_Text>().text = weaponSlot.GetComponent<WeaponSlotManager>().weapon.weaponDescription; // Set the description of the weapon in the slot
+        RectTransform weaponName = weaponSlot.transform.GetChild(0).gameObject.GetComponent<RectTransform>(), 
+            weaponDescription = weaponSlot.transform.GetChild(1).gameObject.GetComponent<RectTransform>(),
+            weaponIcon = weaponSlot.transform.GetChild(2).gameObject.GetComponent<RectTransform>(), 
+            upgradeBtn = weaponSlot.transform.GetChild(3).gameObject.GetComponent<RectTransform>(); // Get the name, description, icon and upgrade button of the weapon in the slot
+        float nameHeight = weaponName.sizeDelta.y + NAME_EXPANSION, 
+            iconHeight = weaponIcon.sizeDelta.y + ICON_EXPANSION, 
+            upgradeBtnHeight = upgradeBtn.sizeDelta.y + UPGRADE_EXPANSION,
+            descriptionHeight = (newHeight + HEIGHT_EXPANSION) - SLOT_GAP * 3 - nameHeight - iconHeight - upgradeBtnHeight; // Get the current heights of the elements
+
+        weaponName.DOSizeDelta(new Vector2(weaponName.sizeDelta.x, nameHeight), 0.5f); // Expand the name of the weapon
+        weaponName.DOAnchorPosY(-nameHeight / 2, 0.5f); // Move the name of the weapon to the top
+        upgradeBtn.DOSizeDelta(new Vector2(upgradeBtn.sizeDelta.x, upgradeBtnHeight), 0.5f); // Expand the upgrade button of the weapon
+        upgradeBtn.DOAnchorPosY(upgradeBtnHeight / 2, 0.5f); // Move the upgrade button of the weapon to the bottom
+        weaponIcon.DOSizeDelta(new Vector2(weaponIcon.sizeDelta.x, iconHeight), 0.5f); // Expand the icon of the weapon
+        weaponIcon.DOAnchorPosY(upgradeBtnHeight + SLOT_GAP + iconHeight / 2, 0.5f); // Move the icon of the weapon to the middle
+        /*DOTween.Sequence()
+        .AppendCallback(() =>
+        {
+            weaponDescription.DOSizeDelta(new Vector2(weaponDescription.sizeDelta.x, descriptionHeight), 0.5f);
+            weaponDescription.DOAnchorPosY(-(nameHeight + SLOT_GAP + descriptionHeight / 2), 0.5f); // Move the description of the weapon to the bottom
+        })
+        .AppendInterval(0.5f)
+        .AppendCallback(() => weaponDescription.gameObject.SetActive(true));*/
+        weaponDescription.DOSizeDelta(new Vector2(weaponDescription.sizeDelta.x, descriptionHeight), 0.5f);
+        weaponDescription.DOAnchorPosY(-(nameHeight + SLOT_GAP + descriptionHeight / 2), 0.5f); // Move the description of the weapon to the bottom
+        weaponDescription.gameObject.SetActive(true);
     }
 
     /// <summary>
@@ -302,12 +335,12 @@ public class WeaponSlotManager : MonoBehaviour
     public static void ShrinkInfoCard(GameObject weaponSlot)
     {
         // Logic to animate the info card of the weapon
-        GameObject parentFrame = weaponSlot.transform.parent.gameObject, weaponDescription = weaponSlot.transform.GetChild(1).gameObject; // Get the parent of the weapon slot
-        int slotIndex = parentFrame.transform.parent.gameObject.transform.GetSiblingIndex() * 3 + parentFrame.transform.GetSiblingIndex(); // Get the index of the slot in the parent
+        GameObject parentFrame = weaponSlot.transform.parent.gameObject; // Get the parent of the weapon slot
         GameObject slotRow = parentFrame.transform.parent.gameObject; // Get the row of slots
         RectTransform frameRect = parentFrame.GetComponent<RectTransform>(), weaponsPanel = slotRow.transform.parent.gameObject.GetComponent<RectTransform>(),
             firstRowRect = slotRow.transform.parent.GetChild(0).gameObject.GetComponent<RectTransform>(),
             secondRowRect = slotRow.transform.parent.GetChild(1).gameObject.GetComponent<RectTransform>();
+        int slotIndex = parentFrame.transform.parent.gameObject.transform.GetSiblingIndex() * 3 + parentFrame.transform.GetSiblingIndex(); // Get the index of the slot in the parent
 
         if (slotIndex < 3)
         {
@@ -373,6 +406,20 @@ public class WeaponSlotManager : MonoBehaviour
             frameRect.DOAnchorPosX(-ScaleManager.FrameWidth / 2, 0.5f); // Move the selected slot back to the center
         }
 
-        weaponDescription.GetComponent<TMP_Text>().text = ""; // Clear the description of the weapon in the slot
+        RectTransform weaponName = weaponSlot.transform.GetChild(0).gameObject.GetComponent<RectTransform>(),
+        weaponDescription = weaponSlot.transform.GetChild(1).gameObject.GetComponent<RectTransform>(),
+        weaponIcon = weaponSlot.transform.GetChild(2).gameObject.GetComponent<RectTransform>(),
+        upgradeBtn = weaponSlot.transform.GetChild(3).gameObject.GetComponent<RectTransform>(); // Get the name, description, icon and upgrade button of the weapon in the slot
+        float nameHeight = weaponName.sizeDelta.y - NAME_EXPANSION,
+            iconHeight = weaponIcon.sizeDelta.y - ICON_EXPANSION,
+            upgradeBtnHeight = upgradeBtn.sizeDelta.y - UPGRADE_EXPANSION;
+
+        weaponName.DOSizeDelta(new Vector2(weaponName.sizeDelta.x, nameHeight), 0.5f); // Expand the name of the weapon
+        weaponName.DOAnchorPosY(-nameHeight / 2, 0.5f); // Move the name of the weapon to the top
+        upgradeBtn.DOSizeDelta(new Vector2(upgradeBtn.sizeDelta.x, upgradeBtnHeight), 0.5f); // Expand the upgrade button of the weapon
+        upgradeBtn.DOAnchorPosY(upgradeBtnHeight / 2, 0.5f); // Move the upgrade button of the weapon to the bottom
+        weaponIcon.DOSizeDelta(new Vector2(weaponIcon.sizeDelta.x, iconHeight), 0.5f); // Expand the icon of the weapon
+        weaponIcon.DOAnchorPosY(upgradeBtnHeight + SLOT_GAP + iconHeight / 2, 0.5f); // Move the icon of the weapon to the middle
+        weaponDescription.gameObject.SetActive(false);
     }
 }

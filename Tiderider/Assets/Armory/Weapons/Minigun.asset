@@ -12,10 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7ebd7643f8f70148927253474e4ea7f, type: 3}
   m_Name: Minigun
   m_EditorClassIdentifier: 
-  weaponName: 
-  damage: 0
-  fireRate: 0
-  range: 0
-  projectilePrefab: {fileID: 0}
-  fireSound: {fileID: 0}
-  icon: {fileID: 0}
+  weaponName: Minigun
+  weaponDescription: This is a minigun
+  weaponLevels: []
+  weaponIcon: {fileID: 0}

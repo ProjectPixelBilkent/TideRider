@@ -11,7 +11,7 @@ public class CentralUIController : MonoBehaviour
 
     [Header("UI References")]
     public GameObject IconPanel;
-    public RectTransform LevelCanvas, ArmoryCanvas, ShopCanvas;
+    public RectTransform ArmoryCanvas, LevelCanvas, ShopCanvas;
 
     private CanvasGroup activeCanvas;
     private CanvasGroup _currentMenu;

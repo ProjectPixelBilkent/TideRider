@@ -19,9 +19,9 @@ public class ScaleManager : MonoBehaviour
     [Header("Armory References")]
     public RectTransform armoryCanvas;
     public RectTransform armoryTopCanvas, armoryBottomCanvas, Ship, weaponsPanel, firstRow, secondRow;
-    public RectTransform[] shipSlots, weaponSlots;
-    private const int SHIP_SLOT_COUNT = 3, SHIP_SLOT_OFFSET = 25, SHIP_SLOT_GAP = 100, ARMORY_ROW_GAP = 40, ARMORY_SLOT_GAP = 15, WEAPONS_PANEL_MARGIN = 40;
-    private const float SHIP_RATIO = 0.73f;
+    public RectTransform[] shipSlots, weaponFrames;
+    private const int SHIP_SLOT_COUNT = 3, SHIP_SLOT_OFFSET = 25, SHIP_SLOT_GAP = 100, ARMORY_ROW_GAP = 40, ARMORY_SLOT_GAP = 15, WEAPONS_PANEL_MARGIN = 40, WEAPONS_SLOT_PADDING = 25;
+    private const float SHIP_RATIO = 0.73f, WEAPON_NAME_RATIO = 0.15f, UPGRADE_BTN_RATIO = 0.3f;
 
     [Header("Level Menu References")]
     public RectTransform levelCanvas;
@@ -105,22 +105,35 @@ public class ScaleManager : MonoBehaviour
         secondRow.sizeDelta = new Vector2(0, (armoryBottomCanvas.rect.height- ICON_MENU_HEIGHT - WEAPONS_PANEL_MARGIN - ARMORY_ROW_GAP) / 2);
         secondRow.anchoredPosition = new Vector2(0, secondRow.sizeDelta.y / 2 + WEAPONS_PANEL_MARGIN);
 
-        foreach (RectTransform slot in weaponSlots)
+        foreach (RectTransform frame in weaponFrames)
         {
-            slot.sizeDelta = new Vector2((Width - ARMORY_SLOT_GAP * 2) / 3, 0);
+            GameObject weaponSlot = frame.transform.GetChild(0).gameObject;
+            RectTransform weaponName = weaponSlot.transform.GetChild(0).GetComponent<RectTransform>(),
+                weaponIcon = weaponSlot.transform.GetChild(2).GetComponent<RectTransform>(),
+                upgradeBtn = weaponSlot.transform.GetChild(3).GetComponent<RectTransform>();
+            float slotHeight = frame.rect.height - WEAPONS_SLOT_PADDING * 2;
 
-            if (slot.transform.GetSiblingIndex() == 0)
+            frame.sizeDelta = new Vector2((Width - ARMORY_SLOT_GAP * 2) / 3, 0);
+
+            if (frame.transform.GetSiblingIndex() == 0)
             {
-                slot.anchoredPosition = new Vector2(slot.rect.width / 2, slot.anchoredPosition.y);
+                frame.anchoredPosition = new Vector2(frame.rect.width / 2, frame.anchoredPosition.y);
             }
-            else if (slot.transform.GetSiblingIndex() == 2)
+            else if (frame.transform.GetSiblingIndex() == 2)
             {
-                slot.anchoredPosition = new Vector2(-slot.rect.width / 2, slot.anchoredPosition.y);
+                frame.anchoredPosition = new Vector2(-frame.rect.width / 2, frame.anchoredPosition.y);
             }
+
+            weaponName.sizeDelta = new Vector2(weaponName.sizeDelta.x, slotHeight * WEAPON_NAME_RATIO);
+            weaponName.anchoredPosition = new Vector2(0, -weaponName.sizeDelta.y / 2);
+            upgradeBtn.sizeDelta = new Vector2(upgradeBtn.sizeDelta.x, slotHeight * UPGRADE_BTN_RATIO);
+            upgradeBtn.anchoredPosition = new Vector2(0, upgradeBtn.sizeDelta.y / 2);
+            weaponIcon.sizeDelta = new Vector2(weaponIcon.sizeDelta.x, slotHeight - weaponName.sizeDelta.y - upgradeBtn.sizeDelta.y - ARMORY_SLOT_GAP * 2);
+            weaponIcon.anchoredPosition = new Vector2(0, upgradeBtn.sizeDelta.y + ARMORY_SLOT_GAP + weaponIcon.sizeDelta.y / 2);
         }
 
-        FrameWidth = weaponSlots[0].rect.width;
-        FrameHeight = weaponSlots[0].rect.height;
+        FrameWidth = weaponFrames[0].rect.width;
+        FrameHeight = weaponFrames[0].rect.height;
     }
 
     /// <summary>

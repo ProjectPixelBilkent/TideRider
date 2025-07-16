@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Icegun
   m_EditorClassIdentifier: 
   weaponName: Icegun
+  weaponDescription: This is a Icegun
   weaponLevels: []
   weaponIcon: {fileID: 0}

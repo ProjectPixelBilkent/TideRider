@@ -12,3 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7ebd7643f8f70148927253474e4ea7f, type: 3}
   m_Name: Cannon
   m_EditorClassIdentifier: 
+  weaponName: Canon
+  weaponDescription: This is a canon
+  weaponLevels: []
+  weaponIcon: {fileID: 21300000, guid: dabc9fa5510d53c40b331fe4e8ab95ab, type: 3}

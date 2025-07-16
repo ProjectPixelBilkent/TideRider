@@ -95,13 +95,11 @@ public class ArmoryManager : MonoBehaviour
             //Show Info Card of the Weapon
             if (weaponSlot == null)
             {
-                //Debug.Log("a");
                 weaponSlot = WeaponSlot; // Assign the selected weapon slot to the weapon slot variable
                 WeaponSlotManager.ExpandInfoCard(weaponSlot); // Expand the info card of the weapon
             }
             else if (weaponSlot != WeaponSlot)
             {
-                //Debug.Log("b");
                 DOTween.Sequence()
                 .AppendCallback(() => WeaponSlotManager.ShrinkInfoCard(weaponSlot))
                 .AppendInterval(0.5f) // Wait for shrink animation duration
@@ -112,7 +110,6 @@ public class ArmoryManager : MonoBehaviour
             }
             else
             {
-                //Debug.Log("c");
                 DeselectWeapon(); // If the same weapon slot is clicked, deselect it
             }
         }
@@ -134,7 +131,7 @@ public class ArmoryManager : MonoBehaviour
     /// </remarks>
     public void DeselectWeapon()
     {
-        if (weaponSlot != null && weaponSlot != EventSystem.current.currentSelectedGameObject)
+        if (weaponSlot != null)
         {
             WeaponSlotManager.ShrinkInfoCard(weaponSlot); // Shrink the info card of the weapon
             weaponSlot = null; // Clear the weapon slot variable

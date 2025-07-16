@@ -18,12 +18,10 @@ public class ArmoryManager : MonoBehaviour
     public static ArmoryManager Instance { get; private set; }
     private GameObject armorySlot = null, weaponSlot = null; // To keep track of the currently selected slot index
     private Weapon selectedWeapon = null; // To keep track of the currently selected weapon
-    public Camera c1, c2;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        c2.enabled = false; // Disable the second camera at the start
         if (Instance == null)
         {
             Instance = this;
@@ -140,21 +138,6 @@ public class ArmoryManager : MonoBehaviour
         {
             WeaponSlotManager.ShrinkInfoCard(weaponSlot); // Shrink the info card of the weapon
             weaponSlot = null; // Clear the weapon slot variable
-        }
-    }
-
-    public void ChangeCamera()
-    {
-        Debug.Log("Changing camera view");
-        if (c1.enabled)
-        {
-            c1.enabled = false;
-            c2.enabled = true;
-        }
-        else
-        {
-            c1.enabled = true;
-            c2.enabled = false;
         }
     }
 }

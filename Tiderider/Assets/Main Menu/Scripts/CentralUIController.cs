@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using TMPro;
@@ -10,9 +10,10 @@ public class CentralUIController : MonoBehaviour
     public static CentralUIController Instance { get; private set; }
 
     [Header("UI References")]
-    public RectTransform MainMenuCanvas, ArmoryCanvas, ShopCanvas;
-    public CanvasGroup LevelMenu;
+    public GameObject IconPanel;
+    public RectTransform LevelCanvas, ArmoryCanvas, ShopCanvas;
 
+    private CanvasGroup activeCanvas;
     private CanvasGroup _currentMenu;
     private Coroutine _activeTransition;
 
@@ -26,8 +27,17 @@ public class CentralUIController : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        activeCanvas = LevelCanvas.GetComponentInChildren<CanvasGroup>();
     }
 
+    /// <summary>
+    /// Toggles the visibility of a menu using a fade transition.
+    /// </summary>
+    /// <param name="targetMenu">The CanvasGroup of the menu to toggle</param>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
     public void ToggleMenu(CanvasGroup targetMenu)
     {
         if (_activeTransition != null)
@@ -36,6 +46,13 @@ public class CentralUIController : MonoBehaviour
         _activeTransition = StartCoroutine(ToggleMenuRoutine(targetMenu));
     }
 
+    /// <summary>
+    /// Coroutine that handles the fading in/out transitions for menu toggling.
+    /// </summary>
+    /// <param name="target">The target CanvasGroup to toggle</param>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
     private IEnumerator ToggleMenuRoutine(CanvasGroup target)
     {
         // Close current menu if different
@@ -50,11 +67,11 @@ public class CentralUIController : MonoBehaviour
         {
             yield return target.FadeOut(this);
             _currentMenu = null;
-            yield return LevelMenu.FadeIn(this);
+            yield return activeCanvas.FadeIn(this);
         }
         else
         {
-            yield return LevelMenu.FadeOut(this);
+            yield return activeCanvas.FadeOut(this);
             yield return target.FadeIn(this);
             _currentMenu = target;
         }
@@ -62,24 +79,90 @@ public class CentralUIController : MonoBehaviour
         _activeTransition = null;
     }
 
+    /// <summary>
+    /// Opens the armory screen and updates the icon panel visuals.
+    /// </summary>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
     public void OpenArmory()
     {
+        RectTransform SelectedIconRect = IconPanel.transform.GetChild(0).GetComponent<RectTransform>(),
+            SideIconRect1 = IconPanel.transform.GetChild(1).GetComponent<RectTransform>(),
+            SideIconRect2 = IconPanel.transform.GetChild(2).GetComponent<RectTransform>();
+
+        activeCanvas = ArmoryCanvas.GetComponentInChildren<CanvasGroup>();
+
         ArmoryCanvas.DOAnchorPosX(0f, 1f);
-        MainMenuCanvas.DOAnchorPosX(1080f, 1f);
-        ShopCanvas.DOAnchorPosX(2160f, 1f);
+        LevelCanvas.DOAnchorPosX(ScaleManager.Width, 1f);
+        ShopCanvas.DOAnchorPosX(ScaleManager.Width * 2, 1f);
+
+        SelectedIconRect.DOSizeDelta(new Vector2(ScaleManager.SelectedIconWidth, SelectedIconRect.sizeDelta.y), 0.5f);
+        SelectedIconRect.DOAnchorPosX(ScaleManager.SelectedIconWidth / 2, 0.5f);
+        SelectedIconRect.GetComponent<Image>().color = ScaleManager.SelectedColor;
+        SideIconRect1.DOSizeDelta(new Vector2(ScaleManager.SideIconWidth, SideIconRect1.sizeDelta.y), 0.5f);
+        SideIconRect1.DOAnchorPosX((ScaleManager.SelectedIconWidth - ScaleManager.SideIconWidth) / 2, 0.5f);
+        SideIconRect1.GetComponent<Image>().color = ScaleManager.SideColor;
+        SideIconRect2.DOSizeDelta(new Vector2(ScaleManager.SideIconWidth, SideIconRect2.sizeDelta.y), 0.5f);
+        SideIconRect2.DOAnchorPosX(-ScaleManager.SideIconWidth / 2, 0.5f);
+        SideIconRect2.GetComponent<Image>().color = ScaleManager.SideColor;
     }
 
+    /// <summary>
+    /// Opens the main menu screen and updates the icon panel visuals.
+    /// </summary>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
     public void OpenMainMenu()
     {
-        ArmoryCanvas.DOAnchorPosX(-1080f, 1f);
-        MainMenuCanvas.DOAnchorPosX(0f, 1f);
-        ShopCanvas.DOAnchorPosX(1080f, 1f);
+        RectTransform SelectedIconRect = IconPanel.transform.GetChild(1).GetComponent<RectTransform>(),
+            SideIconRect1 = IconPanel.transform.GetChild(0).GetComponent<RectTransform>(),
+            SideIconRect2 = IconPanel.transform.GetChild(2).GetComponent<RectTransform>();
+
+        activeCanvas = LevelCanvas.GetComponentInChildren<CanvasGroup>();
+
+        ArmoryCanvas.DOAnchorPosX(-ScaleManager.Width, 1f);
+        LevelCanvas.DOAnchorPosX(0f, 1f);
+        ShopCanvas.DOAnchorPosX(ScaleManager.Width, 1f);
+
+        SideIconRect1.DOSizeDelta(new Vector2(ScaleManager.SideIconWidth, SideIconRect1.sizeDelta.y), 0.5f);
+        SideIconRect1.DOAnchorPosX(ScaleManager.SideIconWidth / 2, 0.5f);
+        SideIconRect1.GetComponent<Image>().DOColor(ScaleManager.SideColor, 0.5f);
+        SelectedIconRect.DOSizeDelta(new Vector2(ScaleManager.SelectedIconWidth, SelectedIconRect.sizeDelta.y), 0.5f);
+        SelectedIconRect.DOAnchorPosX(0f, 0.5f);
+        SelectedIconRect.GetComponent<Image>().DOColor(ScaleManager.SelectedColor, 0.5f);
+        SideIconRect2.DOSizeDelta(new Vector2(ScaleManager.SideIconWidth, SideIconRect2.sizeDelta.y), 0.5f);
+        SideIconRect2.DOAnchorPosX(-ScaleManager.SideIconWidth / 2, 0.5f);
+        SideIconRect2.GetComponent<Image>().DOColor(ScaleManager.SideColor, 0.5f);
     }
 
+    /// <summary>
+    /// Opens the shop screen and updates the icon panel visuals.
+    /// </summary>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
     public void OpenShop()
     {
-        ArmoryCanvas.DOAnchorPosX(-2160f, 1f);
-        MainMenuCanvas.DOAnchorPosX(-1080f, 1f);
+        RectTransform SelectedIconRect = IconPanel.transform.GetChild(2).GetComponent<RectTransform>(),
+            SideIconRect1 = IconPanel.transform.GetChild(0).GetComponent<RectTransform>(),
+            SideIconRect2 = IconPanel.transform.GetChild(1).GetComponent<RectTransform>();
+
+        activeCanvas = ShopCanvas.GetComponentInChildren<CanvasGroup>();
+
+        ArmoryCanvas.DOAnchorPosX(-ScaleManager.Width * 2, 1f);
+        LevelCanvas.DOAnchorPosX(-ScaleManager.Width, 1f);
         ShopCanvas.DOAnchorPosX(0f, 1f);
+
+        SideIconRect1.DOSizeDelta(new Vector2(ScaleManager.SideIconWidth, SideIconRect1.sizeDelta.y), 0.5f);
+        SideIconRect1.DOAnchorPosX(ScaleManager.SideIconWidth / 2, 0.5f);
+        SideIconRect1.GetComponent<Image>().DOColor(ScaleManager.SideColor, 0.5f);
+        SideIconRect2.DOSizeDelta(new Vector2(ScaleManager.SideIconWidth, SideIconRect2.sizeDelta.y), 0.5f);
+        SideIconRect2.DOAnchorPosX(-(ScaleManager.SelectedIconWidth - ScaleManager.SideIconWidth) / 2, 0.5f);
+        SideIconRect2.GetComponent<Image>().DOColor(ScaleManager.SideColor, 0.5f);
+        SelectedIconRect.DOSizeDelta(new Vector2(ScaleManager.SelectedIconWidth, SelectedIconRect.sizeDelta.y), 0.5f);
+        SelectedIconRect.DOAnchorPosX(-ScaleManager.SelectedIconWidth / 2, 0.5f);
+        SelectedIconRect.GetComponent<Image>().DOColor(ScaleManager.SelectedColor, 0.5f);
     }
 }

@@ -54,7 +54,7 @@ public class WeaponSlotManager : MonoBehaviour
         RectTransform frameRect = parentFrame.GetComponent<RectTransform>(), weaponsPanel = slotRow.transform.parent.gameObject.GetComponent<RectTransform>(), rowRect = slotRow.GetComponent<RectTransform>();
         RectTransform firstSiblingFrame, secondSiblingFrame, firstRowRect, secondRowRect;
         Vector2 currentPos;
-        float newWidth = ScaleManager.frameWidth + WIDTH_EXPANSION; // New width for the frame
+        float newWidth = ScaleManager.FrameWidth + WIDTH_EXPANSION; // New width for the frame
 
         switch (slotIndex)
         {
@@ -319,7 +319,7 @@ public class WeaponSlotManager : MonoBehaviour
                     frameRect.offsetMin = new Vector2(frameRect.offsetMin.x, x.y); // Set bottom
                     frameRect.offsetMax = new Vector2(frameRect.offsetMax.x, 0f); // Lock top
                 },
-                new Vector2(ScaleManager.frameWidth, 0f),
+                new Vector2(ScaleManager.FrameWidth, 0f),
                 0.5f
             );
             DOTween.To(
@@ -346,7 +346,7 @@ public class WeaponSlotManager : MonoBehaviour
                     frameRect.offsetMax = new Vector2(frameRect.offsetMax.x, x.y); // Set TOP
                     frameRect.offsetMin = new Vector2(frameRect.offsetMin.x, 0f); // Lock BOTTOM
                 },
-                new Vector2(ScaleManager.frameWidth, 0f),
+                new Vector2(ScaleManager.FrameWidth, 0f),
                 0.5f
             );
             DOTween.To(
@@ -366,11 +366,11 @@ public class WeaponSlotManager : MonoBehaviour
 
         if (slotIndex == 0 || slotIndex == 3)
         {
-            frameRect.DOAnchorPosX(ScaleManager.frameWidth / 2, 0.5f); // Move the selected slot back to the center
+            frameRect.DOAnchorPosX(ScaleManager.FrameWidth / 2, 0.5f); // Move the selected slot back to the center
         }
         else if (slotIndex == 2 || slotIndex == 5)
         {
-            frameRect.DOAnchorPosX(-ScaleManager.frameWidth / 2, 0.5f); // Move the selected slot back to the center
+            frameRect.DOAnchorPosX(-ScaleManager.FrameWidth / 2, 0.5f); // Move the selected slot back to the center
         }
 
         weaponDescription.GetComponent<TMP_Text>().text = ""; // Clear the description of the weapon in the slot

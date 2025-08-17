@@ -15,4 +15,4 @@ MonoBehaviour:
   weaponName: Shield
   weaponDescription: This is a shield
   weaponLevels: []
-  weaponIcon: {fileID: 0}
+  weaponIcon: {fileID: 4849304724019256761, guid: 5d1cfe9c6f1882f46b8288ddccdafb18, type: 3}

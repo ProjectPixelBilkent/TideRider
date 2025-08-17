@@ -1,4 +1,6 @@
 ﻿using DG.Tweening;
+using System.Collections;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -7,9 +9,6 @@ using UnityEngine.UI;
 /// <summary>
 /// Singleton class for managing the armory UI in the game.
 /// </summary>
-/// <todo>
-/// Implement changing animations for the info card of the weapon when a slot is selected.
-/// </todo>
 /// <remarks>
 /// Created by: Işık Dönger
 /// </remarks>
@@ -103,14 +102,15 @@ public class ArmoryManager : MonoBehaviour
                 DOTween.Sequence()
                 .AppendCallback(() => WeaponSlotManager.ShrinkInfoCard(weaponSlot))
                 .AppendInterval(0.5f) // Wait for shrink animation duration
-                .AppendCallback(() => {
+                .AppendCallback(() =>
+                {
                     weaponSlot = WeaponSlot;
                     WeaponSlotManager.ExpandInfoCard(weaponSlot);
                 });
             }
             else
             {
-                DeselectWeapon(); // If the same weapon slot is clicked, deselect it
+                DeselectWeapon(0); // If the same weapon slot is clicked, deselect it
             }
         }
         else
@@ -119,8 +119,19 @@ public class ArmoryManager : MonoBehaviour
             selectedWeapon = WeaponSlot.GetComponent<WeaponSlotManager>().weapon; // Assign the selected weapon to the slot's manager
             armorySlot.GetComponent<Image>().sprite = selectedWeapon.weaponIcon; // Set the icon of the weapon in the slot
             DeselectSlot();
-            DeselectWeapon(); // Deselect the weapon slot after assigning the weapon
+            DeselectWeapon(0); // Deselect the weapon slot after assigning the weapon
         }
+    }
+
+    /// <summary>
+    /// Starts the Coroutine to deselect weapon slot in the armory UI.
+    /// </summary>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public void DeselectWeapon(float delay = 0.1f)
+    {
+        StartCoroutine(DeselectWeaponCoroutine(delay));
     }
 
     /// <summary>
@@ -129,8 +140,10 @@ public class ArmoryManager : MonoBehaviour
     /// <remarks>
     /// Maintained by: Işık Dönger
     /// </remarks>
-    public void DeselectWeapon()
+    private IEnumerator DeselectWeaponCoroutine(float delay)
     {
+        yield return new WaitForSeconds(delay); // To prevent conflict with SelectWeapon method
+
         if (weaponSlot != null)
         {
             WeaponSlotManager.ShrinkInfoCard(weaponSlot); // Shrink the info card of the weapon

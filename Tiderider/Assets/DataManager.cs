@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using NUnit.Framework;
+using UnityEngine;
+using System.Collections.Generic;
 using static LocalBackupManager;
 
 public static class DataManager
@@ -172,4 +174,24 @@ public static class DataManager
     /// Maintained by: Işık Dönger
     /// </remarks>
     public static int GetIcegunLevel() => LoadWeaponData().icegunLevel;
+
+    /// <summary>
+    /// Loads the current level of all weapons from the local backup.
+    /// </summary>
+    /// <returns>Current Weapon Level List.</returns>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public static List<int> GetWeaponLevels()
+    {
+        return new List<int>
+        {
+            GetCanonLevel(),
+            GetMinigunLevel(),
+            GetShieldLevel(),
+            GetLasergunLevel(),
+            GetFlamethrowerLevel(),
+            GetIcegunLevel()
+        };
+    }
 }

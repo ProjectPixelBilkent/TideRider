@@ -30,7 +30,6 @@ public class Obstacle : MonoBehaviour
         }
     }
 
-
     /// <summary>
     /// Moves the obstacle downward.
     /// </summary>

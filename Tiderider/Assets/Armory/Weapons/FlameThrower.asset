@@ -15,4 +15,4 @@ MonoBehaviour:
   weaponName: Flame Thrower
   weaponDescription: This is a flamethrower
   weaponLevels: []
-  weaponIcon: {fileID: -3006225129006118021, guid: 432618d99ee218847837634eed165688, type: 3}
+  weaponIcon: {fileID: 1932770724421860410, guid: 568a5feb6dd61814aafc5b084c3156db, type: 3}

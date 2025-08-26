@@ -32,5 +32,6 @@ public class Weapon : ScriptableObject
     public string weaponName;
     public string weaponDescription; // Description of the weapon
     public WeaponLevel[] weaponLevels; // Array of levels for the weapon
+    public int weaponLevelCount => weaponLevels.Length; // Total number of levels for the weapon
     public Sprite weaponIcon;
 }

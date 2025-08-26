@@ -74,7 +74,9 @@ public static class LocalBackupManager
     /// <summary>
     /// Static method to load game data from a local backup file.
     /// </summary>
-    /// <returns>WeaponData.</returns>
+    /// <returns>
+    /// 
+    /// Data.</returns>
     /// <remarks>
     /// Maintained by: Işık Dönger
     /// </remarks>

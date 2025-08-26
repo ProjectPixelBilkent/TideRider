@@ -5,6 +5,9 @@ using UnityEngine.UI;
 /// <summary>
 /// MonoBehaviour class for scaling the elements of scenes.
 /// </summary>
+/// <todo>
+/// Implement dynamic scaling for Profile, Setting and Credit panels.
+/// </todo>
 /// <remarks>
 /// Created by: Işık Dönger
 /// </remarks>

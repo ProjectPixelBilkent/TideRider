@@ -1,10 +1,16 @@
 fileFormatVersion: 2
-guid: 0bf9194b89ee0334db183f0301536a68
+guid: 568a5feb6dd61814aafc5b084c3156db
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8230488904728474184
-    second: plus_0
+      213: -1906762213471341195
+    second: asset_flamethrower_0
+  - first:
+      213: 6377868435016130
+    second: asset_flamethrower_1
+  - first:
+      213: 1932770724421860410
+    second: asset_flamethrower_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -139,13 +145,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: plus_0
+      name: asset_flamethrower_0
       rect:
         serializedVersion: 2
-        x: 41
-        y: 41
-        width: 430
-        height: 430
+        x: 388
+        y: 1534
+        width: 177
+        height: 156
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,8 +160,52 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 84272264d02983270800000000000000
-      internalID: 8230488904728474184
+      spriteID: 57537ea8ed1d985e0800000000000000
+      internalID: -1906762213471341195
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: asset_flamethrower_1
+      rect:
+        serializedVersion: 2
+        x: 537
+        y: 1689
+        width: 48
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2c94e7633a8a61000800000000000000
+      internalID: 6377868435016130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: asset_flamethrower_2
+      rect:
+        serializedVersion: 2
+        x: 645
+        y: 588
+        width: 2227
+        height: 1944
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a3c707dcbb492da10800000000000000
+      internalID: 1932770724421860410
       vertices: []
       indices: 
       edges: []
@@ -174,7 +224,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      plus_0: 8230488904728474184
+      asset_flamethrower_0: -1906762213471341195
+      asset_flamethrower_1: 6377868435016130
+      asset_flamethrower_2: 1932770724421860410
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

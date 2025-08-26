@@ -11,10 +11,10 @@ public class CentralUIController : MonoBehaviour
 
     [Header("UI References")]
     public GameObject IconPanel;
-    public RectTransform ArmoryCanvas, LevelCanvas, ShopCanvas;
+    public RectTransform ArmoryCanvas, LevelCanvas, ShopCanvas, scrollContentTransform;
 
     private CanvasGroup activeCanvas;
-    private CanvasGroup _currentMenu;
+    private CanvasGroup _currentPanel;
     private Coroutine _activeTransition;
 
     private void Awake()
@@ -31,52 +31,79 @@ public class CentralUIController : MonoBehaviour
         activeCanvas = LevelCanvas.GetComponentInChildren<CanvasGroup>();
     }
 
+    private void Update()
+    {
+        
+    }
+
     /// <summary>
-    /// Toggles the visibility of a menu using a fade transition.
+    /// Toggles the visibility of a panel using a fade transition.
     /// </summary>
-    /// <param name="targetMenu">The CanvasGroup of the menu to toggle</param>
+    /// <param name="targetPanel">The CanvasGroup of the panel to toggle</param>
     /// <remarks>
     /// Maintained by: Işık Dönger
     /// </remarks>
-    public void ToggleMenu(CanvasGroup targetMenu)
+    public void TogglePanel(CanvasGroup targetPanel)
     {
         if (_activeTransition != null)
             StopCoroutine(_activeTransition);
 
-        _activeTransition = StartCoroutine(ToggleMenuRoutine(targetMenu));
+        _activeTransition = StartCoroutine(TogglePanelRoutine(targetPanel));
     }
 
     /// <summary>
-    /// Coroutine that handles the fading in/out transitions for menu toggling.
+    /// Coroutine that handles the fading in/out transitions for panel toggling.
     /// </summary>
     /// <param name="target">The target CanvasGroup to toggle</param>
     /// <remarks>
     /// Maintained by: Işık Dönger
     /// </remarks>
-    private IEnumerator ToggleMenuRoutine(CanvasGroup target)
+    private IEnumerator TogglePanelRoutine(CanvasGroup target)
     {
-        // Close current menu if different
-        if (_currentMenu != null && _currentMenu != target)
+        // Close current panel if different
+        if (_currentPanel != null && _currentPanel != target)
         {
-            yield return _currentMenu.FadeOut(this);
-            _currentMenu = null;
+            yield return _currentPanel.FadeOut(this);
+            _currentPanel = null;
         }
 
-        // Toggle target menu
-        if (_currentMenu == target)
+        // Toggle target panel
+        if (_currentPanel == target)
         {
             yield return target.FadeOut(this);
-            _currentMenu = null;
+            _currentPanel = null;
             yield return activeCanvas.FadeIn(this);
         }
         else
         {
             yield return activeCanvas.FadeOut(this);
             yield return target.FadeIn(this);
-            _currentMenu = target;
+            _currentPanel = target;
         }
 
         _activeTransition = null;
+    }
+
+    /// <summary>
+    /// Manages menu changes for scrolling and updates the icon panel accordingly.
+    /// </summary>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public void ChangeMenu()
+    {
+        if (scrollContentTransform.anchoredPosition.x > -1080)
+        {
+            OpenArmory();
+        }
+        else if (scrollContentTransform.anchoredPosition.x > -2160)
+        {
+            OpenMainMenu();
+        }
+        else
+        {
+            OpenShop();
+        }
     }
 
     /// <summary>
@@ -91,11 +118,10 @@ public class CentralUIController : MonoBehaviour
             SideIconRect1 = IconPanel.transform.GetChild(1).GetComponent<RectTransform>(),
             SideIconRect2 = IconPanel.transform.GetChild(2).GetComponent<RectTransform>();
 
+        if (_currentPanel != null) { _currentPanel.FadeOut(this); }
         activeCanvas = ArmoryCanvas.GetComponentInChildren<CanvasGroup>();
 
-        ArmoryCanvas.DOAnchorPosX(0f, 1f);
-        LevelCanvas.DOAnchorPosX(ScaleManager.Width, 1f);
-        ShopCanvas.DOAnchorPosX(ScaleManager.Width * 2, 1f);
+        scrollContentTransform.DOAnchorPosX(-ScaleManager.Width * 0.5f, 0.5f);
 
         SelectedIconRect.DOSizeDelta(new Vector2(ScaleManager.SelectedIconWidth, SelectedIconRect.sizeDelta.y), 0.5f);
         SelectedIconRect.DOAnchorPosX(ScaleManager.SelectedIconWidth / 2, 0.5f);
@@ -120,11 +146,10 @@ public class CentralUIController : MonoBehaviour
             SideIconRect1 = IconPanel.transform.GetChild(0).GetComponent<RectTransform>(),
             SideIconRect2 = IconPanel.transform.GetChild(2).GetComponent<RectTransform>();
 
+        if (_currentPanel != null) { _currentPanel.FadeOut(this); }
         activeCanvas = LevelCanvas.GetComponentInChildren<CanvasGroup>();
 
-        ArmoryCanvas.DOAnchorPosX(-ScaleManager.Width, 1f);
-        LevelCanvas.DOAnchorPosX(0f, 1f);
-        ShopCanvas.DOAnchorPosX(ScaleManager.Width, 1f);
+        scrollContentTransform.DOAnchorPosX(-ScaleManager.Width * 1.5f, 0.5f);
 
         SideIconRect1.DOSizeDelta(new Vector2(ScaleManager.SideIconWidth, SideIconRect1.sizeDelta.y), 0.5f);
         SideIconRect1.DOAnchorPosX(ScaleManager.SideIconWidth / 2, 0.5f);
@@ -149,11 +174,10 @@ public class CentralUIController : MonoBehaviour
             SideIconRect1 = IconPanel.transform.GetChild(0).GetComponent<RectTransform>(),
             SideIconRect2 = IconPanel.transform.GetChild(1).GetComponent<RectTransform>();
 
+        if (_currentPanel != null) { _currentPanel.FadeOut(this); }
         activeCanvas = ShopCanvas.GetComponentInChildren<CanvasGroup>();
 
-        ArmoryCanvas.DOAnchorPosX(-ScaleManager.Width * 2, 1f);
-        LevelCanvas.DOAnchorPosX(-ScaleManager.Width, 1f);
-        ShopCanvas.DOAnchorPosX(0f, 1f);
+        scrollContentTransform.DOAnchorPosX(-ScaleManager.Width * 2.5f, 0.5f);
 
         SideIconRect1.DOSizeDelta(new Vector2(ScaleManager.SideIconWidth, SideIconRect1.sizeDelta.y), 0.5f);
         SideIconRect1.DOAnchorPosX(ScaleManager.SideIconWidth / 2, 0.5f);

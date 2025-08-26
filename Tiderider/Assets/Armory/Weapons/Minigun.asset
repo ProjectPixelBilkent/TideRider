@@ -15,4 +15,4 @@ MonoBehaviour:
   weaponName: Minigun
   weaponDescription: This is a minigun
   weaponLevels: []
-  weaponIcon: {fileID: 0}
+  weaponIcon: {fileID: 3631692291817558035, guid: ed6af446b4bcba44f846d7ff4d24efd0, type: 3}

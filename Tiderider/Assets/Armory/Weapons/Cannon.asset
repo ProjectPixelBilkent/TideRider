@@ -15,4 +15,4 @@ MonoBehaviour:
   weaponName: Canon
   weaponDescription: This is a canon
   weaponLevels: []
-  weaponIcon: {fileID: 21300000, guid: dabc9fa5510d53c40b331fe4e8ab95ab, type: 3}
+  weaponIcon: {fileID: -2603317412757829357, guid: ad743ff7576ca1643b45e9e596312353, type: 3}

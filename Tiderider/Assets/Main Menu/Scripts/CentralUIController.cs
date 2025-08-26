@@ -11,7 +11,7 @@ public class CentralUIController : MonoBehaviour
 
     [Header("UI References")]
     public GameObject IconPanel;
-    public RectTransform ArmoryCanvas, LevelCanvas, ShopCanvas;
+    public RectTransform ArmoryCanvas, LevelCanvas, ShopCanvas, scrollContentTransform;
 
     private CanvasGroup activeCanvas;
     private CanvasGroup _currentPanel;
@@ -85,6 +85,28 @@ public class CentralUIController : MonoBehaviour
     }
 
     /// <summary>
+    /// Manages menu changes for scrolling and updates the icon panel accordingly.
+    /// </summary>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public void ChangeMenu()
+    {
+        if (scrollContentTransform.anchoredPosition.x > -1080)
+        {
+            OpenArmory();
+        }
+        else if (scrollContentTransform.anchoredPosition.x > -2160)
+        {
+            OpenMainMenu();
+        }
+        else
+        {
+            OpenShop();
+        }
+    }
+
+    /// <summary>
     /// Opens the armory screen and updates the icon panel visuals.
     /// </summary>
     /// <remarks>
@@ -96,12 +118,14 @@ public class CentralUIController : MonoBehaviour
             SideIconRect1 = IconPanel.transform.GetChild(1).GetComponent<RectTransform>(),
             SideIconRect2 = IconPanel.transform.GetChild(2).GetComponent<RectTransform>();
 
-        TogglePanel(_currentPanel);
+<<<<<<< Updated upstream
+        if (_currentPanel != null) { _currentPanel.FadeOut(this); }
+=======
+        if (_currentPanel != null) { TogglePanel(_currentPanel); }
+>>>>>>> Stashed changes
         activeCanvas = ArmoryCanvas.GetComponentInChildren<CanvasGroup>();
 
-        ArmoryCanvas.DOAnchorPosX(0f, 1f);
-        LevelCanvas.DOAnchorPosX(ScaleManager.Width, 1f);
-        ShopCanvas.DOAnchorPosX(ScaleManager.Width * 2, 1f);
+        scrollContentTransform.DOAnchorPosX(-ScaleManager.Width * 0.5f, 0.5f);
 
         SelectedIconRect.DOSizeDelta(new Vector2(ScaleManager.SelectedIconWidth, SelectedIconRect.sizeDelta.y), 0.5f);
         SelectedIconRect.DOAnchorPosX(ScaleManager.SelectedIconWidth / 2, 0.5f);
@@ -126,12 +150,10 @@ public class CentralUIController : MonoBehaviour
             SideIconRect1 = IconPanel.transform.GetChild(0).GetComponent<RectTransform>(),
             SideIconRect2 = IconPanel.transform.GetChild(2).GetComponent<RectTransform>();
 
-        TogglePanel(_currentPanel);
+        if (_currentPanel != null) { _currentPanel.FadeOut(this); }
         activeCanvas = LevelCanvas.GetComponentInChildren<CanvasGroup>();
 
-        ArmoryCanvas.DOAnchorPosX(-ScaleManager.Width, 1f);
-        LevelCanvas.DOAnchorPosX(0f, 1f);
-        ShopCanvas.DOAnchorPosX(ScaleManager.Width, 1f);
+        scrollContentTransform.DOAnchorPosX(-ScaleManager.Width * 1.5f, 0.5f);
 
         SideIconRect1.DOSizeDelta(new Vector2(ScaleManager.SideIconWidth, SideIconRect1.sizeDelta.y), 0.5f);
         SideIconRect1.DOAnchorPosX(ScaleManager.SideIconWidth / 2, 0.5f);
@@ -156,12 +178,10 @@ public class CentralUIController : MonoBehaviour
             SideIconRect1 = IconPanel.transform.GetChild(0).GetComponent<RectTransform>(),
             SideIconRect2 = IconPanel.transform.GetChild(1).GetComponent<RectTransform>();
 
-        TogglePanel(_currentPanel);
+        if (_currentPanel != null) { _currentPanel.FadeOut(this); }
         activeCanvas = ShopCanvas.GetComponentInChildren<CanvasGroup>();
 
-        ArmoryCanvas.DOAnchorPosX(-ScaleManager.Width * 2, 1f);
-        LevelCanvas.DOAnchorPosX(-ScaleManager.Width, 1f);
-        ShopCanvas.DOAnchorPosX(0f, 1f);
+        scrollContentTransform.DOAnchorPosX(-ScaleManager.Width * 2.5f, 0.5f);
 
         SideIconRect1.DOSizeDelta(new Vector2(ScaleManager.SideIconWidth, SideIconRect1.sizeDelta.y), 0.5f);
         SideIconRect1.DOAnchorPosX(ScaleManager.SideIconWidth / 2, 0.5f);

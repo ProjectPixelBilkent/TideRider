@@ -15,4 +15,4 @@ MonoBehaviour:
   weaponName: Icegun
   weaponDescription: This is a Icegun
   weaponLevels: []
-  weaponIcon: {fileID: 0}
+  weaponIcon: {fileID: 5194246080318966883, guid: 580b91e7be3fc664cab10cba1ec4c3e8, type: 3}

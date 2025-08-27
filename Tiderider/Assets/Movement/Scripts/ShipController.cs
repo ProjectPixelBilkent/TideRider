@@ -12,12 +12,12 @@ public class ShipController : MonoBehaviour
     [Header("Movement Settings")]
     [SerializeField] public float maxVelocity = 15f;
     [SerializeField] public float deceleration = 5f;
-    
+
     [Header("Forward Flight")]
     [SerializeField] private float forwardSpeed = 20f;
     [SerializeField] private float maxRotationAngle = 45f; // Maximum bank angle in degrees
     [SerializeField] private float rotationSmoothness = 5f; // How smoothly the ship rotates
-    
+
     [Header("Distance-Based Acceleration")]
     [SerializeField] private float maxAccelerationDistance = 10f;
     [SerializeField] private float minAccelerationDistance = 0.5f;
@@ -27,12 +27,15 @@ public class ShipController : MonoBehaviour
     [Header("Ship Model")]
     [SerializeField] private ShipModel model;
 
+    [Header("Constant Upward Speed")]
+    [SerializeField] private float constantUpwardSpeed = 5f;
+
     private bool isTracking = false;
     private Camera mainCamera;
     private Vector3 targetWorldPosition;
     public Vector3 currentVelocity = Vector3.zero;
     private float targetRotationZ = 0f;
-    
+
     /// <summary>
     /// Initialize components and setup.
     /// </summary>
@@ -42,23 +45,23 @@ public class ShipController : MonoBehaviour
         mainCamera = Camera.main;
         targetWorldPosition = transform.position;
     }
-    
+
     /// <summary>
     /// Handle input and update ship movement.
     /// </summary>
     void Update()
     {
         HandleInput();
-        
+
         if (isTracking)
         {
             UpdateMousePosition();
         }
-        
+
         HandleMovement();
         HandleRotation();
     }
-    
+
     /// <summary>
     /// Handle mouse input for tracking.
     /// </summary>
@@ -78,7 +81,7 @@ public class ShipController : MonoBehaviour
             isTracking = false;
         }
     }
-    
+
     /// <summary>
     /// Handle ship movement with distance-based acceleration.
     /// </summary>
@@ -92,7 +95,10 @@ public class ShipController : MonoBehaviour
         {
             ApplyDeceleration();
         }
-        
+
+        // Add constant upward speed
+        currentVelocity.y = Mathf.Max(currentVelocity.y, constantUpwardSpeed);
+
         ApplyMovement();
     }
 
@@ -103,27 +109,27 @@ public class ShipController : MonoBehaviour
     {
         // Calculate lateral speed (how fast we're moving toward cursor)
         float lateralSpeed = currentVelocity.magnitude;
-        
+
         // Calculate rotation based on ratio of lateral speed to forward speed
         float speedRatio = lateralSpeed / forwardSpeed;
-        
+
         // Determine rotation direction based on movement direction
         Vector3 movementDirection = currentVelocity.normalized;
         float rotationDirection = Vector3.Cross(Vector3.up, movementDirection).z;
-        
+
         // Calculate target rotation angle
         targetRotationZ = rotationDirection * speedRatio * maxRotationAngle;
-        
+
         // If not moving, gradually return to level flight
         if (lateralSpeed < 0.1f)
         {
             targetRotationZ = 0f;
         }
-        
+
         // Smoothly rotate toward target angle
         float currentRotationZ = transform.eulerAngles.z;
         if (currentRotationZ > 180f) currentRotationZ -= 360f; // Normalize to -180 to 180
-        
+
         float newRotationZ = Mathf.LerpAngle(currentRotationZ, targetRotationZ, rotationSmoothness * Time.deltaTime);
         transform.rotation = Quaternion.Euler(0f, 0f, newRotationZ);
     }
@@ -136,29 +142,29 @@ public class ShipController : MonoBehaviour
         Vector3 directionToTarget = (targetWorldPosition - transform.position);
         float distanceToTarget = directionToTarget.magnitude;
         Vector3 normalizedDirection = directionToTarget.normalized;
-        
+
         // Calculate acceleration strength based on distance
-        float normalizedDistance = Mathf.Clamp01((distanceToTarget - minAccelerationDistance) / 
+        float normalizedDistance = Mathf.Clamp01((distanceToTarget - minAccelerationDistance) /
                                                 (maxAccelerationDistance - minAccelerationDistance));
         float curveValue = accelerationCurve.Evaluate(normalizedDistance);
         float accelerationStrength = curveValue * accelerationMultiplier;
-        
+
         // Calculate desired velocity
         float desiredSpeed = Mathf.Min(accelerationStrength, maxVelocity);
         Vector3 desiredVelocity = normalizedDirection * desiredSpeed;
-        
+
         // Apply acceleration
         float lerpRate = accelerationStrength * Time.deltaTime;
         currentVelocity = Vector3.Lerp(currentVelocity, desiredVelocity, lerpRate);
     }
-    
+
     /// <summary>
     /// Apply deceleration when not tracking.
     /// </summary>
     private void ApplyDeceleration()
     {
         currentVelocity = Vector3.Lerp(currentVelocity, Vector3.zero, deceleration * Time.deltaTime);
-        
+
         if (currentVelocity.magnitude < 0.01f)
         {
             currentVelocity = Vector3.zero;
@@ -180,7 +186,7 @@ public class ShipController : MonoBehaviour
             transform.position += currentVelocity * Time.deltaTime;
         }
     }
-    
+
     /// <summary>
     /// Update mouse position target.
     /// </summary>
@@ -189,4 +195,4 @@ public class ShipController : MonoBehaviour
         Vector3 mousePosition = Input.mousePosition;
         targetWorldPosition = mainCamera.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, 10f));
     }
-} 
+}

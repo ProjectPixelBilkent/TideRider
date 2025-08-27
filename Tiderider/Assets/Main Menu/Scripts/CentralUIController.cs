@@ -119,10 +119,7 @@ public class CentralUIController : MonoBehaviour
             SideIconRect2 = IconPanel.transform.GetChild(2).GetComponent<RectTransform>();
 
 <<<<<<< Updated upstream
-        if (_currentPanel != null) { _currentPanel.FadeOut(this); }
-=======
         if (_currentPanel != null) { TogglePanel(_currentPanel); }
->>>>>>> Stashed changes
         activeCanvas = ArmoryCanvas.GetComponentInChildren<CanvasGroup>();
 
         scrollContentTransform.DOAnchorPosX(-ScaleManager.Width * 0.5f, 0.5f);

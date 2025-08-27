@@ -95,21 +95,25 @@ public class ArmoryManager : MonoBehaviour
             if (weaponSlot == null)
             {
                 weaponSlot = WeaponSlot; // Assign the selected weapon slot to the weapon slot variable
+                Debug.Log("Weapon Set To: " + weaponSlot.GetComponent<WeaponSlotManager>().weapon);
                 WeaponSlotManager.ExpandInfoCard(weaponSlot); // Expand the info card of the weapon
             }
             else if (weaponSlot != WeaponSlot)
             {
+                Debug.Log("Previous Weapon Was: " + weaponSlot.GetComponent <WeaponSlotManager>().weapon);
                 DOTween.Sequence()
                 .AppendCallback(() => WeaponSlotManager.ShrinkInfoCard(weaponSlot))
                 .AppendInterval(0.5f) // Wait for shrink animation duration
                 .AppendCallback(() =>
                 {
                     weaponSlot = WeaponSlot;
+                    Debug.Log("Weapon Changed To: " + weaponSlot.GetComponent<WeaponSlotManager>().weapon);
                     WeaponSlotManager.ExpandInfoCard(weaponSlot);
                 });
             }
             else
             {
+                Debug.Log("a");
                 DeselectWeapon(0); // If the same weapon slot is clicked, deselect it
             }
         }
@@ -119,6 +123,7 @@ public class ArmoryManager : MonoBehaviour
             selectedWeapon = WeaponSlot.GetComponent<WeaponSlotManager>().weapon; // Assign the selected weapon to the slot's manager
             armorySlot.GetComponent<Image>().sprite = selectedWeapon.weaponIcon; // Set the icon of the weapon in the slot
             DeselectSlot();
+            Debug.Log("b");
             DeselectWeapon(0); // Deselect the weapon slot after assigning the weapon
         }
     }
@@ -146,8 +151,10 @@ public class ArmoryManager : MonoBehaviour
 
         if (weaponSlot != null)
         {
+            EventSystem.current.SetSelectedGameObject(null);
             WeaponSlotManager.ShrinkInfoCard(weaponSlot); // Shrink the info card of the weapon
             weaponSlot = null; // Clear the weapon slot variable
+            Debug.Log("Weapon Deselected");
         }
     }
 }

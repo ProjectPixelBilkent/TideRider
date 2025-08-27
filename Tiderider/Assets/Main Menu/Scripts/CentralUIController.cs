@@ -141,7 +141,7 @@ public class CentralUIController : MonoBehaviour
             SideIconRect1 = IconPanel.transform.GetChild(0).GetComponent<RectTransform>(),
             SideIconRect2 = IconPanel.transform.GetChild(2).GetComponent<RectTransform>();
 
-        if (_currentPanel != null) { _currentPanel.FadeOut(this); }
+        if (_currentPanel != null) { TogglePanel(_currentPanel); }
         activeCanvas = LevelCanvas.GetComponentInChildren<CanvasGroup>();
 
         scrollContentTransform.DOAnchorPosX(-ScaleManager.Width * 1.5f, 0.5f);
@@ -169,7 +169,7 @@ public class CentralUIController : MonoBehaviour
             SideIconRect1 = IconPanel.transform.GetChild(0).GetComponent<RectTransform>(),
             SideIconRect2 = IconPanel.transform.GetChild(1).GetComponent<RectTransform>();
 
-        if (_currentPanel != null) { _currentPanel.FadeOut(this); }
+        if (_currentPanel != null) { TogglePanel(_currentPanel); }
         activeCanvas = ShopCanvas.GetComponentInChildren<CanvasGroup>();
 
         scrollContentTransform.DOAnchorPosX(-ScaleManager.Width * 2.5f, 0.5f);

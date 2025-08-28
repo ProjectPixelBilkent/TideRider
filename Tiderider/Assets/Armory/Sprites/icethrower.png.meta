@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      icethrower_0: 5194246080318966883
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

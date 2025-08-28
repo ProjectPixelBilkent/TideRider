@@ -63,10 +63,15 @@ public class ObstacleManager : MonoBehaviour
         // Y position just above the screen
         float spawnY = screenBounds.y + spawnYOffset;
 
-        Vector3 spawnPosition = new Vector3(randomX, spawnY, 0f);
-
         // Randomly select a prefab
         GameObject prefab = obstaclePrefabs[Random.Range(0, obstaclePrefabs.Length)];
+
+        if(prefab.GetComponent<SurpriseObstacle>() != null )
+        {
+            spawnY = Random.Range(screenBounds.y * 0.5f, screenBounds.y + spawnYOffset);
+        }
+
+        Vector3 spawnPosition = new Vector3(randomX, spawnY, 0f);
         GameObject obstacle = Instantiate(prefab, spawnPosition, Quaternion.identity);
 
         // Add movement script or velocity

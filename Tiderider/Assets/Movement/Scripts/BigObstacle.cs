@@ -15,7 +15,7 @@ public class BigObstacle : Obstacle
     /// <summary>
     /// Sets the scale of the big obstacle and runs base obstacle initialization.
     /// </summary>
-    void Start()
+    protected override void Start()
     {
         base.Start(); // Ensure Obstacle's Start() runs
         transform.localScale = bigSize;

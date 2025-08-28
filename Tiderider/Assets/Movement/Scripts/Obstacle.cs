@@ -33,7 +33,7 @@ public class Obstacle : MonoBehaviour
     /// <summary>
     /// Moves the obstacle downward.
     /// </summary>
-    void Update()
+    protected virtual void Update()
     {
         // Move downward
         transform.position += Vector3.down * speed * Time.deltaTime;

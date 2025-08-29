@@ -1,0 +1,7 @@
+{
+  "lines": [
+    { "speaker": "NPC", "text": "Hoş geldin gezgin!" },
+    { "speaker": "NPC", "text": "Şehir kapıları bu gece kapanır." },
+    { "speaker": "Anlatıcı", "text": "Görev güncellendi: Han'a uğra." }
+  ]
+}

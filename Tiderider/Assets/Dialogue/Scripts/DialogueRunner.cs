@@ -6,27 +6,28 @@ using UnityEngine.UI;
 using TMPro;
 
 [Serializable]
-public class DialogueFile {
-    public DialogueLine[] lines;
-}
+public class DialogueFile { public DialogueLine[] lines; }
 
 [Serializable]
 public class DialogueLine {
-    public string speaker;   // "NPC", "Hero", "Narrator"...
-    public string text;      // gösterilecek metin
-    public float wait = 0f;  // autoAdvance açıksa bu kadar bekleyip geçer
-    public string portrait;  // Resources içinden uzantısız yol: "Portraits/npc1"
+    public string speaker;     // "NPC", "Hero", "Narrator"...
+    public string text;        // diyalog metni
+    public float wait = 0f;    // autoAdvance açıksa, satır bitince bekleme
+    public string portrait;    // Resources yolu: "Portraits/some_sprite" (uzantısız)
 }
 
 public class DialogueRunner : MonoBehaviour
 {
-    [Header("UI References")]
-    public TextMeshProUGUI speakerText;   // üstte küçük isim
-    public TextMeshProUGUI bodyText;      // alttaki diyalog metni
-    public Image portraitImage;           // metin kutusuna komşu küçük resim
+    [Header("UI")]
+    public TextMeshProUGUI speakerText;   // Canvas/SpeakerText
+    public TextMeshProUGUI bodyText;      // Canvas/PortraitImage/BodyText
+    public Image portraitImage;           // Canvas/PortraitImage (Image)
+
+    [Header("Animate THIS (PortraitImage)")]
+    public RectTransform dialoguePanel;   // Canvas/PortraitImage (RectTransform)
 
     [Header("Data")]
-    [Tooltip("Resources altındaki yol (uzantısız). Örn: Dialogues/intro")]
+    [Tooltip("Resources altındaki JSON yolu (uzantısız). Örn: Dialogues/intro")]
     public string resourcePath = "Dialogues/intro";
 
     [Header("Behavior")]
@@ -35,98 +36,94 @@ public class DialogueRunner : MonoBehaviour
     [Tooltip("Satırlar otomatik ilerlesin mi? true ise 'wait' kadar bekler")]
     public bool autoAdvance = false;
 
-    // dokunma debouncing
+    [Header("Panel Anim (sadece pozisyon)")]
+    [Tooltip("Giriş/çıkış süresi (sn)")]
+    public float panelAnimDuration = 0.5f;
+    [Tooltip("Dikey kaydırma ofseti (px). Pozitif ise aşağıdan yukarı kayar.")]
+    public float slideOffsetY = 200f;
+    [Tooltip("Animasyon eğrisi")]
+    public AnimationCurve panelCurve = AnimationCurve.EaseInOut(0,0,1,1);
+
+    // input debouncing
     private float _lastTapTime = -999f;
     private const float TapCooldown = 0.08f;
 
-    // dahili durum
+    // state
     private DialogueFile _dialogue;
     private int _index = -1;
     private bool _typing = false;
     private Coroutine _typingCo;
+    private bool _panelAnimating = false;
 
-    // sprite cache
+    private Vector2 _homePos;                      // panelin sabit hedef konumu
     private readonly Dictionary<string, Sprite> _spriteCache = new();
 
-    void Start() {
-        LoadAndStart();
-    }
+    void Start() { LoadAndStart(); }
 
-    /// <summary>JSON'u Resources'tan yükler ve diyalogu başlatır.</summary>
     public void LoadAndStart() {
         var ta = Resources.Load<TextAsset>(resourcePath);
-        if (ta == null) {
-            Debug.LogError($"Dialogue JSON not found at Resources/{resourcePath}.json");
-            return;
-        }
+        if (ta == null) { Debug.LogError($"Dialogue JSON not found: Resources/{resourcePath}.json"); return; }
         _dialogue = JsonUtility.FromJson<DialogueFile>(ta.text);
-        if (_dialogue == null || _dialogue.lines == null || _dialogue.lines.Length == 0) {
-            Debug.LogError("Dialogue JSON is empty or invalid.");
-            return;
-        }
+        if (_dialogue?.lines == null || _dialogue.lines.Length == 0) { Debug.LogError("Dialogue JSON empty/invalid."); return; }
+
+        // Sahnede PortraitImage (dialoguePanel) neredeyse, orası "home" konum.
+        _homePos = dialoguePanel.anchoredPosition;
+
         _index = -1;
         Next();
     }
 
     void Update() {
-        if (_dialogue == null) return;
+        if (_dialogue == null || _panelAnimating) return;
 
-        // Editor/PC
         bool mouseTap = Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space);
-
-        // Mobil dokunuş
-        bool touchTap = false;
-        if (Input.touchCount > 0) {
-            var t = Input.GetTouch(0);
-            touchTap = (t.phase == TouchPhase.Began);
-        }
+        bool touchTap = Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began;
 
         if ((mouseTap || touchTap) && Time.time - _lastTapTime > TapCooldown) {
             _lastTapTime = Time.time;
-            OnAdvanceInput();
+            if (_typing) CompleteTyping(); else Next();
         }
     }
 
-    private void OnAdvanceInput() {
-        if (_dialogue == null) return;
+    public void Next() { StartCoroutine(NextRoutine()); }
 
-        if (_typing) {
-            CompleteTyping();   // yazıyı anında tamamla
-        } else {
-            Next();             // bir sonraki satıra geç
+    private IEnumerator NextRoutine() {
+        if (_typing) CompleteTyping();
+
+        // İlk satırda dışarı kaydırma yapma (panel zaten home'da)
+        if (_index >= 0) {
+            yield return SlideOut();   // home → home - offset
         }
-    }
 
-    private void Next() {
         _index++;
-        if (_index >= _dialogue.lines.Length) {
-            OnEnd();
-            return;
-        }
+        if (_index >= _dialogue.lines.Length) { Debug.Log("Dialogue finished."); yield break; }
 
         var line = _dialogue.lines[_index];
 
-        // Portreyi uygula (varsa)
-        ApplyPortrait(line);
+        // portre sprite'ını satır bazında değiştir
+        ApplyPortraitSprite(line);
 
-        // Typewriter başlat
+        // metinleri hazırla (body boş; typewriter animasyondan sonra başlayacak)
+        if (speakerText) speakerText.text = string.IsNullOrEmpty(line.speaker) ? "" : line.speaker;
+        if (bodyText) bodyText.text = "";
+
+        // Paneli ekrana geri kaydır (home - offset → home)
+        yield return SlideIn();
+
+        // Typewriter başlasın
         if (_typingCo != null) StopCoroutine(_typingCo);
         _typingCo = StartCoroutine(TypeLine(line));
     }
 
     private IEnumerator TypeLine(DialogueLine line) {
         _typing = true;
-
-        if (speakerText) speakerText.text = string.IsNullOrEmpty(line.speaker) ? "" : line.speaker;
-        if (bodyText) bodyText.text = "";
-
         string s = line.text ?? "";
         float delay = (charsPerSecond <= 0f) ? 0f : 1f / charsPerSecond;
 
         foreach (char ch in s) {
             bodyText.text += ch;
             if (delay > 0f) yield return new WaitForSeconds(delay);
-            else yield return null; // bir frame bekle
+            else yield return null;
         }
 
         _typing = false;
@@ -146,17 +143,53 @@ public class DialogueRunner : MonoBehaviour
         _typing = false;
     }
 
-    private void OnEnd() {
-        Debug.Log("Dialogue finished.");
-        // İstersen UI temizliği:
-        // if (speakerText) speakerText.text = "";
-        // if (bodyText) bodyText.text = "";
-        // if (portraitImage) portraitImage.enabled = false;
+    // --- panel animasyonları (drift yok: sabit _homePos referansı) ---
+
+    private IEnumerator SlideOut() {
+        if (!dialoguePanel) yield break;
+        _panelAnimating = true;
+
+        // daima home → home - offset
+        Vector2 startPos = _homePos;
+        Vector2 endPos   = _homePos - new Vector2(0, slideOffsetY);
+
+        // emin olmak için tam home'a oturt
+        dialoguePanel.anchoredPosition = startPos;
+
+        float t = 0f;
+        while (t < 1f) {
+            t += Time.deltaTime / panelAnimDuration;
+            float k = panelCurve.Evaluate(Mathf.Clamp01(t));
+            dialoguePanel.anchoredPosition = Vector2.LerpUnclamped(startPos, endPos, k);
+            yield return null;
+        }
+        _panelAnimating = false;
     }
 
-    // --- Helpers ---
+    private IEnumerator SlideIn() {
+        if (!dialoguePanel) yield break;
+        _panelAnimating = true;
 
-    private void ApplyPortrait(DialogueLine line) {
+        // daima home - offset → home
+        Vector2 startPos = _homePos - new Vector2(0, slideOffsetY);
+        Vector2 endPos   = _homePos;
+
+        // paneli ekran dışında başlat
+        dialoguePanel.anchoredPosition = startPos;
+
+        float t = 0f;
+        while (t < 1f) {
+            t += Time.deltaTime / panelAnimDuration;
+            float k = panelCurve.Evaluate(Mathf.Clamp01(t));
+            dialoguePanel.anchoredPosition = Vector2.LerpUnclamped(startPos, endPos, k);
+            yield return null;
+        }
+        _panelAnimating = false;
+    }
+
+    // --- helpers ---
+
+    private void ApplyPortraitSprite(DialogueLine line) {
         if (!portraitImage) return;
 
         if (!string.IsNullOrEmpty(line.portrait)) {
@@ -165,8 +198,9 @@ public class DialogueRunner : MonoBehaviour
             portraitImage.enabled = sp != null;
             portraitImage.preserveAspect = true;
         } else {
-            // Satırda portre belirtilmemişse gizle (yalnızca anlatıcı metni vs.)
-            portraitImage.enabled = false;
+            // satırda portrait verilmemişse, var olanı korumak istiyorsan burayı boş bırak.
+            // tamamen gizlemek istersen:
+            // if (portraitImage.sprite == null) portraitImage.enabled = false;
         }
     }
 
@@ -176,7 +210,7 @@ public class DialogueRunner : MonoBehaviour
 
         var loaded = Resources.Load<Sprite>(resPath);
         if (loaded == null) {
-            Debug.LogWarning($"Sprite not found: Resources/{resPath} (uzantısız path ve Resources içinde olmalı)");
+            Debug.LogWarning($"Sprite not found: Resources/{resPath}  (uzantısız path ve Resources içinde olmalı)");
             return null;
         }
         _spriteCache[resPath] = loaded;

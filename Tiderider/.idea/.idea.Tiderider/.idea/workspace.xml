@@ -6,10 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="ee77a903-0e74-4939-9f7c-25b87e248aa0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Tiderider/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Tiderider/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Dialogue/Resources/Dialogues/intro.json" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Dialogue/Resources/Dialogues/intro.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Dialogue/Scenes/Dialogue.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Dialogue/Scenes/Dialogue.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Dialogue/Scripts/DialogueRunner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Dialogue/Scripts/DialogueRunner.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,7 +90,7 @@
       <option name="presentableId" value="Default" />
       <updated>1750263645977</updated>
       <workItem from="1750263648093" duration="2390000" />
-      <workItem from="1756489730218" duration="5782000" />
+      <workItem from="1756489730218" duration="8680000" />
     </task>
     <servers />
   </component>
@@ -107,6 +104,17 @@
     <option name="unityProjectFolder" value="true" />
   </component>
   <component name="UnityUnitTestConfiguration" currentTestLauncher="Both" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>

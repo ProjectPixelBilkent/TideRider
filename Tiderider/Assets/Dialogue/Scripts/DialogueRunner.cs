@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 [Serializable]
@@ -10,40 +12,47 @@ public class DialogueFile {
 
 [Serializable]
 public class DialogueLine {
-    public string speaker;
-    public string text;
-    public float wait = 0f; // autoAdvance açıksa bu kadar bekleyip geçer
+    public string speaker;   // "NPC", "Hero", "Narrator"...
+    public string text;      // gösterilecek metin
+    public float wait = 0f;  // autoAdvance açıksa bu kadar bekleyip geçer
+    public string portrait;  // Resources içinden uzantısız yol: "Portraits/npc1"
 }
 
 public class DialogueRunner : MonoBehaviour
 {
     [Header("UI References")]
-    public TextMeshProUGUI speakerText;
-    public TextMeshProUGUI bodyText;
+    public TextMeshProUGUI speakerText;   // üstte küçük isim
+    public TextMeshProUGUI bodyText;      // alttaki diyalog metni
+    public Image portraitImage;           // metin kutusuna komşu küçük resim
 
     [Header("Data")]
-    [Tooltip("Resources altındaki yol (uzantısız). Örn: dialogues/intro")]
-    public string resourcePath = "dialogues/intro";
+    [Tooltip("Resources altındaki yol (uzantısız). Örn: Dialogues/intro")]
+    public string resourcePath = "Dialogues/intro";
 
     [Header("Behavior")]
-    [Tooltip("Karakter/saniye (typewriter)")]
+    [Tooltip("Karakter/saniye (typewriter hızı)")]
     public float charsPerSecond = 40f;
-    [Tooltip("Otomatik ilerlesin mi? (true ise wait süresine göre)")]
+    [Tooltip("Satırlar otomatik ilerlesin mi? true ise 'wait' kadar bekler")]
     public bool autoAdvance = false;
 
-    // dokunuş debouncing
+    // dokunma debouncing
     private float _lastTapTime = -999f;
-    private const float TapCooldown = 0.08f; // çok hızlı çift dokunuşları filtrele
+    private const float TapCooldown = 0.08f;
 
+    // dahili durum
     private DialogueFile _dialogue;
     private int _index = -1;
     private bool _typing = false;
     private Coroutine _typingCo;
 
+    // sprite cache
+    private readonly Dictionary<string, Sprite> _spriteCache = new();
+
     void Start() {
         LoadAndStart();
     }
 
+    /// <summary>JSON'u Resources'tan yükler ve diyalogu başlatır.</summary>
     public void LoadAndStart() {
         var ta = Resources.Load<TextAsset>(resourcePath);
         if (ta == null) {
@@ -62,10 +71,10 @@ public class DialogueRunner : MonoBehaviour
     void Update() {
         if (_dialogue == null) return;
 
-        // EDITOR/PC: sol tık veya Space
+        // Editor/PC
         bool mouseTap = Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space);
 
-        // MOBİL: ekrana ilk dokunuş
+        // Mobil dokunuş
         bool touchTap = false;
         if (Input.touchCount > 0) {
             var t = Input.GetTouch(0);
@@ -90,13 +99,17 @@ public class DialogueRunner : MonoBehaviour
 
     private void Next() {
         _index++;
-
         if (_index >= _dialogue.lines.Length) {
             OnEnd();
             return;
         }
 
         var line = _dialogue.lines[_index];
+
+        // Portreyi uygula (varsa)
+        ApplyPortrait(line);
+
+        // Typewriter başlat
         if (_typingCo != null) StopCoroutine(_typingCo);
         _typingCo = StartCoroutine(TypeLine(line));
     }
@@ -135,8 +148,38 @@ public class DialogueRunner : MonoBehaviour
 
     private void OnEnd() {
         Debug.Log("Dialogue finished.");
-        // İstersen UI'yı temizleyebilirsin:
+        // İstersen UI temizliği:
         // if (speakerText) speakerText.text = "";
         // if (bodyText) bodyText.text = "";
+        // if (portraitImage) portraitImage.enabled = false;
+    }
+
+    // --- Helpers ---
+
+    private void ApplyPortrait(DialogueLine line) {
+        if (!portraitImage) return;
+
+        if (!string.IsNullOrEmpty(line.portrait)) {
+            var sp = LoadSprite(line.portrait);
+            portraitImage.sprite = sp;
+            portraitImage.enabled = sp != null;
+            portraitImage.preserveAspect = true;
+        } else {
+            // Satırda portre belirtilmemişse gizle (yalnızca anlatıcı metni vs.)
+            portraitImage.enabled = false;
+        }
+    }
+
+    private Sprite LoadSprite(string resPath) {
+        if (string.IsNullOrEmpty(resPath)) return null;
+        if (_spriteCache.TryGetValue(resPath, out var s)) return s;
+
+        var loaded = Resources.Load<Sprite>(resPath);
+        if (loaded == null) {
+            Debug.LogWarning($"Sprite not found: Resources/{resPath} (uzantısız path ve Resources içinde olmalı)");
+            return null;
+        }
+        _spriteCache[resPath] = loaded;
+        return loaded;
     }
 }

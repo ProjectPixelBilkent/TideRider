@@ -1,7 +1,7 @@
 {
   "lines": [
-    { "speaker": "NPC", "text": "Hoş geldin gezgin!" },
-    { "speaker": "NPC", "text": "Şehir kapıları bu gece kapanır." },
-    { "speaker": "Anlatıcı", "text": "Görev güncellendi: Han'a uğra." }
+    { "speaker": "NPC", "text": "Hoş geldin!", "portrait": "Portraits/siren_before" },
+    { "speaker": "Hero", "text": "Merhaba!", "portrait": "Portraits/siren_before" },
+    { "speaker": "Narrator", "text": "Görev güncellendi.", "portrait": "Portraits/spraits_after" }
   ]
 }

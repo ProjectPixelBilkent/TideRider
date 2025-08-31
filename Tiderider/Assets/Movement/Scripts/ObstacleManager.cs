@@ -16,6 +16,9 @@ public class ObstacleManager : MonoBehaviour
     [SerializeField] private float obstacleSpeed = 3f;
     [SerializeField] private float spawnYOffset = 1f;
 
+    [Header("Spawning Control")]
+    [SerializeField] private bool spawningEnabled = true;
+
     private float timer = 0f;
     private Camera mainCamera;
 
@@ -32,6 +35,9 @@ public class ObstacleManager : MonoBehaviour
     /// </summary>
     void Update()
     {
+        if (!spawningEnabled)
+            return;
+
         timer += Time.deltaTime;
         if (timer >= spawnInterval)
         {
@@ -57,10 +63,15 @@ public class ObstacleManager : MonoBehaviour
         // Y position just above the screen
         float spawnY = screenBounds.y + spawnYOffset;
 
-        Vector3 spawnPosition = new Vector3(randomX, spawnY, 0f);
-
         // Randomly select a prefab
         GameObject prefab = obstaclePrefabs[Random.Range(0, obstaclePrefabs.Length)];
+
+        if(prefab.GetComponent<SurpriseObstacle>() != null )
+        {
+            spawnY = Random.Range(screenBounds.y * 0.5f, screenBounds.y + spawnYOffset);
+        }
+
+        Vector3 spawnPosition = new Vector3(randomX, spawnY, 0f);
         GameObject obstacle = Instantiate(prefab, spawnPosition, Quaternion.identity);
 
         // Add movement script or velocity
@@ -69,6 +80,15 @@ public class ObstacleManager : MonoBehaviour
         {
             rb.linearVelocity = new Vector2(0, -obstacleSpeed);
         }
+    }
+
+    /// <summary>
+    /// Enables or disables obstacle spawning at runtime.
+    /// </summary>
+    /// <param name="enabled">If true, enables spawning; otherwise disables it.</param>
+    public void SetSpawningEnabled(bool enabled)
+    {
+        spawningEnabled = enabled;
     }
 }
 

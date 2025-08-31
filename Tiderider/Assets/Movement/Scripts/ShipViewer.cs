@@ -13,7 +13,7 @@ public class ShipViewer : MonoBehaviour
     [SerializeField] ShipController controller;
     [SerializeField] Slider healthSlider;
     [SerializeField] Slider speedSlider;
-    [SerializeField] private float SpeedBarPercent = 20f;
+    [SerializeField] private float SpeedBarPercent = 0f;
 
     /// <summary>
     /// Subscribes to health change events and updates UI.

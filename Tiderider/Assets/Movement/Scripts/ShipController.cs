@@ -36,6 +36,8 @@ public class ShipController : MonoBehaviour
     public Vector3 currentVelocity = Vector3.zero;
     private float targetRotationZ = 0f;
 
+    public Vector3 AdditionalVelocity = Vector3.zero;
+
     /// <summary>
     /// Initialize components and setup.
     /// </summary>
@@ -60,6 +62,12 @@ public class ShipController : MonoBehaviour
 
         HandleMovement();
         HandleRotation();
+    }
+
+    private void FixedUpdate()
+    {
+        var effect = FindExternalEffectAtScreenPoint(transform.position);
+        AdditionalVelocity = effect != null ? effect.GetAddition(gameObject) : Vector3.zero;
     }
 
     /// <summary>
@@ -98,6 +106,8 @@ public class ShipController : MonoBehaviour
 
         // Add constant upward speed
         currentVelocity.y = Mathf.Max(currentVelocity.y, constantUpwardSpeed);
+
+        currentVelocity += AdditionalVelocity;
 
         ApplyMovement();
     }
@@ -185,6 +195,26 @@ public class ShipController : MonoBehaviour
         {
             transform.position += currentVelocity * Time.deltaTime;
         }
+    }
+
+    /// <summary>
+    /// Casts a ray from the camera through the given screen point (in pixels) and returns
+    /// the first ExternalEffect encountered along the ray. This uses Physics2D.GetRayIntersectionAll
+    /// so colliders in front will NOT block discovering ExternalEffect behind them.
+    /// </summary>
+    public ExternalEffect FindExternalEffectAtScreenPoint(Vector2 worldPoint)
+    {
+        Collider2D[] colliders = Physics2D.OverlapPointAll(worldPoint);
+
+        foreach (var col in colliders)
+        {
+            if (col == null) continue;
+            var ext = col.GetComponentInParent<ExternalEffect>();
+            if (ext != null)
+                return ext; // return the first ExternalEffect found
+        }
+
+        return null; // none found
     }
 
     /// <summary>

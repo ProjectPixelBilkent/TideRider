@@ -81,8 +81,6 @@ public class CollisionController : MonoBehaviour
             // Flash color
             if (spriteRenderer != null && !isFlashing)
                 StartCoroutine(FlashColor());
-
-
         }
     }
 

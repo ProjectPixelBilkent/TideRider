@@ -66,9 +66,10 @@ public class ObstacleManager : MonoBehaviour
         // Randomly select a prefab
         GameObject prefab = obstaclePrefabs[Random.Range(0, obstaclePrefabs.Length)];
 
-        if(prefab.GetComponent<SurpriseObstacle>() != null )
+        if (prefab.GetComponent<SurpriseObstacle>() != null )
         {
-            spawnY = Random.Range(screenBounds.y * 0.5f, screenBounds.y + spawnYOffset);
+            //spawn surprises from 1/4th of the screen up to 3/4ths.
+            spawnY = Random.Range((3 * mainCamera.transform.position.y - screenBounds.y)/2, (mainCamera.transform.position.y + screenBounds.y) / 2);
         }
 
         Vector3 spawnPosition = new Vector3(randomX, spawnY, 0f);

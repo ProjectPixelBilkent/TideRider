@@ -17,7 +17,7 @@ public class ExternalEffect : MonoBehaviour
     };
 
     [SerializeField] private Direction direction;
-    [SerializeField] private float speed;
+    [SerializeField] protected float speed;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -31,8 +31,13 @@ public class ExternalEffect : MonoBehaviour
         
     }
 
-    public Vector3 GetAddition(GameObject ship)
+    public virtual Vector3 GetAddition(ShipController ship)
     {
         return directionVectors[direction] * speed;
+    }
+
+    void OnBecameInvisible()
+    {
+        Destroy(gameObject);
     }
 }

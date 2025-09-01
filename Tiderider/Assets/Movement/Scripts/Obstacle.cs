@@ -43,7 +43,7 @@ public class Obstacle : MonoBehaviour
     /// Updates the CircleCollider2D to fit the current sprite.
     /// </summary>
     /// <param name="sprite">The sprite to fit the collider to.</param>
-    private void UpdateColliderToMatchSprite(Sprite sprite)
+    protected virtual void UpdateColliderToMatchSprite(Sprite sprite)
     {
         // Remove existing CircleCollider2D if present
         var existingCollider = GetComponent<CircleCollider2D>();

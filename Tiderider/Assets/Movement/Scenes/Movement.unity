@@ -948,7 +948,7 @@ Camera:
   far clip plane: 2000
   field of view: 34
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 9
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1914,7 +1914,7 @@ GameObject:
   - component: {fileID: 1191205268}
   - component: {fileID: 1191205270}
   - component: {fileID: 1191205269}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Particle System Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7294,7 +7294,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1490789430}
   - component: {fileID: 1490789429}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ObstacleManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7317,6 +7317,8 @@ MonoBehaviour:
   - {fileID: 39280020223836803, guid: 218ea8d5ff8341d4889f3dc1386c5eca, type: 3}
   - {fileID: 3089341489726441051, guid: 8de3179e932b5604c8178b7da6ac2934, type: 3}
   - {fileID: 3089341489726441051, guid: 62e51feb03235274ea719e09d8a73ed1, type: 3}
+  - {fileID: 39280020223836803, guid: 590420cf90ce28c4790277c23de000ad, type: 3}
+  - {fileID: 39280020223836803, guid: a65fb8c0f60a44a448f40dfc691b00ef, type: 3}
   spawnInterval: 0.5
   obstacleSpeed: 0
   spawnYOffset: 1
@@ -7329,7 +7331,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1490789428}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -7937,7 +7939,7 @@ GameObject:
   - component: {fileID: 1859451691}
   - component: {fileID: 1859451690}
   - component: {fileID: 1859451689}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Particle System Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12927,7 +12929,7 @@ GameObject:
   - component: {fileID: 2062790732}
   - component: {fileID: 2062790734}
   - component: {fileID: 2062790733}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: PlayerShip
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -12981,6 +12983,7 @@ MonoBehaviour:
   model: {fileID: 2062790734}
   constantUpwardSpeed: 4
   currentVelocity: {x: 0, y: 0, z: 0}
+  AdditionalVelocity: {x: 0, y: 0, z: 0}
 --- !u!212 &2062790728
 SpriteRenderer:
   m_ObjectHideFlags: 0

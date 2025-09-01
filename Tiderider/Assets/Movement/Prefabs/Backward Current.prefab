@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: -364935425406671484}
   - component: {fileID: -217810467041598506}
   m_Layer: 0
-  m_Name: Basic_Obstacle 2
-  m_TagString: obstacle
+  m_Name: Backward Current
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27,13 +27,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 39280020223836803}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2505371606092800989
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -78,7 +78,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -7664337575455169194, guid: ef50776fa20f06f45a448553f7236776, type: 3}
+  m_Sprite: {fileID: -3883930128050460584, guid: 98f4fc67687cb6447bf07d5000b90abd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -102,7 +102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: 1
-  speed: 0.4
+  speed: 3
 --- !u!61 &-217810467041598506
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -67,7 +67,7 @@ public class ShipController : MonoBehaviour
     private void FixedUpdate()
     {
         var effect = FindExternalEffectAtScreenPoint(transform.position);
-        AdditionalVelocity = effect != null ? effect.GetAddition(gameObject) : Vector3.zero;
+        AdditionalVelocity = effect != null ? effect.GetAddition(this) : Vector3.zero;
     }
 
     /// <summary>

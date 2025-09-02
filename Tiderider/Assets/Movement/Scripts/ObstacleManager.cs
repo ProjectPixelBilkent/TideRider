@@ -55,7 +55,7 @@ public class ObstacleManager : MonoBehaviour
             return;
 
         // Get the screen width in world units
-        Vector2 screenBounds = mainCamera.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+        Vector2 screenBounds = LevelController.GetScreenBounds();
 
         // Random X position within screen width
         float randomX = Random.Range(-screenBounds.x, screenBounds.x);

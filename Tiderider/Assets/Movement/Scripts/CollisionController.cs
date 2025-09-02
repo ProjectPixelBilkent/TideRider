@@ -61,8 +61,7 @@ public class CollisionController : MonoBehaviour
                 StartCoroutine(FlashColor());
 
             // Destroy the obstacle unless it's a BigObstacle
-            var bigObstacle = collision.gameObject.GetComponent<BigObstacle>();
-            if (bigObstacle == null)
+            if (collision.gameObject.GetComponent<BigObstacle>() == null && collision.gameObject.GetComponent<Obstacle>() != null)
             {
                 Destroy(collision.gameObject);
             }

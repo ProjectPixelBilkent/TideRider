@@ -7321,6 +7321,7 @@ MonoBehaviour:
   - {fileID: 39280020223836803, guid: a65fb8c0f60a44a448f40dfc691b00ef, type: 3}
   - {fileID: 3089341489726441051, guid: e240e172d3b767343bcddceeac2eb37c, type: 3}
   - {fileID: 3089341489726441051, guid: e34be1ac981688d40ad621fe5a096e64, type: 3}
+  - {fileID: 2743745310613609813, guid: 11ed9ff2a9e0705419b3168598ab80d8, type: 3}
   spawnInterval: 0.5
   obstacleSpeed: 0
   spawnYOffset: 1

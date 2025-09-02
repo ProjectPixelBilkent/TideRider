@@ -121,5 +121,10 @@ public class LevelController : MonoBehaviour
             }
         }
     }
+
+    public static Vector2 GetScreenBounds()
+    {
+        return Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+    }
 }
 

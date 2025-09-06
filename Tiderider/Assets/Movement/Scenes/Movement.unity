@@ -7322,7 +7322,7 @@ MonoBehaviour:
   - {fileID: 3089341489726441051, guid: e240e172d3b767343bcddceeac2eb37c, type: 3}
   - {fileID: 3089341489726441051, guid: e34be1ac981688d40ad621fe5a096e64, type: 3}
   - {fileID: 2743745310613609813, guid: 11ed9ff2a9e0705419b3168598ab80d8, type: 3}
-  spawnInterval: 0.5
+  spawnInterval: 1
   obstacleSpeed: 0
   spawnYOffset: 1
   spawningEnabled: 1

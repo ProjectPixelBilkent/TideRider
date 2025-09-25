@@ -1,6 +1,16 @@
 using UnityEngine;
 using System;
 
+
+public enum ShipModifier
+{
+    None,
+    SlowedDown, 
+    Burning, 
+    Frozen
+}
+
+
 /// <summary>
 /// Holds ship health data and provides methods to modify and restore health.
 /// </summary>
@@ -14,10 +24,12 @@ public class ShipModel : MonoBehaviour
     private const int minHealth = 0;
     private const int maxHealth = 100;
     private int currentHealth;
+    private ShipModifier modifier;
 
     public int CurrentHealth { get => currentHealth; set => currentHealth = value; }
     public int MinHealth => minHealth;
     public int MaxHealth => maxHealth;
+    public ShipModifier Modifier => modifier;
 
     /// <summary>
     /// Increases ship health by the specified amount.

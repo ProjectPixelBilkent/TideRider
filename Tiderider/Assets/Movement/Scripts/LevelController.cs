@@ -31,7 +31,7 @@ public class LevelController : MonoBehaviour
         if (mainCamera == null)
             mainCamera = Camera.main;
         if (obstacleManager == null)
-            obstacleManager = FindObjectOfType<ObstacleManager>();
+            obstacleManager = FindFirstObjectByType<ObstacleManager>();
 
         edgeCollider = GetComponent<EdgeCollider2D>();
         SetupEdgeCollider();

@@ -12,7 +12,7 @@ using Unity.VisualScripting;
 public class WeaponLevel
 {
     public int cost; // Cost to upgrade to this level
-    public float damage;
+    public int damage;
     public float fireRate; // Time between shots in seconds
     public float range; // Maximum range of the weapon in Unity distance units
     public float HP; // Health points of the weapon
@@ -34,4 +34,16 @@ public class Weapon : ScriptableObject
     public WeaponLevel[] weaponLevels; // Array of levels for the weapon
     public int weaponLevelCount => weaponLevels.Length; // Total number of levels for the weapon
     public Sprite weaponIcon;
+    public Sprite bulletSprite;
+    [SerializeField] private string onCollisionWithBulletMethodName;
+
+    public void OnCollisionWithBullet(ShipModel model, int level)
+    {
+        GetType().GetMethod(onCollisionWithBulletMethodName).Invoke(this, new object[] { model, level });
+    }
+
+    public void NormalBullet(ShipModel model, int level)
+    {
+        model.Decrement(weaponLevels[level].damage);
+    }
 }

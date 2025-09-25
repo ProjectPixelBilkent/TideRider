@@ -11,8 +11,10 @@ GameObject:
   - component: {fileID: 7137745954006631449}
   - component: {fileID: 765588773355817832}
   - component: {fileID: 3871660815932931041}
+  - component: {fileID: 8150349788911135439}
+  - component: {fileID: 699871148616380033}
   m_Layer: 0
-  m_Name: Obstacle_Grey
+  m_Name: Common Pirate
   m_TagString: obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26,13 +28,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2743745310613609813}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
   m_LocalPosition: {x: 4.22, y: 7.44, z: 4.5356956}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
 --- !u!212 &765588773355817832
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -122,6 +124,43 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.4, y: 1.15}
+  m_Offset: {x: 0, y: -0.0063718557}
+  m_Size: {x: 0.4, y: 1.2816823}
   m_Direction: 0
+--- !u!114 &8150349788911135439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2743745310613609813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 781acaadfd45de2428ae55eaeeb49b5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &699871148616380033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2743745310613609813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e956df16afcd90449812505704263cf5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pirateArmory:
+  - weaponInfo: {fileID: 11400000, guid: b3e878eb06da4434b9a7e8241f255f8c, type: 2}
+    weaponLevel: 0
+  - weaponInfo: {fileID: 11400000, guid: b3e878eb06da4434b9a7e8241f255f8c, type: 2}
+    weaponLevel: 0
+  - weaponInfo: {fileID: 0}
+    weaponLevel: 0
+  - weaponInfo: {fileID: 0}
+    weaponLevel: 0
+  - weaponInfo: {fileID: 11400000, guid: b3e878eb06da4434b9a7e8241f255f8c, type: 2}
+    weaponLevel: 0
+  - weaponInfo: {fileID: 11400000, guid: b3e878eb06da4434b9a7e8241f255f8c, type: 2}
+    weaponLevel: 0

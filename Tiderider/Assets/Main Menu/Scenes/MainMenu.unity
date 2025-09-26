@@ -1268,12 +1268,20 @@ PrefabInstance:
       value: MiddleLeft
       objectReference: {fileID: 0}
     - target: {fileID: 3304192460052165279, guid: 6117bbf09ac1ac04bafee8666b724eb9, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3304192460052165279, guid: 6117bbf09ac1ac04bafee8666b724eb9, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1319880913}
     - target: {fileID: 3304192460052165279, guid: 6117bbf09ac1ac04bafee8666b724eb9, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: DeselectSlot
+      objectReference: {fileID: 0}
+    - target: {fileID: 3304192460052165279, guid: 6117bbf09ac1ac04bafee8666b724eb9, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_FloatArgument
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 5789045497846050827, guid: 6117bbf09ac1ac04bafee8666b724eb9, type: 3}
       propertyPath: m_Pivot.x
@@ -3319,12 +3327,20 @@ PrefabInstance:
       value: TopRight
       objectReference: {fileID: 0}
     - target: {fileID: 3304192460052165279, guid: 6117bbf09ac1ac04bafee8666b724eb9, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3304192460052165279, guid: 6117bbf09ac1ac04bafee8666b724eb9, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1319880913}
     - target: {fileID: 3304192460052165279, guid: 6117bbf09ac1ac04bafee8666b724eb9, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: DeselectSlot
+      objectReference: {fileID: 0}
+    - target: {fileID: 3304192460052165279, guid: 6117bbf09ac1ac04bafee8666b724eb9, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_FloatArgument
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 5789045497846050827, guid: 6117bbf09ac1ac04bafee8666b724eb9, type: 3}
       propertyPath: m_Pivot.x
@@ -7415,12 +7431,20 @@ PrefabInstance:
       value: BottomRight
       objectReference: {fileID: 0}
     - target: {fileID: 3304192460052165279, guid: 6117bbf09ac1ac04bafee8666b724eb9, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3304192460052165279, guid: 6117bbf09ac1ac04bafee8666b724eb9, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1319880913}
     - target: {fileID: 3304192460052165279, guid: 6117bbf09ac1ac04bafee8666b724eb9, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: DeselectSlot
+      value: DeselectWeapon
+      objectReference: {fileID: 0}
+    - target: {fileID: 3304192460052165279, guid: 6117bbf09ac1ac04bafee8666b724eb9, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_FloatArgument
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 5789045497846050827, guid: 6117bbf09ac1ac04bafee8666b724eb9, type: 3}
       propertyPath: m_Pivot.x
@@ -9757,12 +9781,20 @@ PrefabInstance:
       value: BottomLeft
       objectReference: {fileID: 0}
     - target: {fileID: 3304192460052165279, guid: 6117bbf09ac1ac04bafee8666b724eb9, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3304192460052165279, guid: 6117bbf09ac1ac04bafee8666b724eb9, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1319880913}
     - target: {fileID: 3304192460052165279, guid: 6117bbf09ac1ac04bafee8666b724eb9, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: DeselectSlot
+      objectReference: {fileID: 0}
+    - target: {fileID: 3304192460052165279, guid: 6117bbf09ac1ac04bafee8666b724eb9, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_FloatArgument
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 5789045497846050827, guid: 6117bbf09ac1ac04bafee8666b724eb9, type: 3}
       propertyPath: m_Pivot.x
@@ -10049,7 +10081,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1620, y: 1200}
+  m_AnchoredPosition: {x: -540, y: 1200}
   m_SizeDelta: {x: 3240, y: 2400}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1156037593
@@ -12544,6 +12576,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3549571833895424555, guid: 0e17bc1e4c99edf4cb1820c13291b480, type: 3}
+      propertyPath: weapon
+      value: 
+      objectReference: {fileID: 11400000, guid: b3e878eb06da4434b9a7e8241f255f8c, type: 2}
     - target: {fileID: 5932430310557993869, guid: 0e17bc1e4c99edf4cb1820c13291b480, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 4
@@ -16263,12 +16299,20 @@ PrefabInstance:
       value: MiddleRight
       objectReference: {fileID: 0}
     - target: {fileID: 3304192460052165279, guid: 6117bbf09ac1ac04bafee8666b724eb9, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3304192460052165279, guid: 6117bbf09ac1ac04bafee8666b724eb9, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1319880913}
     - target: {fileID: 3304192460052165279, guid: 6117bbf09ac1ac04bafee8666b724eb9, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: DeselectSlot
+      objectReference: {fileID: 0}
+    - target: {fileID: 3304192460052165279, guid: 6117bbf09ac1ac04bafee8666b724eb9, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_FloatArgument
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 5789045497846050827, guid: 6117bbf09ac1ac04bafee8666b724eb9, type: 3}
       propertyPath: m_Pivot.x
@@ -17835,12 +17879,20 @@ PrefabInstance:
       value: TopLeft
       objectReference: {fileID: 0}
     - target: {fileID: 3304192460052165279, guid: 6117bbf09ac1ac04bafee8666b724eb9, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3304192460052165279, guid: 6117bbf09ac1ac04bafee8666b724eb9, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1319880913}
     - target: {fileID: 3304192460052165279, guid: 6117bbf09ac1ac04bafee8666b724eb9, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: DeselectSlot
+      objectReference: {fileID: 0}
+    - target: {fileID: 3304192460052165279, guid: 6117bbf09ac1ac04bafee8666b724eb9, type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_FloatArgument
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 5789045497846050827, guid: 6117bbf09ac1ac04bafee8666b724eb9, type: 3}
       propertyPath: m_Pivot.x

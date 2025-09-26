@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 580b91e7be3fc664cab10cba1ec4c3e8
+guid: d896083069b2f1d4f95161037de3eb27
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -173,8 +173,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      icethrower_0: 5194246080318966883
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

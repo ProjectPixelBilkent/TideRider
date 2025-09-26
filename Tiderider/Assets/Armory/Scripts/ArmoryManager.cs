@@ -15,7 +15,7 @@ using UnityEngine.UI;
 public class ArmoryManager : MonoBehaviour
 {
     public static ArmoryManager Instance { get; private set; }
-    private GameObject armorySlot = null, weaponSlot = null; // To keep track of the currently selected slot index
+    private GameObject shipSlot = null, weaponSlot = null; // To keep track of the currently selected slot index
     private Weapon selectedWeapon = null; // To keep track of the currently selected weapon
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -41,7 +41,7 @@ public class ArmoryManager : MonoBehaviour
     /// </remarks>
     public void SelectSlot(GameObject Slot)
     {
-        if (armorySlot != null)
+        if (shipSlot != null)
         {
             if (weaponSlot != null)
             {
@@ -49,7 +49,7 @@ public class ArmoryManager : MonoBehaviour
                 weaponSlot = null; // Clear the weapon slot variable
             }
 
-            if (armorySlot == Slot)
+            if (shipSlot == Slot)
             {
                 DeselectSlot(); // If the same slot is clicked, deselect it
                 return;
@@ -60,8 +60,8 @@ public class ArmoryManager : MonoBehaviour
             }
         }
 
-        armorySlot = Slot;
-        armorySlot.GetComponent<Image>().color = armorySlot.GetComponent<Button>().colors.pressedColor; // Change the color of the slot to indicate selection
+        shipSlot = Slot;
+        shipSlot.GetComponent<Image>().color = shipSlot.GetComponent<Button>().colors.pressedColor; // Change the color of the slot to indicate selection
     }
 
     /// <summary>
@@ -70,13 +70,25 @@ public class ArmoryManager : MonoBehaviour
     /// <remarks>
     /// Maintained by: Işık Dönger
     /// </remarks>
-    public void DeselectSlot()
+    public void DeselectSlot(float delay = 0.1f)
     {
-        //Check if there is a currently selected slot
-        if (armorySlot != null)
+        StartCoroutine(DeselectShipSlotCoroutine(delay));
+    }
+
+    /// <summary>
+    /// Deselects the currently selected ship slot in the armory UI.
+    /// </summary>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    private IEnumerator DeselectShipSlotCoroutine(float delay)
+    {
+        yield return new WaitForSeconds(delay); // To prevent conflict with SelectWeapon method
+
+        if (shipSlot != null)
         {
-            armorySlot.GetComponent<Image>().color = Color.white; //Deselect the slot by changing its color back to black
-            armorySlot = null;
+            shipSlot.GetComponent<Image>().color = Color.white; //Deselect the slot by changing its color back to black
+            shipSlot = null;
         }
     }
 
@@ -89,7 +101,7 @@ public class ArmoryManager : MonoBehaviour
     /// </remarks>
     public void SelectWeapon(GameObject WeaponSlot)
     {
-        if (armorySlot == null)
+        if (shipSlot == null)
         {
             //Show Info Card of the Weapon
             if (weaponSlot == null)
@@ -117,7 +129,7 @@ public class ArmoryManager : MonoBehaviour
         {
             // Put the selected weapon into the currently selected slot
             selectedWeapon = WeaponSlot.GetComponent<WeaponSlotManager>().weapon; // Assign the selected weapon to the slot's manager
-            armorySlot.GetComponent<Image>().sprite = selectedWeapon.weaponIcon; // Set the icon of the weapon in the slot
+            shipSlot.GetComponent<Image>().sprite = selectedWeapon.weaponIcon; // Set the icon of the weapon in the slot
             DeselectSlot();
             DeselectWeapon(0); // Deselect the weapon slot after assigning the weapon
         }

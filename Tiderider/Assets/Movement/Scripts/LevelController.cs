@@ -31,13 +31,12 @@ public class LevelController : MonoBehaviour
         if (mainCamera == null)
             mainCamera = Camera.main;
         if (obstacleManager == null)
-            obstacleManager = FindObjectOfType<ObstacleManager>();
+            obstacleManager = FindFirstObjectByType<ObstacleManager>();
 
         edgeCollider = GetComponent<EdgeCollider2D>();
-        //SetupEdgeCollider();
+        SetupEdgeCollider();
 
         edgeCollider.isTrigger = false;
-        edgeCollider.enabled = false;
         gameObject.layer = LayerMask.NameToLayer("Default");
     }
 
@@ -52,6 +51,8 @@ public class LevelController : MonoBehaviour
             mainCamera.transform.position += move;
         if (obstacleManager != null)
             obstacleManager.transform.position += move;
+        if(edgeCollider != null)
+            edgeCollider.transform.position += move;
 
         // Move monster to bottom edge of camera using transform
         if (monster != null && mainCamera != null)
@@ -94,6 +95,9 @@ public class LevelController : MonoBehaviour
 
         edgeCollider.points = points;
     }
+
+
+
 
     /// <summary>
     /// Keeps the ship inside the camera frame by clamping its position on collision.

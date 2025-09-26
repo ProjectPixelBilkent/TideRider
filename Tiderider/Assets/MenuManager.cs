@@ -22,12 +22,12 @@ public class MenuManager : MonoBehaviour
     void Awake()
     {
         // Find UI elements among children (by name)
-        pauseMenuUI = transform.Find("PauseMenu")?.gameObject;
-        gameOverMenuUI = transform.Find("GameOverMenu")?.gameObject;
-        restartButtonPauseMenu = transform.Find("PauseMenu/RestartButton")?.GetComponent<Button>();
-        restartButtonGameOverMenu = transform.Find("GameOverMenu/RestartButton")?.GetComponent<Button>();
-        resumeButtonPauseMenu = transform.Find("PauseMenu/ResumeButton")?.GetComponent<Button>();
-        pauseButton = transform.Find("PauseButton")?.GetComponent<Button>();
+        pauseMenuUI = transform.Find("SafeArea/PauseMenu")?.gameObject;
+        gameOverMenuUI = transform.Find("SafeArea/GameOverMenu")?.gameObject;
+        restartButtonPauseMenu = transform.Find("SafeArea/PauseMenu/RestartButton")?.GetComponent<Button>();
+        restartButtonGameOverMenu = transform.Find("SafeArea/GameOverMenu/RestartButton")?.GetComponent<Button>();
+        resumeButtonPauseMenu = transform.Find("SafeArea/PauseMenu/ResumeButton")?.GetComponent<Button>();
+        pauseButton = transform.Find("SafeArea/PauseButton")?.GetComponent<Button>();
     }
 
     void Start()

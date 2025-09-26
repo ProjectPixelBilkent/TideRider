@@ -52,5 +52,8 @@ TagManager:
   - name: GameObjects
     uniqueID: 1512527175
     locked: 0
+  - name: PermaUI
+    uniqueID: 805993197
+    locked: 0
   m_RenderingLayers:
   - Default

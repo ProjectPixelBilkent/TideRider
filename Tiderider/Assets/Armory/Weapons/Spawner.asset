@@ -10,9 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d7ebd7643f8f70148927253474e4ea7f, type: 3}
-  m_Name: Shield
+  m_Name: Spawner
   m_EditorClassIdentifier: 
-  weaponName: Shield
-  weaponDescription: This is a shield
+  weaponName: Spawner
+  weaponDescription: This is a mini ship spawner.
   weaponLevels: []
-  weaponIcon: {fileID: 4849304724019256761, guid: 5d1cfe9c6f1882f46b8288ddccdafb18, type: 3}
+  weaponIcon: {fileID: 0}
+  projectilePrefab: {fileID: 0}
+  onCollisionWithBulletMethodName: 

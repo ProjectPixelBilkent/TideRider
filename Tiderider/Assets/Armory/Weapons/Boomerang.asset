@@ -10,9 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d7ebd7643f8f70148927253474e4ea7f, type: 3}
-  m_Name: Lasergun
+  m_Name: Boomerang
   m_EditorClassIdentifier: 
-  weaponName: Lasergun
-  weaponDescription: This is a lasergun
+  weaponName: Boomerang
+  weaponDescription: This is a boomerang.
   weaponLevels: []
-  weaponIcon: {fileID: 0}
+  weaponIcon: {fileID: 4849304724019256761, guid: 5d1cfe9c6f1882f46b8288ddccdafb18, type: 3}
+  projectilePrefab: {fileID: 0}
+  onCollisionWithBulletMethodName: 

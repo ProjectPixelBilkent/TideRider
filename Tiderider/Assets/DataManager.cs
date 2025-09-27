@@ -34,6 +34,20 @@ public static class DataManager
     }
 
     /// <summary>
+    /// Saves the selected weapon in player armory in game data.
+    /// </summary>
+    /// <remarks>
+    /// Created by: Ata Uzay Kuzey
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public static void SaveToArmory(int index, Weapon weapon)
+    {
+        GameData gameData = LoadGameData();
+        gameData.playerArmory[index] = weapon;
+        SaveGameData(gameData);
+    }
+
+    /// <summary>
     /// Increments the canon level in weapon data.
     /// </summary>
     /// <remarks>
@@ -120,6 +134,16 @@ public static class DataManager
     /// Maintained by: Işık Dönger
     /// </remarks>
     public static int GetCoinAmount() => LoadGameData().coinAmount;
+
+    /// <summary>
+    /// Loads the player armory from the local backup.
+    /// </summary>
+    /// <returns>Player Armory.</returns>
+    /// <remarks>
+    /// Created by: Ata Uzay Kuzey
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public static Weapon[] GetPlayerArmory() => LoadGameData().playerArmory;
 
     /// <summary>
     /// Loads the current canon level from the local backup.

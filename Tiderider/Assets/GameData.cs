@@ -13,6 +13,7 @@ using JetBrains.Annotations;
 public class GameData
 {
     public int coinAmount;
+    public Weapon[] playerArmory = new Weapon[6];
 }
 
 /// <summary>

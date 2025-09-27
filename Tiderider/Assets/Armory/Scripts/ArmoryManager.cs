@@ -130,6 +130,7 @@ public class ArmoryManager : MonoBehaviour
             // Put the selected weapon into the currently selected slot
             selectedWeapon = WeaponSlot.GetComponent<WeaponSlotManager>().weapon; // Assign the selected weapon to the slot's manager
             shipSlot.GetComponent<Image>().sprite = selectedWeapon.weaponIcon; // Set the icon of the weapon in the slot
+            DataManager.SaveToArmory(shipSlot.transform.GetSiblingIndex(), selectedWeapon);
             DeselectSlot();
             DeselectWeapon(0); // Deselect the weapon slot after assigning the weapon
         }

@@ -10,7 +10,7 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
   - 
@@ -51,6 +51,9 @@ TagManager:
     locked: 0
   - name: GameObjects
     uniqueID: 1512527175
+    locked: 0
+  - name: PermaUI
+    uniqueID: 805993197
     locked: 0
   m_RenderingLayers:
   - Default

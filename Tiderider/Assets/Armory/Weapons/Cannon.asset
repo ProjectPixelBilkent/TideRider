@@ -14,5 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: Canon
   weaponDescription: This is a canon
-  weaponLevels: []
+  weaponLevels:
+  - cost: 0
+    damage: 1
+    fireRate: 1
+    speedOfBullet: 1
+    range: 1
+    HP: 1
+    duration: 1
   weaponIcon: {fileID: -2603317412757829357, guid: ad743ff7576ca1643b45e9e596312353, type: 3}
+  projectilePrefab: {fileID: 2743745310613609813, guid: 8a864efbb24199d40b37dad37ebbe3f4, type: 3}
+  onCollisionWithBulletMethodName: NormalBullet

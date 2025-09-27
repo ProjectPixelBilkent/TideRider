@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-public class SurpriseObstacle : BigObstacle
+public class SurpriseObstacle : Obstacle
 {
     [SerializeField] SpriteRenderer surpiseSprite;
     [SerializeField] SpriteRenderer warningSprite;

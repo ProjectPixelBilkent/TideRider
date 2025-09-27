@@ -10,13 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 7137745954006631449}
   - component: {fileID: 765588773355817832}
-  - component: {fileID: 3871660815932931041}
-  - component: {fileID: 8150349788911135439}
-  - component: {fileID: 699871148616380033}
-  - component: {fileID: 3839560178821069222}
+  - component: {fileID: 2374149195380897532}
+  - component: {fileID: 4702281437897915481}
   m_Layer: 0
-  m_Name: Common Pirate
-  m_TagString: obstacle
+  m_Name: Canonball
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -80,7 +78,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -4030218682350969340, guid: b647c8673146f4a8599b35f225dcd6ff, type: 3}
+  m_Sprite: {fileID: 343099495614289299, guid: b647c8673146f4a8599b35f225dcd6ff, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -91,8 +89,8 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!70 &3871660815932931041
-CapsuleCollider2D:
+--- !u!58 &2374149195380897532
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -125,10 +123,9 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: -0.0063718557}
-  m_Size: {x: 0.4, y: 1.2816823}
-  m_Direction: 0
---- !u!114 &8150349788911135439
+  m_Offset: {x: -0.0018308759, y: 0}
+  m_Radius: 0.19620007
+--- !u!114 &4702281437897915481
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -137,45 +134,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 2743745310613609813}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 781acaadfd45de2428ae55eaeeb49b5a, type: 3}
+  m_Script: {fileID: 11500000, guid: 63d417b6906ecf84f89ebe52d7e65366, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &699871148616380033
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2743745310613609813}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e956df16afcd90449812505704263cf5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pirateModel: {fileID: 8150349788911135439}
---- !u!114 &3839560178821069222
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2743745310613609813}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba7ddf37072981240b4a773f1ed890b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  armory:
-  - weaponInfo: {fileID: 11400000, guid: b3e878eb06da4434b9a7e8241f255f8c, type: 2}
-    level: 0
-  - weaponInfo: {fileID: 11400000, guid: b3e878eb06da4434b9a7e8241f255f8c, type: 2}
-    level: 0
-  - weaponInfo: {fileID: 0}
-    level: 0
-  - weaponInfo: {fileID: 0}
-    level: 0
-  - weaponInfo: {fileID: 11400000, guid: b3e878eb06da4434b9a7e8241f255f8c, type: 2}
-    level: 0
-  - weaponInfo: {fileID: 11400000, guid: b3e878eb06da4434b9a7e8241f255f8c, type: 2}
-    level: 0
-  playerShip: 0
+  spriteRenderer: {fileID: 765588773355817832}
+  circleCollider: {fileID: 2374149195380897532}

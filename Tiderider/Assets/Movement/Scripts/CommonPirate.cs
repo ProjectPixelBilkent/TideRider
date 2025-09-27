@@ -1,18 +1,11 @@
 using System;
 using UnityEngine;
 
-[Serializable]
-public struct WeaponStat
-{
-    public Weapon weaponInfo;
-    public int weaponLevel;
-}
+
 
 public class CommonPirate : MonoBehaviour
 {
-    [SerializeField] private WeaponStat[] pirateArmory;
-    
-    private ShipModel pirateModel;
+    public ShipModel pirateModel;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -27,11 +20,5 @@ public class CommonPirate : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

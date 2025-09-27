@@ -22,12 +22,26 @@ public class ObstacleManager : MonoBehaviour
     private float timer = 0f;
     private Camera mainCamera;
 
+    // Reference to PlayArea's SpriteRenderer
+    private SpriteRenderer playAreaRenderer;
+
     /// <summary>
-    /// Initializes the main camera reference.
+    /// Initializes the main camera reference and PlayArea bounds.
     /// </summary>
     void Start()
     {
         mainCamera = Camera.main;
+
+        // Find PlayArea child and get its SpriteRenderer
+        Transform playAreaTransform = transform.Find("PlayArea");
+        if (playAreaTransform != null)
+        {
+            playAreaRenderer = playAreaTransform.GetComponent<SpriteRenderer>();
+        }
+        else
+        {
+            Debug.LogWarning("PlayArea child not found under ObstacleManager.");
+        }
     }
 
     /// <summary>
@@ -51,24 +65,28 @@ public class ObstacleManager : MonoBehaviour
     /// </summary>
     void SpawnObstacle()
     {
-        if (obstaclePrefabs == null || obstaclePrefabs.Length == 0)
+        if (obstaclePrefabs == null || obstaclePrefabs.Length == 0 || playAreaRenderer == null)
             return;
 
-        // Get the screen width in world units
-        Vector2 screenBounds = mainCamera.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+        // Get PlayArea bounds
+        Bounds bounds = playAreaRenderer.bounds;
 
-        // Random X position within screen width
-        float randomX = Random.Range(-screenBounds.x, screenBounds.x);
+        // Random X position within PlayArea width
+        float randomX = Random.Range(bounds.min.x, bounds.max.x);
 
-        // Y position just above the screen
-        float spawnY = screenBounds.y + spawnYOffset;
+        // Y position at the top of PlayArea
+        float spawnY = bounds.max.y + spawnYOffset;
 
         // Randomly select a prefab
         GameObject prefab = obstaclePrefabs[Random.Range(0, obstaclePrefabs.Length)];
 
-        if(prefab.GetComponent<SurpriseObstacle>() != null )
+        if (prefab.GetComponent<SurpriseObstacle>() != null )
         {
-            spawnY = Random.Range(screenBounds.y * 0.5f, screenBounds.y + spawnYOffset);
+            //spawn surprises from 1/4th of the screen up to 3/4ths.
+            // Spawn surprises from 1/4th up to 3/4ths of PlayArea height
+            float minY = Mathf.Lerp(bounds.min.y, bounds.max.y, 0.25f);
+            float maxY = Mathf.Lerp(bounds.min.y, bounds.max.y, 0.75f);
+            spawnY = Random.Range(minY, maxY);
         }
 
         Vector3 spawnPosition = new Vector3(randomX, spawnY, 0f);

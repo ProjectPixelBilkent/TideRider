@@ -19,10 +19,6 @@ public class Bullet : MonoBehaviour
         
     }
 
-    private void FixedUpdate()
-    {
-    }
-
     public void Activate(Vector3 direction)
     {
         direction = direction.normalized;

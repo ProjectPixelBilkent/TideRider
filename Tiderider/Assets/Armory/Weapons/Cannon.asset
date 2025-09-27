@@ -16,7 +16,7 @@ MonoBehaviour:
   weaponDescription: This is a canon
   weaponLevels:
   - cost: 0
-    damage: 1
+    damage: 20
     fireRate: 1
     speedOfBullet: 1
     range: 1

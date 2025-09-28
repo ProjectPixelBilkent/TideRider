@@ -55,6 +55,7 @@ public class Weapon : ScriptableObject
     public Sprite weaponIcon;
     public GameObject projectilePrefab; // Prefab for the projectile fired by the weapon
     [SerializeField] private string onCollisionWithBulletMethodName;
+    public Sprite[] extraSprites;
 
     public void OnCollisionWithBullet(ShipModel model, int level, Bullet bullet)
     {
@@ -71,8 +72,23 @@ public class Weapon : ScriptableObject
 
     public void MiniShipBullet(ShipModel model, int level, Bullet bullet)
     {
-        model.Decrement(weaponLevels[level].damage);
-        bullet.transform.DOKill();
-        Destroy(bullet.gameObject);
+        bullet.transform.localScale *= 2;
+
+        bullet.spriteRenderer.sprite = extraSprites[0];
+
+        DOVirtual.DelayedCall(0.1f, () =>
+        {
+            bullet.spriteRenderer.sprite = extraSprites[1];
+
+            DOVirtual.DelayedCall(0.1f, () =>
+            {
+                model.Decrement(weaponLevels[level].damage);
+                bullet.transform.DOKill();
+                Destroy(bullet.gameObject);
+            });
+        });
+
+
+
     }
 }

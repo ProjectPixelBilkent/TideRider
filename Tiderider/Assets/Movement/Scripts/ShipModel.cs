@@ -23,7 +23,7 @@ public class ShipModel : MonoBehaviour
 
     private const int minHealth = 0;
     private const int maxHealth = 100;
-    private int currentHealth;
+    [SerializeField] private int currentHealth;
     private ShipModifier modifier;
 
     public int CurrentHealth { get => currentHealth; set => currentHealth = value; }

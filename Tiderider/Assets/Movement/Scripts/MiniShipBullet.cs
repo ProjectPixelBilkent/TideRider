@@ -26,12 +26,15 @@ public class MiniShipBullet : Bullet
         if (timer >= updatePeriod)
         {
             timer = 0;
-            direction = (Enemy.transform.position - transform.position + Random.onUnitSphere * 1.5f).normalized;
+            if(Enemy!=null)
+            {
+                direction = (Enemy.transform.position - transform.position + Random.onUnitSphere * 1.5f).normalized;
+            }
 
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f; 
             transform.rotation = Quaternion.Euler(0, 0, angle);
         }
-        rigidBody.linearVelocity = (direction * WeaponLevel.speedOfBullet);
+        rigidBody.linearVelocity = Enemy==null ? Vector3.zero: (direction * WeaponLevel.speedOfBullet);
     }
 
     public override void Activate(Vector3 direction, Vector3 shipSpeed)
@@ -42,7 +45,11 @@ public class MiniShipBullet : Bullet
         // {
         //     enemyList[i].transform.position
         // }
-        Enemy = enemyList[0];
+
+        if(enemyList.Length > 0)
+        {
+            Enemy = enemyList[0];
+        }
         timer = 1000;
 
 

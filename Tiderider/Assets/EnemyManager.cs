@@ -1,17 +1,11 @@
-// ObstacleManager.cs
-
 using UnityEngine;
 
-/// <summary>
-/// Manages obstacle spawning at intervals, with random prefab selection and velocity assignment.
-/// </summary>
-/// <remarks>
-/// Maintained by: Obstacle System
-/// </remarks>
-public class ObstacleManager : MonoBehaviour
+public class EnemyManager : MonoBehaviour
+// ObstacleManager.cs
+
 {
     [Header("Obstacle Settings")]
-    [SerializeField] private GameObject[] obstaclePrefabs;
+    [SerializeField] private GameObject[] enemyPrefabs;
     [SerializeField] private float spawnInterval = 2f;
     [SerializeField] private float obstacleSpeed = 3f;
     [SerializeField] private float spawnYOffset = 1f;
@@ -64,7 +58,7 @@ public class ObstacleManager : MonoBehaviour
         timer += Time.deltaTime;
         if (timer >= spawnInterval)
         {
-            SpawnObstacle();
+            SpawnEnemy();
             timer = 0f;
         }
     }
@@ -72,9 +66,9 @@ public class ObstacleManager : MonoBehaviour
     /// <summary>
     /// Spawns a random obstacle prefab at a random X position above the screen.
     /// </summary>
-    void SpawnObstacle()
+    void SpawnEnemy()
     {
-        if (obstaclePrefabs == null || obstaclePrefabs.Length == 0 || playAreaRenderer == null)
+        if (enemyPrefabs == null || enemyPrefabs.Length == 0 || playAreaRenderer == null)
             return;
 
         // Get PlayArea bounds
@@ -87,9 +81,9 @@ public class ObstacleManager : MonoBehaviour
         float spawnY = bounds.max.y + spawnYOffset;
 
         // Randomly select a prefab
-        GameObject prefab = obstaclePrefabs[Random.Range(0, obstaclePrefabs.Length)];
+        GameObject prefab = enemyPrefabs[Random.Range(0, enemyPrefabs.Length)];
 
-        if (prefab.GetComponent<SurpriseObstacle>() != null )
+        if (prefab.GetComponent<SurpriseObstacle>() != null)
         {
             //spawn surprises from 1/4th of the screen up to 3/4ths.
             // Spawn surprises from 1/4th up to 3/4ths of PlayArea height
@@ -118,5 +112,3 @@ public class ObstacleManager : MonoBehaviour
         spawningEnabled = enabled;
     }
 }
-
-

@@ -27,6 +27,12 @@ public struct WeaponStat
     public int level;
 
     public WeaponLevel WeaponLevel { get { return weaponInfo.weaponLevels[level]; } }
+
+    public WeaponStat(Weapon weaponInfo, int level)
+    {
+        this.weaponInfo = weaponInfo;
+        this.level = level;
+    }
 }
 
 /// <summary>

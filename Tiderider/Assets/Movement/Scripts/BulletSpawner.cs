@@ -3,7 +3,7 @@
 public class BulletSpawner : MonoBehaviour
 {
     [SerializeField] private WeaponStat[] armory;
-    [SerializeField] private bool playerShip;
+    public bool playerShip;
 
     private float[] lastFired;
 
@@ -12,7 +12,12 @@ public class BulletSpawner : MonoBehaviour
     {
         if(playerShip)
         {
-            //TODO: create armory array from data (Işık will add this)
+            var playerArmory = TempWeaponManager.Instance.GetPlayerArmory();
+            armory = new WeaponStat[playerArmory.Length];
+            for (int i=0; i<armory.Length; i++)
+            {
+                armory[i] = new WeaponStat(playerArmory[i], 0);
+            }
         }
 
         lastFired = new float[armory.Length];

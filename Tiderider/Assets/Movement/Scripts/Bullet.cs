@@ -10,6 +10,7 @@ public class Bullet : MonoBehaviour
     public Weapon Weapon { get; set; }
     public int Level {  get; set; }
     public WeaponLevel WeaponLevel { get; set; }
+    public bool PlayerBullet { get; set; }
 
     private Vector3 direction;
 
@@ -31,5 +32,11 @@ public class Bullet : MonoBehaviour
         {
             Destroy(gameObject);
         };
+    }
+
+    private void OnBecameInvisible()
+    {
+        transform.DOKill();
+        Destroy(gameObject);
     }
 }

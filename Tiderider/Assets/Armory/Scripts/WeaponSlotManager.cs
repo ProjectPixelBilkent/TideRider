@@ -40,7 +40,7 @@ public class WeaponSlotManager : MonoBehaviour
     public void UpgradeWeapon()
     {
         DataManager.SubtractCoinAmount(weapon.weaponLevels[(int)typeof(DataManager).GetMethod("Get" + weapon.weaponName + "Level").Invoke(null, null)].cost);
-        typeof(DataManager).GetMethod("Increment" + weapon.weaponName + "Level").Invoke(null, null);
+        //typeof(DataManager).GetMethod("Increment" + weapon.weaponName + "Level").Invoke(null, null);
     }
 
     /// <summary>

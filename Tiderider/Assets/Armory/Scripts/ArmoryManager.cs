@@ -17,10 +17,16 @@ public class ArmoryManager : MonoBehaviour
     public static ArmoryManager Instance { get; private set; }
     private GameObject shipSlot = null, weaponSlot = null; // To keep track of the currently selected slot index
     private Weapon selectedWeapon = null; // To keep track of the currently selected weapon
+    [SerializeField] private Weapon[] weaponList = new Weapon[6];
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        PlayerPrefs.DeleteKey("PlayerArmory");
+        if (!PlayerPrefs.HasKey("PlayerArmory"))
+        {
+            InitPlayerArmory();
+        }
         if (Instance == null)
         {
             Instance = this;
@@ -30,6 +36,12 @@ public class ArmoryManager : MonoBehaviour
         {
             Destroy(gameObject); // Ensure only one instance exists
         }
+    }
+
+    private void InitPlayerArmory()
+    {
+        PlayerPrefs.SetString("PlayerArmory", "Canon|Canon|Canon|Canon|Canon|Canon");
+        Debug.Log(PlayerPrefs.GetString("PlayerArmory"));
     }
 
     /// <summary>
@@ -130,10 +142,48 @@ public class ArmoryManager : MonoBehaviour
             // Put the selected weapon into the currently selected slot
             selectedWeapon = WeaponSlot.GetComponent<WeaponSlotManager>().weapon; // Assign the selected weapon to the slot's manager
             shipSlot.GetComponent<Image>().sprite = selectedWeapon.weaponIcon; // Set the icon of the weapon in the slot
-            DataManager.SaveToArmory(shipSlot.transform.GetSiblingIndex(), selectedWeapon);
+            //DataManager.SaveToArmory(shipSlot.transform.GetSiblingIndex(), selectedWeapon);
+            SaveToPlayerArmory(selectedWeapon, shipSlot.transform.parent.GetSiblingIndex());
+            Debug.Log(PlayerPrefs.GetString("PlayerArmory"));
             DeselectSlot();
             DeselectWeapon(0); // Deselect the weapon slot after assigning the weapon
         }
+    }
+
+    private void SaveToPlayerArmory(Weapon weapon, int index)
+    {
+        Debug.Log(index);
+        string[] currentArmory = PlayerPrefs.GetString("PlayerArmory").Split("|");
+        string temp = "";
+        for (int i=0;i<6;i++)
+        {
+            if (i!=index)
+            {
+                temp += currentArmory[i];
+            }
+            else
+            {
+                temp += weapon.weaponName;
+            }
+            if (i!=5)
+            {
+                temp += "|";
+            }
+            Debug.Log(temp);
+        }
+        PlayerPrefs.SetString("PlayerArmory", temp);
+    }
+
+    private Weapon GetWeaponByName(string name)
+    {
+        foreach (Weapon weapon in weaponList)
+        {
+            if (weapon.name == name)
+            {
+                return weapon;
+            }
+        }
+        return null;
     }
 
     /// <summary>

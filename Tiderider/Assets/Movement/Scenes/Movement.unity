@@ -7739,7 +7739,7 @@ MonoBehaviour:
   spawnInterval: 1
   obstacleSpeed: 0
   spawnYOffset: 1
-  spawningEnabled: 1
+  spawningEnabled: 0
 --- !u!4 &1490789430
 Transform:
   m_ObjectHideFlags: 0

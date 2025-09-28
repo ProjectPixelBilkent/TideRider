@@ -1,0 +1,83 @@
+using NUnit.Framework.Interfaces;
+using UnityEngine;
+
+public class TempWeaponManager : MonoBehaviour
+{
+    public static TempWeaponManager Instance { get; private set; }
+    [SerializeField] private WeaponStat[] weaponStats = new WeaponStat[6];
+    public static Weapon[] playerArmory = new Weapon[6];
+    private static Weapon[] weaponList = new Weapon[6];
+
+    private void Start()
+    {
+        if (!PlayerPrefs.HasKey("PlayerArmory"))
+        {
+            InitPlayerArmory();
+        }
+        playerArmory = GetPlayerArmory();
+    }
+
+    private void InitPlayerArmory()
+    {
+        PlayerPrefs.SetString("PlayerArmory", "Canon|Canon|Canon|Canon|Canon|Canon");
+    }
+
+    public int GetWeaponIndex(Weapon weapon)
+    {
+        for (int i=0;i<6;i++)
+        {
+            if (playerArmory[i] == weapon)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int GetWeaponLevel(Weapon weapon)
+    {
+        foreach (var weaponStat in weaponStats)
+        {
+            if (weaponStat.weaponInfo == weapon)
+            {
+                return weaponStat.level;
+            }
+        }
+        return -1;
+    }
+
+    public static Weapon[] GetPlayerArmory()
+    {
+        string crypted = PlayerPrefs.GetString("WeaponStats");
+        string[] infoArray = crypted.Split("|");
+        Weapon[] temp = new Weapon[6];
+        for (int i=0;i<6;i++)
+        {
+            temp[i] = GetWeaponByName(infoArray[i]);
+        }
+        return temp;
+    }
+
+    public static void SaveToPlayerArmory(Weapon weapon, int index)
+    {
+        playerArmory[index] = weapon;
+        string temp = "";
+        foreach (Weapon wepaon in playerArmory)
+        {
+            temp += weapon.weaponName + "|";
+        }
+        PlayerPrefs.SetString("PlayerArmory", temp);
+    }
+
+    private static Weapon GetWeaponByName(string name)
+    {
+        foreach(Weapon weapon in weaponList)
+        {
+            if (weapon.name == name)
+            {
+                return weapon;
+            }
+        }
+        return null;
+    }
+}

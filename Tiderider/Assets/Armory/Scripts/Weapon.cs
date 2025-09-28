@@ -55,19 +55,15 @@ public class Weapon : ScriptableObject
     public GameObject projectilePrefab; // Prefab for the projectile fired by the weapon
     [SerializeField] private string onCollisionWithBulletMethodName;
 
-    public void OnCollisionWithBullet(ShipModel model, int level)
+    public void OnCollisionWithBullet(ShipModel model, int level, Bullet bullet)
     {
-        GetType().GetMethod(onCollisionWithBulletMethodName).Invoke(this, new object[] { model, level });
+        GetType().GetMethod(onCollisionWithBulletMethodName).Invoke(this, new object[] { model, level, bullet });
     }
 
-    public void NormalBullet(ShipModel model, int level)
+    public void NormalBullet(ShipModel model, int level, Bullet bullet)
     {
         model.Decrement(weaponLevels[level].damage);
     }
 
-    public void MiniShipBullet(ShipModel model, int level)
-    {
-        
-        
-    }
+    public void MiniShipBullet(ShipModel model, int level, Bullet bullet) { }
 }

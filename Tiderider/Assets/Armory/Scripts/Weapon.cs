@@ -75,16 +75,21 @@ public class Weapon : ScriptableObject
         bullet.transform.localScale *= 2;
 
         bullet.spriteRenderer.sprite = extraSprites[0];
-
-        DOVirtual.DelayedCall(0.1f, () =>
+        bullet.circleCollider.enabled = false;
+        DOVirtual.DelayedCall(0.07f, () =>
         {
             bullet.spriteRenderer.sprite = extraSprites[1];
 
-            DOVirtual.DelayedCall(0.1f, () =>
+            DOVirtual.DelayedCall(0.07f, () =>
             {
-                model.Decrement(weaponLevels[level].damage);
-                bullet.transform.DOKill();
-                Destroy(bullet.gameObject);
+                bullet.spriteRenderer.sprite = extraSprites[2];
+
+                DOVirtual.DelayedCall(0.07f, () =>
+                {
+                    model.Decrement(weaponLevels[level].damage);
+                    bullet.transform.DOKill();
+                    Destroy(bullet.gameObject);
+                });
             });
         });
 

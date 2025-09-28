@@ -13434,6 +13434,7 @@ GameObject:
   - component: {fileID: 2062790732}
   - component: {fileID: 2062790734}
   - component: {fileID: 2062790733}
+  - component: {fileID: 2062790735}
   m_Layer: 3
   m_Name: PlayerShip
   m_TagString: Player
@@ -13672,6 +13673,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 781acaadfd45de2428ae55eaeeb49b5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2062790735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2062790726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba7ddf37072981240b4a773f1ed890b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  armory: []
+  playerShip: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

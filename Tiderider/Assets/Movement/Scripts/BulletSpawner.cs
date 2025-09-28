@@ -12,7 +12,7 @@ public class BulletSpawner : MonoBehaviour
     {
         if(playerShip)
         {
-            var playerArmory = DataManager.GetPlayerArmory();
+            var playerArmory = TempWeaponManager.Instance.GetPlayerArmory();
             armory = new WeaponStat[playerArmory.Length];
             for (int i=0; i<armory.Length; i++)
             {

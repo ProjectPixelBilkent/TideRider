@@ -8,8 +8,9 @@ public class TempWeaponManager : MonoBehaviour
     [SerializeField] private WeaponStat[] weaponStats = new WeaponStat[6];
     [SerializeField] private Weapon[] weaponList = new Weapon[6];
 
-    private void Start()
+    private void Awake()
     {
+        Instance = this;
         if (!PlayerPrefs.HasKey("PlayerArmory"))
         {
             InitPlayerArmory();
@@ -48,7 +49,7 @@ public class TempWeaponManager : MonoBehaviour
 
     public Weapon[] GetPlayerArmory()
     {
-        string crypted = PlayerPrefs.GetString("WeaponStats");
+        string crypted = PlayerPrefs.GetString("PlayerArmory");
         string[] infoArray = crypted.Split("|");
         Weapon[] temp = new Weapon[6];
         for (int i=0;i<6;i++)

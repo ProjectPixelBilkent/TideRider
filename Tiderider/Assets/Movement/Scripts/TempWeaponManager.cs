@@ -63,7 +63,7 @@ public class TempWeaponManager : MonoBehaviour
     {
         foreach(Weapon weapon in weaponList)
         {
-            if (weapon.name == name)
+            if (weapon.weaponName == name)
             {
                 return weapon;
             }

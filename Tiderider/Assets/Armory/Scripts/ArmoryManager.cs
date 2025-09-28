@@ -22,6 +22,11 @@ public class ArmoryManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        PlayerPrefs.DeleteKey("PlayerArmory");
+        if (!PlayerPrefs.HasKey("PlayerArmory"))
+        {
+            InitPlayerArmory();
+        }
         if (Instance == null)
         {
             Instance = this;
@@ -33,9 +38,10 @@ public class ArmoryManager : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void InitPlayerArmory()
     {
-        Debug.Log(shipSlot);
+        PlayerPrefs.SetString("PlayerArmory", "Canon|Canon|Canon|Canon|Canon|Canon");
+        Debug.Log(PlayerPrefs.GetString("PlayerArmory"));
     }
 
     /// <summary>
@@ -137,7 +143,8 @@ public class ArmoryManager : MonoBehaviour
             selectedWeapon = WeaponSlot.GetComponent<WeaponSlotManager>().weapon; // Assign the selected weapon to the slot's manager
             shipSlot.GetComponent<Image>().sprite = selectedWeapon.weaponIcon; // Set the icon of the weapon in the slot
             //DataManager.SaveToArmory(shipSlot.transform.GetSiblingIndex(), selectedWeapon);
-            SaveToPlayerArmory(selectedWeapon, shipSlot.transform.GetSiblingIndex());
+            SaveToPlayerArmory(selectedWeapon, shipSlot.transform.parent.GetSiblingIndex());
+            Debug.Log(PlayerPrefs.GetString("PlayerArmory"));
             DeselectSlot();
             DeselectWeapon(0); // Deselect the weapon slot after assigning the weapon
         }
@@ -145,6 +152,7 @@ public class ArmoryManager : MonoBehaviour
 
     private void SaveToPlayerArmory(Weapon weapon, int index)
     {
+        Debug.Log(index);
         string[] currentArmory = PlayerPrefs.GetString("PlayerArmory").Split("|");
         string temp = "";
         for (int i=0;i<6;i++)
@@ -161,6 +169,7 @@ public class ArmoryManager : MonoBehaviour
             {
                 temp += "|";
             }
+            Debug.Log(temp);
         }
         PlayerPrefs.SetString("PlayerArmory", temp);
     }

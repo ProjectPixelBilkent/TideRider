@@ -32,15 +32,24 @@ public class ObstacleManager : MonoBehaviour
     {
         mainCamera = Camera.main;
 
-        // Find PlayArea child and get its SpriteRenderer
-        Transform playAreaTransform = transform.Find("PlayArea");
-        if (playAreaTransform != null)
+        // Find LevelManager in the scene
+        GameObject levelManager = GameObject.Find("LevelManager");
+        if (levelManager != null)
         {
-            playAreaRenderer = playAreaTransform.GetComponent<SpriteRenderer>();
+            // Find PlayArea child under LevelManager
+            Transform playAreaTransform = levelManager.transform.Find("PlayArea");
+            if (playAreaTransform != null)
+            {
+                playAreaRenderer = playAreaTransform.GetComponent<SpriteRenderer>();
+            }
+            else
+            {
+                Debug.LogWarning("PlayArea child not found under LevelManager.");
+            }
         }
         else
         {
-            Debug.LogWarning("PlayArea child not found under ObstacleManager.");
+            Debug.LogWarning("LevelManager object not found in the scene.");
         }
     }
 

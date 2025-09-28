@@ -13,13 +13,15 @@ public class illisionShip : MonoBehaviour
     private Color originalColor;
     [SerializeField] private Color glowColor = Color.yellow;
 
-
     // Player tracking variables
     [SerializeField] private string playerShipName = "PlayerShip";
     [SerializeField] private float xApproachSpeed = 2f; // Units per second
 
     private Transform playerShipTransform;
 
+    // Blink sound variables
+    [SerializeField] private AudioClip blinkClip;
+    [SerializeField] private AudioSource audioSource;
 
     void Start()
     {
@@ -57,6 +59,10 @@ public class illisionShip : MonoBehaviour
         {
             Debug.LogWarning("Player ship not found in the scene.");
         }
+
+        // Get AudioSource if not set
+        if (audioSource == null)
+            audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -70,7 +76,7 @@ public class illisionShip : MonoBehaviour
         float y = transform.position.y;
         float bottomQuarter = Mathf.Lerp(playAreaBounds.min.y, playAreaBounds.max.y, 0.25f);
 
-        // Move x closer to player ship if available
+        // Move x closer to player ship if available and above player
         if (playerShipTransform != null && transform.position.y > playerShipTransform.position.y)
         {
             float targetX = playerShipTransform.position.x;
@@ -90,6 +96,12 @@ public class illisionShip : MonoBehaviour
                 float newX = Random.Range(playAreaBounds.min.x, playAreaBounds.max.x);
 
                 transform.position = new Vector3(newX, newY, transform.position.z);
+
+                // Play blink sound
+                if (audioSource != null && blinkClip != null)
+                {
+                    audioSource.PlayOneShot(blinkClip);
+                }
 
                 // End glow
                 SpriteRenderer sr = GetComponent<SpriteRenderer>();
@@ -114,5 +126,10 @@ public class illisionShip : MonoBehaviour
                 glowTimer = 0f;
             }
         }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Destroy(gameObject);
     }
 }

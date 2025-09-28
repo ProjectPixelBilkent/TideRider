@@ -81,10 +81,10 @@ SpriteRenderer:
   m_SortingLayerID: 1512527175
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 2483b0f2acef341489200a27080bf73d, type: 3}
+  m_Sprite: {fileID: -6198998088767171345, guid: 80fe890f5dceedf48b8b0f6309e10bc1, type: 3}
   m_Color: {r: 0.5801887, g: 0.97126734, b: 1, a: 1}
   m_FlipX: 0
-  m_FlipY: 1
+  m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 2.56, y: 2.56}
   m_AdaptiveModeThreshold: 0.5
@@ -142,7 +142,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   armory: []
-  playerShip: 0
 --- !u!95 &5013327541763256139
 Animator:
   serializedVersion: 7
@@ -153,7 +152,7 @@ Animator:
   m_GameObject: {fileID: 1773189793287540094}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 226b359d34f11ad42be5252efb404da2, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

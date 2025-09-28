@@ -59,6 +59,11 @@ public class BulletSpawner : MonoBehaviour
 
             currentBullet.transform.position = Weapon.BulletOffsets[i] + transform.position;
             currentBullet.Activate(Weapon.BulletDirections[i], rb.linearVelocity);
+
+            if (armory[i].weaponInfo.spawningSound != null)
+            {
+                AudioSource.PlayClipAtPoint(armory[i].weaponInfo.spawningSound, transform.position);
+            }
         }
     }
 }

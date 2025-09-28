@@ -55,6 +55,8 @@ public class Weapon : ScriptableObject
     public Sprite weaponIcon;
     public GameObject projectilePrefab; // Prefab for the projectile fired by the weapon
     [SerializeField] private string onCollisionWithBulletMethodName;
+    public AudioClip spawningSound;
+    public AudioClip[] extraSounds;
     public Sprite[] extraSprites;
 
     public void OnCollisionWithBullet(ShipModel model, int level, Bullet bullet)
@@ -76,6 +78,7 @@ public class Weapon : ScriptableObject
 
         bullet.spriteRenderer.sprite = extraSprites[0];
         bullet.circleCollider.enabled = false;
+        AudioSource.PlayClipAtPoint(extraSounds[0], model.transform.position);
         DOVirtual.DelayedCall(0.07f, () =>
         {
             bullet.spriteRenderer.sprite = extraSprites[1];

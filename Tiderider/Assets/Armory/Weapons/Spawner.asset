@@ -25,3 +25,10 @@ MonoBehaviour:
   weaponIcon: {fileID: 0}
   projectilePrefab: {fileID: 2743745310613609813, guid: 4a0a3511a9caf8b478963a6a31babd51, type: 3}
   onCollisionWithBulletMethodName: MiniShipBullet
+  spawningSound: {fileID: 8300000, guid: 786e69c8f4b04a04a930891e89a3bfc3, type: 3}
+  extraSounds:
+  - {fileID: 8300000, guid: 2e641ddb6bcc529408a6193388784815, type: 3}
+  extraSprites:
+  - {fileID: 5364634953845228753, guid: 6e5af45fe45c3f446b5a3ad7a9dca3f3, type: 3}
+  - {fileID: -1936993983738128382, guid: 248dd9f33d93df243a9ba002217263f3, type: 3}
+  - {fileID: 4524672217310228151, guid: 31082ded7e4120d4a9f874f37bd09a5c, type: 3}

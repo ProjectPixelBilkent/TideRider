@@ -3,14 +3,15 @@
 public class BulletSpawner : MonoBehaviour
 {
     [SerializeField] private WeaponStat[] armory;
-    public bool playerShip;
 
     private float[] lastFired;
+    private Rigidbody2D rb;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if(playerShip)
+        rb = GetComponent<Rigidbody2D>();
+        if(CompareTag("Player"))
         {
             var playerArmory = TempWeaponManager.Instance.GetPlayerArmory();
             armory = new WeaponStat[playerArmory.Length];
@@ -56,7 +57,7 @@ public class BulletSpawner : MonoBehaviour
             currentBullet.WeaponLevel = armory[i].WeaponLevel;
 
             currentBullet.transform.position = Weapon.BulletOffsets[i] + transform.position;
-            currentBullet.Activate(Weapon.BulletDirections[i]);
+            currentBullet.Activate(Weapon.BulletDirections[i], rb.linearVelocity);
         }
     }
 }

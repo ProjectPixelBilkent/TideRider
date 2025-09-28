@@ -4,9 +4,9 @@ using UnityEngine;
 public class TempWeaponManager : MonoBehaviour
 {
     public static TempWeaponManager Instance { get; private set; }
+    public Weapon[] playerArmory = new Weapon[6];
     [SerializeField] private WeaponStat[] weaponStats = new WeaponStat[6];
-    public static Weapon[] playerArmory = new Weapon[6];
-    private static Weapon[] weaponList = new Weapon[6];
+    [SerializeField] private Weapon[] weaponList = new Weapon[6];
 
     private void Start()
     {
@@ -46,7 +46,7 @@ public class TempWeaponManager : MonoBehaviour
         return -1;
     }
 
-    public static Weapon[] GetPlayerArmory()
+    public Weapon[] GetPlayerArmory()
     {
         string crypted = PlayerPrefs.GetString("WeaponStats");
         string[] infoArray = crypted.Split("|");
@@ -58,18 +58,7 @@ public class TempWeaponManager : MonoBehaviour
         return temp;
     }
 
-    public static void SaveToPlayerArmory(Weapon weapon, int index)
-    {
-        playerArmory[index] = weapon;
-        string temp = "";
-        foreach (Weapon wepaon in playerArmory)
-        {
-            temp += weapon.weaponName + "|";
-        }
-        PlayerPrefs.SetString("PlayerArmory", temp);
-    }
-
-    private static Weapon GetWeaponByName(string name)
+    private Weapon GetWeaponByName(string name)
     {
         foreach(Weapon weapon in weaponList)
         {

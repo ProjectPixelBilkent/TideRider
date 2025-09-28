@@ -17,6 +17,7 @@ public class ArmoryManager : MonoBehaviour
     public static ArmoryManager Instance { get; private set; }
     private GameObject shipSlot = null, weaponSlot = null; // To keep track of the currently selected slot index
     private Weapon selectedWeapon = null; // To keep track of the currently selected weapon
+    [SerializeField] private Weapon[] weaponList = new Weapon[6];
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -136,10 +137,44 @@ public class ArmoryManager : MonoBehaviour
             selectedWeapon = WeaponSlot.GetComponent<WeaponSlotManager>().weapon; // Assign the selected weapon to the slot's manager
             shipSlot.GetComponent<Image>().sprite = selectedWeapon.weaponIcon; // Set the icon of the weapon in the slot
             //DataManager.SaveToArmory(shipSlot.transform.GetSiblingIndex(), selectedWeapon);
-            TempWeaponManager.SaveToPlayerArmory(selectedWeapon, shipSlot.transform.GetSiblingIndex());
+            SaveToPlayerArmory(selectedWeapon, shipSlot.transform.GetSiblingIndex());
             DeselectSlot();
             DeselectWeapon(0); // Deselect the weapon slot after assigning the weapon
         }
+    }
+
+    private void SaveToPlayerArmory(Weapon weapon, int index)
+    {
+        string[] currentArmory = PlayerPrefs.GetString("PlayerArmory").Split("|");
+        string temp = "";
+        for (int i=0;i<6;i++)
+        {
+            if (i!=index)
+            {
+                temp += currentArmory[i];
+            }
+            else
+            {
+                temp += weapon.weaponName;
+            }
+            if (i!=5)
+            {
+                temp += "|";
+            }
+        }
+        PlayerPrefs.SetString("PlayerArmory", temp);
+    }
+
+    private Weapon GetWeaponByName(string name)
+    {
+        foreach (Weapon weapon in weaponList)
+        {
+            if (weapon.name == name)
+            {
+                return weapon;
+            }
+        }
+        return null;
     }
 
     /// <summary>

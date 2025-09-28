@@ -48,8 +48,10 @@ public class ShipModel : MonoBehaviour
     /// <param name="amount">Amount to decrease health.</param>
     public void Decrement(int amount)
     {
+                print(currentHealth);
         currentHealth -= amount;
         currentHealth = Mathf.Clamp(currentHealth, minHealth, maxHealth);
+        print(currentHealth);
         UpdateHealth();
     }
 

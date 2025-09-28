@@ -55,6 +55,7 @@ public class BulletSpawner : MonoBehaviour
             currentBullet.Weapon = armory[i].weaponInfo;
             currentBullet.Level = armory[i].level;
             currentBullet.WeaponLevel = armory[i].WeaponLevel;
+            currentBullet.PlayerBullet = CompareTag("Player");
 
             currentBullet.transform.position = Weapon.BulletOffsets[i] + transform.position;
             currentBullet.Activate(Weapon.BulletDirections[i], rb.linearVelocity);

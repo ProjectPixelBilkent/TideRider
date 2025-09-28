@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 7137745954006631449}
   - component: {fileID: 765588773355817832}
   - component: {fileID: 2374149195380897532}
-  - component: {fileID: 4702281437897915481}
   - component: {fileID: 1504419685845820183}
-  m_Layer: 0
-  m_Name: Canonball
+  - component: {fileID: 3693537336859376679}
+  m_Layer: 6
+  m_Name: MiniShipBullet
   m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
   m_LocalPosition: {x: 4.22, y: 7.44, z: 4.5356956}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.9, y: 0.9, z: 0.9}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -79,7 +79,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 343099495614289299, guid: b647c8673146f4a8599b35f225dcd6ff, type: 3}
+  m_Sprite: {fileID: -818523527529083689, guid: b647c8673146f4a8599b35f225dcd6ff, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -110,10 +110,10 @@ CircleCollider2D:
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
-    m_Bits: 191
+    m_Bits: 4294967295
   m_ForceReceiveLayers:
     serializedVersion: 2
-    m_Bits: 191
+    m_Bits: 4294967295
   m_ContactCaptureLayers:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -126,21 +126,6 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: -0.0018308759, y: 0}
   m_Radius: 0.19620007
---- !u!114 &4702281437897915481
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2743745310613609813}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63d417b6906ecf84f89ebe52d7e65366, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spriteRenderer: {fileID: 765588773355817832}
-  circleCollider: {fileID: 2374149195380897532}
-  rigidBody: {fileID: 1504419685845820183}
 --- !u!50 &1504419685845820183
 Rigidbody2D:
   serializedVersion: 5
@@ -168,3 +153,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &3693537336859376679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2743745310613609813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06187c1923f275c4abe1b4e12b811a92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 765588773355817832}
+  circleCollider: {fileID: 2374149195380897532}
+  rigidBody: {fileID: 1504419685845820183}

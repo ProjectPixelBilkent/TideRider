@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using Unity.VisualScripting;
+using DG.Tweening;
 
 /// <summary>
 /// Serializable class representing a level of a weapon with its properties.
@@ -58,12 +59,20 @@ public class Weapon : ScriptableObject
     public void OnCollisionWithBullet(ShipModel model, int level, Bullet bullet)
     {
         GetType().GetMethod(onCollisionWithBulletMethodName).Invoke(this, new object[] { model, level, bullet });
+
     }
 
     public void NormalBullet(ShipModel model, int level, Bullet bullet)
     {
         model.Decrement(weaponLevels[level].damage);
+        bullet.transform.DOKill();
+        Destroy(bullet.gameObject);
     }
 
-    public void MiniShipBullet(ShipModel model, int level, Bullet bullet) { }
+    public void MiniShipBullet(ShipModel model, int level, Bullet bullet)
+    {
+        model.Decrement(weaponLevels[level].damage);
+        bullet.transform.DOKill();
+        Destroy(bullet.gameObject);
+    }
 }

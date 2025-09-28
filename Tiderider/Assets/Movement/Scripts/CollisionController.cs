@@ -85,11 +85,9 @@ public class CollisionController : MonoBehaviour
         else if (collision.gameObject.CompareTag("Bullet"))
         {
             var b = collision.collider.GetComponent<Bullet>();
-            if(GetComponent<BulletSpawner>().CompareTag("Player") != b.PlayerBullet)
+            if((TryGetComponent<BulletSpawner>(out BulletSpawner spawner) && spawner.CompareTag("Player")) != b.PlayerBullet)
             {
                 b.Weapon.OnCollisionWithBullet(model, b.Level, b);
-                b.transform.DOKill();
-                Destroy(b.gameObject);
             }
         }
     }

@@ -3,7 +3,8 @@ using UnityEngine;
 public class MiniShipBullet : Bullet
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public GameObject enemy;
+    public GameObject Enemy { get; set; }
+
 
     void Start()
     {
@@ -25,9 +26,12 @@ public class MiniShipBullet : Bullet
         if (timer >= updatePeriod)
         {
             timer = 0;
-            direction = (enemy.transform.position - transform.position).normalized;
+            direction = (Enemy.transform.position - transform.position + Random.onUnitSphere * 1.5f).normalized;
+
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f; 
+            transform.rotation = Quaternion.Euler(0, 0, angle);
         }
-        rigidBody.linearVelocity = (direction * WeaponLevel.speedOfBullet * 5f );
+        rigidBody.linearVelocity = (direction * WeaponLevel.speedOfBullet);
     }
 
     public override void Activate(Vector3 direction, Vector3 shipSpeed)
@@ -38,10 +42,12 @@ public class MiniShipBullet : Bullet
         // {
         //     enemyList[i].transform.position
         // }
-        enemy = enemyList[0];
+        Enemy = enemyList[0];
         timer = 1000;
 
 
     }
+    
+    protected override void OnCollisionEnter2D(Collision2D collision) { }
     
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public SpriteRenderer spriteRenderer;
+    [SerializeField] public SpriteRenderer spriteRenderer;
     public CircleCollider2D circleCollider;
     public Rigidbody2D rigidBody;
 
@@ -44,7 +44,7 @@ public class Bullet : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
         if(collision.collider.gameObject.name == "LevelManager")
         {

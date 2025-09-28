@@ -14,7 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: Spawner
   weaponDescription: This is a mini ship spawner.
-  weaponLevels: []
+  weaponLevels:
+  - cost: 0
+    damage: 10
+    fireRate: 3
+    speedOfBullet: 3
+    range: 0
+    HP: 0
+    duration: 0
   weaponIcon: {fileID: 0}
   projectilePrefab: {fileID: 0}
   onCollisionWithBulletMethodName: 

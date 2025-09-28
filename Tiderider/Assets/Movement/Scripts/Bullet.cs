@@ -13,8 +13,8 @@ public class Bullet : MonoBehaviour
     public WeaponLevel WeaponLevel { get; set; }
     public bool PlayerBullet { get; set; }
 
-    private Vector3 direction;
-    private Vector3 shipSpeed;
+    protected Vector3 direction;
+    protected Vector3 shipSpeed;
 
     // Update is called once per frame
     void Update()
@@ -22,13 +22,12 @@ public class Bullet : MonoBehaviour
         
     }
 
-    private void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
-        print(direction + ":" + shipSpeed);
         rigidBody.linearVelocity = (direction * WeaponLevel.speedOfBullet * 5f + shipSpeed);
     }
 
-    public void Activate(Vector3 direction, Vector3 shipSpeed)
+    public virtual void Activate(Vector3 direction, Vector3 shipSpeed)
     {
         direction = direction.normalized;
 

@@ -33,4 +33,10 @@ public class Bullet : MonoBehaviour
             Destroy(gameObject);
         };
     }
+
+    private void OnBecameInvisible()
+    {
+        transform.DOKill();
+        Destroy(gameObject);
+    }
 }

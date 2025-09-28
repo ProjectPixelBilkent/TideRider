@@ -3,7 +3,6 @@
 public class BulletSpawner : MonoBehaviour
 {
     [SerializeField] private WeaponStat[] armory;
-    public bool playerShip;
 
     private float[] lastFired;
     private Rigidbody2D rb;
@@ -12,7 +11,7 @@ public class BulletSpawner : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        if(playerShip)
+        if(CompareTag("Player"))
         {
             var playerArmory = TempWeaponManager.Instance.GetPlayerArmory();
             armory = new WeaponStat[playerArmory.Length];

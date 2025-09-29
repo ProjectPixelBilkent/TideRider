@@ -14,7 +14,7 @@ public class MiniShipBullet : Bullet
     // Update is called once per frame
     void Update()
     {
-
+        transform.position += LevelController.UpwardsMovement * Time.deltaTime * 0.5f;
     }
 
     private float timer = 0;
@@ -28,7 +28,8 @@ public class MiniShipBullet : Bullet
             timer = 0;
             if(Enemy!=null)
             {
-                direction = (Enemy.transform.position - transform.position + Random.onUnitSphere * 1.5f).normalized;
+                var ab = Enemy.transform.position - transform.position;
+                direction = (ab + 1.3f * Random.onUnitSphere / (ab.magnitude + 1)).normalized;
             }
 
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f; 
@@ -40,19 +41,22 @@ public class MiniShipBullet : Bullet
     public override void Activate(Vector3 direction, Vector3 shipSpeed)
     {
         base.Activate(direction, shipSpeed);
-        var enemyList = GameObject.FindGameObjectsWithTag("Enemy");
-        // for (int i = 0; i < enemyList.Length; i++)
-        // {
-        //     enemyList[i].transform.position
-        // }
+        var enemyList = GameObject.FindGameObjectsWithTag(PlayerBullet ? "Enemy": "Player");
 
-        if(enemyList.Length > 0)
+        Enemy = null;
+        float closestDistance = float.MaxValue;
+
+        foreach(var e in enemyList)
         {
-            Enemy = enemyList[0];
+            float dist = (e.transform.position - transform.position).magnitude;
+            if(dist < closestDistance)
+            {
+                closestDistance = dist;
+                Enemy = e;
+            }
         }
+
         timer = 1000;
-
-
     }
     
     protected override void OnCollisionEnter2D(Collision2D collision) { }

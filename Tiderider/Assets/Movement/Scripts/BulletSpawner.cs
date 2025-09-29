@@ -6,12 +6,14 @@ public class BulletSpawner : MonoBehaviour
 
     private float[] lastFired;
     private Rigidbody2D rb;
+    private Collider2D col;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        if(CompareTag("Player"))
+        col = GetComponent<Collider2D>();
+        if (CompareTag("Player"))
         {
             var playerArmory = TempWeaponManager.Instance.GetPlayerArmory();
             armory = new WeaponStat[playerArmory.Length];
@@ -35,6 +37,7 @@ public class BulletSpawner : MonoBehaviour
 
     private void FixedUpdate()
     {
+        var monster = GameObject.FindGameObjectWithTag("LevelMonster").GetComponent<Collider2D>();
         for(int i=0; i< armory.Length ; i++)
         {
             if (armory[i].weaponInfo == null)
@@ -59,6 +62,9 @@ public class BulletSpawner : MonoBehaviour
 
             currentBullet.transform.position = Weapon.BulletOffsets[i] + transform.position;
             currentBullet.Activate(Weapon.BulletDirections[i], rb.linearVelocity);
+
+            Physics2D.IgnoreCollision(currentBullet.circleCollider, col, true);
+            Physics2D.IgnoreCollision(currentBullet.circleCollider, monster, true);
 
             if (armory[i].weaponInfo.spawningSound != null)
             {

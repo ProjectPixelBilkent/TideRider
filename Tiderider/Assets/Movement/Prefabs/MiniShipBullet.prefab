@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2374149195380897532}
   - component: {fileID: 1504419685845820183}
   - component: {fileID: 3693537336859376679}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: MiniShipBullet
   m_TagString: Bullet
   m_Icon: {fileID: 0}
@@ -28,13 +28,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2743745310613609813}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 4.22, y: 7.44, z: 4.5356956}
   m_LocalScale: {x: 0.9, y: 0.9, z: 0.9}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &765588773355817832
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -110,10 +110,10 @@ CircleCollider2D:
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 63
   m_ForceReceiveLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 63
   m_ContactCaptureLayers:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -124,8 +124,8 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.0018308759, y: 0}
-  m_Radius: 0.19620007
+  m_Offset: {x: -0.067452095, y: 0.058786012}
+  m_Radius: 0.33974618
 --- !u!50 &1504419685845820183
 Rigidbody2D:
   serializedVersion: 5

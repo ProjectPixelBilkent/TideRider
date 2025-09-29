@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2374149195380897532}
   - component: {fileID: 4702281437897915481}
   - component: {fileID: 1504419685845820183}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Canonball
   m_TagString: Bullet
   m_Icon: {fileID: 0}
@@ -110,10 +110,10 @@ CircleCollider2D:
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
-    m_Bits: 191
+    m_Bits: 4294967295
   m_ForceReceiveLayers:
     serializedVersion: 2
-    m_Bits: 191
+    m_Bits: 4294967295
   m_ContactCaptureLayers:
     serializedVersion: 2
     m_Bits: 4294967295

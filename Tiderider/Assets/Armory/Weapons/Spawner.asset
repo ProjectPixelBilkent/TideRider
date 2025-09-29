@@ -18,7 +18,7 @@ MonoBehaviour:
   - cost: 0
     damage: 50
     fireRate: 3
-    speedOfBullet: 6
+    speedOfBullet: 10
     range: 0
     HP: 0
     duration: 0

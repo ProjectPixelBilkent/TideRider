@@ -14,9 +14,11 @@ GameObject:
   - component: {fileID: 8150349788911135439}
   - component: {fileID: 699871148616380033}
   - component: {fileID: 3839560178821069222}
+  - component: {fileID: 2366604710266649708}
+  - component: {fileID: -704433917804248948}
   m_Layer: 0
   m_Name: Common Pirate
-  m_TagString: obstacle
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -140,6 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 781acaadfd45de2428ae55eaeeb49b5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentHealth: 0
 --- !u!114 &699871148616380033
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170,7 +173,7 @@ MonoBehaviour:
     level: 0
   - weaponInfo: {fileID: 11400000, guid: b3e878eb06da4434b9a7e8241f255f8c, type: 2}
     level: 0
-  - weaponInfo: {fileID: 0}
+  - weaponInfo: {fileID: 11400000, guid: 931c103c87b29fe4b958c445094022eb, type: 2}
     level: 0
   - weaponInfo: {fileID: 0}
     level: 0
@@ -178,4 +181,48 @@ MonoBehaviour:
     level: 0
   - weaponInfo: {fileID: 11400000, guid: b3e878eb06da4434b9a7e8241f255f8c, type: 2}
     level: 0
-  playerShip: 0
+--- !u!50 &2366604710266649708
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2743745310613609813}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!114 &-704433917804248948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2743745310613609813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea008daba8437ad4eb73a8bd6605ee4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bounceForce: 8
+  colorFlashDuration: 0.5
+  flashColor: {r: 1, g: 1, b: 1, a: 1}
+  model: {fileID: 8150349788911135439}
+  monsterCollisionDamage: 50
+  bounceForceMonster: 30

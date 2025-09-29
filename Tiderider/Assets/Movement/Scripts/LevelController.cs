@@ -23,11 +23,15 @@ public class LevelController : MonoBehaviour
 
     private EdgeCollider2D edgeCollider;
 
+    public static Vector3 UpwardsMovement { get; private set; }
+
     /// <summary>
     /// Initializes references, sets up the edge collider to match the camera bounds, and configures collision.
     /// </summary>
     void Start()
     {
+        UpwardsMovement = Vector3.up * moveSpeed;
+
         if (mainCamera == null)
             mainCamera = Camera.main;
         if (obstacleManager == null)

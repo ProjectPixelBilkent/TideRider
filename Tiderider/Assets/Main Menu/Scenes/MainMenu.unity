@@ -3301,10 +3301,10 @@ RectTransform:
   - {fileID: 638138301}
   m_Father: {fileID: 1002231342}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 3240, y: 2400}
+  m_SizeDelta: {x: 2160, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &401424747
 PrefabInstance:
@@ -10056,7 +10056,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1149820570}
   m_Layer: 5
-  m_Name: Menus
+  m_Name: MenuParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10081,7 +10081,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -540, y: 1200}
+  m_AnchoredPosition: {x: -1620, y: 1200}
   m_SizeDelta: {x: 3240, y: 2400}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1156037593
@@ -11419,6 +11419,9 @@ MonoBehaviour:
   Camera: {fileID: 519420031}
   topMenu: {fileID: 850904566}
   navigationMenu: {fileID: 908532934}
+  menuCanvas: {fileID: 362686654}
+  viewport: {fileID: 761958412}
+  menuParent: {fileID: 1149820570}
   armoryCanvas: {fileID: 1052048489}
   armoryTopCanvas: {fileID: 953444152}
   armoryBottomCanvas: {fileID: 1464683626}

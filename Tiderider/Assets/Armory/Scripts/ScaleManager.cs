@@ -17,20 +17,23 @@ public class ScaleManager : MonoBehaviour
     private const int ORIGINAL_WIDTH = 1080, ORIGINAL_HEIGHT = 2400, TOP_MENU_HEIGHT = 200, TOP_MENU_PADDING = 25, TOP_MENU_GAP = 25, GEAR_ICON_SIZE = 100, ICON_MENU_HEIGHT = 200;
     public static float Width, Height, FrameWidth, FrameHeight, SelectedIconWidth, SideIconWidth;
     public static Color SelectedColor, SideColor;
+
+    [Header("Main Menu References")]
     [SerializeField] private RectTransform topMenu, navigationMenu;
+    [SerializeField] private RectTransform menuCanvas, viewport, menuParent;
 
     [Header("Armory References")]
-    public RectTransform armoryCanvas;
-    public RectTransform armoryTopCanvas, armoryBottomCanvas, Ship, weaponsPanel, firstRow, secondRow;
-    public RectTransform[] shipSlots, weaponFrames;
+    [SerializeField] private RectTransform armoryCanvas;
+    [SerializeField] private RectTransform armoryTopCanvas, armoryBottomCanvas, Ship, weaponsPanel, firstRow, secondRow;
+    [SerializeField] private RectTransform[] shipSlots, weaponFrames;
     private const int SHIP_SLOT_COUNT = 3, SHIP_SLOT_OFFSET = 25, SHIP_SLOT_GAP = 100, ARMORY_ROW_GAP = 40, ARMORY_SLOT_GAP = 15, WEAPONS_PANEL_MARGIN = 40, WEAPONS_SLOT_PADDING = 25;
     private const float SHIP_RATIO = 0.73f, WEAPON_NAME_RATIO = 0.15f, UPGRADE_BTN_RATIO = 0.3f;
 
     [Header("Level Menu References")]
-    public RectTransform levelCanvas;
+    [SerializeField] private RectTransform levelCanvas;
 
     [Header("Shop References")]
-    public RectTransform shopCanvas;
+    [SerializeField] private RectTransform shopCanvas;
 
     private void Start()
     {
@@ -38,6 +41,7 @@ public class ScaleManager : MonoBehaviour
         Height = Camera.pixelHeight;
 
         ScaleTopMenu();
+        ScaleMenuPanel();
         ScaleArmory();
         ScaleLevels();
         ScaleShop();
@@ -52,14 +56,13 @@ public class ScaleManager : MonoBehaviour
     /// </remarks>
     private void ScaleTopMenu()
     {
-        int height = Camera.pixelHeight, width = Camera.pixelWidth;
-        float scaleFactor = width / (float)ORIGINAL_WIDTH;
+        float scaleFactor = Width / (float)ORIGINAL_WIDTH;
         GameObject resourcePanel = topMenu.transform.GetChild(1).gameObject;
         RectTransform accountFrameRect = topMenu.transform.GetChild(0).GetComponent<RectTransform>(), resourcePanelRect = resourcePanel.GetComponent<RectTransform>();
         RectTransform energyFrameRect = resourcePanelRect.transform.GetChild(0).GetComponent<RectTransform>(),
             moneyFrameRect = resourcePanelRect.transform.GetChild(1).GetComponent<RectTransform>();
 
-        topMenu.sizeDelta = new Vector2(width, TOP_MENU_HEIGHT);
+        topMenu.sizeDelta = new Vector2(Width, TOP_MENU_HEIGHT);
         topMenu.anchoredPosition = new Vector2(0, -TOP_MENU_HEIGHT / 2);
         accountFrameRect.sizeDelta = new Vector2(accountFrameRect.sizeDelta.x * scaleFactor, TOP_MENU_HEIGHT);
         accountFrameRect.anchoredPosition = new Vector2(accountFrameRect.sizeDelta.x / 2, 0);
@@ -69,6 +72,16 @@ public class ScaleManager : MonoBehaviour
         energyFrameRect.anchoredPosition = new Vector2(energyFrameRect.sizeDelta.x / 2, 0);
         moneyFrameRect.sizeDelta = new Vector2((resourcePanelRect.sizeDelta.x - GEAR_ICON_SIZE - TOP_MENU_GAP * 2) / 2, moneyFrameRect.sizeDelta.y);
         moneyFrameRect.anchoredPosition = new Vector2(moneyFrameRect.sizeDelta.x * 1.5f + TOP_MENU_GAP, 0); // Place money frame next to energy frame with menu gap
+    }
+
+    private void ScaleMenuPanel()
+    {
+        menuCanvas.offsetMin = new Vector2(-Width, 0);
+        menuCanvas.offsetMax = new Vector2(Width, 0);
+        viewport.offsetMin = new Vector2(Width, 0);
+        viewport.offsetMax = new Vector2(-Width, 0);
+        menuParent.sizeDelta = new Vector2(Width * 3, Height);
+        menuParent.anchoredPosition = new Vector2(-Width * 1.5f, Height / 2);
     }
 
     /// <summary>
@@ -171,13 +184,12 @@ public class ScaleManager : MonoBehaviour
     /// </remarks>
     private void ScaleNavigationMenu()
     {
-        int height = Camera.pixelHeight, width = Camera.pixelWidth;
-        float scaleFactor = width / (float)ORIGINAL_WIDTH;
+        float scaleFactor = Width / (float)ORIGINAL_WIDTH;
         RectTransform armoryIconRect = navigationMenu.transform.GetChild(0).GetComponent<RectTransform>(),
             mainMenuIconRect = navigationMenu.transform.GetChild(1).GetComponent<RectTransform>(),
             shopIconRect = navigationMenu.transform.GetChild(2).GetComponent<RectTransform>();
 
-        navigationMenu.sizeDelta = new Vector2(width, ICON_MENU_HEIGHT);
+        navigationMenu.sizeDelta = new Vector2(Width, ICON_MENU_HEIGHT);
         navigationMenu.anchoredPosition = new Vector2(0, ICON_MENU_HEIGHT / 2);
         armoryIconRect.sizeDelta = new Vector2(armoryIconRect.sizeDelta.x * scaleFactor, ICON_MENU_HEIGHT);
         armoryIconRect.anchoredPosition = new Vector2(armoryIconRect.sizeDelta.x / 2, 0);

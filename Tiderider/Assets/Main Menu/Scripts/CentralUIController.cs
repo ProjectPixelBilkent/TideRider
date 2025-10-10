@@ -87,11 +87,11 @@ public class CentralUIController : MonoBehaviour
     /// </remarks>
     public void ChangeMenu()
     {
-        if (scrollContentTransform.anchoredPosition.x > -1080)
+        if (scrollContentTransform.anchoredPosition.x > -ScaleManager.Width)
         {
             OpenArmory();
         }
-        else if (scrollContentTransform.anchoredPosition.x > -2160)
+        else if (scrollContentTransform.anchoredPosition.x > -ScaleManager.Width * 2)
         {
             OpenMainMenu();
         }

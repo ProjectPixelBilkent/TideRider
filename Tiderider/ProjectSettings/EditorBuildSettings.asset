@@ -6,11 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Movement/Scenes/Movement.unity
+    guid: a7ab153ab70880640bbaabe758d7333b
+  - enabled: 1
     path: Assets/Main Menu/Scenes/MainMenu.unity
     guid: 018367f47eb4582468b097644372bcca
-  - enabled: 1
-    path: Assets/Movement/Scenes/Movement.unity
-    guid: 3ebfbae6470151543b3a5a426b1847d5
   - enabled: 1
     path: Assets/Armory/Scenes/Armory.unity
     guid: c5fc44850dca2f54e9f43f5173ea7cb1

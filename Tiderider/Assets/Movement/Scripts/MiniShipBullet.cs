@@ -14,11 +14,12 @@ public class MiniShipBullet : Bullet
     // Update is called once per frame
     void Update()
     {
-        transform.position += LevelController.UpwardsMovement * Time.deltaTime * 0.5f;
+        transform.position += 0.5f * Time.deltaTime * LevelController.UpwardsMovement;
     }
 
     private float timer = 0;
-    private static float updatePeriod = 0.5f;
+    private static readonly float updatePeriod = 0.5f;
+
     protected override void FixedUpdate()
     {
         timer += Time.fixedDeltaTime;

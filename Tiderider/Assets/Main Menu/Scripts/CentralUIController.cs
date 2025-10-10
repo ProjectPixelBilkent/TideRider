@@ -31,11 +31,6 @@ public class CentralUIController : MonoBehaviour
         activeCanvas = LevelCanvas.GetComponentInChildren<CanvasGroup>();
     }
 
-    private void Update()
-    {
-        
-    }
-
     /// <summary>
     /// Toggles the visibility of a panel using a fade transition.
     /// </summary>
@@ -118,7 +113,7 @@ public class CentralUIController : MonoBehaviour
             SideIconRect1 = IconPanel.transform.GetChild(1).GetComponent<RectTransform>(),
             SideIconRect2 = IconPanel.transform.GetChild(2).GetComponent<RectTransform>();
 
-        if (_currentPanel != null) { _currentPanel.FadeOut(this); }
+        if (_currentPanel != null) { TogglePanel(_currentPanel); }
         activeCanvas = ArmoryCanvas.GetComponentInChildren<CanvasGroup>();
 
         scrollContentTransform.DOAnchorPosX(-ScaleManager.Width * 0.5f, 0.5f);
@@ -146,7 +141,7 @@ public class CentralUIController : MonoBehaviour
             SideIconRect1 = IconPanel.transform.GetChild(0).GetComponent<RectTransform>(),
             SideIconRect2 = IconPanel.transform.GetChild(2).GetComponent<RectTransform>();
 
-        if (_currentPanel != null) { _currentPanel.FadeOut(this); }
+        if (_currentPanel != null) { TogglePanel(_currentPanel); }
         activeCanvas = LevelCanvas.GetComponentInChildren<CanvasGroup>();
 
         scrollContentTransform.DOAnchorPosX(-ScaleManager.Width * 1.5f, 0.5f);
@@ -174,7 +169,7 @@ public class CentralUIController : MonoBehaviour
             SideIconRect1 = IconPanel.transform.GetChild(0).GetComponent<RectTransform>(),
             SideIconRect2 = IconPanel.transform.GetChild(1).GetComponent<RectTransform>();
 
-        if (_currentPanel != null) { _currentPanel.FadeOut(this); }
+        if (_currentPanel != null) { TogglePanel(_currentPanel); }
         activeCanvas = ShopCanvas.GetComponentInChildren<CanvasGroup>();
 
         scrollContentTransform.DOAnchorPosX(-ScaleManager.Width * 2.5f, 0.5f);

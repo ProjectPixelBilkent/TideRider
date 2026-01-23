@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 
 public class MiniShipBullet : Bullet
@@ -58,6 +59,8 @@ public class MiniShipBullet : Bullet
         }
 
         timer = 1000;
+
+
     }
     
     protected override void OnCollisionEnter2D(Collision2D collision) { }

@@ -7698,7 +7698,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11f73b39a5233dd4395bb5dc57570fe3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shipModel: {fileID: 2062790734}
+  shipModel: {fileID: 0}
 --- !u!1 &1490789428
 GameObject:
   m_ObjectHideFlags: 0
@@ -13430,10 +13430,8 @@ GameObject:
   - component: {fileID: 2062790728}
   - component: {fileID: 2062790731}
   - component: {fileID: 2062790730}
-  - component: {fileID: 2062790727}
-  - component: {fileID: 2062790732}
-  - component: {fileID: 2062790734}
   - component: {fileID: 2062790733}
+  - component: {fileID: 2062790734}
   - component: {fileID: 2062790735}
   m_Layer: 3
   m_Name: PlayerShip
@@ -13442,54 +13440,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2062790727
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2062790726}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 727d5f728fd1a3f4b9c2d4e0ae1dae2f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxVelocity: 20
-  deceleration: 2
-  forwardSpeed: 20
-  maxRotationAngle: 90
-  rotationSmoothness: 5
-  maxAccelerationDistance: 10
-  minAccelerationDistance: 4
-  accelerationCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  accelerationMultiplier: 8
-  model: {fileID: 2062790734}
-  constantUpwardSpeed: 0
-  currentVelocity: {x: 0, y: 0, z: 0}
-  AdditionalVelocity: {x: 0, y: 0, z: 0}
 --- !u!212 &2062790728
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -13626,24 +13576,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
---- !u!114 &2062790732
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2062790726}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea008daba8437ad4eb73a8bd6605ee4c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bounceForce: 4
-  colorFlashDuration: 0.3
-  flashColor: {r: 0.6509434, g: 0, b: 0, a: 1}
-  model: {fileID: 2062790734}
-  monsterCollisionDamage: 50
-  bounceForceMonster: 15
 --- !u!114 &2062790733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13656,8 +13588,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d520b09b0b43d6d4d928e8e953366ba4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  model: {fileID: 2062790734}
-  controller: {fileID: 2062790727}
+  player: {fileID: 2062790735}
+  controller: {fileID: 2062790734}
   healthSlider: {fileID: 1528757455}
   speedSlider: {fileID: 555561561}
   SpeedBarPercent: 20
@@ -13670,9 +13602,45 @@ MonoBehaviour:
   m_GameObject: {fileID: 2062790726}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 781acaadfd45de2428ae55eaeeb49b5a, type: 3}
+  m_Script: {fileID: 11500000, guid: 9a2f0dcd37a988840bfc01fb4ea25c99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxVelocity: 20
+  deceleration: 2
+  forwardSpeed: 20
+  maxRotationAngle: 90
+  rotationSmoothness: 5
+  maxAccelerationDistance: 10
+  minAccelerationDistance: 4
+  accelerationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.1
+      inSlope: 0
+      outSlope: 0.9
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0.9
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  accelerationMultiplier: 8
+  model: {fileID: 2062790735}
+  constantUpwardSpeed: 1
+  currentVelocity: {x: 0, y: 0, z: 0}
+  AdditionalVelocity: {x: 0, y: 0, z: 0}
 --- !u!114 &2062790735
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13682,11 +13650,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2062790726}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba7ddf37072981240b4a773f1ed890b7, type: 3}
+  m_Script: {fileID: 11500000, guid: 243e3326c91d37849ae4224d4ad46659, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  armory: []
-  playerShip: 1
+  maxHealth: 100
+  currentHealth: 0
+  coll2d: {fileID: 0}
+  playerMovement: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

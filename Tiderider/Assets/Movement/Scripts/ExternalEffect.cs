@@ -31,7 +31,7 @@ public class ExternalEffect : MonoBehaviour
         
     }
 
-    public virtual Vector3 GetAddition(ShipController ship)
+    public virtual Vector3 GetAddition(PlayerMovement ship)
     {
         return directionVectors[direction] * speed;
     }

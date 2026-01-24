@@ -9,8 +9,8 @@ using UnityEngine.UI;
 /// </remarks>
 public class ShipViewer : MonoBehaviour
 {
-    [SerializeField] ShipModel model;
-    [SerializeField] ShipController controller;
+    [SerializeField] Player player;
+    [SerializeField] PlayerMovement controller;
     [SerializeField] Slider healthSlider;
     [SerializeField] Slider speedSlider;
     [SerializeField] private float SpeedBarPercent = 0f;
@@ -20,48 +20,8 @@ public class ShipViewer : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        if (model != null)
-        {
-            model.HealthChanged += OnHealthChanged;
-        }
+
         UpdateView();
-    }
-
-    /// <summary>
-    /// Unsubscribes from health change events.
-    /// </summary>
-    private void OnDestroy()
-    {
-        if (model != null)
-        {
-            model.HealthChanged -= OnHealthChanged;
-        }
-    }
-
-    /// <summary>
-    /// Damages the ship by the specified amount.
-    /// </summary>
-    /// <param name="amount">Amount of damage.</param>
-    public void Damage(int amount)
-    {
-        model?.Decrement(amount);
-    }
-
-    /// <summary>
-    /// Heals the ship by the specified amount.
-    /// </summary>
-    /// <param name="amount">Amount to heal.</param>
-    public void Heal(int amount)
-    {
-        model?.Increment(amount);
-    }
-
-    /// <summary>
-    /// Restores the ship's health to maximum.
-    /// </summary>
-    public void Reset()
-    {
-        model?.Restore();
     }
 
     /// <summary>
@@ -69,12 +29,12 @@ public class ShipViewer : MonoBehaviour
     /// </summary>
     public void UpdateView()
     {
-        if (model == null)
+        if (player == null)
             return;
 
-        if (healthSlider != null && model.MaxHealth != 0)
+        if (healthSlider != null && player.maxHealth != 0)
         {
-            healthSlider.value = (float)model.CurrentHealth / (float)model.MaxHealth;
+            healthSlider.value = (float)player.currentHealth / (float)player.maxHealth;
         }
 
         if (speedSlider != null && controller != null && controller.maxVelocity > 0f)

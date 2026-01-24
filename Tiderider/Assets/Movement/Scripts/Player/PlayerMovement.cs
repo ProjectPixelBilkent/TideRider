@@ -1,13 +1,6 @@
-﻿using UnityEngine;
+using UnityEngine;
 
-/// <summary>
-/// Ship controller that follows mouse position with distance-based acceleration and momentum physics.
-/// The ship rotates based on the ratio between lateral movement speed and forward speed.
-/// </summary>
-/// <remarks>
-/// Maintained by: Mouse Tracking System
-/// </remarks>
-public class ShipController : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement Settings")]
     [SerializeField] public float maxVelocity = 15f;
@@ -24,8 +17,8 @@ public class ShipController : MonoBehaviour
     [SerializeField] private AnimationCurve accelerationCurve = AnimationCurve.Linear(0f, 0.1f, 1f, 1f);
     [SerializeField] private float accelerationMultiplier = 8f;
 
-    [Header("Ship Model")]
-    [SerializeField] private ShipModel model;
+    [Header("Player")]
+    [SerializeField] private Player model;
 
     [Header("Constant Upward Speed")]
     [SerializeField] private float constantUpwardSpeed = 5f;
@@ -67,7 +60,7 @@ public class ShipController : MonoBehaviour
     private void FixedUpdate()
     {
         var effect = FindExternalEffectAtScreenPoint(transform.position);
-        AdditionalVelocity = Vector3.zero;
+        AdditionalVelocity = effect != null ? effect.GetAddition(this) : Vector3.zero;
     }
 
     /// <summary>

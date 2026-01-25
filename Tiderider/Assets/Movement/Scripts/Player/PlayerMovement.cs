@@ -216,6 +216,6 @@ public class PlayerMovement : MonoBehaviour
     private void UpdateMousePosition()
     {
         Vector3 mousePosition = Input.mousePosition;
-        targetWorldPosition = mainCamera.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, 10f));
+        targetWorldPosition = mainCamera.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, 10f)) + new Vector3(0, 8.5f, 0);
     }
 }

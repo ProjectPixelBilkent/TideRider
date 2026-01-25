@@ -1,6 +1,6 @@
 public abstract class State
 {
-    private StateMachine machine;
+    protected StateMachine machine;
 
     public State(StateMachine machine)
     {

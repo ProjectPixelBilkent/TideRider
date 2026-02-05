@@ -32,7 +32,7 @@ public class HasHealth: MonoBehaviour
         return currentHealth;
     }
 
-    public void Die()
+    public virtual void Die()
     {
         //TODO
     }

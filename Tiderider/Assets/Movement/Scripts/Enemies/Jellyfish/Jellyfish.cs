@@ -13,18 +13,6 @@ public class Jellyfish : Enemy
         base.Start();
 
         fsm = new StateMachine();
-        fsm.Init(new GoToTopState(fsm, rb, speed), this);
-    }
-
-    public Vector2 GetTopPoint()
-    {
-        GameObject ship = GameObject.FindGameObjectWithTag("Player");
-        float y = Camera.main.transform.position.y + topOffsetFromCamera;
-        return new Vector2(ship.transform.position.x, y);
-    }
-
-    public float GetBottomY()
-    {
-        return Camera.main.transform.position.y + bottomOffsetFromCamera;
+        fsm.Init(new IdleState(fsm), this);
     }
 }

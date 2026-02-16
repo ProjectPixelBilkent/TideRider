@@ -6,6 +6,8 @@ public class Enemy: HasHealth
     protected Rigidbody2D rb;
     [SerializeField] protected float speed;
 
+    public Rigidbody2D rigidBody { get { return rb; } }
+
     protected override void Start()
     {
         base.Start();

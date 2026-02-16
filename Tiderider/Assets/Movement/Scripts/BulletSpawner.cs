@@ -40,6 +40,7 @@ public class BulletSpawner : MonoBehaviour
         var monster = GameObject.FindGameObjectWithTag("LevelMonster").GetComponent<Collider2D>();
         for(int i=0; i< armory.Length ; i++)
         {
+            continue;
             if (armory[i].weaponInfo == null)
             {
                 continue;

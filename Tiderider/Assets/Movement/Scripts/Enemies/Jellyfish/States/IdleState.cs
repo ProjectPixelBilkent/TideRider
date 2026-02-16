@@ -21,7 +21,8 @@ public class IdleState : State
 
     public override void Update()
     {
-        if(timeIn > maxTime)
+        Debug.Log("JELLYFISH IdleState Update - Enemy type: " + machine.Enemy.GetType().Name);
+        if (timeIn > maxTime)
         {
             Vector2 candidate;
 

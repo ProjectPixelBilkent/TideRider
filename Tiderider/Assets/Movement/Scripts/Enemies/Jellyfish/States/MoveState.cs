@@ -20,6 +20,9 @@ public class MoveState : State
 
     public override void Update()
     {
+        Debug.Log("JELLYFISH MoveState Update - Enemy type: " + machine.Enemy.GetType().Name);
+
+        Debug.Log("Jellyfish MoveState controlling: " + machine.Enemy.gameObject.name);
         Vector2 updatedPos = new Vector2(Camera.main.transform.position.x, Camera.main.transform.position.y) + pos;
         Vector2 speedVec = new Vector2(updatedPos.x - machine.Enemy.transform.position.x, updatedPos.y - machine.Enemy.transform.position.y);
         machine.Enemy.rigidBody.linearVelocity = speedVec.normalized * Mathf.Min(speed, speedVec.magnitude + 0.5f) + new Vector2(0, Camera.main.velocity.y);

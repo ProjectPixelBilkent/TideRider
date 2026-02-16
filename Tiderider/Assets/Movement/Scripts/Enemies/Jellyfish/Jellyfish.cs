@@ -11,6 +11,7 @@ public class Jellyfish : Enemy
     protected override void Start()
     {
         base.Start();
+        Debug.Log("JELLYFISH START: " + gameObject.name);
 
         fsm = new StateMachine();
         fsm.Init(new IdleState(fsm), this);

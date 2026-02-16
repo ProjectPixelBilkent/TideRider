@@ -23,6 +23,6 @@ public class SpawnState : State
 
     public override void Update()
     {
-        machine.ChangeState(new CalculateState(machine, rb));
+        machine.ChangeState(new PirateCalculateState(machine, rb));
     }
 }

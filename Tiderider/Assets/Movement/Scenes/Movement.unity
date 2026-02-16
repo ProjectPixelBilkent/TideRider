@@ -7371,6 +7371,12 @@ MonoBehaviour:
   maxAccel: 12
   recalcInterval: 0.25
   recalcTimer: 0
+  maxSpeedUp: 6
+  maxSpeedDown: 3.5
+  maxSpeedSide: 4
+  maxAccelUp: 18
+  maxAccelDown: 12
+  maxAccelSide: 12
   bulletSpeed: 12
   desiredRange: 6
   strafeOffset: 1.5
@@ -7901,7 +7907,7 @@ Transform:
   m_GameObject: {fileID: 1420463125}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.81, y: -2.1, z: -5}
+  m_LocalPosition: {x: -1.99, y: -3.45, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -13405,11 +13411,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3961672815343742368, guid: 4d06852374b16774a982069c363195ea, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.121
+      value: -2.51
       objectReference: {fileID: 0}
     - target: {fileID: 3961672815343742368, guid: 4d06852374b16774a982069c363195ea, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 7.4914
+      value: -3.38
       objectReference: {fileID: 0}
     - target: {fileID: 3961672815343742368, guid: 4d06852374b16774a982069c363195ea, type: 3}
       propertyPath: m_LocalPosition.z

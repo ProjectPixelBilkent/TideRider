@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: ff9dafa9d25710b47b94c92c25dbf29e
+guid: a92d893f895402748a95c2516a7c534a
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -801776766171507223
-    second: angler-fish-isolated-on-a-transparent-background-free-png_0
+      213: -6494868965143887343
+    second: "\u2014Pngtree\u2014cute snowman wearing a star_5591751_0"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: angler-fish-isolated-on-a-transparent-background-free-png_0
+      name: "\u2014Pngtree\u2014cute snowman wearing a star_5591751_0"
       rect:
         serializedVersion: 2
-        x: 51
-        y: 29
-        width: 532
-        height: 291
+        x: 87
+        y: 57
+        width: 1007
+        height: 1105
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9e59f2777448fd4f0800000000000000
-      internalID: -801776766171507223
+      spriteID: 112c3e566179dd5a0800000000000000
+      internalID: -6494868965143887343
       vertices: []
       indices: 
       edges: []
@@ -147,8 +147,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      angler-fish-isolated-on-a-transparent-background-free-png_0: -801776766171507223
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -11,9 +11,6 @@ public class PirateMoveState : State
 
     public override void Enter()
     {
-        var p = (PirateShip)machine.Enemy;
-        // Reset the recalculation timer when entering this state
-        p.recalcTimer = p.recalcInterval;
     }
 
     public override void Exit()
@@ -23,45 +20,77 @@ public class PirateMoveState : State
     public override void Update()
     {
         var p = (PirateShip)machine.Enemy;
-        Debug.Log("PirateMoveState controlling: " + p.gameObject.name);
         p.FindPlayerIfNeeded();
 
-        // Count down recalc timer - when it hits zero, recalculate optimal position
-        p.recalcTimer -= Time.fixedDeltaTime;
+        if (p.playerRb == null)
+        {
+            rb.linearVelocity = Vector2.zero;
+            return;
+        }
+
+        Vector2 piratePos = rb.position;
+        Vector2 playerPos = p.playerRb.position;
+        Vector2 playerVel = p.playerRb.linearVelocity;
+
+        // Recalculate target sometimes
+        p.recalcTimer -= Time.deltaTime;
         if (p.recalcTimer <= 0f)
         {
-            // Time to recalculate optimal firing position
             machine.ChangeState(new PirateCalculateState(machine, rb));
             return;
         }
 
-        // Move towards the calculated target position
-        Vector2 delta = p.moveTarget - rb.position;
-        Debug.Log("Pirate at: " + rb.position + ", Target: " + p.moveTarget + ", Delta: " + delta);
-        // Smooth steering with different up/down speeds
-        float dx = delta.x;
-        float dy = delta.y;
+        // Continuously keep target ahead of the player
+        float leadTime = 0.75f;
+        Vector2 leadOffset = playerVel * leadTime;
+        p.moveTarget = playerPos + leadOffset;
 
-        // Pick directional max speeds
-        float sx = p.maxSpeedSide;
-        float sy = (dy > 0f) ? p.maxSpeedUp : p.maxSpeedDown;
+        Vector2 toTarget = p.moveTarget - piratePos;
+        float dist = toTarget.magnitude;
 
-        // Build desired velocity with separate caps
-        Vector2 desiredVel = Vector2.zero;
-        if (delta.sqrMagnitude > 0.0001f)
+        if (dist < 0.01f)
         {
-            Vector2 dir = delta.normalized;
-            desiredVel = new Vector2(dir.x * sx, dir.y * sy);
+            rb.linearVelocity = Vector2.MoveTowards(
+                rb.linearVelocity,
+                playerVel,
+                p.maxAccelSide * Time.deltaTime
+            );
+            return;
         }
 
-        // Pick directional accel
-        float ax = p.maxAccelSide;
-        float ay = (desiredVel.y > rb.linearVelocity.y) ? p.maxAccelUp : p.maxAccelDown;
+        Vector2 chaseDir = toTarget.normalized;
 
-        // Move current velocity toward desired velocity per-axis
-        Vector2 v = rb.linearVelocity;
-        v.x = Mathf.MoveTowards(v.x, desiredVel.x, ax * Time.fixedDeltaTime);
-        v.y = Mathf.MoveTowards(v.y, desiredVel.y, ay * Time.fixedDeltaTime);
-        rb.linearVelocity = v;
+        // Catch-up strength gets bigger when farther away
+        float catchUpStrength = Mathf.Clamp(dist * 1.5f, 2f, 12f);
+
+        // Desired velocity = player's velocity + extra velocity toward target
+        Vector2 desiredVel = playerVel + chaseDir * catchUpStrength;
+
+        // Clamp per-axis using pirate limits
+        float maxYSpeed = desiredVel.y >= 0f ? p.maxSpeedUp : p.maxSpeedDown;
+
+        desiredVel.x = Mathf.Clamp(desiredVel.x, -p.maxSpeedSide, p.maxSpeedSide);
+        desiredVel.y = Mathf.Clamp(desiredVel.y, -maxYSpeed, maxYSpeed);
+
+        Vector2 currentVel = rb.linearVelocity;
+
+        float accelX = p.maxAccelSide;
+        float accelY = desiredVel.y > currentVel.y ? p.maxAccelUp : p.maxAccelDown;
+
+        currentVel.x = Mathf.MoveTowards(currentVel.x, desiredVel.x, accelX * Time.deltaTime);
+        currentVel.y = Mathf.MoveTowards(currentVel.y, desiredVel.y, accelY * Time.deltaTime);
+
+        rb.linearVelocity = currentVel;
+
+        // Keep shooting direction updated
+        Vector2 shootDir = LeadAim2D.GetShootDirection(
+            piratePos,
+            playerPos,
+            playerVel,
+            p.bulletSpeed
+        );
+
+        if (shootDir.sqrMagnitude > 0.0001f)
+            p.shootDir = shootDir.normalized;
     }
 }

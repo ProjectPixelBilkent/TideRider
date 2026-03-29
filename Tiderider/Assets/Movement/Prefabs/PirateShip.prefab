@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4401793685225626737}
   - component: {fileID: 1546127869558965176}
   - component: {fileID: 395548122705825254}
+  - component: {fileID: 2880021062661780473}
   m_Layer: 0
   m_Name: PirateShip
   m_TagString: Untagged
@@ -162,3 +163,41 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &2880021062661780473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9005360163949944931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a429d1911dcd3dd46a76c460866b5fe8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 0
+  currentHealth: 0
+  healthSlider: {fileID: 0}
+  speed: 0
+  playerRb: {fileID: 0}
+  moveSpeed: 3
+  stopDistance: 0.25
+  maxSpeed: 4
+  maxAccel: 12
+  recalcInterval: 0.25
+  recalcTimer: 0
+  maxSpeedUp: 6
+  maxSpeedDown: 3.5
+  maxSpeedSide: 4
+  maxAccelUp: 18
+  maxAccelDown: 12
+  maxAccelSide: 12
+  bulletSpeed: 12
+  desiredRange: 6
+  strafeOffset: 1.5
+  strafeSign: 1
+  autoSpawnFromTop: 1
+  spawnAboveScreen: 0.25
+  spawnXPaddingViewport: 0.08
+  moveTarget: {x: 0, y: 0}
+  shootDir: {x: 0, y: 0}

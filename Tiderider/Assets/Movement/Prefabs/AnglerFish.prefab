@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7693522936954057203}
   - component: {fileID: 6229066113371815728}
   - component: {fileID: 4965450026169650170}
+  - component: {fileID: 3861942100354759249}
   m_Layer: 0
   m_Name: AnglerFish
   m_TagString: Untagged
@@ -152,3 +153,44 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
+--- !u!114 &3861942100354759249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8291028243939827525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de18312a992e07145b5212c4b8dfdb72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 0
+  currentHealth: 0
+  healthSlider: {fileID: 0}
+  speed: 0
+  ship: {fileID: 0}
+  renderer: {fileID: 0}
+  disguisedSprite: {fileID: 0}
+  revealedSprite: {fileID: 0}
+  revealDelay: 0.4
+  revealDistance: 1.8
+  isRevealed: 0
+  autoSpawnFromTop: 1
+  spawnAboveScreen: 0.25
+  randomizeSpawnX: 1
+  spawnXPaddingViewport: 0.08
+  passDownSpeed: 2
+  xLockSmoothTime: 0.12
+  xLockMaxSpeed: 6
+  xDeadZone: 0.05
+  wobbleX: 0.05
+  wobbleSpeed: 2
+  chaseSpeed: 4.5
+  eatTriggerDistance: 0.85
+  eatLungeSpeed: 10
+  eatLungeTime: 0.25
+  eatCooldown: 1
+  baseX: 0
+  xSmoothVel: 0
+  revealTimer: 0

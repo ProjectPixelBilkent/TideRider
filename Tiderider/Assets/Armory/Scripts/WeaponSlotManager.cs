@@ -15,411 +15,247 @@ public class WeaponSlotManager : MonoBehaviour
 {
     public Weapon weapon;
     private GameObject weaponName, weaponDescription, weaponIcon, upgradeBtn;
-    private const float SLOT_PADDING = 25f, SLOT_GAP = 25f, WIDTH_EXPANSION = 270f, HEIGHT_EXPANSION = 350f, 
-        NAME_EXPANSION = 50f, ICON_EXPANSION = 80f, UPGRADE_EXPANSION = 25f; // Constants for the expansion of the weapon slot frame
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    // --- STATE MANAGEMENT & CACHE ---
+    private static GameObject activeSlot = null;
+    private static Sequence uiSequence;
+    private static bool layoutCached = false;
+    private static bool isShrinking = false;
+    private static Action onShrinkCompleteAction = null; // Used to queue seamless card swapping
+
+    // Absolute values to prevent math drift during spam-clicking
+    private static float row1BaseY, row2BaseY;
+    private static float baseNameHeight, baseIconHeight, baseUpgradeBtnHeight;
+
+    private const float SLOT_PADDING = 25f, SLOT_GAP = 25f, WIDTH_EXPANSION = 270f, HEIGHT_EXPANSION = 350f,
+        NAME_EXPANSION = 50f, ICON_EXPANSION = 80f, UPGRADE_EXPANSION = 25f;
+
     void Start()
     {
-        weaponName = transform.GetChild(0).gameObject; // Get the name of the weapon in the slot
-        weaponDescription = transform.GetChild(1).gameObject; // Get the description of the weapon in the slot
-        weaponIcon = transform.GetChild(2).gameObject; // Get the icon of the weapon in the slot
-        upgradeBtn = transform.GetChild(3).gameObject; // Get the upgrade button of the weapon in the slot
-        weaponName.GetComponent<TMP_Text>().text = weapon.weaponName; // Set the name of the weapon in the slot
-        weaponDescription.GetComponent<TMP_Text>().text = weapon.weaponDescription; // Set the description of the weapon in the slot
-        weaponDescription.SetActive(false); // Initially hide the description of the weapon in the slot
-        weaponIcon.GetComponent<Image>().sprite = weapon.weaponIcon; // Set the icon of the weapon in the slot
+        weaponName = transform.GetChild(0).gameObject;
+        weaponDescription = transform.GetChild(1).gameObject;
+        weaponIcon = transform.GetChild(2).gameObject;
+        upgradeBtn = transform.GetChild(3).gameObject;
+
+        weaponName.GetComponent<TMP_Text>().text = weapon.weaponName;
+        weaponDescription.GetComponent<TMP_Text>().text = weapon.weaponDescription;
+        weaponDescription.SetActive(false);
+        weaponIcon.GetComponent<Image>().sprite = weapon.weaponIcon;
+
+        // Reset static locks if the scene reloads
+        activeSlot = null;
+        layoutCached = false;
+        isShrinking = false;
+        onShrinkCompleteAction = null;
+        if (uiSequence != null) uiSequence.Kill();
     }
 
-    /// <summary>
-    /// Method to upgrade the weapon in the slot.
-    /// </summary>
-    /// <remarks>
-    /// Created by: Işık Dönger
-    /// </remarks>
     public void UpgradeWeapon()
     {
         DataManager.SubtractCoinAmount(weapon.weaponLevels[(int)typeof(DataManager).GetMethod("Get" + weapon.weaponName + "Level").Invoke(null, null)].cost);
-        //typeof(DataManager).GetMethod("Increment" + weapon.weaponName + "Level").Invoke(null, null);
     }
 
-    /// <summary>
-    /// Expands the info card of the weapon in the armory UI when a slot is selected.
-    /// </summary>
-    /// <param name="WeaponSlot">Weapon Slot to be expanded</param>
-    /// <todo>
-    /// Optimize and increase maintainability of the animation logic.
-    /// </todo>
-    /// <remarks>
-    /// Maintained by: Işık Dönger
-    /// </remarks>
     public static void ExpandInfoCard(GameObject weaponSlot)
     {
-        // Logic to animate the info card of the weapon
-        GameObject parentFrame = weaponSlot.transform.parent.gameObject; // Get the parent of the weapon slot
-        int slotIndex = parentFrame.transform.parent.gameObject.transform.GetSiblingIndex() * 3 + parentFrame.transform.GetSiblingIndex(); // Get the index of the slot in the parent
-        GameObject slotRow = parentFrame.transform.parent.gameObject; // Get the row of slots
-        RectTransform frameRect = parentFrame.GetComponent<RectTransform>(), weaponsPanel = slotRow.transform.parent.gameObject.GetComponent<RectTransform>(), rowRect = slotRow.GetComponent<RectTransform>();
-        RectTransform firstSiblingFrame, secondSiblingFrame, firstRowRect, secondRowRect;
-        Vector2 currentPos;
-        float newWidth = ScaleManager.FrameWidth + WIDTH_EXPANSION, newHeight = ScaleManager.FrameHeight - SLOT_PADDING * 2; // New width for the frame
-
-        switch (slotIndex)
+        // 1. SEAMLESS SWAP LOGIC: If a different card is open, shrink it and queue this one to expand
+        if (activeSlot != null && activeSlot != weaponSlot)
         {
-            case 0:
-                secondRowRect = slotRow.transform.parent.GetChild(1).gameObject.GetComponent<RectTransform>(); // Get the second row of slots
-                firstSiblingFrame = parentFrame.transform.parent.GetChild(1).gameObject.GetComponent<RectTransform>(); // Get the middle slot as sibling
-                secondSiblingFrame = parentFrame.transform.parent.GetChild(2).gameObject.GetComponent<RectTransform>(); // Get the right slot as sibling
-                currentPos = frameRect.position;
-                frameRect.anchorMin = new Vector2(0f, 0f);
-                frameRect.anchorMax = new Vector2(0f, 1f); // Anchor the selected slot to the left
-                frameRect.position = currentPos; // Keep the position of the selected slot
-                currentPos = firstSiblingFrame.position;
-                firstSiblingFrame.anchorMin = new Vector2(1f, 0f);
-                firstSiblingFrame.anchorMax = new Vector2(1f, 1f); // Anchor the middle slot to the right
-                firstSiblingFrame.position = currentPos; // Keep the position of the middle slot
-                currentPos = secondSiblingFrame.position;
-                secondSiblingFrame.anchorMin = new Vector2(1f, 0f);
-                secondSiblingFrame.anchorMax = new Vector2(1f, 1f); // Anchor the right slot to the right
-                secondSiblingFrame.position = currentPos; // Keep the position of the right slot
-                secondRowRect.DOAnchorPosY(secondRowRect.anchoredPosition.y - HEIGHT_EXPANSION, 0.5f); // Move the second row of slots down
-                DOTween.To(
-                    () => rowRect.offsetMax,
-                    x => rowRect.offsetMax = x,
-                    new Vector2(WIDTH_EXPANSION, rowRect.offsetMax.y),
-                    0.5f
-                );
-                DOTween.To(
-                    () => new Vector2(frameRect.sizeDelta.x, frameRect.offsetMin.y),
-                    x =>
-                    {
-                        frameRect.sizeDelta = new Vector2(x.x, frameRect.sizeDelta.y); // Set width
-                        frameRect.offsetMin = new Vector2(frameRect.offsetMin.x, x.y); // Set bottom
-                        frameRect.offsetMax = new Vector2(frameRect.offsetMax.x, 0f); // Lock top
-                    },
-                    new Vector2(newWidth, -HEIGHT_EXPANSION),
-                    0.5f
-                );
-                frameRect.DOAnchorPosX(newWidth / 2, 0.5f); // Move the selected slot to the left side
-                break;
-            case 1:
-                secondRowRect = slotRow.transform.parent.GetChild(1).gameObject.GetComponent<RectTransform>(); // Get the second row of slots
-                firstSiblingFrame = parentFrame.transform.parent.GetChild(0).gameObject.GetComponent<RectTransform>(); // Get the middle slot as sibling
-                secondSiblingFrame = parentFrame.transform.parent.GetChild(2).gameObject.GetComponent<RectTransform>(); // Get the right slot as sibling
-                currentPos = firstSiblingFrame.position;
-                firstSiblingFrame.anchorMin = new Vector2(0f, 0f);
-                firstSiblingFrame.anchorMax = new Vector2(0f, 1f); // Anchor the left slot to the left
-                firstSiblingFrame.position = currentPos; // Keep the position of the left slot
-                currentPos = frameRect.position;
-                frameRect.anchorMin = new Vector2(0.5f, 0f);
-                frameRect.anchorMax = new Vector2(0.5f, 1f); // Anchor the selected slot to the center
-                frameRect.position = currentPos; // Keep the position of the selected slot
-                currentPos = secondSiblingFrame.position;
-                secondSiblingFrame.anchorMin = new Vector2(1f, 0f);
-                secondSiblingFrame.anchorMax = new Vector2(1f, 1f); // Anchor the right slot to the right
-                secondSiblingFrame.position = currentPos; // Keep the position of the right slot
-                secondRowRect.DOAnchorPosY(secondRowRect.anchoredPosition.y - HEIGHT_EXPANSION, 0.5f); // Move the second row of slots down
-                DOTween.To(
-                    () => rowRect.offsetMin,
-                    x => rowRect.offsetMin = x,
-                    new Vector2(-WIDTH_EXPANSION / 2, rowRect.offsetMin.y),
-                    0.5f
-                );
-                DOTween.To(
-                    () => rowRect.offsetMax,
-                    x => rowRect.offsetMax = x,
-                    new Vector2(WIDTH_EXPANSION / 2, rowRect.offsetMax.y),
-                    0.5f
-                );
-                DOTween.To(
-                    () => new Vector2(frameRect.sizeDelta.x, frameRect.offsetMin.y),
-                    x =>
-                    {
-                        frameRect.sizeDelta = new Vector2(x.x, frameRect.sizeDelta.y); // Set width
-                        frameRect.offsetMin = new Vector2(frameRect.offsetMin.x, x.y); // Set bottom
-                        frameRect.offsetMax = new Vector2(frameRect.offsetMax.x, 0f); // Lock top
-                    },
-                    new Vector2(newWidth, -HEIGHT_EXPANSION),
-                    0.5f
-                );
-                break;
-            case 2:
-                secondRowRect = slotRow.transform.parent.GetChild(1).gameObject.GetComponent<RectTransform>(); // Get the second row of slots
-                firstSiblingFrame = parentFrame.transform.parent.GetChild(0).gameObject.GetComponent<RectTransform>(); // Get the middle slot as sibling
-                secondSiblingFrame = parentFrame.transform.parent.GetChild(1).gameObject.GetComponent<RectTransform>(); // Get the right slot as sibling
-                currentPos = firstSiblingFrame.position;
-                firstSiblingFrame.anchorMin = new Vector2(0f, 0f);
-                firstSiblingFrame.anchorMax = new Vector2(0f, 1f); // Anchor the left slot to the left
-                firstSiblingFrame.position = currentPos; // Keep the position of the left slot
-                currentPos = secondSiblingFrame.position;
-                secondSiblingFrame.anchorMin = new Vector2(0f, 0f);
-                secondSiblingFrame.anchorMax = new Vector2(0f, 1f); // Anchor the middle slot to the left
-                secondSiblingFrame.position = currentPos; // Keep the position of the middle slot
-                currentPos = frameRect.position;
-                frameRect.anchorMin = new Vector2(1f, 0f);
-                frameRect.anchorMax = new Vector2(1f, 1f); // Anchor the selected slot to the right
-                frameRect.position = currentPos; // Keep the position of the selected slot
-                secondRowRect.DOAnchorPosY(secondRowRect.anchoredPosition.y - HEIGHT_EXPANSION, 0.5f); // Move the second row of slots down
-                DOTween.To(
-                    () => rowRect.offsetMin,
-                    x => rowRect.offsetMin = x,
-                    new Vector2(-WIDTH_EXPANSION, rowRect.offsetMin.y),
-                    0.5f
-                );
-                DOTween.To(
-                    () => new Vector2(frameRect.sizeDelta.x, frameRect.offsetMin.y),
-                    x =>
-                    {
-                        frameRect.sizeDelta = new Vector2(x.x, frameRect.sizeDelta.y); // Set width
-                        frameRect.offsetMin = new Vector2(frameRect.offsetMin.x, x.y); // Set bottom
-                        frameRect.offsetMax = new Vector2(frameRect.offsetMax.x, 0f); // Lock top
-                    },
-                    new Vector2(newWidth, -HEIGHT_EXPANSION),
-                    0.5f
-                );
-                frameRect.DOAnchorPosX(-newWidth / 2, 0.5f); // Move the selected slot to the right side
-                break;
-            case 3:
-                firstRowRect = slotRow.transform.parent.GetChild(0).gameObject.GetComponent<RectTransform>(); // Get the first row of slots
-                firstSiblingFrame = parentFrame.transform.parent.GetChild(1).gameObject.GetComponent<RectTransform>(); // Get the middle slot as sibling
-                secondSiblingFrame = parentFrame.transform.parent.GetChild(2).gameObject.GetComponent<RectTransform>(); // Get the right slot as sibling
-                currentPos = frameRect.position;
-                frameRect.anchorMin = new Vector2(0f, 0f);
-                frameRect.anchorMax = new Vector2(0f, 1f); // Anchor the selected slot to the left
-                frameRect.position = currentPos; // Keep the position of the selected slot
-                currentPos = firstSiblingFrame.position;
-                firstSiblingFrame.anchorMin = new Vector2(1f, 0f);
-                firstSiblingFrame.anchorMax = new Vector2(1f, 1f); // Anchor the middle slot to the right
-                firstSiblingFrame.position = currentPos; // Keep the position of the middle slot
-                currentPos = secondSiblingFrame.position;
-                secondSiblingFrame.anchorMin = new Vector2(1f, 0f);
-                secondSiblingFrame.anchorMax = new Vector2(1f, 1f); // Anchor the right slot to the right
-                secondSiblingFrame.position = currentPos; // Keep the position of the right slot
-                firstRowRect.DOAnchorPosY(firstRowRect.anchoredPosition.y + HEIGHT_EXPANSION, 0.5f); // Move the first row of slots up
-                DOTween.To(
-                    () => rowRect.offsetMax,
-                    x => rowRect.offsetMax = x,
-                    new Vector2(WIDTH_EXPANSION, rowRect.offsetMax.y),
-                    0.5f
-                );
-                DOTween.To(
-                    () => new Vector2(frameRect.sizeDelta.x, frameRect.offsetMax.y),
-                    x =>
-                    {
-                        frameRect.sizeDelta = new Vector2(x.x, frameRect.sizeDelta.y); // Set width
-                        frameRect.offsetMax = new Vector2(frameRect.offsetMax.x, x.y); // Set TOP
-                        frameRect.offsetMin = new Vector2(frameRect.offsetMin.x, 0f); // Lock BOTTOM
-                    },
-                    new Vector2(newWidth, HEIGHT_EXPANSION),
-                    0.5f
-                );
-                frameRect.DOAnchorPosX(newWidth / 2, 0.5f); // Move the selected slot to the left side
-                break;
-            case 4:
-                firstRowRect = slotRow.transform.parent.GetChild(0).gameObject.GetComponent<RectTransform>(); // Get the first row of slots
-                firstSiblingFrame = parentFrame.transform.parent.GetChild(0).gameObject.GetComponent<RectTransform>(); // Get the middle slot as sibling
-                secondSiblingFrame = parentFrame.transform.parent.GetChild(2).gameObject.GetComponent<RectTransform>(); // Get the right slot as sibling
-                currentPos = firstSiblingFrame.position;
-                firstSiblingFrame.anchorMin = new Vector2(0f, 0f);
-                firstSiblingFrame.anchorMax = new Vector2(0f, 1f); // Anchor the left slot to the left
-                firstSiblingFrame.position = currentPos; // Keep the position of the left slot
-                currentPos = frameRect.position;
-                frameRect.anchorMin = new Vector2(0.5f, 0f);
-                frameRect.anchorMax = new Vector2(0.5f, 1f); // Anchor the selected slot to the center
-                frameRect.position = currentPos; // Keep the position of the selected slot
-                currentPos = secondSiblingFrame.position;
-                secondSiblingFrame.anchorMin = new Vector2(1f, 0f);
-                secondSiblingFrame.anchorMax = new Vector2(1f, 1f); // Anchor the right slot to the right
-                secondSiblingFrame.position = currentPos; // Keep the position of the right slot
-                firstRowRect.DOAnchorPosY(firstRowRect.anchoredPosition.y + HEIGHT_EXPANSION, 0.5f); // Move the first row of slots up
-                DOTween.To(
-                    () => rowRect.offsetMin,
-                    x => rowRect.offsetMin = x,
-                    new Vector2(-WIDTH_EXPANSION / 2, rowRect.offsetMin.y),
-                    0.5f
-                );
-                DOTween.To(
-                    () => rowRect.offsetMax,
-                    x => rowRect.offsetMax = x,
-                    new Vector2(WIDTH_EXPANSION / 2, rowRect.offsetMax.y),
-                    0.5f
-                );
-                DOTween.To(
-                    () => new Vector2(frameRect.sizeDelta.x, frameRect.offsetMax.y),
-                    x =>
-                    {
-                        frameRect.sizeDelta = new Vector2(x.x, frameRect.sizeDelta.y); // Set width
-                        frameRect.offsetMax = new Vector2(frameRect.offsetMax.x, x.y); // Set TOP
-                        frameRect.offsetMin = new Vector2(frameRect.offsetMin.x, 0f); // Lock BOTTOM
-                    },
-                    new Vector2(newWidth, HEIGHT_EXPANSION),
-                    0.5f
-                );
-                break;
-            case 5:
-                firstRowRect = slotRow.transform.parent.GetChild(0).gameObject.GetComponent<RectTransform>(); // Get the first row of slots
-                firstSiblingFrame = parentFrame.transform.parent.GetChild(0).gameObject.GetComponent<RectTransform>(); // Get the middle slot as sibling
-                secondSiblingFrame = parentFrame.transform.parent.GetChild(1).gameObject.GetComponent<RectTransform>(); // Get the right slot as sibling
-                currentPos = firstSiblingFrame.position;
-                firstSiblingFrame.anchorMin = new Vector2(0f, 0f);
-                firstSiblingFrame.anchorMax = new Vector2(0f, 1f); // Anchor the left slot to the left
-                firstSiblingFrame.position = currentPos; // Keep the position of the left slot
-                currentPos = secondSiblingFrame.position;
-                secondSiblingFrame.anchorMin = new Vector2(0f, 0f);
-                secondSiblingFrame.anchorMax = new Vector2(0f, 1f); // Anchor the middle slot to the left
-                secondSiblingFrame.position = currentPos; // Keep the position of the middle slot
-                currentPos = frameRect.position;
-                frameRect.anchorMin = new Vector2(1f, 0f);
-                frameRect.anchorMax = new Vector2(1f, 1f); // Anchor the selected slot to the right
-                frameRect.position = currentPos; // Keep the position of the selected slot
-                firstRowRect.DOAnchorPosY(firstRowRect.anchoredPosition.y + HEIGHT_EXPANSION, 0.5f); // Move the first row of slots up
-                DOTween.To(
-                    () => rowRect.offsetMin,
-                    x => rowRect.offsetMin = x,
-                    new Vector2(-WIDTH_EXPANSION, rowRect.offsetMin.y),
-                    0.5f
-                );
-                DOTween.To(
-                    () => new Vector2(frameRect.sizeDelta.x, frameRect.offsetMax.y),
-                    x =>
-                    {
-                        frameRect.sizeDelta = new Vector2(x.x, frameRect.sizeDelta.y); // Set width
-                        frameRect.offsetMax = new Vector2(frameRect.offsetMax.x, x.y); // Set TOP
-                        frameRect.offsetMin = new Vector2(frameRect.offsetMin.x, 0f); // Lock BOTTOM
-                    },
-                    new Vector2(newWidth, HEIGHT_EXPANSION),
-                    0.5f
-                );
-                frameRect.DOAnchorPosX(-newWidth / 2, 0.5f); // Move the selected slot to the left side
-                break;
+            GameObject nextSlotToOpen = weaponSlot; // Capture for the queue
+            onShrinkCompleteAction = () => { ExpandInfoCard(nextSlotToOpen); };
+            ShrinkInfoCard(activeSlot);
+            return;
         }
 
-        RectTransform weaponName = weaponSlot.transform.GetChild(0).gameObject.GetComponent<RectTransform>(), 
-            weaponDescription = weaponSlot.transform.GetChild(1).gameObject.GetComponent<RectTransform>(),
-            weaponIcon = weaponSlot.transform.GetChild(2).gameObject.GetComponent<RectTransform>(), 
-            upgradeBtn = weaponSlot.transform.GetChild(3).gameObject.GetComponent<RectTransform>(); // Get the name, description, icon and upgrade button of the weapon in the slot
-        float nameHeight = weaponName.sizeDelta.y + NAME_EXPANSION, 
-            iconHeight = weaponIcon.sizeDelta.y + ICON_EXPANSION, 
-            upgradeBtnHeight = upgradeBtn.sizeDelta.y + UPGRADE_EXPANSION,
-            descriptionHeight = (newHeight + HEIGHT_EXPANSION) - SLOT_GAP * 3 - nameHeight - iconHeight - upgradeBtnHeight; // Get the current heights of the elements
+        // 2. Prevent double-expanding the same card, UNLESS it's currently shrinking (allows fast reversal)
+        if (activeSlot == weaponSlot && !isShrinking) return;
 
-        weaponName.DOSizeDelta(new Vector2(weaponName.sizeDelta.x, nameHeight), 0.5f); // Expand the name of the weapon
-        weaponName.DOAnchorPosY(-nameHeight / 2, 0.5f); // Move the name of the weapon to the top
-        upgradeBtn.DOSizeDelta(new Vector2(upgradeBtn.sizeDelta.x, upgradeBtnHeight), 0.5f); // Expand the upgrade button of the weapon
-        upgradeBtn.DOAnchorPosY(upgradeBtnHeight / 2, 0.5f); // Move the upgrade button of the weapon to the bottom
-        weaponIcon.DOSizeDelta(new Vector2(weaponIcon.sizeDelta.x, iconHeight), 0.5f); // Expand the icon of the weapon
-        weaponIcon.DOAnchorPosY(upgradeBtnHeight + SLOT_GAP + iconHeight / 2, 0.5f); // Move the icon of the weapon to the middle
-        /*DOTween.Sequence()
-        .AppendCallback(() =>
+        activeSlot = weaponSlot;
+        isShrinking = false;
+
+        GameObject parentFrame = weaponSlot.transform.parent.gameObject;
+        Transform slotRowTransform = parentFrame.transform.parent;
+        int slotIndex = slotRowTransform.GetSiblingIndex() * 3 + parentFrame.transform.GetSiblingIndex();
+
+        bool isTopRow = slotIndex < 3;
+        int columnIndex = slotIndex % 3;
+
+        RectTransform frameRect = parentFrame.GetComponent<RectTransform>();
+        RectTransform rowRect = slotRowTransform.GetComponent<RectTransform>();
+        RectTransform firstRowRect = slotRowTransform.parent.GetChild(0).GetComponent<RectTransform>();
+        RectTransform secondRowRect = slotRowTransform.parent.GetChild(1).GetComponent<RectTransform>();
+
+        // 3. CACHE ABSOLUTE HEIGHTS ON FIRST USE (Stops UI from breaking on rapid clicks)
+        if (!layoutCached)
         {
-            weaponDescription.DOSizeDelta(new Vector2(weaponDescription.sizeDelta.x, descriptionHeight), 0.5f);
-            weaponDescription.DOAnchorPosY(-(nameHeight + SLOT_GAP + descriptionHeight / 2), 0.5f); // Move the description of the weapon to the bottom
-        })
-        .AppendInterval(0.5f)
-        .AppendCallback(() => weaponDescription.gameObject.SetActive(true));*/
-        weaponDescription.DOSizeDelta(new Vector2(weaponDescription.sizeDelta.x, descriptionHeight), 0.5f);
-        weaponDescription.DOAnchorPosY(-(nameHeight + SLOT_GAP + descriptionHeight / 2), 0.5f); // Move the description of the weapon to the bottom
-        weaponDescription.gameObject.SetActive(true);
-    }
+            row1BaseY = firstRowRect.anchoredPosition.y;
+            row2BaseY = secondRowRect.anchoredPosition.y;
 
-    /// <summary>
-    /// Shrinks the info card of the weapon in the armory UI when a slot is selected.
-    /// </summary>
-    /// <param name="WeaponSlot">Weapon Slot to be expanded</param>
-    /// <todo>
-    /// Optimize and increase maintainability of the animation logic.
-    /// </todo>
-    /// <remarks>
-    /// Maintained by: Işık Dönger
-    /// </remarks>
-    public static void ShrinkInfoCard(GameObject weaponSlot)
-    {
-        // Logic to animate the info card of the weapon
-        GameObject parentFrame = weaponSlot.transform.parent.gameObject; // Get the parent of the weapon slot
-        GameObject slotRow = parentFrame.transform.parent.gameObject; // Get the row of slots
-        RectTransform frameRect = parentFrame.GetComponent<RectTransform>(), weaponsPanel = slotRow.transform.parent.gameObject.GetComponent<RectTransform>(),
-            firstRowRect = slotRow.transform.parent.GetChild(0).gameObject.GetComponent<RectTransform>(),
-            secondRowRect = slotRow.transform.parent.GetChild(1).gameObject.GetComponent<RectTransform>();
-        int slotIndex = parentFrame.transform.parent.gameObject.transform.GetSiblingIndex() * 3 + parentFrame.transform.GetSiblingIndex(); // Get the index of the slot in the parent
+            baseNameHeight = weaponSlot.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta.y;
+            baseIconHeight = weaponSlot.transform.GetChild(2).GetComponent<RectTransform>().sizeDelta.y;
+            baseUpgradeBtnHeight = weaponSlot.transform.GetChild(3).GetComponent<RectTransform>().sizeDelta.y;
 
-        if (slotIndex < 3)
+            layoutCached = true;
+        }
+
+        if (uiSequence != null) uiSequence.Kill();
+        uiSequence = DOTween.Sequence();
+
+        RectTransform weaponNameRect = weaponSlot.transform.GetChild(0).GetComponent<RectTransform>();
+        RectTransform weaponDescriptionRect = weaponSlot.transform.GetChild(1).GetComponent<RectTransform>();
+        RectTransform weaponIconRect = weaponSlot.transform.GetChild(2).GetComponent<RectTransform>();
+        RectTransform upgradeBtnRect = weaponSlot.transform.GetChild(3).GetComponent<RectTransform>();
+
+        weaponDescriptionRect.gameObject.SetActive(true);
+
+        float newWidth = ScaleManager.FrameWidth + WIDTH_EXPANSION;
+        float newHeight = ScaleManager.FrameHeight - SLOT_PADDING * 2;
+
+        // --- HORIZONTAL EXPANSION ---
+        RectTransform sibling1, sibling2;
+        if (columnIndex == 0) // Left
         {
-            DOTween.To(
+            SetAnchorKeepPosition(frameRect, 0f, 0f);
+            sibling1 = slotRowTransform.GetChild(1).GetComponent<RectTransform>();
+            sibling2 = slotRowTransform.GetChild(2).GetComponent<RectTransform>();
+            SetAnchorKeepPosition(sibling1, 1f, 1f); SetAnchorKeepPosition(sibling2, 1f, 1f);
+
+            uiSequence.Join(DOTween.To(() => rowRect.offsetMax, x => rowRect.offsetMax = x, new Vector2(WIDTH_EXPANSION, rowRect.offsetMax.y), 0.5f));
+            uiSequence.Join(frameRect.DOAnchorPosX(newWidth / 2f, 0.5f));
+        }
+        else if (columnIndex == 1) // Center
+        {
+            SetAnchorKeepPosition(frameRect, 0.5f, 0.5f);
+            sibling1 = slotRowTransform.GetChild(0).GetComponent<RectTransform>();
+            sibling2 = slotRowTransform.GetChild(2).GetComponent<RectTransform>();
+            SetAnchorKeepPosition(sibling1, 0f, 0f); SetAnchorKeepPosition(sibling2, 1f, 1f);
+
+            uiSequence.Join(DOTween.To(() => rowRect.offsetMin, x => rowRect.offsetMin = x, new Vector2(-WIDTH_EXPANSION / 2f, rowRect.offsetMin.y), 0.5f));
+            uiSequence.Join(DOTween.To(() => rowRect.offsetMax, x => rowRect.offsetMax = x, new Vector2(WIDTH_EXPANSION / 2f, rowRect.offsetMax.y), 0.5f));
+        }
+        else // Right
+        {
+            SetAnchorKeepPosition(frameRect, 1f, 1f);
+            sibling1 = slotRowTransform.GetChild(0).GetComponent<RectTransform>();
+            sibling2 = slotRowTransform.GetChild(1).GetComponent<RectTransform>();
+            SetAnchorKeepPosition(sibling1, 0f, 0f); SetAnchorKeepPosition(sibling2, 0f, 0f);
+
+            uiSequence.Join(DOTween.To(() => rowRect.offsetMin, x => rowRect.offsetMin = x, new Vector2(-WIDTH_EXPANSION, rowRect.offsetMin.y), 0.5f));
+            uiSequence.Join(frameRect.DOAnchorPosX(-newWidth / 2f, 0.5f));
+        }
+
+        // --- VERTICAL EXPANSION ---
+        if (isTopRow)
+        {
+            uiSequence.Join(secondRowRect.DOAnchorPosY(row2BaseY - HEIGHT_EXPANSION, 0.5f));
+            uiSequence.Join(DOTween.To(
                 () => new Vector2(frameRect.sizeDelta.x, frameRect.offsetMin.y),
-                x =>
-                {
-                    frameRect.sizeDelta = new Vector2(x.x, frameRect.sizeDelta.y); // Set width
-                    frameRect.offsetMin = new Vector2(frameRect.offsetMin.x, x.y); // Set bottom
-                    frameRect.offsetMax = new Vector2(frameRect.offsetMax.x, 0f); // Lock top
-                },
-                new Vector2(ScaleManager.FrameWidth, 0f),
-                0.5f
-            );
-            DOTween.To(
-                () => firstRowRect.offsetMin,
-                x => firstRowRect.offsetMin = x,
-                new Vector2(0f, firstRowRect.offsetMin.y),
-                0.5f
-            );
-            DOTween.To(
-                () => firstRowRect.offsetMax,
-                x => firstRowRect.offsetMax = x,
-                new Vector2(0f, firstRowRect.offsetMax.y),
-                0.5f
-            );
-            secondRowRect.DOAnchorPosY(secondRowRect.anchoredPosition.y + HEIGHT_EXPANSION, 0.5f); // Move the second row of slots back up
+                x => { frameRect.sizeDelta = new Vector2(x.x, frameRect.sizeDelta.y); frameRect.offsetMin = new Vector2(frameRect.offsetMin.x, x.y); frameRect.offsetMax = new Vector2(frameRect.offsetMax.x, 0f); },
+                new Vector2(newWidth, -HEIGHT_EXPANSION), 0.5f));
         }
         else
         {
-            DOTween.To(
+            uiSequence.Join(firstRowRect.DOAnchorPosY(row1BaseY + HEIGHT_EXPANSION, 0.5f));
+            uiSequence.Join(DOTween.To(
                 () => new Vector2(frameRect.sizeDelta.x, frameRect.offsetMax.y),
-                x =>
-                {
-                    frameRect.sizeDelta = new Vector2(x.x, frameRect.sizeDelta.y); // Set width
-                    frameRect.offsetMax = new Vector2(frameRect.offsetMax.x, x.y); // Set TOP
-                    frameRect.offsetMin = new Vector2(frameRect.offsetMin.x, 0f); // Lock BOTTOM
-                },
-                new Vector2(ScaleManager.FrameWidth, 0f),
-                0.5f
-            );
-            DOTween.To(
-                () => secondRowRect.offsetMin,
-                x => secondRowRect.offsetMin = x,
-                new Vector2(0f, secondRowRect.offsetMin.y),
-                0.5f
-            );
-            DOTween.To(
-                () => secondRowRect.offsetMax,
-                x => secondRowRect.offsetMax = x,
-                new Vector2(0f, secondRowRect.offsetMax.y),
-                0.5f
-            );
-            firstRowRect.DOAnchorPosY(firstRowRect.anchoredPosition.y - HEIGHT_EXPANSION, 0.5f); // Move the first row of slots back down
+                x => { frameRect.sizeDelta = new Vector2(x.x, frameRect.sizeDelta.y); frameRect.offsetMax = new Vector2(frameRect.offsetMax.x, x.y); frameRect.offsetMin = new Vector2(frameRect.offsetMin.x, 0f); },
+                new Vector2(newWidth, HEIGHT_EXPANSION), 0.5f));
         }
 
-        if (slotIndex == 0 || slotIndex == 3)
+        // --- INTERNAL UI ELEMENTS (Targeting Absolute Numbers) ---
+        float targetNameHeight = baseNameHeight + NAME_EXPANSION;
+        float targetIconHeight = baseIconHeight + ICON_EXPANSION;
+        float targetUpgradeBtnHeight = baseUpgradeBtnHeight + UPGRADE_EXPANSION;
+        float descriptionHeight = (newHeight + HEIGHT_EXPANSION) - SLOT_GAP * 3 - targetNameHeight - targetIconHeight - targetUpgradeBtnHeight;
+
+        uiSequence.Join(weaponNameRect.DOSizeDelta(new Vector2(weaponNameRect.sizeDelta.x, targetNameHeight), 0.5f));
+        uiSequence.Join(weaponNameRect.DOAnchorPosY(-targetNameHeight / 2f, 0.5f));
+        uiSequence.Join(upgradeBtnRect.DOSizeDelta(new Vector2(upgradeBtnRect.sizeDelta.x, targetUpgradeBtnHeight), 0.5f));
+        uiSequence.Join(upgradeBtnRect.DOAnchorPosY(targetUpgradeBtnHeight / 2f, 0.5f));
+        uiSequence.Join(weaponIconRect.DOSizeDelta(new Vector2(weaponIconRect.sizeDelta.x, targetIconHeight), 0.5f));
+        uiSequence.Join(weaponIconRect.DOAnchorPosY(targetUpgradeBtnHeight + SLOT_GAP + targetIconHeight / 2f, 0.5f));
+        uiSequence.Join(weaponDescriptionRect.DOSizeDelta(new Vector2(weaponDescriptionRect.sizeDelta.x, descriptionHeight), 0.5f));
+        uiSequence.Join(weaponDescriptionRect.DOAnchorPosY(-(targetNameHeight + SLOT_GAP + descriptionHeight / 2f), 0.5f));
+    }
+
+    public static void ShrinkInfoCard(GameObject weaponSlot)
+    {
+        if (activeSlot != weaponSlot) return;
+
+        isShrinking = true;
+
+        RectTransform weaponDescriptionRect = weaponSlot.transform.GetChild(1).GetComponent<RectTransform>();
+        weaponDescriptionRect.gameObject.SetActive(false); // Hide instantly
+
+        GameObject parentFrame = weaponSlot.transform.parent.gameObject;
+        Transform slotRowTransform = parentFrame.transform.parent;
+        int slotIndex = slotRowTransform.GetSiblingIndex() * 3 + parentFrame.transform.GetSiblingIndex();
+
+        bool isTopRow = slotIndex < 3;
+        int columnIndex = slotIndex % 3;
+
+        RectTransform frameRect = parentFrame.GetComponent<RectTransform>();
+        RectTransform firstRowRect = slotRowTransform.parent.GetChild(0).GetComponent<RectTransform>();
+        RectTransform secondRowRect = slotRowTransform.parent.GetChild(1).GetComponent<RectTransform>();
+
+        RectTransform weaponNameRect = weaponSlot.transform.GetChild(0).GetComponent<RectTransform>();
+        RectTransform weaponIconRect = weaponSlot.transform.GetChild(2).GetComponent<RectTransform>();
+        RectTransform upgradeBtnRect = weaponSlot.transform.GetChild(3).GetComponent<RectTransform>();
+
+        if (uiSequence != null) uiSequence.Kill();
+        uiSequence = DOTween.Sequence();
+
+        // --- ROW SHRINKING ---
+        if (isTopRow)
         {
-            frameRect.DOAnchorPosX(ScaleManager.FrameWidth / 2, 0.5f); // Move the selected slot back to the center
+            uiSequence.Join(DOTween.To(
+                () => new Vector2(frameRect.sizeDelta.x, frameRect.offsetMin.y),
+                x => { frameRect.sizeDelta = new Vector2(x.x, frameRect.sizeDelta.y); frameRect.offsetMin = new Vector2(frameRect.offsetMin.x, x.y); frameRect.offsetMax = new Vector2(frameRect.offsetMax.x, 0f); },
+                new Vector2(ScaleManager.FrameWidth, 0f), 0.5f));
+
+            uiSequence.Join(DOTween.To(() => firstRowRect.offsetMin, x => firstRowRect.offsetMin = x, new Vector2(0f, firstRowRect.offsetMin.y), 0.5f));
+            uiSequence.Join(DOTween.To(() => firstRowRect.offsetMax, x => firstRowRect.offsetMax = x, new Vector2(0f, firstRowRect.offsetMax.y), 0.5f));
+            uiSequence.Join(secondRowRect.DOAnchorPosY(row2BaseY, 0.5f));
         }
-        else if (slotIndex == 2 || slotIndex == 5)
+        else
         {
-            frameRect.DOAnchorPosX(-ScaleManager.FrameWidth / 2, 0.5f); // Move the selected slot back to the center
+            uiSequence.Join(DOTween.To(
+                () => new Vector2(frameRect.sizeDelta.x, frameRect.offsetMax.y),
+                x => { frameRect.sizeDelta = new Vector2(x.x, frameRect.sizeDelta.y); frameRect.offsetMax = new Vector2(frameRect.offsetMax.x, x.y); frameRect.offsetMin = new Vector2(frameRect.offsetMin.x, 0f); },
+                new Vector2(ScaleManager.FrameWidth, 0f), 0.5f));
+
+            uiSequence.Join(DOTween.To(() => secondRowRect.offsetMin, x => secondRowRect.offsetMin = x, new Vector2(0f, secondRowRect.offsetMin.y), 0.5f));
+            uiSequence.Join(DOTween.To(() => secondRowRect.offsetMax, x => secondRowRect.offsetMax = x, new Vector2(0f, secondRowRect.offsetMax.y), 0.5f));
+            uiSequence.Join(firstRowRect.DOAnchorPosY(row1BaseY, 0.5f));
         }
 
-        RectTransform weaponName = weaponSlot.transform.GetChild(0).gameObject.GetComponent<RectTransform>(),
-        weaponDescription = weaponSlot.transform.GetChild(1).gameObject.GetComponent<RectTransform>(),
-        weaponIcon = weaponSlot.transform.GetChild(2).gameObject.GetComponent<RectTransform>(),
-        upgradeBtn = weaponSlot.transform.GetChild(3).gameObject.GetComponent<RectTransform>(); // Get the name, description, icon and upgrade button of the weapon in the slot
-        float nameHeight = weaponName.sizeDelta.y - NAME_EXPANSION,
-            iconHeight = weaponIcon.sizeDelta.y - ICON_EXPANSION,
-            upgradeBtnHeight = upgradeBtn.sizeDelta.y - UPGRADE_EXPANSION;
+        // --- HORIZONTAL CENTERING ---
+        if (columnIndex == 0) uiSequence.Join(frameRect.DOAnchorPosX(ScaleManager.FrameWidth / 2f, 0.5f));
+        else if (columnIndex == 2) uiSequence.Join(frameRect.DOAnchorPosX(-ScaleManager.FrameWidth / 2f, 0.5f));
 
-        weaponName.DOSizeDelta(new Vector2(weaponName.sizeDelta.x, nameHeight), 0.5f); // Expand the name of the weapon
-        weaponName.DOAnchorPosY(-nameHeight / 2, 0.5f); // Move the name of the weapon to the top
-        upgradeBtn.DOSizeDelta(new Vector2(upgradeBtn.sizeDelta.x, upgradeBtnHeight), 0.5f); // Expand the upgrade button of the weapon
-        upgradeBtn.DOAnchorPosY(upgradeBtnHeight / 2, 0.5f); // Move the upgrade button of the weapon to the bottom
-        weaponIcon.DOSizeDelta(new Vector2(weaponIcon.sizeDelta.x, iconHeight), 0.5f); // Expand the icon of the weapon
-        weaponIcon.DOAnchorPosY(upgradeBtnHeight + SLOT_GAP + iconHeight / 2, 0.5f); // Move the icon of the weapon to the middle
-        weaponDescription.gameObject.SetActive(false);
+        // --- INTERNAL UI ELEMENTS (Returning to Absolute Base Values) ---
+        uiSequence.Join(weaponNameRect.DOSizeDelta(new Vector2(weaponNameRect.sizeDelta.x, baseNameHeight), 0.5f));
+        uiSequence.Join(weaponNameRect.DOAnchorPosY(-baseNameHeight / 2f, 0.5f));
+        uiSequence.Join(upgradeBtnRect.DOSizeDelta(new Vector2(upgradeBtnRect.sizeDelta.x, baseUpgradeBtnHeight), 0.5f));
+        uiSequence.Join(upgradeBtnRect.DOAnchorPosY(baseUpgradeBtnHeight / 2f, 0.5f));
+        uiSequence.Join(weaponIconRect.DOSizeDelta(new Vector2(weaponIconRect.sizeDelta.x, baseIconHeight), 0.5f));
+        uiSequence.Join(weaponIconRect.DOAnchorPosY(baseUpgradeBtnHeight + SLOT_GAP + baseIconHeight / 2f, 0.5f));
+
+        // --- COMPLETION CALLBACKS ---
+        uiSequence.OnComplete(() => {
+            isShrinking = false;
+            activeSlot = null;
+
+            // If another card was queued while shrinking, trigger it now!
+            onShrinkCompleteAction?.Invoke();
+            onShrinkCompleteAction = null;
+        });
+    }
+
+    private static void SetAnchorKeepPosition(RectTransform rt, float anchorMinX, float anchorMaxX)
+    {
+        Vector2 currentPosition = rt.position;
+        rt.anchorMin = new Vector2(anchorMinX, 0f);
+        rt.anchorMax = new Vector2(anchorMaxX, 1f);
+        rt.position = currentPosition;
     }
 }

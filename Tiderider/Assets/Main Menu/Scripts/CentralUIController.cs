@@ -17,6 +17,10 @@ public class CentralUIController : MonoBehaviour
     private CanvasGroup _currentPanel;
     private Coroutine _activeTransition;
 
+    // --- CACHED REFERENCES ---
+    private RectTransform[] navIcons;
+    private Image[] navImages;
+
     private void Awake()
     {
         if (Instance == null)
@@ -29,31 +33,32 @@ public class CentralUIController : MonoBehaviour
         }
 
         activeCanvas = LevelCanvas.GetComponentInChildren<CanvasGroup>();
+
+        navIcons = new RectTransform[3];
+        navImages = new Image[3];
+        for (int i = 0; i < 3; i++)
+        {
+            navIcons[i] = IconPanel.transform.GetChild(i).GetComponent<RectTransform>();
+            navImages[i] = navIcons[i].GetComponent<Image>();
+        }
     }
 
     /// <summary>
     /// Toggles the visibility of a panel using a fade transition.
     /// </summary>
-    /// <param name="targetPanel">The CanvasGroup of the panel to toggle</param>
-    /// <remarks>
-    /// Maintained by: Işık Dönger
-    /// </remarks>
+    /// <remarks>Maintained by: Işık Dönger</remarks>
     public void TogglePanel(CanvasGroup targetPanel)
     {
         if (_activeTransition != null)
             StopCoroutine(_activeTransition);
 
-        _activeTransition = StartCoroutine(TogglePanelRoutine(targetPanel));
+        _activeTransition = StartCoroutine(TogglePanelRoutine(targetPanel, activeCanvas));
     }
 
     /// <summary>
     /// Coroutine that handles the fading in/out transitions for panel toggling.
     /// </summary>
-    /// <param name="target">The target CanvasGroup to toggle</param>
-    /// <remarks>
-    /// Maintained by: Işık Dönger
-    /// </remarks>
-    private IEnumerator TogglePanelRoutine(CanvasGroup target)
+    private IEnumerator TogglePanelRoutine(CanvasGroup target, CanvasGroup backgroundToRestore)
     {
         // Close current panel if different
         if (_currentPanel != null && _currentPanel != target)
@@ -67,11 +72,12 @@ public class CentralUIController : MonoBehaviour
         {
             yield return target.FadeOut(this);
             _currentPanel = null;
-            yield return activeCanvas.FadeIn(this);
+
+            yield return backgroundToRestore.FadeIn(this);
         }
         else
         {
-            yield return activeCanvas.FadeOut(this);
+            yield return backgroundToRestore.FadeOut(this);
             yield return target.FadeIn(this);
             _currentPanel = target;
         }
@@ -82,106 +88,85 @@ public class CentralUIController : MonoBehaviour
     /// <summary>
     /// Manages menu changes for scrolling and updates the icon panel accordingly.
     /// </summary>
-    /// <remarks>
-    /// Maintained by: Işık Dönger
-    /// </remarks>
+    /// <remarks>Maintained by: Işık Dönger</remarks>
     public void ChangeMenu()
     {
-        if (scrollContentTransform.anchoredPosition.x > -ScaleManager.Width)
+        float xPos = scrollContentTransform.anchoredPosition.x;
+
+        if (xPos > -ScaleManager.Width) OpenArmory();
+        else if (xPos > -ScaleManager.Width * 2) OpenMainMenu();
+        else OpenShop();
+    }
+
+    public void OpenArmory() => SwitchTab(0, ArmoryCanvas, -ScaleManager.Width * 0.5f);
+    public void OpenMainMenu() => SwitchTab(1, LevelCanvas, -ScaleManager.Width * 1.5f);
+    public void OpenShop() => SwitchTab(2, ShopCanvas, -ScaleManager.Width * 2.5f);
+
+    /// <summary>
+    /// Handles the heavy lifting of killing tweens, updating canvases, and animating the nav bar.
+    /// </summary>
+    private void SwitchTab(int selectedIndex, RectTransform targetCanvas, float targetScrollX)
+    {
+        if (_currentPanel != null)
         {
-            OpenArmory();
+            TogglePanel(_currentPanel);
         }
-        else if (scrollContentTransform.anchoredPosition.x > -ScaleManager.Width * 2)
+
+        if (activeCanvas != null)
         {
-            OpenMainMenu();
+            activeCanvas.alpha = 1f;
+            activeCanvas.blocksRaycasts = true;
+            activeCanvas.interactable = true;
         }
-        else
+
+        activeCanvas = targetCanvas.GetComponentInChildren<CanvasGroup>();
+
+        scrollContentTransform.DOKill();
+        scrollContentTransform.DOAnchorPosX(targetScrollX, 0.5f);
+
+        // Animate Icons
+        for (int i = 0; i < 3; i++)
         {
-            OpenShop();
+            navIcons[i].DOKill();
+            navImages[i].DOKill();
+
+            bool isSelected = (i == selectedIndex);
+            float targetWidth = isSelected ? ScaleManager.SelectedIconWidth : ScaleManager.SideIconWidth;
+            Color targetColor = isSelected ? ScaleManager.SelectedColor : ScaleManager.SideColor;
+
+            navIcons[i].DOSizeDelta(new Vector2(targetWidth, navIcons[i].sizeDelta.y), 0.5f);
+            navImages[i].DOColor(targetColor, 0.5f);
+
+            float targetPosX = GetIconPositionX(i, selectedIndex);
+            navIcons[i].DOAnchorPosX(targetPosX, 0.5f);
         }
     }
 
     /// <summary>
-    /// Opens the armory screen and updates the icon panel visuals.
+    /// Returns the precise mathematical X position for an icon based on the active tab.
     /// </summary>
-    /// <remarks>
-    /// Maintained by: Işık Dönger
-    /// </remarks>
-    public void OpenArmory()
+    private float GetIconPositionX(int iconIndex, int selectedIndex)
     {
-        RectTransform SelectedIconRect = IconPanel.transform.GetChild(0).GetComponent<RectTransform>(),
-            SideIconRect1 = IconPanel.transform.GetChild(1).GetComponent<RectTransform>(),
-            SideIconRect2 = IconPanel.transform.GetChild(2).GetComponent<RectTransform>();
+        float selWidth = ScaleManager.SelectedIconWidth;
+        float sideWidth = ScaleManager.SideIconWidth;
 
-        if (_currentPanel != null) { TogglePanel(_currentPanel); }
-        activeCanvas = ArmoryCanvas.GetComponentInChildren<CanvasGroup>();
-
-        scrollContentTransform.DOAnchorPosX(-ScaleManager.Width * 0.5f, 0.5f);
-
-        SelectedIconRect.DOSizeDelta(new Vector2(ScaleManager.SelectedIconWidth, SelectedIconRect.sizeDelta.y), 0.5f);
-        SelectedIconRect.DOAnchorPosX(ScaleManager.SelectedIconWidth / 2, 0.5f);
-        SelectedIconRect.GetComponent<Image>().color = ScaleManager.SelectedColor;
-        SideIconRect1.DOSizeDelta(new Vector2(ScaleManager.SideIconWidth, SideIconRect1.sizeDelta.y), 0.5f);
-        SideIconRect1.DOAnchorPosX((ScaleManager.SelectedIconWidth - ScaleManager.SideIconWidth) / 2, 0.5f);
-        SideIconRect1.GetComponent<Image>().color = ScaleManager.SideColor;
-        SideIconRect2.DOSizeDelta(new Vector2(ScaleManager.SideIconWidth, SideIconRect2.sizeDelta.y), 0.5f);
-        SideIconRect2.DOAnchorPosX(-ScaleManager.SideIconWidth / 2, 0.5f);
-        SideIconRect2.GetComponent<Image>().color = ScaleManager.SideColor;
-    }
-
-    /// <summary>
-    /// Opens the main menu screen and updates the icon panel visuals.
-    /// </summary>
-    /// <remarks>
-    /// Maintained by: Işık Dönger
-    /// </remarks>
-    public void OpenMainMenu()
-    {
-        RectTransform SelectedIconRect = IconPanel.transform.GetChild(1).GetComponent<RectTransform>(),
-            SideIconRect1 = IconPanel.transform.GetChild(0).GetComponent<RectTransform>(),
-            SideIconRect2 = IconPanel.transform.GetChild(2).GetComponent<RectTransform>();
-
-        if (_currentPanel != null) { TogglePanel(_currentPanel); }
-        activeCanvas = LevelCanvas.GetComponentInChildren<CanvasGroup>();
-
-        scrollContentTransform.DOAnchorPosX(-ScaleManager.Width * 1.5f, 0.5f);
-
-        SideIconRect1.DOSizeDelta(new Vector2(ScaleManager.SideIconWidth, SideIconRect1.sizeDelta.y), 0.5f);
-        SideIconRect1.DOAnchorPosX(ScaleManager.SideIconWidth / 2, 0.5f);
-        SideIconRect1.GetComponent<Image>().DOColor(ScaleManager.SideColor, 0.5f);
-        SelectedIconRect.DOSizeDelta(new Vector2(ScaleManager.SelectedIconWidth, SelectedIconRect.sizeDelta.y), 0.5f);
-        SelectedIconRect.DOAnchorPosX(0f, 0.5f);
-        SelectedIconRect.GetComponent<Image>().DOColor(ScaleManager.SelectedColor, 0.5f);
-        SideIconRect2.DOSizeDelta(new Vector2(ScaleManager.SideIconWidth, SideIconRect2.sizeDelta.y), 0.5f);
-        SideIconRect2.DOAnchorPosX(-ScaleManager.SideIconWidth / 2, 0.5f);
-        SideIconRect2.GetComponent<Image>().DOColor(ScaleManager.SideColor, 0.5f);
-    }
-
-    /// <summary>
-    /// Opens the shop screen and updates the icon panel visuals.
-    /// </summary>
-    /// <remarks>
-    /// Maintained by: Işık Dönger
-    /// </remarks>
-    public void OpenShop()
-    {
-        RectTransform SelectedIconRect = IconPanel.transform.GetChild(2).GetComponent<RectTransform>(),
-            SideIconRect1 = IconPanel.transform.GetChild(0).GetComponent<RectTransform>(),
-            SideIconRect2 = IconPanel.transform.GetChild(1).GetComponent<RectTransform>();
-
-        if (_currentPanel != null) { TogglePanel(_currentPanel); }
-        activeCanvas = ShopCanvas.GetComponentInChildren<CanvasGroup>();
-
-        scrollContentTransform.DOAnchorPosX(-ScaleManager.Width * 2.5f, 0.5f);
-
-        SideIconRect1.DOSizeDelta(new Vector2(ScaleManager.SideIconWidth, SideIconRect1.sizeDelta.y), 0.5f);
-        SideIconRect1.DOAnchorPosX(ScaleManager.SideIconWidth / 2, 0.5f);
-        SideIconRect1.GetComponent<Image>().DOColor(ScaleManager.SideColor, 0.5f);
-        SideIconRect2.DOSizeDelta(new Vector2(ScaleManager.SideIconWidth, SideIconRect2.sizeDelta.y), 0.5f);
-        SideIconRect2.DOAnchorPosX(-(ScaleManager.SelectedIconWidth - ScaleManager.SideIconWidth) / 2, 0.5f);
-        SideIconRect2.GetComponent<Image>().DOColor(ScaleManager.SideColor, 0.5f);
-        SelectedIconRect.DOSizeDelta(new Vector2(ScaleManager.SelectedIconWidth, SelectedIconRect.sizeDelta.y), 0.5f);
-        SelectedIconRect.DOAnchorPosX(-ScaleManager.SelectedIconWidth / 2, 0.5f);
-        SelectedIconRect.GetComponent<Image>().DOColor(ScaleManager.SelectedColor, 0.5f);
+        if (selectedIndex == 0) // Armory
+        {
+            if (iconIndex == 0) return selWidth / 2f;
+            if (iconIndex == 1) return (selWidth - sideWidth) / 2f;
+            return -sideWidth / 2f;
+        }
+        if (selectedIndex == 1) // Main Menu
+        {
+            if (iconIndex == 0) return sideWidth / 2f;
+            if (iconIndex == 1) return 0f;
+            return -sideWidth / 2f;
+        }
+        else // Shop
+        {
+            if (iconIndex == 0) return sideWidth / 2f;
+            if (iconIndex == 1) return -(selWidth - sideWidth) / 2f;
+            return -selWidth / 2f;
+        }
     }
 }

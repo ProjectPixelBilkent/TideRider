@@ -6,8 +6,8 @@ public class Idle : State
     private float speed;
     private int next;
 
-    private float idleDuration = 5f;
-    private float idleTimer;
+    private float idleDuration = 10f;
+    public float timeIn;
 
     // plan for next move:
     private float plannedX;
@@ -23,17 +23,17 @@ public class Idle : State
     public override void Enter()
     {
         Debug.Log("Icyman -> Idle");
-        next = Random.Range(2, 3);
-        idleTimer = 0f;
+        next = Random.Range(1, 5);
+        next = 4; 
+        if (next == 1)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, Camera.main.velocity.y);
+        }
+        timeIn = 0;
         rb.linearVelocity = Vector2.zero;
 
         var i = (Icyman)machine.Enemy;
-        idleDuration = i.idleDuration;
-        var ship = GameObject.FindGameObjectWithTag("Player");
-        plannedX = ship.transform.position.x + (Random.value - 0.5f) * i.xMaxDist;
-        plannedX = i.ClampToScreenX(plannedX);
-
-
+        idleDuration = i.idleDuration;;
         plannedYOffsetFromTop = -Random.Range(1f, i.yMaxDist);
         yVelocity = 0f;
     }
@@ -50,19 +50,38 @@ public class Idle : State
 
         if (next == 1)
         {
-            idleTimer += Time.deltaTime;
-            if (idleTimer >= idleDuration)
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, Camera.main.velocity.y);
+            timeIn += Time.deltaTime;
+            if (timeIn >= idleDuration)
             {
                 Debug.Log("Idle running");
-                machine.ChangeState(new MovesState(machine, rb, speed, plannedX, plannedYOffsetFromTop));
+                next = Random.Range(1, 5);
                 return;
             }
         }
-        else
+        if (next == 2) 
         {
-            machine.ChangeState(new MovesState(machine, rb, speed, plannedX, plannedYOffsetFromTop));
-            return;
+            Vector2 candidate;
+            
+            float rndNumber = Random.Range(-3f, 3f);
+            candidate = new Vector2(rndNumber, 0f);
+
+            Debug.Log("icy: " + candidate.x + " " + candidate.y);
+
+
+            machine.ChangeState(new MovesState(machine, candidate, speed, rb));
         }
+        if (next == 3)
+        {
+            machine.ChangeState(new SnowballAttackState(machine, rb, speed));
+        }
+        if (next == 4)
+        {
+            machine.ChangeState(new CloseRangeAttackState(machine, rb, speed, plannedX, plannedYOffsetFromTop));
+        }
+        timeIn += Time.deltaTime;
+        machine.Enemy.rigidBody.linearVelocityY = Camera.main.velocity.y;
+        return;
     }
 
     public override void Exit() { }

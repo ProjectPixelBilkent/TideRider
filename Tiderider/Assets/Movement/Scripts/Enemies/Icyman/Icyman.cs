@@ -2,20 +2,44 @@ using UnityEngine;
 
 public class Icyman : Enemy
 {
+    [Header("References")]
+    public SpriteRenderer spriteRenderer;
+    public AttackTelegraphVisual swipeTelegraph;
+
     [Header("Behavior")]
     public float xMaxDist = 5f;
     public float yMaxDist = 5f;
-    public float screenEdgePadding = 0.5f;
-    public float speedMultiplier = 0.3f;
-    public float xSpeedMultiplier = 1.5f;
     public float ySmoothTime = 0.35f;
-    public float idleDuration = 2f;
-    public float attackRecovery = 0.5f;
+    public float idleDuration = 5f;
+    public float attackRecovery = 1f;
 
     [Header("Close Range Attack")]
+    [Min(0)]
     public int swipeDamage = 10;
+
+    [Tooltip("How far the melee cone reaches.")]
+    [Min(0.1f)]
     public float swipeRange = 1.5f;
-    public float swipeRadius = 0.9f;
+
+    [Tooltip("Cone width in degrees, centered toward the player.")]
+    [Range(1f, 180f)]
+    public float swipeAngle = 120f;
+
+    [Tooltip("Delay before the melee hit lands and the cone disappears.")]
+    [Min(0f)]
+    public float swipeWindup = 0.5f;
+
+    [Tooltip("How long before impact the telegraph switches from faded to full color.")]
+    [Min(0f)]
+    public float swipeTelegraphFullColorLead = 0.15f;
+
+    [Tooltip("Initial telegraph color shown during most of the wind-up.")]
+    public Color swipeTelegraphFadedColor = new Color(0.8f, 0.95f, 1f, 0.2f);
+
+    [Tooltip("Final telegraph color shown right before the hit.")]
+    public Color swipeTelegraphFullColor = new Color(0.8f, 0.95f, 1f, 0.65f);
+
+    [Tooltip("Optional layer mask to limit what the melee can hit.")]
     public LayerMask playerLayer;
 
     [Header("Snowball Attack")]
@@ -26,9 +50,59 @@ public class Icyman : Enemy
     {
 
         base.Start();
+        if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
+        EnsureSwipeTelegraph();
 
         fsm = new StateMachine();
         fsm.Init(new Idle(fsm, rb, speed), this);
+    }
+
+    private void EnsureSwipeTelegraph()
+    {
+        if (swipeTelegraph != null) return;
+
+        var telegraphObject = new GameObject("IcymanSwipeTelegraph");
+        telegraphObject.transform.SetParent(transform, false);
+        telegraphObject.transform.localPosition = Vector3.zero;
+        swipeTelegraph = telegraphObject.AddComponent<AttackTelegraphVisual>();
+    }
+
+    public Vector2 GetSwipeDirection()
+    {
+        var player = FindPlayerTransform();
+        if (player == null) return Vector2.down;
+
+        Vector2 dir = (player.position - transform.position);
+        if (dir.sqrMagnitude <= 0.0001f) return Vector2.down;
+
+        return dir.normalized;
+    }
+
+    public void ShowSwipeTelegraph(Vector2 direction, bool charged)
+    {
+        EnsureSwipeTelegraph();
+
+        if (swipeTelegraph == null) return;
+
+        if (spriteRenderer != null)
+        {
+            swipeTelegraph.SetSorting(spriteRenderer.sortingLayerID, spriteRenderer.sortingOrder + 1);
+        }
+
+        swipeTelegraph.Show(direction, swipeRange, swipeAngle);
+        swipeTelegraph.SetColor(charged ? swipeTelegraphFullColor : swipeTelegraphFadedColor);
+    }
+
+    public void SetSwipeTelegraphCharged()
+    {
+        if (swipeTelegraph == null) return;
+        swipeTelegraph.SetColor(swipeTelegraphFullColor);
+    }
+
+    public void HideSwipeTelegraph()
+    {
+        if (swipeTelegraph == null) return;
+        swipeTelegraph.Hide();
     }
 
     public float topOffsetFromCamera = 3.5f; // same concept as jellyfish top
@@ -40,41 +114,40 @@ public class Icyman : Enemy
         return new Vector2(targetX, y);
     }
 
-    public float ClampToScreenX(float x)
-    {
-        var cam = Camera.main;
-        float z = Mathf.Abs(cam.transform.position.z);
-        float left = cam.ViewportToWorldPoint(new Vector3(0f, 0.5f, z)).x + screenEdgePadding;
-        float right = cam.ViewportToWorldPoint(new Vector3(1f, 0.5f, z)).x - screenEdgePadding;
-        return Mathf.Clamp(x, left, right);
-    }
-
     public Transform FindPlayerTransform()
     {
         var go = GameObject.FindGameObjectWithTag("Player");
         return go != null ? go.transform : null;
     }
 
-    public void DoSwipeAttack()
+    public void DoSwipeAttack(Vector2 direction)
     {
         Vector2 origin = transform.position;
-        Vector2 dir = Vector2.down;
-        var player = FindPlayerTransform();
-        if (player != null)
+        if (direction.sqrMagnitude <= 0.0001f)
         {
-            dir = ((Vector2)player.position - origin).normalized;
+            direction = Vector2.down;
         }
 
-        Vector2 center = origin + dir * swipeRange;
+        float halfAngle = swipeAngle * 0.5f;
         Collider2D[] hits = playerLayer.value != 0
-            ? Physics2D.OverlapCircleAll(center, swipeRadius, playerLayer)
-            : Physics2D.OverlapCircleAll(center, swipeRadius);
+            ? Physics2D.OverlapCircleAll(origin, swipeRange, playerLayer)
+            : Physics2D.OverlapCircleAll(origin, swipeRange);
 
         for (int i = 0; i < hits.Length; i++)
         {
             var col = hits[i];
             if (col != null && col.CompareTag("Player"))
             {
+                Vector2 hitPoint = col.ClosestPoint(origin);
+                Vector2 toHit = hitPoint - origin;
+                if (toHit.sqrMagnitude <= 0.0001f)
+                {
+                    toHit = (Vector2)col.transform.position - origin;
+                }
+
+                if (toHit.sqrMagnitude <= 0.0001f) continue;
+                if (Vector2.Angle(direction, toHit.normalized) > halfAngle) continue;
+
                 if (col.TryGetComponent(out HasHealth health))
                 {
                     health.ChangeHealth(-swipeDamage);
@@ -92,12 +165,13 @@ public class Icyman : Enemy
         }
 
         Vector2 spawnPos = snowballSpawn != null ? (Vector2)snowballSpawn.position : (Vector2)transform.position;
-        GameObject snowball = Object.Instantiate(snowballPrefab, spawnPos, Quaternion.identity);
+        GameObject snowball = Instantiate(snowballPrefab, spawnPos, Quaternion.identity);
+
         Vector2 dir = (target - spawnPos).normalized;
 
-        if (snowball.TryGetComponent(out Rigidbody2D rb2d))
+        if (snowball.TryGetComponent(out Snowball snowballScript))
         {
-            rb2d.linearVelocity = dir * snowballSpeed;
+            snowballScript.Init(dir, snowballSpeed);
         }
     }
 }

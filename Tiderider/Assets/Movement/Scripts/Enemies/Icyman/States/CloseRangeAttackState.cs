@@ -4,19 +4,16 @@ public class CloseRangeAttackState : State
 {
     private Rigidbody2D rb;
     private float speed;
-    private float targetX;
-    private float yOffsetFromTop;
-    private float yVelocity;
     private float timer;
     private bool attacked;
+    private bool telegraphCharged;
+    private Vector2 attackDirection;
 
     public CloseRangeAttackState(StateMachine machine, Rigidbody2D rb, float speed, float targetX, float yOffsetFromTop)
         : base(machine)
     {
         this.rb = rb;
         this.speed = speed;
-        this.targetX = targetX;
-        this.yOffsetFromTop = yOffsetFromTop;
     }
 
     public override void Enter()
@@ -24,31 +21,43 @@ public class CloseRangeAttackState : State
         Debug.Log("Icyman -> CloseRangeAttackState");
         timer = 0f;
         attacked = false;
+        telegraphCharged = false;
+
+        var i = (Icyman)machine.Enemy;
+        attackDirection = i.GetSwipeDirection();
+        i.ShowSwipeTelegraph(attackDirection, false);
     }
 
     public override void Update()
     {
         var i = (Icyman)machine.Enemy;
 
-        var target = i.GetCameraRelativeTarget(targetX, yOffsetFromTop);
-        Vector2 pos = rb.position;
-        pos.y = Mathf.SmoothDamp(pos.y, target.y, ref yVelocity, i.ySmoothTime, Mathf.Infinity, Time.fixedDeltaTime);
-        pos.x = Mathf.MoveTowards(pos.x, targetX, speed * i.speedMultiplier * i.xSpeedMultiplier * Time.fixedDeltaTime);
-        rb.MovePosition(pos);
-        rb.linearVelocity = Vector2.zero;
+        // Keep Icyman moving with the camera scroll
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, Camera.main.velocity.y);
 
-        if (!attacked)
+        timer += Time.deltaTime;
+
+        if (!telegraphCharged && timer >= Mathf.Max(0f, i.swipeWindup - i.swipeTelegraphFullColorLead))
         {
-            i.DoSwipeAttack();
+            i.SetSwipeTelegraphCharged();
+            telegraphCharged = true;
+        }
+
+        if (!attacked && timer >= i.swipeWindup)
+        {
+            i.DoSwipeAttack(attackDirection);
+            i.HideSwipeTelegraph();
             attacked = true;
         }
 
-        timer += Time.fixedDeltaTime;
-        if (timer >= i.attackRecovery)
+        if (timer >= i.swipeWindup + i.attackRecovery)
         {
             machine.ChangeState(new Idle(machine, rb, speed));
         }
     }
 
-    public override void Exit() { }
+    public override void Exit()
+    {
+        ((Icyman)machine.Enemy).HideSwipeTelegraph();
+    }
 }

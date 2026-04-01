@@ -24,7 +24,6 @@ public class Idle : State
     {
         Debug.Log("Icyman -> Idle");
         next = Random.Range(1, 5);
-        next = 4; 
         if (next == 1)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, Camera.main.velocity.y);

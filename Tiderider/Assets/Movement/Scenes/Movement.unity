@@ -1979,14 +1979,21 @@ MonoBehaviour:
   maxHealth: 0
   currentHealth: 0
   speed: 1
+  spriteRenderer: {fileID: 0}
+  swipeTelegraph: {fileID: 0}
   xMaxDist: 5
   yMaxDist: 5
   ySmoothTime: 0.35
   idleDuration: 5
   attackRecovery: 2
   swipeDamage: 10
-  swipeRange: 1.5
-  swipeRadius: 0.9
+  swipeTriggerDistance: 2.5
+  swipeRange: 15
+  swipeAngle: 120
+  swipeWindup: 1
+  swipeTelegraphFullColorLead: 0.15
+  swipeTelegraphFadedColor: {r: 0.8, g: 0.95, b: 1, a: 0.2}
+  swipeTelegraphFullColor: {r: 0.047169805, g: 0.047169805, b: 0.047169805, a: 0.65}
   playerLayer:
     serializedVersion: 2
     m_Bits: 0

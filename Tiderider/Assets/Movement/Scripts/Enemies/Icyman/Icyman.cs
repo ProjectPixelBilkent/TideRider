@@ -17,6 +17,10 @@ public class Icyman : Enemy
     [Min(0)]
     public int swipeDamage = 10;
 
+    [Tooltip("If the player is within this distance, Icyman uses the melee attack instead of a snowball.")]
+    [Min(0f)]
+    public float swipeTriggerDistance = 2.5f;
+
     [Tooltip("How far the melee cone reaches.")]
     [Min(0.1f)]
     public float swipeRange = 1.5f;

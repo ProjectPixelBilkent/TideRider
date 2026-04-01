@@ -23,7 +23,7 @@ public class Idle : State
     public override void Enter()
     {
         Debug.Log("Icyman -> Idle");
-        next = Random.Range(1, 5);
+        next = Random.Range(1, 4);
         if (next == 1)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, Camera.main.velocity.y);
@@ -54,7 +54,7 @@ public class Idle : State
             if (timeIn >= idleDuration)
             {
                 Debug.Log("Idle running");
-                next = Random.Range(1, 5);
+                next = Random.Range(1, 4);
                 return;
             }
         }
@@ -72,11 +72,19 @@ public class Idle : State
         }
         if (next == 3)
         {
-            machine.ChangeState(new SnowballAttackState(machine, rb, speed));
-        }
-        if (next == 4)
-        {
-            machine.ChangeState(new CloseRangeAttackState(machine, rb, speed, plannedX, plannedYOffsetFromTop));
+            var player = i.FindPlayerTransform();
+            float distanceToPlayer = player != null
+                ? Vector2.Distance(machine.Enemy.transform.position, player.position)
+                : float.PositiveInfinity;
+
+            if (distanceToPlayer <= i.swipeTriggerDistance)
+            {
+                machine.ChangeState(new CloseRangeAttackState(machine, rb, speed, plannedX, plannedYOffsetFromTop));
+            }
+            else
+            {
+                machine.ChangeState(new SnowballAttackState(machine, rb, speed));
+            }
         }
         timeIn += Time.deltaTime;
         machine.Enemy.rigidBody.linearVelocityY = Camera.main.velocity.y;

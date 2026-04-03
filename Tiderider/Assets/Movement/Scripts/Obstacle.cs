@@ -1,5 +1,6 @@
 // Obstacle.cs
 
+using UnityEditor.U2D;
 using UnityEngine;
 
 
@@ -14,6 +15,32 @@ using UnityEngine;
 [RequireComponent(typeof(SpriteRenderer))]
 public class Obstacle : MonoBehaviour
 {
+    public string prefabId;
+    private int spriteIndex;
+
+    public int getSpriteNo()
+    {
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        for(int i=0;i<sprites.Length;i++)
+        {
+            Sprite s = sprites[i];
+            if(s.GetSpriteID() == sr.sprite.GetSpriteID())
+            {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    public void SetSpriteIndex(int index)
+    {
+        this.spriteIndex = index;
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        sr.sprite = sprites[index];
+        UpdateColliderToMatchSprite(sr.sprite);
+    }
+
+
     [SerializeField] private float speed = 3f; // Match your ship's forwardSpeed
     [SerializeField] private Sprite[] sprites;
 
@@ -22,12 +49,7 @@ public class Obstacle : MonoBehaviour
     /// </summary>
     protected virtual void Start()
     {
-        SpriteRenderer sr = GetComponent<SpriteRenderer>();
-        if (sprites != null && sprites.Length > 0 && sr != null)
-        {
-            sr.sprite = sprites[Random.Range(0, sprites.Length)];
-            UpdateColliderToMatchSprite(sr.sprite);
-        }
+
     }
 
     /// <summary>

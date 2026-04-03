@@ -103,6 +103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   direction: 1
   speed: 3
+  prefabId: backward
 --- !u!61 &-217810467041598506
 BoxCollider2D:
   m_ObjectHideFlags: 0

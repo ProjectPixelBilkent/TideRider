@@ -32,9 +32,9 @@ public class ShipViewer : MonoBehaviour
         if (player == null)
             return;
 
-        if (healthSlider != null && player.maxHealth != 0)
+        if (healthSlider != null && player.MaxHealth != 0)
         {
-            healthSlider.value = (float)player.currentHealth / (float)player.maxHealth;
+            healthSlider.value = (float)player.CurrentHealth / (float)player.MaxHealth;
         }
 
         if (speedSlider != null && controller != null && controller.maxVelocity > 0f)

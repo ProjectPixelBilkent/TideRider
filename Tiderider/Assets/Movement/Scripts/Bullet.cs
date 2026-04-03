@@ -49,6 +49,32 @@ public class Bullet : MonoBehaviour
         if(collision.collider.gameObject.name == "LevelManager")
         {
             Destroy(gameObject);
+            return;
         }
+
+        if (collision.collider.TryGetComponent(out HasHealth health))
+        {
+            if (ShouldDamageTarget(health))
+            {
+                health.TakeDamage(WeaponLevel.damage);
+                transform.DOKill();
+                Destroy(gameObject);
+            }
+        }
+    }
+
+    private bool ShouldDamageTarget(HasHealth health)
+    {
+        if (health == null)
+        {
+            return false;
+        }
+
+        if (PlayerBullet)
+        {
+            return !health.CompareTag("Player");
+        }
+
+        return health.CompareTag("Player");
     }
 }

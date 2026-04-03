@@ -14,7 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: Boomerang
   weaponDescription: This is a boomerang.
-  weaponLevels: []
+  weaponLevels:
+  - cost: 0
+    damage: 10
+    fireRate: 1
+    speedOfBullet: 1
+    range: 1
+    HP: 1
+    duration: 1
   weaponIcon: {fileID: 4849304724019256761, guid: 5d1cfe9c6f1882f46b8288ddccdafb18, type: 3}
-  projectilePrefab: {fileID: 0}
+  projectilePrefab: {fileID: 1440320539427034115, guid: f4650f193aef8ac4fa59739588abd535, type: 3}
   onCollisionWithBulletMethodName: 
+  spawningSound: {fileID: 0}
+  extraSounds: []
+  extraSprites: []

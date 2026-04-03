@@ -12,9 +12,28 @@ public class Bullet : MonoBehaviour
     public int Level {  get; set; }
     public WeaponLevel WeaponLevel { get; set; }
     public bool PlayerBullet { get; set; }
+    public Transform OwnerTransform { get; set; }
 
     protected Vector3 direction;
     protected Vector3 shipSpeed;
+
+    protected virtual void Awake()
+    {
+        if (spriteRenderer == null)
+        {
+            spriteRenderer = GetComponent<SpriteRenderer>();
+        }
+
+        if (circleCollider == null)
+        {
+            circleCollider = GetComponent<CircleCollider2D>();
+        }
+
+        if (rigidBody == null)
+        {
+            rigidBody = GetComponent<Rigidbody2D>();
+        }
+    }
 
     // Update is called once per frame
     void Update()
@@ -24,21 +43,38 @@ public class Bullet : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
+        if (rigidBody == null || WeaponLevel == null)
+        {
+            return;
+        }
+
         rigidBody.linearVelocity = (direction * WeaponLevel.speedOfBullet * 5f + shipSpeed);
     }
 
     public virtual void Activate(Vector3 direction, Vector3 shipSpeed)
     {
+        if (spriteRenderer == null || circleCollider == null || rigidBody == null)
+        {
+            Awake();
+        }
+
         direction = direction.normalized;
 
-        spriteRenderer.enabled = true;
-        circleCollider.enabled = true;
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.enabled = true;
+        }
+
+        if (circleCollider != null)
+        {
+            circleCollider.enabled = true;
+        }
 
         this.direction = direction;
         this.shipSpeed = shipSpeed;
     }
 
-    private void OnBecameInvisible()
+    public virtual void OnBecameInvisible()
     {
         transform.DOKill();
         Destroy(gameObject);

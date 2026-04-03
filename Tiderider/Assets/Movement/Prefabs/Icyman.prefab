@@ -169,6 +169,7 @@ MonoBehaviour:
   currentHealth: 100
   healthSlider: {fileID: 0}
   speed: 1.2
+  prefabId: 
   spriteRenderer: {fileID: 0}
   swipeTelegraph: {fileID: 0}
   xMaxDist: 5

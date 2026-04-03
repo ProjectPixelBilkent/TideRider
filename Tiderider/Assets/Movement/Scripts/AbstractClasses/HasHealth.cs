@@ -19,17 +19,6 @@ public class HasHealth: MonoBehaviour
     }
     public void Update()
     {
-        if (healthSlider != null)
-        {
-            int cLevel = mermi.level;
-
-            int damage = mermi.cannon.weaponLevels[cLevel].damage;
-            ChangeHealth(damage);
-            Destroy(collision.gameObject);
-        }
-    }
-    public void Update()
-    {
         if(healthSlider!=null)
         {
             healthSlider.value = currentHealth;

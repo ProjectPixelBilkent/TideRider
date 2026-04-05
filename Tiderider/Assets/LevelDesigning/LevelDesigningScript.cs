@@ -42,12 +42,23 @@ public class LevelDesignerScript : MonoBehaviour
         public List<SavedObjectData> objects = new List<SavedObjectData>();
     }
 
-    static string FilePath => Path.Combine(Application.persistentDataPath, "scene_objects.json");
-
     [MenuItem("Tools/Save Scene Objects To JSON")]
     public static void SaveSceneObjects()
     {
         float saveConstant = 1.8f;
+
+        string path = EditorUtility.SaveFilePanel(
+            "Save Scene Objects JSON",
+            Application.persistentDataPath,
+            "scene_objects",
+            "json"
+        );
+
+        if (string.IsNullOrEmpty(path))
+        {
+            Debug.Log("Save cancelled.");
+            return;
+        }
 
         List<SavedObjectData> sortedObjects = new List<SavedObjectData>();
 
@@ -86,7 +97,7 @@ public class LevelDesignerScript : MonoBehaviour
                 name = e.gameObject.name,
                 objectType = SpawnObjectType.Enemy,
 
-                spriteNo = -1, // not used for enemies unless you want it
+                spriteNo = -1,
 
                 posX = e.transform.position.x * saveConstant,
                 posY = e.transform.position.y * saveConstant,
@@ -137,8 +148,8 @@ public class LevelDesignerScript : MonoBehaviour
         };
 
         string json = JsonUtility.ToJson(sceneData, true);
-        File.WriteAllText(FilePath, json);
+        File.WriteAllText(path, json);
 
-        Debug.Log($"Saved {sortedObjects.Count} objects to: {FilePath}");
+        Debug.Log($"Saved {sortedObjects.Count} objects to: {path}");
     }
 }

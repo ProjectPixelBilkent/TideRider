@@ -3,6 +3,7 @@
 public class BulletSpawner : MonoBehaviour
 {
     [SerializeField] private WeaponStat[] armory;
+    [SerializeField] private SceneObjectSpawner objectSpawner;
 
     private float[] lastFired;
     private Rigidbody2D rb;
@@ -37,6 +38,10 @@ public class BulletSpawner : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if(objectSpawner!=null && !objectSpawner.isPausedForEnemy)
+        {
+            return;
+        }
         var monster = GameObject.FindGameObjectWithTag("LevelMonster").GetComponent<Collider2D>();
         for(int i=0; i< armory.Length ; i++)
         {

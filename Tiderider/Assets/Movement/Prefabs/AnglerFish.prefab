@@ -192,7 +192,7 @@ MonoBehaviour:
   wobbleSpeed: 1.2
   chaseSpeed: 0.5
   chaseYOffset: 2
-  contactDamage: 10
+  chaseContactDamage: 10
   contactDamageDistance: 0.8
   damageCooldown: 1
   revealTimer: 0

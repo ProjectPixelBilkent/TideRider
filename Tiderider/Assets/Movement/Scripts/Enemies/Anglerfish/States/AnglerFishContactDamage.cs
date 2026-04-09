@@ -11,7 +11,7 @@ public class AnglerFishContactDamage : MonoBehaviour
         HasHealth health = other.GetComponent<HasHealth>();
         if (health != null)
         {
-            health.ChangeHealth(contactDamage);
+            health.TakeDamage(contactDamage);
         }
     }
 }

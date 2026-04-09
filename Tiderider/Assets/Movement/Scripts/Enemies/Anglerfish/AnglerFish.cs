@@ -40,7 +40,7 @@ public class AnglerFish : Enemy
     public float chaseYOffset = 0.8f;
 
     [Header("Damage")]
-    public int contactDamage = 10;
+    public int chaseContactDamage = 10;
     public float contactDamageDistance = 0.8f;
     public float damageCooldown = 1.0f;
 

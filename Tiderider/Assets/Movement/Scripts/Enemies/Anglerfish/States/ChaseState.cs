@@ -99,7 +99,7 @@ public class ChaseState : State
             HasHealth health = a.ship.GetComponent<HasHealth>();
             if (health != null)
             {
-                health.ChangeHealth(a.contactDamage);
+                health.TakeDamage(a.chaseContactDamage);
                 damageCooldownTimer = a.damageCooldown;
             }
         }

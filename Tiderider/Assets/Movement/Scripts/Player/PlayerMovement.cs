@@ -7,6 +7,12 @@ public class PlayerMovement : MonoBehaviour
     [Header("Rotation")]
     [SerializeField] private float maxTiltAngle = 45f;
     [SerializeField] private float rotationSpeed = 180f;
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private Sprite defaultSprite;
+    [SerializeField] private Sprite turnRightSprite;
+    [SerializeField] private Sprite turnLeftSprite;
+    [SerializeField] private float turnSpriteAngleThreshold = 20f;
+    [SerializeField] private float turnSpriteChangeCooldown = 1f;
 
     [Header("Movement")]
     [SerializeField] private float minForwardSpeed = 2f;
@@ -31,6 +37,7 @@ public class PlayerMovement : MonoBehaviour
 
     private float targetZRotation = 0f;
     private float targetSpeed = 0f;
+    private float targetMouseAngle = 0f;
     private bool hasInput = false;
 
     private bool isBouncing = false;
@@ -40,6 +47,8 @@ public class PlayerMovement : MonoBehaviour
     private float postBounceSlowTimer = 0f;
 
     public Vector3 currentVelocity;
+    private Sprite currentDisplayedSprite;
+    private float lastTurnSpriteChangeTime = float.NegativeInfinity;
 
     private readonly HashSet<ExternalEffect> activeExternalEffects = new HashSet<ExternalEffect>();
 
@@ -47,6 +56,17 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         mainCam = Camera.main;
+        if (spriteRenderer == null)
+        {
+            spriteRenderer = GetComponent<SpriteRenderer>();
+        }
+
+        if (spriteRenderer != null && defaultSprite == null)
+        {
+            defaultSprite = spriteRenderer.sprite;
+        }
+
+        currentDisplayedSprite = spriteRenderer != null ? spriteRenderer.sprite : null;
     }
 
     private void Update()
@@ -80,6 +100,7 @@ public class PlayerMovement : MonoBehaviour
 
             float horizontalFactor = Mathf.Clamp(localClick.x / 2.5f, -1f, 1f);
             targetZRotation = -horizontalFactor * maxTiltAngle;
+            targetMouseAngle = Vector2.SignedAngle(transform.up, toClick);
 
             float aheadDistance = Mathf.Max(0f, Vector2.Dot(toClick, transform.up));
             float speedT = Mathf.Clamp01(aheadDistance / maxAheadDistance);
@@ -89,7 +110,10 @@ public class PlayerMovement : MonoBehaviour
         {
             targetZRotation = 0f;
             targetSpeed = minForwardSpeed;
+            targetMouseAngle = 0f;
         }
+
+        UpdateTurnSprite();
     }
 
     private void FixedUpdate()
@@ -119,6 +143,39 @@ public class PlayerMovement : MonoBehaviour
 
         rb.linearVelocity = baseVelocity + externalBonus;
         currentVelocity = rb.linearVelocity;
+    }
+
+    private void UpdateTurnSprite()
+    {
+        if (spriteRenderer == null || defaultSprite == null)
+        {
+            return;
+        }
+
+        Sprite targetSprite = defaultSprite;
+
+        if (targetMouseAngle <= -turnSpriteAngleThreshold && turnRightSprite != null)
+        {
+            targetSprite = turnRightSprite;
+        }
+        else if (targetMouseAngle >= turnSpriteAngleThreshold && turnLeftSprite != null)
+        {
+            targetSprite = turnLeftSprite;
+        }
+
+        if (currentDisplayedSprite == targetSprite)
+        {
+            return;
+        }
+
+        if (Time.time - lastTurnSpriteChangeTime < turnSpriteChangeCooldown)
+        {
+            return;
+        }
+
+        spriteRenderer.sprite = targetSprite;
+        currentDisplayedSprite = targetSprite;
+        lastTurnSpriteChangeTime = Time.time;
     }
 
     private Vector2 GetExternalEffectBonus()

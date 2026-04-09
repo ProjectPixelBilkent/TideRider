@@ -116,7 +116,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!58 &8136653383126230822
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -172,6 +172,9 @@ MonoBehaviour:
   prefabId: icyman
   spriteRenderer: {fileID: 0}
   swipeTelegraph: {fileID: 0}
+  defaultSprite: {fileID: 3838674497056114677, guid: 070369bc8083f8348a902352b01208af, type: 3}
+  snowballWindupSprite: {fileID: 4006508752840253220, guid: 4c80bc77173cfb948bf9d18adcfdcc0d, type: 3}
+  snowballRecoverySprite: {fileID: 4016068991384510363, guid: e6753d069b23a8c4dbed506f215c53c3, type: 3}
   xMaxDist: 5
   yMaxDist: 5
   ySmoothTime: 0.35
@@ -191,4 +194,5 @@ MonoBehaviour:
   snowballPrefab: {fileID: 177523828396537501, guid: 620e5e0d21dfbdc488005d5189f2ed45, type: 3}
   snowballSpawn: {fileID: 0}
   snowballSpeed: 6
+  snowballWindup: 0.5
   topOffsetFromCamera: 3.5

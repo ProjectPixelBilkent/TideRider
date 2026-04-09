@@ -58,7 +58,7 @@ public class BulletSpawner : MonoBehaviour
                 continue;
             }
 
-            if(Time.time - lastFired[i] < weaponLevel.fireRate)
+            if(Time.time - lastFired[i] < GetWeaponCooldown(weaponStat, weaponLevel))
             {
                 continue;
             }
@@ -88,19 +88,41 @@ public class BulletSpawner : MonoBehaviour
             currentBullet.transform.position = Weapon.BulletOffsets[i] + transform.position;
             currentBullet.Activate(Weapon.BulletDirections[i], rb.linearVelocity);
 
-            if (weaponStat.weaponInfo.weaponName == "Boomerang" || weaponStat.weaponInfo.name == "Boomerang")
+            if (currentBullet.circleCollider != null)
             {
-                Debug.Log(
-                    $"Boomerang spawned by '{gameObject.name}' in slot {i} at {currentBullet.transform.position} from spawner position {transform.position}");
+                Physics2D.IgnoreCollision(currentBullet.circleCollider, col, true);
+                Physics2D.IgnoreCollision(currentBullet.circleCollider, monster, true);
             }
-
-            Physics2D.IgnoreCollision(currentBullet.circleCollider, col, true);
-            Physics2D.IgnoreCollision(currentBullet.circleCollider, monster, true);
 
             if (weaponStat.weaponInfo.spawningSound != null)
             {
                 AudioSource.PlayClipAtPoint(weaponStat.weaponInfo.spawningSound, transform.position);
             }
         }
+    }
+
+    private float GetWeaponCooldown(WeaponStat weaponStat, WeaponLevel weaponLevel)
+    {
+        if (weaponStat.weaponInfo == null || weaponLevel == null)
+        {
+            return 0f;
+        }
+
+        if (weaponStat.weaponInfo.projectilePrefab != null)
+        {
+            var flamethrower = weaponStat.weaponInfo.projectilePrefab.GetComponent<Flamethrower>();
+            if (flamethrower != null)
+            {
+                return flamethrower.ShootDurationSeconds + flamethrower.PauseDurationSeconds;
+            }
+
+            var iceThrower = weaponStat.weaponInfo.projectilePrefab.GetComponent<IceThrower>();
+            if (iceThrower != null)
+            {
+                return iceThrower.ShootDurationSeconds + iceThrower.PauseDurationSeconds;
+            }
+        }
+
+        return weaponLevel.fireRate;
     }
 }

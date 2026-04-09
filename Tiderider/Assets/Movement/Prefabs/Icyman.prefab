@@ -30,8 +30,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 3.0442, y: 4.7542, z: -5.1401305}
-  m_LocalScale: {x: 0.07815763, y: 0.07829163, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.14815763, y: 0.14841165, z: 1.8956258}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -79,7 +79,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -5501158148214156552, guid: fb712c714f9e96e4a91b77b789152dac, type: 3}
+  m_Sprite: {fileID: 3838674497056114677, guid: 070369bc8083f8348a902352b01208af, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -152,7 +152,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 3
+  m_Radius: 6
 --- !u!114 &891669156373632376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -172,6 +172,9 @@ MonoBehaviour:
   prefabId: 
   spriteRenderer: {fileID: 0}
   swipeTelegraph: {fileID: 0}
+  defaultSprite: {fileID: 3838674497056114677, guid: 070369bc8083f8348a902352b01208af, type: 3}
+  snowballWindupSprite: {fileID: 4006508752840253220, guid: 4c80bc77173cfb948bf9d18adcfdcc0d, type: 3}
+  snowballRecoverySprite: {fileID: 4016068991384510363, guid: e6753d069b23a8c4dbed506f215c53c3, type: 3}
   xMaxDist: 5
   yMaxDist: 5
   ySmoothTime: 0.35
@@ -191,4 +194,5 @@ MonoBehaviour:
   snowballPrefab: {fileID: 177523828396537501, guid: 620e5e0d21dfbdc488005d5189f2ed45, type: 3}
   snowballSpawn: {fileID: 0}
   snowballSpeed: 6
+  snowballWindup: 0.5
   topOffsetFromCamera: 3.5

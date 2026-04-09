@@ -14,5 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: Flame Thrower
   weaponDescription: This is a flamethrower
-  weaponLevels: []
+  weaponLevels:
+  - cost: 0
+    damage: 10
+    fireRate: 1
+    speedOfBullet: 1
+    range: 1
+    HP: 1
+    duration: 1
   weaponIcon: {fileID: 1932770724421860410, guid: 568a5feb6dd61814aafc5b084c3156db, type: 3}
+  projectilePrefab: {fileID: 2730507424216055102, guid: 115c250c9ec9d5943ac0b85114dce245, type: 3}
+  onCollisionWithBulletMethodName: 
+  spawningSound: {fileID: 0}
+  extraSounds: []
+  extraSprites: []

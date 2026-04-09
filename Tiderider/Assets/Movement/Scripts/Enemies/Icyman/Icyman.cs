@@ -6,6 +6,11 @@ public class Icyman : Enemy
     public SpriteRenderer spriteRenderer;
     public AttackTelegraphVisual swipeTelegraph;
 
+    [Header("Snowball Animation")]
+    public Sprite defaultSprite;
+    public Sprite snowballWindupSprite;
+    public Sprite snowballRecoverySprite;
+
     [Header("Behavior")]
     public float xMaxDist = 5f;
     public float yMaxDist = 5f;
@@ -50,6 +55,7 @@ public class Icyman : Enemy
     public GameObject snowballPrefab;
     public Transform snowballSpawn;
     public float snowballSpeed = 6f;
+    public float snowballWindup = 0.5f;
 
     public float topOffsetFromCamera = 3.5f;
 
@@ -57,10 +63,16 @@ public class Icyman : Enemy
     {
         base.Start();
         if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null && defaultSprite == null) defaultSprite = spriteRenderer.sprite;
         EnsureSwipeTelegraph();
 
         fsm = new StateMachine();
         fsm.Init(new Idle(fsm, rb, speed), this);
+    }
+
+    private void Update()
+    {
+        UpdateFacing();
     }
 
     private void EnsureSwipeTelegraph()
@@ -178,5 +190,46 @@ public class Icyman : Enemy
             snowballScript.Init(dir, snowballSpeed);
             snowballScript.IgnoreCollider(GetComponent<Collider2D>());
         }
+    }
+
+    public void SetDefaultSprite()
+    {
+        SetSprite(defaultSprite);
+    }
+
+    public void SetSnowballWindupSprite()
+    {
+        SetSprite(snowballWindupSprite);
+    }
+
+    public void SetSnowballRecoverySprite()
+    {
+        SetSprite(snowballRecoverySprite);
+    }
+
+    private void SetSprite(Sprite sprite)
+    {
+        if (spriteRenderer == null || sprite == null)
+        {
+            return;
+        }
+
+        spriteRenderer.sprite = sprite;
+    }
+
+    private void UpdateFacing()
+    {
+        if (spriteRenderer == null)
+        {
+            return;
+        }
+
+        var player = FindPlayerTransform();
+        if (player == null)
+        {
+            return;
+        }
+
+        spriteRenderer.flipX = transform.position.x < player.position.x;
     }
 }

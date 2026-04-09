@@ -18,6 +18,7 @@ public class SnowballAttackState : State
         Debug.Log("Icyman -> SnowballAttackState");
         shot = false;
         timer = 0f;
+        ((Icyman)machine.Enemy).SetSnowballWindupSprite();
     }
 
     public override void Update()
@@ -25,7 +26,7 @@ public class SnowballAttackState : State
         var i = (Icyman)machine.Enemy;
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, Camera.main.velocity.y);
 
-        if (!shot)
+        if (!shot && timer >= i.snowballWindup)
         {
             var player = i.FindPlayerTransform();
             Vector2 shootTarget = player != null ? (Vector2)player.position : (Vector2)i.transform.position;
@@ -39,14 +40,19 @@ public class SnowballAttackState : State
 
             i.ShootSnowballAt(shootTarget);
             shot = true;
+            i.SetSnowballRecoverySprite();
         }
 
         timer += Time.deltaTime;
-        if (timer >= i.attackRecovery)
+        if (shot && timer >= i.snowballWindup + i.attackRecovery)
         {
+            i.SetDefaultSprite();
             machine.ChangeState(new Idle(machine, rb, speed));
         }
     }
 
-    public override void Exit() { }
+    public override void Exit()
+    {
+        ((Icyman)machine.Enemy).SetDefaultSprite();
+    }
 }

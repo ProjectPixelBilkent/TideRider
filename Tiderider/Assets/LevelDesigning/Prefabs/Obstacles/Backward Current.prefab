@@ -102,7 +102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: 1
-  speed: 8
+  speed: 5
   prefabId: backward
 --- !u!61 &-217810467041598506
 BoxCollider2D:

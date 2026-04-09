@@ -12,6 +12,13 @@ public class SceneObjectSpawner : MonoBehaviour
         Enemy
     }
 
+    public enum TerrainType
+    {
+        General,
+        Ice,
+        Misty
+    }
+
     [System.Serializable]
     public class SavedObjectData
     {
@@ -20,6 +27,7 @@ public class SceneObjectSpawner : MonoBehaviour
         public SpawnObjectType objectType;
 
         public int spriteNo;
+        public TerrainType typeOfTerrain;
 
         public float posX;
         public float posY;
@@ -59,7 +67,7 @@ public class SceneObjectSpawner : MonoBehaviour
     private Enemy activeEnemy;
     public bool isPausedForEnemy = false;
 
-    // Offset applied to remaining obstacle spawns after an enemy dies
+    private Vector3 lastEnemySpawnOffset = Vector3.zero;
     private Vector3 postEnemyObstacleOffset = Vector3.zero;
 
     private string FilePath => Path.Combine(Application.persistentDataPath, fileName);
@@ -80,19 +88,17 @@ public class SceneObjectSpawner : MonoBehaviour
 
         float currentY = Camera.main.transform.position.y + spawnAheadDistance;
 
-        // Do not continue sequence while waiting for enemy death
         if (isPausedForEnemy)
             return;
 
         while (nextSpawnIndex < objectsToSpawn.Count &&
                GetSpawnPosition(objectsToSpawn[nextSpawnIndex]).y <= currentY)
         {
-            print(nextSpawnIndex);
+            print(nextSpawnIndex + ", " + GetSpawnPosition(objectsToSpawn[nextSpawnIndex]).y + ", " + postEnemyObstacleOffset);
             SavedObjectData data = objectsToSpawn[nextSpawnIndex];
             SpawnObject(data);
             nextSpawnIndex++;
 
-            // If this spawned object is an enemy, stop further spawning now
             if (isPausedForEnemy)
                 break;
         }
@@ -166,7 +172,7 @@ public class SceneObjectSpawner : MonoBehaviour
             data.posZ
         );
 
-        basePosition += postEnemyObstacleOffset;
+        basePosition += postEnemyObstacleOffset - lastEnemySpawnOffset;
 
         return basePosition;
     }
@@ -202,6 +208,7 @@ public class SceneObjectSpawner : MonoBehaviour
             Obstacle obstacle = obj.GetComponent<Obstacle>();
             if (obstacle != null)
             {
+                obstacle.SetTerrainType((Obstacle.TerrainType)data.typeOfTerrain);
                 obstacle.SetSpriteIndex(data.spriteNo);
             }
         }
@@ -213,6 +220,7 @@ public class SceneObjectSpawner : MonoBehaviour
                 activeEnemy = enemy;
                 isPausedForEnemy = true;
                 enemy.OnEnemyDied += HandleEnemyDied;
+                lastEnemySpawnOffset = new Vector3(data.posX, data.posY + yOffset, data.posZ);
             }
         }
     }
@@ -225,7 +233,6 @@ public class SceneObjectSpawner : MonoBehaviour
         if (activeEnemy == enemy)
             activeEnemy = null;
 
-        // Capture the camera's current position as the offset for remaining obstacles
         if (Camera.main != null)
         {
             postEnemyObstacleOffset = new Vector3(0, Camera.main.transform.position.y, 0);

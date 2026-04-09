@@ -137,7 +137,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        print("enter trigger");
         ExternalEffect effect = other.GetComponent<ExternalEffect>();
         if (effect != null)
         {
@@ -147,7 +146,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        print("exit trigger");
         ExternalEffect effect = other.GetComponent<ExternalEffect>();
         if (effect != null)
         {
@@ -164,23 +162,20 @@ public class PlayerMovement : MonoBehaviour
         {
             return;
         }
-        print("enter collision");
 
 
         Vector2 normal = collision.GetContact(0).normal;
 
         if(collision.gameObject.GetComponent<Monster>() != null)
         {
-            normal = new Vector3(0, 2, 0);
+            normal = new Vector3(0, 5, 0);
         }
 
-        // Reverse away from the thing you hit
         bounceVelocity = normal * bounceForce;
 
         isBouncing = true;
         bounceTimer = bounceDuration;
 
-        // Slow movement after bounce so we don't instantly re-hit the obstacle
         postBounceSlowTimer = postBounceSlowDuration;
     }
 }

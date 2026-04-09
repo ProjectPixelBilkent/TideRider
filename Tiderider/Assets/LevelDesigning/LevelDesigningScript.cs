@@ -13,6 +13,13 @@ public class LevelDesignerScript : MonoBehaviour
         Enemy
     }
 
+    public enum TerrainType
+    {
+        General,
+        Ice,
+        Misty
+    }
+
     [System.Serializable]
     public class SavedObjectData
     {
@@ -21,6 +28,7 @@ public class LevelDesignerScript : MonoBehaviour
         public SpawnObjectType objectType;
 
         public int spriteNo;
+        public TerrainType typeOfTerrain;
 
         public float posX;
         public float posY;
@@ -67,26 +75,32 @@ public class LevelDesignerScript : MonoBehaviour
         ExternalEffect[] effects = Object.FindObjectsByType<ExternalEffect>(FindObjectsSortMode.None);
 
         sortedObjects.AddRange(
-            obstacles.Select(o => new SavedObjectData
+            obstacles.Select(o =>
             {
-                prefabId = o.prefabId,
-                name = o.gameObject.name,
-                objectType = SpawnObjectType.Obstacle,
+                Obstacle.TerrainType obstacleTerrain = o.GetTerrainTypeFromCurrentSprite();
 
-                spriteNo = o.getSpriteNo(),
+                return new SavedObjectData
+                {
+                    prefabId = o.prefabId,
+                    name = o.gameObject.name,
+                    objectType = SpawnObjectType.Obstacle,
 
-                posX = o.transform.position.x * saveConstant,
-                posY = o.transform.position.y * saveConstant,
-                posZ = o.transform.position.z * saveConstant,
+                    spriteNo = o.getSpriteNo(),
+                    typeOfTerrain = ConvertTerrainType(obstacleTerrain),
 
-                rotX = o.transform.rotation.x,
-                rotY = o.transform.rotation.y,
-                rotZ = o.transform.rotation.z,
-                rotW = o.transform.rotation.w,
+                    posX = o.transform.position.x * saveConstant,
+                    posY = o.transform.position.y * saveConstant,
+                    posZ = o.transform.position.z * saveConstant,
 
-                scaleX = o.transform.localScale.x * saveConstant,
-                scaleY = o.transform.localScale.y * saveConstant,
-                scaleZ = o.transform.localScale.z * saveConstant
+                    rotX = o.transform.rotation.x,
+                    rotY = o.transform.rotation.y,
+                    rotZ = o.transform.rotation.z,
+                    rotW = o.transform.rotation.w,
+
+                    scaleX = o.transform.localScale.x * saveConstant,
+                    scaleY = o.transform.localScale.y * saveConstant,
+                    scaleZ = o.transform.localScale.z * saveConstant
+                };
             })
         );
 
@@ -98,6 +112,7 @@ public class LevelDesignerScript : MonoBehaviour
                 objectType = SpawnObjectType.Enemy,
 
                 spriteNo = -1,
+                typeOfTerrain = TerrainType.General,
 
                 posX = e.transform.position.x * saveConstant,
                 posY = e.transform.position.y * saveConstant,
@@ -122,6 +137,7 @@ public class LevelDesignerScript : MonoBehaviour
                 objectType = SpawnObjectType.ExternalEffect,
 
                 spriteNo = -1,
+                typeOfTerrain = TerrainType.General,
 
                 posX = e.transform.position.x * saveConstant,
                 posY = e.transform.position.y * saveConstant,
@@ -151,5 +167,19 @@ public class LevelDesignerScript : MonoBehaviour
         File.WriteAllText(path, json);
 
         Debug.Log($"Saved {sortedObjects.Count} objects to: {path}");
+    }
+
+    private static TerrainType ConvertTerrainType(Obstacle.TerrainType obstacleTerrain)
+    {
+        switch (obstacleTerrain)
+        {
+            case Obstacle.TerrainType.Ice:
+                return TerrainType.Ice;
+            case Obstacle.TerrainType.Misty:
+                return TerrainType.Misty;
+            case Obstacle.TerrainType.General:
+            default:
+                return TerrainType.General;
+        }
     }
 }

@@ -3,6 +3,9 @@ using UnityEngine;
 public class ChaseState : State
 {
     private readonly Rigidbody2D rb;
+    private float damageCooldownTimer;
+    private float lurkTimer;
+    private bool isLurking;
 
     public ChaseState(StateMachine machine, Rigidbody2D rb) : base(machine)
     {
@@ -12,6 +15,9 @@ public class ChaseState : State
     public override void Enter()
     {
         rb.linearVelocity = Vector2.zero;
+        damageCooldownTimer = 0f;
+        lurkTimer = 0f;
+        isLurking = false;
     }
 
     public override void Exit() { }
@@ -22,26 +28,80 @@ public class ChaseState : State
 
         if (a.ship == null)
         {
-            var p = GameObject.FindGameObjectWithTag("Player");
-            if (p) a.ship = p.transform;
+            GameObject p = GameObject.FindGameObjectWithTag("Player");
+            if (p != null)
+                a.ship = p.transform;
         }
 
         if (a.ship == null) return;
 
-        float targetX = a.ship.position.x;
-        float newX = Mathf.MoveTowards(rb.position.x, targetX, a.chaseSpeed * Time.deltaTime);
-        float newY = rb.position.y - a.passDownSpeed * 0.5f * Time.deltaTime;
+        if (damageCooldownTimer > 0f)
+            damageCooldownTimer -= Time.deltaTime;
 
-        Vector2 newPos = new Vector2(newX, newY);
-        rb.MovePosition(newPos);
+        Vector2 pos = rb.position;
+        Vector2 playerPos = a.ship.position;
 
-        Vector2 toPlayer = (Vector2)a.ship.position - newPos;
-        float r2 = a.eatTriggerDistance * a.eatTriggerDistance;
+        Rigidbody2D playerRb = a.ship.GetComponent<Rigidbody2D>();
+        float playerDirX = 0f;
 
-        if (toPlayer.sqrMagnitude <= r2)
+        if (playerRb != null)
         {
-            Vector2 dir = toPlayer.normalized;
-            machine.ChangeState(new EatState(machine, rb, dir));
+            if (playerRb.linearVelocity.x > a.playerMoveThreshold) playerDirX = 1f;
+            else if (playerRb.linearVelocity.x < -a.playerMoveThreshold) playerDirX = -1f;
+        }
+
+        float targetX = playerPos.x + playerDirX * a.blockAheadDistance;
+        float targetY = playerPos.y + a.chaseYOffset;
+
+        targetX += Mathf.Sin(Time.time * a.wobbleSpeed) * a.wobbleX * 0.5f;
+
+        Vector2 targetPos = new Vector2(targetX, targetY);
+        Vector2 toTarget = targetPos - pos;
+        float distanceToPlayer = Vector2.Distance(pos, playerPos);
+
+        if (distanceToPlayer <= a.contactDamageDistance * 1.5f && !isLurking)
+        {
+            isLurking = true;
+            lurkTimer = a.lurkTime;
+        }
+
+        if (isLurking)
+        {
+            lurkTimer -= Time.deltaTime;
+
+            float hoverX = Mathf.Sin(Time.time * a.wobbleSpeed) * a.wobbleX * 0.4f;
+            float hoverY = Mathf.Cos(Time.time * a.wobbleSpeed) * 0.05f;
+
+            Vector2 hoverTarget = new Vector2(targetX + hoverX, targetY + hoverY);
+            Vector2 hoverMove = hoverTarget - pos;
+
+            if (hoverMove.sqrMagnitude > 0.001f)
+            {
+                Vector2 step = hoverMove.normalized * a.chaseSpeed * Time.deltaTime * 0.7f;
+                rb.MovePosition(pos + step);
+            }
+
+            if (lurkTimer <= 0f)
+                isLurking = false;
+        }
+        else
+        {
+            if (toTarget.sqrMagnitude > 0.001f)
+            {
+                Vector2 step = toTarget.normalized * a.chaseSpeed * Time.deltaTime;
+                rb.MovePosition(pos + step);
+            }
+        }
+
+        Vector2 toPlayer = playerPos - rb.position;
+        if (toPlayer.sqrMagnitude <= a.contactDamageDistance * a.contactDamageDistance && damageCooldownTimer <= 0f)
+        {
+            HasHealth health = a.ship.GetComponent<HasHealth>();
+            if (health != null)
+            {
+                health.ChangeHealth(a.contactDamage);
+                damageCooldownTimer = a.damageCooldown;
+            }
         }
     }
 }

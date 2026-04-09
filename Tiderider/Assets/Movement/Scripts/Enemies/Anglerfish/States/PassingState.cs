@@ -22,8 +22,9 @@ public class PassingState : State
 
         if (a.ship == null)
         {
-            var p = GameObject.FindGameObjectWithTag("Player");
-            if (p) a.ship = p.transform;
+            GameObject p = GameObject.FindGameObjectWithTag("Player");
+            if (p != null)
+                a.ship = p.transform;
         }
 
         if (a.revealTimer > 0f)
@@ -31,15 +32,18 @@ public class PassingState : State
 
         Vector2 pos = rb.position;
 
-        // move downward
-        pos.y -= a.passDownSpeed * Time.deltaTime;
+        float topY = Camera.main.transform.position.y + a.topOffset;
+        pos.y = Mathf.MoveTowards(pos.y, topY, a.topFollowSpeed * Time.deltaTime);
 
-        // follow player horizontally in a smoother way
         if (a.ship != null)
         {
-            float targetX = a.ship.position.x;
+            float playerX = a.ship.position.x;
 
-            // small side-to-side wobble
+            float dir = 0f;
+            if (playerX > pos.x + 0.1f) dir = 1f;
+            else if (playerX < pos.x - 0.1f) dir = -1f;
+
+            float targetX = playerX + dir * a.blockAheadDistance;
             targetX += Mathf.Sin(Time.time * a.wobbleSpeed) * a.wobbleX;
 
             pos.x = Mathf.MoveTowards(pos.x, targetX, a.xLockMaxSpeed * Time.deltaTime);

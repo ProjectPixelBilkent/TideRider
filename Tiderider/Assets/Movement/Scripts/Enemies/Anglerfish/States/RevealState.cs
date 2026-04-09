@@ -3,7 +3,7 @@ using UnityEngine;
 public class RevealState : State
 {
     private readonly Rigidbody2D rb;
-    private float pause = 0.10f;
+    private float pause;
 
     public RevealState(StateMachine machine, Rigidbody2D rb) : base(machine)
     {
@@ -13,6 +13,7 @@ public class RevealState : State
     public override void Enter()
     {
         rb.linearVelocity = Vector2.zero;
+        pause = 0.2f;
 
         var a = (AnglerFish)machine.Enemy;
         if (!a.isRevealed)
@@ -27,8 +28,6 @@ public class RevealState : State
         pause -= Time.deltaTime;
 
         if (pause <= 0f)
-        {
             machine.ChangeState(new ChaseState(machine, rb));
-        }
     }
 }

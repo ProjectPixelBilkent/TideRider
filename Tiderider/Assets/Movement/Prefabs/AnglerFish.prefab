@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6229066113371815728}
   - component: {fileID: 4965450026169650170}
   - component: {fileID: 3861942100354759249}
+  - component: {fileID: 3780938133264655238}
   m_Layer: 0
   m_Name: AnglerFish
   m_TagString: Untagged
@@ -113,7 +114,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
@@ -147,7 +148,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -180,17 +181,30 @@ MonoBehaviour:
   spawnAboveScreen: 0.25
   randomizeSpawnX: 1
   spawnXPaddingViewport: 0.08
-  passDownSpeed: 2
-  xLockSmoothTime: 0.12
-  xLockMaxSpeed: 6
-  xDeadZone: 0.05
-  wobbleX: 0.05
-  wobbleSpeed: 2
-  chaseSpeed: 4.5
-  eatTriggerDistance: 0.85
-  eatLungeSpeed: 10
-  eatLungeTime: 0.25
-  eatCooldown: 1
-  baseX: 0
-  xSmoothVel: 0
+  topOffset: 4
+  topFollowSpeed: 0
+  xLockMaxSpeed: 2
+  blockAheadDistance: 1.2
+  playerMoveThreshold: 0.05
+  lurkTime: 1
+  wobbleX: 0.15
+  wobbleSpeed: 1.2
+  chaseSpeed: 0.5
+  chaseYOffset: 2
+  contactDamage: 10
+  contactDamageDistance: 0.8
+  damageCooldown: 1
   revealTimer: 0
+--- !u!114 &3780938133264655238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8291028243939827525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f2c38e993f1d8444be6787e53f23985, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  contactDamage: 10

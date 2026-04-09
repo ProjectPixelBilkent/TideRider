@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 6135632261993531991}
   - component: {fileID: 3324982547572546397}
   - component: {fileID: 6054287319458533720}
-  - component: {fileID: 9179863757044216945}
   - component: {fileID: 5247687667986329842}
   - component: {fileID: 4206087879975261282}
   m_Layer: 0
@@ -156,66 +155,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &9179863757044216945
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2037578664033997800}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93800a72b7cc587478f14aca01980db8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerTransform: {fileID: 0}
-  rb: {fileID: 6054287319458533720}
-  shipSprite: {fileID: 6135632261993531991}
-  shipCollider: {fileID: 3324982547572546397}
-  shipVisual: {fileID: 0}
-  maxHealth: 100
-  currentHealth: 100
-  sailSpeed: 1.83
-  maxSpeed: 2.66
-  acceleration: 2.48
-  turnSpeed: 90
-  retreatSpeed: 6
-  desiredAheadDistance: 7
-  sideOffset: 2.5
-  playerPredictionTime: 0.4
-  retreatDistance: 5
-  farDistance: 14
-  behindCatchupMultiplier: 1.5
-  steeringResponsiveness: 2.5
-  minimumForwardFactorWhileTurning: 0.12
-  alignmentPower: 2.4
-  maxDesiredHeadingChange: 55
-  targetLookAheadDistance: 2.2
-  movementNoseAngleOffset: 90
-  visualNoseAngleOffset: 0
-  weaponData: {fileID: 11400000, guid: b3e878eb06da4434b9a7e8241f255f8c, type: 2}
-  weaponLevel: 0
-  fireCooldown: 1.2
-  broadsideTolerance: 22
-  shootingMinFacingDot: 0.45
-  aimIterations: 3
-  fallbackBulletSpeed: 8
-  aimRandomness: 0.15
-  minimumAimDistance: 0.1
-  bulletIgnoreDuration: 0.3
-  portCannonOffset: {x: 0, y: 0.6}
-  starboardCannonOffset: {x: 0, y: -0.6}
-  diveDelay: 1
-  respawnRandomAngle: 30
-  respawnDistanceMin: 0.9
-  respawnDistanceMax: 1.25
-  behindDotThreshold: -0.1
-  respawnSpeedMultiplier: 0.75
-  cameraPadding: 0.5
-  offscreenMargin: 0.2
-  currentState: 1
-  currentSpeed: 0
-  isDiving: 0
 --- !u!114 &5247687667986329842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -243,8 +182,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6337065157edcbc46aebf18f0279592d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 0
+  healthSlider: {fileID: 0}
+  speed: 0
+  prefabId: ghost_ship
   playerTransform: {fileID: 0}
-  rb: {fileID: 6054287319458533720}
   shipSprite: {fileID: 6135632261993531991}
   shipCollider: {fileID: 3324982547572546397}
   spawnFromLeft: 1

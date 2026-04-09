@@ -46,7 +46,7 @@ public class SceneObjectSpawner : MonoBehaviour
 
     [Header("Spawn Control")]
     [SerializeField] private float yOffset = 0f;
-    [SerializeField] private float spawnAheadDistance = 10f;
+    [SerializeField] private float spawnAheadDistance = 20f;
     [SerializeField] private Transform spawnedParent;
 
     [Header("Prefabs")]

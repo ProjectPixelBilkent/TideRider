@@ -2,11 +2,10 @@ using System.Collections;
 using UnityEngine;
 
 [DisallowMultipleComponent]
-public class test_ghost_ship : MonoBehaviour
+public class GhostShip : Enemy
 {
     [Header("References")]
     public Transform playerTransform;
-    public Rigidbody2D rb;
     public SpriteRenderer shipSprite;
     public Collider2D shipCollider;
 

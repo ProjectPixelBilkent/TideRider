@@ -7093,7 +7093,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1264881559}
   - component: {fileID: 1264881558}
-  - component: {fileID: 1264881556}
+  - component: {fileID: 1264881560}
   m_Layer: 0
   m_Name: Monster
   m_TagString: LevelMonster
@@ -7101,43 +7101,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!70 &1264881556
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1264881555}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.75, y: 0.625}
-  m_Direction: 0
 --- !u!212 &1264881558
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -7208,6 +7171,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &1264881560
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1264881555}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: -0.03322053, y: -0.5768311}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.75, y: 0.625}
+    newSize: {x: 0.75, y: 0.625}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 2.7492785, y: 1.8028228}
+  m_EdgeRadius: 0
 --- !u!1 &1300685034
 GameObject:
   m_ObjectHideFlags: 0
@@ -8192,6 +8201,7 @@ MonoBehaviour:
   - {fileID: 8291028243939827525, guid: b5b4d70c9af72ee45b8bf21f33d56cfe, type: 3}
   - {fileID: 6938519905356381504, guid: cad216ad90c971c44b7a5f65beb16431, type: 3}
   - {fileID: 5326964346436984552, guid: c4dd961a27a4de641b3b576f983f7983, type: 3}
+  isPausedForEnemy: 0
 --- !u!4 &1839496897
 Transform:
   m_ObjectHideFlags: 0
@@ -13667,11 +13677,13 @@ MonoBehaviour:
   maxTiltAngle: 45
   rotationSpeed: 180
   minForwardSpeed: 2
-  maxVelocity: 25
+  maxVelocity: 15
   maxAheadDistance: 10
   mouseButton: 0
   bounceForce: 6
   bounceDuration: 0.15
+  postBounceSpeedMultiplier: 0.5
+  postBounceSlowDuration: 1.25
   currentVelocity: {x: 0, y: 0, z: 0}
 --- !u!114 &2062790735
 MonoBehaviour:
@@ -13717,6 +13729,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   armory: []
+  objectSpawner: {fileID: 1839496896}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

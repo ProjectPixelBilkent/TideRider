@@ -29,7 +29,7 @@ public class HasHealth: MonoBehaviour
     }
     public void Update()
     {
-       healthSlider.value = currentHealth;
+     //  healthSlider.value = currentHealth;
         
     }
     public void Restore()

@@ -17,9 +17,10 @@ public class EatState : State
         var a = (AnglerFish)machine.Enemy;
         timeLeft = a.eatLungeTime;
 
-        if (dir.sqrMagnitude < 0.0001f) dir = Vector2.right;
-        dir.Normalize();
+        if (dir.sqrMagnitude < 0.0001f)
+            dir = Vector2.right;
 
+        dir.Normalize();
         rb.linearVelocity = Vector2.zero;
     }
 
@@ -32,7 +33,7 @@ public class EatState : State
         timeLeft -= Time.deltaTime;
 
         Vector2 pos = rb.position;
-        Vector2 step = dir * a.eatLungeSpeed * Time.fixedDeltaTime;
+        Vector2 step = dir * a.eatLungeSpeed * Time.deltaTime;
         rb.MovePosition(pos + step);
 
         if (timeLeft <= 0f)

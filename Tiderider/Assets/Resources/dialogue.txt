@@ -1,0 +1,22 @@
+{
+  "conversations": [
+    {
+      "conversationId": "intro_scene",
+      "lines": [
+        {
+          "text": "Hello. You finally came back.",
+          "characterId": "siren",
+          "emotion": "sad",
+          "enterSide": 0
+        },
+        {
+          "text": "I waited for you for so long.",
+          "characterId": "siren",
+          "emotion": "happy",
+          "enterSide": 1
+        }
+      ]
+    }
+  ]
+}
+

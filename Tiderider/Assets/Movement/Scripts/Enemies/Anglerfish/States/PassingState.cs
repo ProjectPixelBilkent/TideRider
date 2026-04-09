@@ -18,7 +18,7 @@ public class PassingState : State
 
     public override void Update()
     {
-        var a = (AnglerFish)machine.Enemy;   
+        var a = (AnglerFish)machine.Enemy;
 
         if (a.ship == null)
         {
@@ -26,27 +26,24 @@ public class PassingState : State
             if (p) a.ship = p.transform;
         }
 
-        if (a.revealTimer > 0f) a.revealTimer -= Time.deltaTime;
+        if (a.revealTimer > 0f)
+            a.revealTimer -= Time.deltaTime;
 
         Vector2 pos = rb.position;
 
-        pos.y -= a.passDownSpeed * Time.fixedDeltaTime;
+        // move downward
+        pos.y -= a.passDownSpeed * Time.deltaTime;
 
- 
-        float desiredX = pos.x;
+        // follow player horizontally in a smoother way
         if (a.ship != null)
         {
-            float playerX = a.ship.position.x;
+            float targetX = a.ship.position.x;
 
-            if (Mathf.Abs(playerX - pos.x) > a.xDeadZone)
-                desiredX = playerX;
+            // small side-to-side wobble
+            targetX += Mathf.Sin(Time.time * a.wobbleSpeed) * a.wobbleX;
+
+            pos.x = Mathf.MoveTowards(pos.x, targetX, a.xLockMaxSpeed * Time.deltaTime);
         }
-
-   
-        desiredX += Mathf.Sin(Time.time * a.wobbleSpeed) * a.wobbleX;
-
-        float maxStep = a.xLockMaxSpeed * Time.fixedDeltaTime;
-        pos.x = Mathf.MoveTowards(pos.x, desiredX, maxStep);
 
         rb.MovePosition(pos);
 

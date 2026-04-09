@@ -28,19 +28,19 @@ public class ChaseState : State
 
         if (a.ship == null) return;
 
-        Vector2 pos = rb.position;
-        Vector2 toPlayer = (Vector2)a.ship.position - pos;
+        float targetX = a.ship.position.x;
+        float newX = Mathf.MoveTowards(rb.position.x, targetX, a.chaseSpeed * Time.deltaTime);
+        float newY = rb.position.y - a.passDownSpeed * 0.5f * Time.deltaTime;
 
-        if (toPlayer.sqrMagnitude > 0.0001f)
-        {
-            Vector2 step = toPlayer.normalized * a.chaseSpeed * Time.fixedDeltaTime;
-            rb.MovePosition(pos + step);
-        }
+        Vector2 newPos = new Vector2(newX, newY);
+        rb.MovePosition(newPos);
 
+        Vector2 toPlayer = (Vector2)a.ship.position - newPos;
         float r2 = a.eatTriggerDistance * a.eatTriggerDistance;
+
         if (toPlayer.sqrMagnitude <= r2)
         {
-            Vector2 dir = toPlayer.normalized; 
+            Vector2 dir = toPlayer.normalized;
             machine.ChangeState(new EatState(machine, rb, dir));
         }
     }

@@ -1,140 +1,174 @@
+﻿using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {
-    [Header("Movement")]
-    [SerializeField] public float maxVelocity = 15f;
-    [SerializeField] private float deceleration = 5f;
-    [SerializeField] private float constantUpwardSpeed = 5f;
-
-    [Header("Steering")]
-    [SerializeField] private float maxAccelerationDistance = 10f;
-    [SerializeField] private float minAccelerationDistance = 0.5f;
-    [SerializeField] private float accelerationMultiplier = 8f;
-    [SerializeField] private AnimationCurve accelerationCurve = AnimationCurve.Linear(0f, 0.1f, 1f, 1f);
-
     [Header("Rotation")]
-    [SerializeField] private float forwardSpeed = 20f;
-    [SerializeField] private float maxRotationAngle = 45f;
-    [SerializeField] private float rotationSmoothness = 5f;
+    [SerializeField] private float maxTiltAngle = 45f;
+    [SerializeField] private float rotationSpeed = 180f;
 
-    [Header("References")]
-    [SerializeField] private Player model;
+    [Header("Movement")]
+    [SerializeField] private float minForwardSpeed = 2f;
+    [SerializeField] public float maxVelocity = 8f;
+
+    [Tooltip("How far ahead the click must be to reach max speed.")]
+    [SerializeField] private float maxAheadDistance = 10f;
+
+    [Header("Input")]
+    [SerializeField] private int mouseButton = 0; // 0 = left mouse button
+
+    [Header("Bounce")]
+    [SerializeField] private float bounceForce = 10f;
+    [SerializeField] private float bounceDuration = 0.15f;
+
+    [Header("Post-Bounce Slow")]
+    [SerializeField] private float postBounceSpeedMultiplier = 0.5f;
+    [SerializeField] private float postBounceSlowDuration = 1.25f;
+
+    private Rigidbody2D rb;
+    private Camera mainCam;
+
+    private float targetZRotation = 0f;
+    private float targetSpeed = 0f;
+    private bool hasInput = false;
+
+    private bool isBouncing = false;
+    private float bounceTimer = 0f;
+    private Vector2 bounceVelocity;
+
+    private float postBounceSlowTimer = 0f;
 
     public Vector3 currentVelocity;
-    public Vector3 AdditionalVelocity;
 
-    private Camera mainCamera;
-    private Vector3 targetWorldPosition;
-    private bool isTracking;
+    private readonly HashSet<ExternalEffect> activeExternalEffects = new HashSet<ExternalEffect>();
 
-    private void Start()
+    private void Awake()
     {
-        model.Restore();
-        mainCamera = Camera.main;
-        targetWorldPosition = transform.position;
+        rb = GetComponent<Rigidbody2D>();
+        mainCam = Camera.main;
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
-            model.Restore();
-
-        if (Input.GetMouseButtonDown(0))
-            isTracking = true;
-
-        if (Input.GetMouseButtonUp(0))
-            isTracking = false;
-
-        if (isTracking)
+        if (isBouncing)
         {
-            Vector3 mouse = Input.mousePosition;
-            targetWorldPosition =
-                mainCamera.ScreenToWorldPoint(new Vector3(mouse.x, mouse.y, 10f)) +
-                new Vector3(0f, 8.5f, 0f);
+            bounceTimer -= Time.deltaTime;
+            if (bounceTimer <= 0f)
+            {
+                isBouncing = false;
+            }
+        }
 
-            MoveTowardTarget();
+        if (postBounceSlowTimer > 0f)
+        {
+            postBounceSlowTimer -= Time.deltaTime;
+        }
+
+        hasInput = Input.GetMouseButton(mouseButton);
+
+        if (hasInput)
+        {
+            Vector3 mouseScreenPos = Input.mousePosition;
+            Vector3 mouseWorldPos = mainCam.ScreenToWorldPoint(mouseScreenPos) + new Vector3(0, 1, 0);
+            mouseWorldPos.z = 0f;
+
+            Vector2 shipPos = rb.position;
+            Vector2 toClick = (Vector2)mouseWorldPos - shipPos;
+
+            Vector2 localClick = transform.InverseTransformPoint(mouseWorldPos);
+
+            float horizontalFactor = Mathf.Clamp(localClick.x / 2.5f, -1f, 1f);
+            targetZRotation = -horizontalFactor * maxTiltAngle;
+
+            float aheadDistance = Mathf.Max(0f, Vector2.Dot(toClick, transform.up));
+            float speedT = Mathf.Clamp01(aheadDistance / maxAheadDistance);
+            targetSpeed = Mathf.Lerp(minForwardSpeed, maxVelocity, speedT);
         }
         else
         {
-            SlowDown();
+            targetZRotation = 0f;
+            targetSpeed = minForwardSpeed;
         }
-
-        currentVelocity.y = Mathf.Max(currentVelocity.y, constantUpwardSpeed);
-        currentVelocity += AdditionalVelocity;
-
-        transform.position += currentVelocity * Time.deltaTime;
-        UpdateRotation();
     }
 
     private void FixedUpdate()
     {
-        ExternalEffect effect = FindExternalEffectAtPoint(transform.position);
-        AdditionalVelocity = effect != null ? effect.GetAddition(this) : Vector3.zero;
+        Vector2 externalBonus = GetExternalEffectBonus();
+
+        if (isBouncing)
+        {
+            rb.linearVelocity = bounceVelocity + externalBonus;
+            currentVelocity = rb.linearVelocity;
+            return;
+        }
+
+        float currentZ = rb.rotation;
+        float newZ = Mathf.MoveTowardsAngle(currentZ, targetZRotation, rotationSpeed * Time.fixedDeltaTime);
+        rb.MoveRotation(newZ);
+
+        float currentSpeed = targetSpeed;
+
+        if (postBounceSlowTimer > 0f)
+        {
+            currentSpeed *= postBounceSpeedMultiplier;
+        }
+
+        Vector2 forward = transform.up;
+        Vector2 baseVelocity = forward * currentSpeed;
+
+        rb.linearVelocity = baseVelocity + externalBonus;
+        currentVelocity = rb.linearVelocity;
     }
 
-    private void MoveTowardTarget()
+    private Vector2 GetExternalEffectBonus()
     {
-        Vector3 toTarget = targetWorldPosition - transform.position;
-        float distance = toTarget.magnitude;
+        Vector2 totalBonus = Vector2.zero;
 
-        if (distance <= 0.001f)
+        activeExternalEffects.RemoveWhere(effect => effect == null);
+
+        foreach (ExternalEffect effect in activeExternalEffects)
+        {
+            totalBonus += (Vector2)effect.GetAddition(this);
+        }
+
+        return totalBonus;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        print("enter");
+        ExternalEffect effect = other.GetComponent<ExternalEffect>();
+        if (effect != null)
+        {
+            activeExternalEffects.Add(effect);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        print("exit");
+        ExternalEffect effect = other.GetComponent<ExternalEffect>();
+        if (effect != null)
+        {
+            activeExternalEffects.Remove(effect);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.contactCount == 0)
             return;
 
-        float t = Mathf.Clamp01((distance - minAccelerationDistance) / (maxAccelerationDistance - minAccelerationDistance));
-        float acceleration = accelerationCurve.Evaluate(t) * accelerationMultiplier;
+        Vector2 normal = collision.GetContact(0).normal;
 
-        Vector3 desiredVelocity = toTarget.normalized * Mathf.Min(acceleration, maxVelocity);
-        currentVelocity = Vector3.Lerp(currentVelocity, desiredVelocity, acceleration * Time.deltaTime);
-    }
+        // Reverse away from the thing you hit
+        bounceVelocity = normal * bounceForce;
 
-    private void SlowDown()
-    {
-        currentVelocity = Vector3.Lerp(currentVelocity, Vector3.zero, deceleration * Time.deltaTime);
+        isBouncing = true;
+        bounceTimer = bounceDuration;
 
-        if (currentVelocity.magnitude < 0.01f)
-            currentVelocity = Vector3.zero;
-    }
-
-    private void UpdateRotation()
-    {
-        float speed = currentVelocity.magnitude;
-        float targetZ = 0f;
-
-        if (speed > 0.1f)
-        {
-            Vector3 direction = currentVelocity.normalized;
-            float turnDirection = Vector3.Cross(Vector3.up, direction).z;
-            float speedRatio = speed / forwardSpeed;
-            targetZ = turnDirection * speedRatio * maxRotationAngle;
-        }
-
-        float currentZ = transform.eulerAngles.z;
-        if (currentZ > 180f)
-            currentZ -= 360f;
-
-        float newZ = Mathf.LerpAngle(currentZ, targetZ, rotationSmoothness * Time.deltaTime);
-        transform.rotation = Quaternion.Euler(0f, 0f, newZ);
-    }
-
-    public void Bounce(Vector2 force)
-    {
-        currentVelocity = force;
-    }
-
-    private ExternalEffect FindExternalEffectAtPoint(Vector2 worldPoint)
-    {
-        Collider2D[] colliders = Physics2D.OverlapPointAll(worldPoint);
-
-        foreach (Collider2D col in colliders)
-        {
-            if (col == null) continue;
-
-            ExternalEffect effect = col.GetComponentInParent<ExternalEffect>();
-            if (effect != null)
-                return effect;
-        }
-
-        return null;
+        // Slow movement after bounce so we don't instantly re-hit the obstacle
+        postBounceSlowTimer = postBounceSlowDuration;
     }
 }

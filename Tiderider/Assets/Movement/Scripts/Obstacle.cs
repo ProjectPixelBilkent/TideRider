@@ -36,6 +36,7 @@ public class Obstacle : MonoBehaviour
     {
         this.spriteIndex = index;
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        index = Mathf.Clamp(index, 0, sprites.Length - 1);
         sr.sprite = sprites[index];
         UpdateColliderToMatchSprite(sr.sprite);
     }

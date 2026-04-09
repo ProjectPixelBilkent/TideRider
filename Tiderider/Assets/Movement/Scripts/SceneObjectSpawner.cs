@@ -46,7 +46,7 @@ public class SceneObjectSpawner : MonoBehaviour
 
     [Header("Spawn Control")]
     [SerializeField] private float yOffset = 0f;
-    [SerializeField] private float spawnAheadDistance = 5f;
+    [SerializeField] private float spawnAheadDistance = 10f;
     [SerializeField] private Transform spawnedParent;
 
     [Header("Prefabs")]
@@ -57,7 +57,10 @@ public class SceneObjectSpawner : MonoBehaviour
     private int nextSpawnIndex = 0;
 
     private Enemy activeEnemy;
-    private bool isPausedForEnemy = false;
+    public bool isPausedForEnemy = false;
+
+    // Offset applied to remaining obstacle spawns after an enemy dies
+    private Vector3 postEnemyObstacleOffset = Vector3.zero;
 
     private string FilePath => Path.Combine(Application.persistentDataPath, fileName);
 
@@ -82,8 +85,9 @@ public class SceneObjectSpawner : MonoBehaviour
             return;
 
         while (nextSpawnIndex < objectsToSpawn.Count &&
-               objectsToSpawn[nextSpawnIndex].posY + yOffset <= currentY)
+               GetSpawnPosition(objectsToSpawn[nextSpawnIndex]).y <= currentY)
         {
+            print(nextSpawnIndex);
             SavedObjectData data = objectsToSpawn[nextSpawnIndex];
             SpawnObject(data);
             nextSpawnIndex++;
@@ -154,6 +158,19 @@ public class SceneObjectSpawner : MonoBehaviour
         Debug.Log($"Loaded {objectsToSpawn.Count} objects from: {FilePath}");
     }
 
+    private Vector3 GetSpawnPosition(SavedObjectData data)
+    {
+        Vector3 basePosition = new Vector3(
+            data.posX,
+            data.posY + yOffset,
+            data.posZ
+        );
+
+        basePosition += postEnemyObstacleOffset;
+
+        return basePosition;
+    }
+
     private void SpawnObject(SavedObjectData data)
     {
         if (!prefabMap.TryGetValue(data.prefabId, out GameObject prefab) || prefab == null)
@@ -162,11 +179,7 @@ public class SceneObjectSpawner : MonoBehaviour
             return;
         }
 
-        Vector3 position = new Vector3(
-            data.posX,
-            data.posY + yOffset,
-            data.posZ
-        );
+        Vector3 position = GetSpawnPosition(data);
 
         Quaternion rotation = new Quaternion(
             data.rotX,
@@ -212,6 +225,12 @@ public class SceneObjectSpawner : MonoBehaviour
         if (activeEnemy == enemy)
             activeEnemy = null;
 
+        // Capture the camera's current position as the offset for remaining obstacles
+        if (Camera.main != null)
+        {
+            postEnemyObstacleOffset = new Vector3(0, Camera.main.transform.position.y, 0);
+        }
+
         isPausedForEnemy = false;
     }
 
@@ -220,5 +239,6 @@ public class SceneObjectSpawner : MonoBehaviour
         nextSpawnIndex = 0;
         isPausedForEnemy = false;
         activeEnemy = null;
+        postEnemyObstacleOffset = Vector3.zero;
     }
 }

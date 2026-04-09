@@ -78,8 +78,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -8595772872337016305, guid: e0a19d70efbd5b84f8471e585a160d22, type: 3}
-  m_Color: {r: 0.6981132, g: 0.24397324, b: 0, a: 1}
+  m_Sprite: {fileID: -3258652907620935512, guid: 6eda9b5bca5f0ee4795d53b41b7f47ae, type: 3}
+  m_Color: {r: 0.67058825, g: 0.67058825, b: 0.67058825, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -104,11 +104,20 @@ MonoBehaviour:
   prefabId: big
   speed: 0
   generalSprites:
-  - {fileID: 21300000, guid: 5fda097f5d4aa7c4a92f2a29a9aa2243, type: 2}
-  - {fileID: 21300000, guid: 94372b940f4e87241a97b19dfb8617bf, type: 2}
-  - {fileID: 21300000, guid: 7263c3e6a3bffb8408c8315ee78c1e7e, type: 2}
-  iceSprites: []
-  mistySprites: []
+  - {fileID: 5482131075063599014, guid: f20df590e0e806d45ab1eccfffe9211d, type: 3}
+  - {fileID: -1283619244963461261, guid: e216d52ce5a5fba41a0421365d942bf5, type: 3}
+  - {fileID: 4927765378794880426, guid: ddb4ece29c8bed94b88936d4e82f5427, type: 3}
+  iceSprites:
+  - {fileID: -3258652907620935512, guid: 6eda9b5bca5f0ee4795d53b41b7f47ae, type: 3}
+  - {fileID: -2157146034815284111, guid: 3257d1c315815aa438bc790657b9e1b2, type: 3}
+  - {fileID: 1445438385698095081, guid: a7715698258b90345afaba8ad9134f9d, type: 3}
+  - {fileID: 6333394497469599162, guid: b4a3d67b0ea32c147a8ae54110f98e8f, type: 3}
+  - {fileID: 2042648547274403265, guid: 68852ad216aa825428bf8785084dab5f, type: 3}
+  - {fileID: -8033598509520219606, guid: 141b2b795603ed34bb0fbc3b94db6773, type: 3}
+  mistySprites:
+  - {fileID: 4554363055064735072, guid: c02e69206b328cc4e9e88bb6db74f4d7, type: 3}
+  - {fileID: 5249617459696343698, guid: d2a5b77b00634c14684df4ced07b5c9e, type: 3}
+  - {fileID: -5550507929528789306, guid: 92f66d7cc5c814548a5e3e994a9fd88c, type: 3}
   typeOfTerrain: 0
   bigSize: {x: 1, y: 1, z: 1}
 --- !u!58 &489615573201556764

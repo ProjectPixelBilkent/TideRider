@@ -49,13 +49,9 @@ MonoBehaviour:
   prefabId: basic
   speed: 0
   generalSprites:
-  - {fileID: 21300000, guid: 078498bcb56485843947c9698fab42ff, type: 2}
-  - {fileID: 21300000, guid: 9088f8de48ca4c945994618f48e677bc, type: 2}
-  - {fileID: 21300000, guid: 72d81bb84c8a9d14190614b9b1bc0288, type: 2}
-  - {fileID: 21300000, guid: d9259457f52f7ca4c8f907eb5925c830, type: 2}
-  - {fileID: 21300000, guid: 17314f027807f834b9a4be480ab69aca, type: 2}
-  - {fileID: 21300000, guid: dfc8910b30c257643badf0d70e824f4b, type: 2}
-  - {fileID: 21300000, guid: dfc8910b30c257643badf0d70e824f4b, type: 2}
+  - {fileID: 174813410436587458, guid: b828d68e736882347a03e715bc5c7b19, type: 3}
+  - {fileID: 3883361573496168704, guid: b70c3a7766ea4254cbd3ecdb57e1d7c4, type: 3}
+  - {fileID: 8212808588713916105, guid: 42337855fa99b2343ba1ad7e6d6be945, type: 3}
   iceSprites:
   - {fileID: 2225503104332575589, guid: 1b6e44199a840f24e97508fe7b096123, type: 3}
   - {fileID: -6263091795111771235, guid: 72c8082181cc9d7478aa7dba167906b7, type: 3}
@@ -65,7 +61,9 @@ MonoBehaviour:
   - {fileID: 500925001247195793, guid: e355d5b90b071784eab52e2e3e530d0f, type: 3}
   - {fileID: -6894130147517579981, guid: 11a23e45385ca7d418504f942320981e, type: 3}
   mistySprites:
-  - {fileID: 0}
+  - {fileID: -5032863055491971588, guid: 7c57d1ca67ea32643b241a6e2ca66334, type: 3}
+  - {fileID: 1846751762539081027, guid: e83d731a3672d1b4686829e84017c9f5, type: 3}
+  - {fileID: 2914388067118327894, guid: 04e51abf562e6234bae87f0d59ff859c, type: 3}
   typeOfTerrain: 0
 --- !u!58 &6305738913952791274
 CircleCollider2D:

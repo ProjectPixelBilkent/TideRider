@@ -40,13 +40,20 @@ public class BulletSpawner : MonoBehaviour
         var monster = GameObject.FindGameObjectWithTag("LevelMonster").GetComponent<Collider2D>();
         for(int i=0; i< armory.Length ; i++)
         {
-            continue;
-            if (armory[i].weaponInfo == null)
+            var weaponStat = armory[i];
+            if (weaponStat.weaponInfo == null)
             {
                 continue;
             }
 
-            if(Time.time - lastFired[i] < armory[i].WeaponLevel.fireRate)
+            var weaponLevel = weaponStat.WeaponLevel;
+            if (weaponLevel == null)
+            {
+                Debug.LogWarning($"Skipping slot {i} on '{gameObject.name}': weapon '{weaponStat.weaponInfo.weaponName}' has no valid weapon level.");
+                continue;
+            }
+
+            if(Time.time - lastFired[i] < weaponLevel.fireRate)
             {
                 continue;
             }
@@ -54,22 +61,40 @@ public class BulletSpawner : MonoBehaviour
             lastFired[i] = Time.time;
 
             //Might be better to implement an object pool.
-            var currentBullet = Instantiate(armory[i].weaponInfo.projectilePrefab).GetComponent<Bullet>();
+            if (weaponStat.weaponInfo.projectilePrefab == null)
+            {
+                Debug.LogWarning($"Skipping slot {i} on '{gameObject.name}': weapon '{weaponStat.weaponInfo.weaponName}' has no projectile prefab.");
+                continue;
+            }
 
-            currentBullet.Weapon = armory[i].weaponInfo;
-            currentBullet.Level = armory[i].level;
-            currentBullet.WeaponLevel = armory[i].WeaponLevel;
+            var currentBullet = Instantiate(weaponStat.weaponInfo.projectilePrefab).GetComponent<Bullet>();
+            if (currentBullet == null)
+            {
+                Debug.LogWarning($"Skipping slot {i} on '{gameObject.name}': prefab '{weaponStat.weaponInfo.projectilePrefab.name}' has no Bullet component.");
+                continue;
+            }
+
+            currentBullet.Weapon = weaponStat.weaponInfo;
+            currentBullet.Level = weaponStat.level;
+            currentBullet.WeaponLevel = weaponLevel;
             currentBullet.PlayerBullet = CompareTag("Player");
+            currentBullet.OwnerTransform = transform;
 
             currentBullet.transform.position = Weapon.BulletOffsets[i] + transform.position;
             currentBullet.Activate(Weapon.BulletDirections[i], rb.linearVelocity);
 
+            if (weaponStat.weaponInfo.weaponName == "Boomerang" || weaponStat.weaponInfo.name == "Boomerang")
+            {
+                Debug.Log(
+                    $"Boomerang spawned by '{gameObject.name}' in slot {i} at {currentBullet.transform.position} from spawner position {transform.position}");
+            }
+
             Physics2D.IgnoreCollision(currentBullet.circleCollider, col, true);
             Physics2D.IgnoreCollision(currentBullet.circleCollider, monster, true);
 
-            if (armory[i].weaponInfo.spawningSound != null)
+            if (weaponStat.weaponInfo.spawningSound != null)
             {
-                AudioSource.PlayClipAtPoint(armory[i].weaponInfo.spawningSound, transform.position);
+                AudioSource.PlayClipAtPoint(weaponStat.weaponInfo.spawningSound, transform.position);
             }
         }
     }

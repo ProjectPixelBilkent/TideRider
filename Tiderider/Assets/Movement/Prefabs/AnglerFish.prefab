@@ -170,6 +170,7 @@ MonoBehaviour:
   currentHealth: 0
   healthSlider: {fileID: 0}
   speed: 0
+  prefabId: angler
   ship: {fileID: 0}
   renderer: {fileID: 0}
   disguisedSprite: {fileID: 0}

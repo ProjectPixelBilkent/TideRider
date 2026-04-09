@@ -18,6 +18,7 @@ public class ExternalEffect : MonoBehaviour
 
     [SerializeField] private Direction direction;
     [SerializeField] protected float speed;
+    [SerializeField] public string prefabId;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

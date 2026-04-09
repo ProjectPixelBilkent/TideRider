@@ -3,11 +3,13 @@ using UnityEngine.UI;
 
 public class HasHealth: MonoBehaviour   
 {
-    public int maxHealth;
-    public int currentHealth;
+    [SerializeField] protected int maxHealth = 100;
+    [SerializeField] protected int currentHealth;
     protected Collider2D coll2d;
     public Slider healthSlider;
-    
+    public int MaxHealth => maxHealth;
+    public int CurrentHealth => currentHealth;
+
 
 
     protected virtual void Start()
@@ -15,22 +17,12 @@ public class HasHealth: MonoBehaviour
         Restore();
        
     }
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        BulletProjectile mermi = collision.gameObject.GetComponent<BulletProjectile>();
-        if (mermi != null)
-        {
-            int cLevel = mermi.level;
-
-            int damage = mermi.cannon.weaponLevels[cLevel].damage;
-            ChangeHealth(damage);
-            Destroy(collision.gameObject);
-        }
-    }
     public void Update()
     {
-     //  healthSlider.value = currentHealth;
-        
+        if(healthSlider!=null)
+        {
+            healthSlider.value = currentHealth;
+        }
     }
     public void Restore()
     {
@@ -38,15 +30,37 @@ public class HasHealth: MonoBehaviour
         coll2d = GetComponent<Collider2D>();
     }
 
-    public int ChangeHealth(int amount)
+    public void SetMaxHealth(int value, bool restoreToFull = true)
     {
-        currentHealth = Mathf.Clamp(currentHealth - amount, 0, maxHealth);
-        if(currentHealth<=0)
+        maxHealth = Mathf.Max(1, value);
+        currentHealth = restoreToFull ? maxHealth : Mathf.Clamp(currentHealth, 0, maxHealth);
+    }
+
+    public int TakeDamage(int damage)
+    {
+        if (damage <= 0)
+        {
+            return currentHealth;
+        }
+
+        currentHealth = Mathf.Clamp(currentHealth - damage, 0, maxHealth);
+        if (currentHealth <= 0)
         {
             Die();
         }
+
         return currentHealth;
-        //Debug.Log("shot");
+    }
+
+    public int Heal(int amount)
+    {
+        if (amount <= 0)
+        {
+            return currentHealth;
+        }
+
+        currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+        return currentHealth;
     }
 
     public virtual void Die()

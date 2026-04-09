@@ -60,6 +60,9 @@ public class MiniShipBullet : Bullet
         timer = 1000;
     }
     
-    protected override void OnCollisionEnter2D(Collision2D collision) { }
+    protected override void OnCollisionEnter2D(Collision2D collision)
+    {
+        base.OnCollisionEnter2D(collision);
+    }
     
 }

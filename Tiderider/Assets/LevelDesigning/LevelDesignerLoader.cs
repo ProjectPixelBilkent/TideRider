@@ -55,9 +55,17 @@ public class LevelDesignerLoader : MonoBehaviour
     {
         float saveConstant = 1.8f;
 
+        string levelsPath = Path.Combine(Application.dataPath, "Levels");
+
+        // Ensure folder exists
+        if (!Directory.Exists(levelsPath))
+        {
+            Directory.CreateDirectory(levelsPath);
+        }
+
         string path = EditorUtility.OpenFilePanel(
             "Load Scene Objects JSON",
-            Application.persistentDataPath,
+            levelsPath,
             "json"
         );
 
@@ -85,9 +93,6 @@ public class LevelDesignerLoader : MonoBehaviour
 
         Dictionary<string, GameObject> prefabLookup = BuildPrefabLookup(prefabList);
 
-        GameObject root = new GameObject("LoadedLevel_" + Path.GetFileNameWithoutExtension(path));
-        Undo.RegisterCreatedObjectUndo(root, "Load Scene Objects");
-
         int loadedCount = 0;
         int skippedCount = 0;
 
@@ -114,9 +119,6 @@ public class LevelDesignerLoader : MonoBehaviour
                 skippedCount++;
                 continue;
             }
-
-            Undo.RegisterCreatedObjectUndo(instance, "Instantiate Loaded Object");
-            instance.transform.SetParent(root.transform);
 
             instance.transform.position = new Vector3(
                 data.posX / saveConstant,
@@ -146,7 +148,6 @@ public class LevelDesignerLoader : MonoBehaviour
         }
 
         Debug.Log($"Loaded {loadedCount} objects from: {path}. Skipped: {skippedCount}");
-        Selection.activeGameObject = root;
     }
 
     private static Dictionary<string, GameObject> BuildPrefabLookup(PrefabList prefabList)

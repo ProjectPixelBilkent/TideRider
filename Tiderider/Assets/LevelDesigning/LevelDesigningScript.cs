@@ -55,10 +55,17 @@ public class LevelDesignerScript : MonoBehaviour
     {
         float saveConstant = 1.8f;
 
-        string path = EditorUtility.SaveFilePanel(
-            "Save Scene Objects JSON",
-            Application.persistentDataPath,
-            "scene_objects",
+        string levelsPath = Path.Combine(Application.dataPath, "Levels");
+
+        // Ensure folder exists
+        if (!Directory.Exists(levelsPath))
+        {
+            Directory.CreateDirectory(levelsPath);
+        }
+
+        string path = EditorUtility.OpenFilePanel(
+            "Load Scene Objects JSON",
+            levelsPath,
             "json"
         );
 

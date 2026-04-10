@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using UnityEngine;
 
@@ -49,8 +48,7 @@ public class SceneObjectSpawner : MonoBehaviour
         public List<SavedObjectData> objects = new List<SavedObjectData>();
     }
 
-    [Header("JSON")]
-    [SerializeField] private string fileName = "scene_objects.json";
+    public static TextAsset sceneJsonFile;
 
     [Header("Spawn Control")]
     [SerializeField] private float yOffset = 0f;
@@ -69,8 +67,6 @@ public class SceneObjectSpawner : MonoBehaviour
 
     private Vector3 lastEnemySpawnOffset = Vector3.zero;
     private Vector3 postEnemyObstacleOffset = Vector3.zero;
-
-    private string FilePath => Path.Combine(Application.persistentDataPath, fileName);
 
     private void Awake()
     {
@@ -94,7 +90,6 @@ public class SceneObjectSpawner : MonoBehaviour
         while (nextSpawnIndex < objectsToSpawn.Count &&
                GetSpawnPosition(objectsToSpawn[nextSpawnIndex]).y <= currentY)
         {
-            print(nextSpawnIndex + ", " + GetSpawnPosition(objectsToSpawn[nextSpawnIndex]).y + ", " + postEnemyObstacleOffset);
             SavedObjectData data = objectsToSpawn[nextSpawnIndex];
             SpawnObject(data);
             nextSpawnIndex++;
@@ -140,13 +135,13 @@ public class SceneObjectSpawner : MonoBehaviour
 
     private void LoadSceneData()
     {
-        if (!File.Exists(FilePath))
+        if (sceneJsonFile == null)
         {
-            Debug.LogError($"Scene JSON not found at: {FilePath}");
+            Debug.LogError("Scene JSON file is not assigned in the Inspector.");
             return;
         }
 
-        string json = File.ReadAllText(FilePath);
+        string json = sceneJsonFile.text;
         SavedSceneData sceneData = JsonUtility.FromJson<SavedSceneData>(json);
 
         if (sceneData == null || sceneData.objects == null)
@@ -161,7 +156,7 @@ public class SceneObjectSpawner : MonoBehaviour
 
         nextSpawnIndex = 0;
 
-        Debug.Log($"Loaded {objectsToSpawn.Count} objects from: {FilePath}");
+        Debug.Log($"Loaded {objectsToSpawn.Count} objects from assigned TextAsset: {sceneJsonFile.name}");
     }
 
     private Vector3 GetSpawnPosition(SavedObjectData data)

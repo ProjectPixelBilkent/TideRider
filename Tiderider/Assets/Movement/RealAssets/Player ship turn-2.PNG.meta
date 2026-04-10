@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Player ship turn-2_0: 3178686683879416593
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

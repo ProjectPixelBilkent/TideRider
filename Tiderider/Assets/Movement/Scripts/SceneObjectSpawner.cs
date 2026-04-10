@@ -8,7 +8,8 @@ public class SceneObjectSpawner : MonoBehaviour
     {
         Obstacle,
         ExternalEffect,
-        Enemy
+        Enemy,
+        EndingObject
     }
 
     public enum TerrainType
@@ -49,6 +50,7 @@ public class SceneObjectSpawner : MonoBehaviour
     }
 
     public static TextAsset sceneJsonFile;
+    [SerializeField] private TextAsset jsonForTesting;
 
     [Header("Spawn Control")]
     [SerializeField] private float yOffset = 0f;
@@ -65,7 +67,7 @@ public class SceneObjectSpawner : MonoBehaviour
     private Enemy activeEnemy;
     public bool isPausedForEnemy = false;
 
-    private Vector3 lastEnemySpawnOffset = Vector3.zero;
+    private Vector3 lastEnemyOriginalSpawnOffset = Vector3.zero;
     private Vector3 postEnemyObstacleOffset = Vector3.zero;
 
     private void Awake()
@@ -135,13 +137,13 @@ public class SceneObjectSpawner : MonoBehaviour
 
     private void LoadSceneData()
     {
-        if (sceneJsonFile == null)
+        if (sceneJsonFile == null && jsonForTesting == null)
         {
             Debug.LogError("Scene JSON file is not assigned in the Inspector.");
             return;
         }
 
-        string json = sceneJsonFile.text;
+        string json = sceneJsonFile==null ? jsonForTesting.text: sceneJsonFile.text;
         SavedSceneData sceneData = JsonUtility.FromJson<SavedSceneData>(json);
 
         if (sceneData == null || sceneData.objects == null)
@@ -156,7 +158,7 @@ public class SceneObjectSpawner : MonoBehaviour
 
         nextSpawnIndex = 0;
 
-        Debug.Log($"Loaded {objectsToSpawn.Count} objects from assigned TextAsset: {sceneJsonFile.name}");
+        Debug.Log($"Loaded {objectsToSpawn.Count} objects from assigned TextAsset: {(sceneJsonFile == null ? jsonForTesting: sceneJsonFile).name}");
     }
 
     private Vector3 GetSpawnPosition(SavedObjectData data)
@@ -167,7 +169,7 @@ public class SceneObjectSpawner : MonoBehaviour
             data.posZ
         );
 
-        basePosition += postEnemyObstacleOffset - lastEnemySpawnOffset;
+        basePosition += postEnemyObstacleOffset - lastEnemyOriginalSpawnOffset;
 
         return basePosition;
     }
@@ -215,7 +217,7 @@ public class SceneObjectSpawner : MonoBehaviour
                 activeEnemy = enemy;
                 isPausedForEnemy = true;
                 enemy.OnEnemyDied += HandleEnemyDied;
-                lastEnemySpawnOffset = new Vector3(data.posX, data.posY + yOffset, data.posZ);
+                lastEnemyOriginalSpawnOffset = new Vector3(data.posX, data.posY + yOffset, data.posZ);
             }
         }
     }

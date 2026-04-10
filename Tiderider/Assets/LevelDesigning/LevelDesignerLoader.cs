@@ -10,7 +10,8 @@ public class LevelDesignerLoader : MonoBehaviour
     {
         Obstacle,
         ExternalEffect,
-        Enemy
+        Enemy,
+        EndingObject
     }
 
     public enum TerrainType
@@ -53,7 +54,7 @@ public class LevelDesignerLoader : MonoBehaviour
     [MenuItem("Tools/Load Scene Objects From JSON")]
     public static void LoadSceneObjects()
     {
-        float saveConstant = 1.8f;
+        float saveConstant = LevelDesignerScript.saveConstant;
 
         string levelsPath = Path.Combine(Application.dataPath, "Levels");
 
@@ -202,6 +203,7 @@ public class LevelDesignerLoader : MonoBehaviour
 
             case SpawnObjectType.Enemy:
             case SpawnObjectType.ExternalEffect:
+            case SpawnObjectType.EndingObject:
             default:
                 break;
         }

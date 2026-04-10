@@ -10,7 +10,8 @@ public class LevelDesignerScript : MonoBehaviour
     {
         Obstacle,
         ExternalEffect,
-        Enemy
+        Enemy,
+        EndingObject
     }
 
     public enum TerrainType
@@ -49,11 +50,12 @@ public class LevelDesignerScript : MonoBehaviour
     {
         public List<SavedObjectData> objects = new List<SavedObjectData>();
     }
+    public static float saveConstant = 1.8f;
+
 
     [MenuItem("Tools/Save Scene Objects To JSON")]
     public static void SaveSceneObjects()
     {
-        float saveConstant = 1.8f;
 
         string levelsPath = Path.Combine(Application.dataPath, "Levels");
 
@@ -63,10 +65,11 @@ public class LevelDesignerScript : MonoBehaviour
             Directory.CreateDirectory(levelsPath);
         }
 
-        string path = EditorUtility.OpenFilePanel(
-            "Load Scene Objects JSON",
-            levelsPath,
-            "json"
+        string path = EditorUtility.SaveFilePanel(
+            "Save Scene Objects JSON", 
+            levelsPath,                
+            "SceneObjects",            
+            "json"                     
         );
 
         if (string.IsNullOrEmpty(path))
@@ -80,6 +83,7 @@ public class LevelDesignerScript : MonoBehaviour
         Obstacle[] obstacles = Object.FindObjectsByType<Obstacle>(FindObjectsSortMode.None);
         Enemy[] enemies = Object.FindObjectsByType<Enemy>(FindObjectsSortMode.None);
         ExternalEffect[] effects = Object.FindObjectsByType<ExternalEffect>(FindObjectsSortMode.None);
+        EndingObject[] endings = Object.FindObjectsByType<EndingObject>(FindObjectsSortMode.None);
 
         sortedObjects.AddRange(
             obstacles.Select(o =>
@@ -142,6 +146,31 @@ public class LevelDesignerScript : MonoBehaviour
                 prefabId = e.prefabId,
                 name = e.gameObject.name,
                 objectType = SpawnObjectType.ExternalEffect,
+
+                spriteNo = -1,
+                typeOfTerrain = TerrainType.General,
+
+                posX = e.transform.position.x * saveConstant,
+                posY = e.transform.position.y * saveConstant,
+                posZ = e.transform.position.z * saveConstant,
+
+                rotX = e.transform.rotation.x,
+                rotY = e.transform.rotation.y,
+                rotZ = e.transform.rotation.z,
+                rotW = e.transform.rotation.w,
+
+                scaleX = e.transform.localScale.x * saveConstant,
+                scaleY = e.transform.localScale.y * saveConstant,
+                scaleZ = e.transform.localScale.z * saveConstant
+            })
+        );
+
+        sortedObjects.AddRange(
+            endings.Select(e => new SavedObjectData
+            {
+                prefabId = e.prefabId,
+                name = e.gameObject.name,
+                objectType = SpawnObjectType.EndingObject,
 
                 spriteNo = -1,
                 typeOfTerrain = TerrainType.General,

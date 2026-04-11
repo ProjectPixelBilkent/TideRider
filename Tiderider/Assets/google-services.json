@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "871900798271",
+    "project_id": "tiderider-b0d71",
+    "storage_bucket": "tiderider-b0d71.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:871900798271:android:01bcb220fb98c00837478a",
+        "android_client_info": {
+          "package_name": "com.ProjectBilkent.Tiderider"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "871900798271-f5dk8svt96h4kg3p11mb4pfum0ssa4uq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ProjectBilkent.Tiderider",
+            "certificate_hash": "adf748642552f905d72972e56eacfc72c77bd582"
+          }
+        },
+        {
+          "client_id": "871900798271-26hgbkodr57aen0cp0sbh16caidm17ai.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAr72IipOKenovXrVBmX2qSNKG6XIFRg90"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "871900798271-26hgbkodr57aen0cp0sbh16caidm17ai.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

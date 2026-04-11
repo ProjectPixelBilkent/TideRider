@@ -1621,7 +1621,7 @@ MonoBehaviour:
   moveSpeed: 5
   shipTag: Player
   monster: {fileID: 1264881555}
-  monsterYOffset: 2
+  monsterYOffset: -0.76
 --- !u!4 &740800159
 Transform:
   m_ObjectHideFlags: 0
@@ -7094,6 +7094,8 @@ GameObject:
   - component: {fileID: 1264881559}
   - component: {fileID: 1264881558}
   - component: {fileID: 1264881560}
+  - component: {fileID: 1264881561}
+  - component: {fileID: 1264881562}
   m_Layer: 0
   m_Name: Monster
   m_TagString: LevelMonster
@@ -7165,7 +7167,7 @@ Transform:
   m_GameObject: {fileID: 1264881555}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.15, y: -7.97, z: -10}
+  m_LocalPosition: {x: 0.07, y: -9.75, z: -10}
   m_LocalScale: {x: 0.44999874, y: 0.44999874, z: 0.44999874}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -7217,6 +7219,45 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 19.76, y: 17.597301}
   m_EdgeRadius: 0
+--- !u!50 &1264881561
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1264881555}
+  m_BodyType: 2
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 0
+--- !u!114 &1264881562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1264881555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93c4922890ce87f439eb6c6a6dc6e1b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1300685034
 GameObject:
   m_ObjectHideFlags: 0
@@ -7400,6 +7441,8 @@ MonoBehaviour:
   - {fileID: 3873590547140903753, guid: d66afd3047dcd7d459dd9122ca86d72d, type: 3}
   - {fileID: 7808888523705297427, guid: edecbd3347264cb489a2e088fd4f3eb0, type: 3}
   - {fileID: 1014947555034517380, guid: 98ecedc4c3002624f9d0d1d635178777, type: 3}
+  - {fileID: 1913479563316951313, guid: 7a082bed7b6b24c47af22bd152c66f4e, type: 3}
+  - {fileID: 8492155602311516759, guid: 3d9bfaec147d3604fb65bb53493e1510, type: 3}
   isPausedForEnemy: 0
 --- !u!4 &1302116610
 Transform:
@@ -13505,7 +13548,6 @@ GameObject:
   - component: {fileID: 2062790733}
   - component: {fileID: 2062790734}
   - component: {fileID: 2062790735}
-  - component: {fileID: 2062790736}
   m_Layer: 3
   m_Name: PlayerShip
   m_TagString: Player
@@ -13708,24 +13750,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
-  currentHealth: 0
-  healthSlider: {fileID: 0}
-  playerMovement: {fileID: 0}
---- !u!114 &2062790736
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2062790726}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78d7f0a1f97a8d7459687305c0e4e140, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 100
   currentHealth: 100
   healthSlider: {fileID: 1528757455}
+  playerMovement: {fileID: 2062790734}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

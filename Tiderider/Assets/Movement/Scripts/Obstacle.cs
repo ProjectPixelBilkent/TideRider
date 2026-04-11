@@ -20,6 +20,7 @@ public class Obstacle : MonoBehaviour
     public string prefabId;
 
     [SerializeField] private float speed = 3f;
+    [SerializeField] protected int damageAmount = 10;
 
     [Header("Sprites By Terrain")]
     [SerializeField] private Sprite[] generalSprites;
@@ -145,6 +146,21 @@ public class Obstacle : MonoBehaviour
             return TerrainType.General;
 
         return TerrainType.General;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Player player = collision.gameObject.GetComponent<Player>();
+        if (player != null)
+        {
+            OnHitByPlayer(player);
+        }
+    }
+
+    protected virtual void OnHitByPlayer(Player player)
+    {
+        player.TakeDamage(damageAmount);
+        Destroy(gameObject);
     }
 
     void OnBecameInvisible()

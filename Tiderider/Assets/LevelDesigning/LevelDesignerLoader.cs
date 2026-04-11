@@ -11,7 +11,8 @@ public class LevelDesignerLoader : MonoBehaviour
         Obstacle,
         ExternalEffect,
         Enemy,
-        EndingObject
+        EndingObject,
+        Coin
     }
 
     public enum TerrainType
@@ -189,6 +190,10 @@ public class LevelDesignerLoader : MonoBehaviour
         ExternalEffect effect = prefab.GetComponent<ExternalEffect>();
         if (effect != null)
             return effect.prefabId;
+
+        Coin coin = prefab.GetComponent<Coin>();
+        if (coin != null)
+            return coin.prefabId;
 
         return null;
     }

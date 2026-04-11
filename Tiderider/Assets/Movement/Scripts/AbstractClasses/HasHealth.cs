@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class HasHealth: MonoBehaviour   
 {
@@ -9,6 +10,8 @@ public class HasHealth: MonoBehaviour
     public Slider healthSlider;
     public int MaxHealth => maxHealth;
     public int CurrentHealth => currentHealth;
+
+    public event Action HealthChanged;
 
 
 
@@ -44,6 +47,7 @@ public class HasHealth: MonoBehaviour
         }
 
         currentHealth = Mathf.Clamp(currentHealth - damage, 0, maxHealth);
+        HealthChanged?.Invoke();
         if (currentHealth <= 0)
         {
             Die();
@@ -60,6 +64,7 @@ public class HasHealth: MonoBehaviour
         }
 
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+        HealthChanged?.Invoke();
         return currentHealth;
     }
 

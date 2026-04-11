@@ -9,7 +9,8 @@ public class SceneObjectSpawner : MonoBehaviour
         Obstacle,
         ExternalEffect,
         Enemy,
-        EndingObject
+        EndingObject,
+        Coin
     }
 
     public enum TerrainType
@@ -131,6 +132,13 @@ public class SceneObjectSpawner : MonoBehaviour
             {
                 if (!prefabMap.ContainsKey(effect.prefabId))
                     prefabMap.Add(effect.prefabId, entry);
+            }
+
+            Coin coin = entry.GetComponent<Coin>();
+            if (coin != null && !string.IsNullOrEmpty(coin.prefabId))
+            {
+                if (!prefabMap.ContainsKey(coin.prefabId))
+                    prefabMap.Add(coin.prefabId, entry);
             }
         }
     }

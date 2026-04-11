@@ -20,5 +20,11 @@ public class BigObstacle : Obstacle
         base.Start(); // Ensure Obstacle's Start() runs
         //transform.localScale = bigSize;
     }
+
+    protected override void OnHitByPlayer(Player player)
+    {
+        player.TakeDamage(damageAmount);
+        // Big obstacles stay — do not destroy
+    }
 }
 

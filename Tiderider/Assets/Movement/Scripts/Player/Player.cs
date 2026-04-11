@@ -4,15 +4,16 @@ public class Player : HasHealth
 {
     [SerializeField] private PlayerMovement playerMovement;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
+    public override void Die()
     {
-        
+        if (currentHealth > 0) return;
+
+        if (playerMovement != null)
+            playerMovement.enabled = false;
+
+        MenuManager menuManager = FindFirstObjectByType<MenuManager>();
+        if (menuManager != null)
+            menuManager.ShowGameOverMenu();
     }
 }

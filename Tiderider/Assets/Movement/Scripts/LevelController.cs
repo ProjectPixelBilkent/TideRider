@@ -19,7 +19,7 @@ public class LevelController : MonoBehaviour
     [SerializeField] private string shipTag = "Player";
     [Header("Monster")]
     [SerializeField] private GameObject monster; // Assign in Inspector
-    [SerializeField] private float monsterYOffset = 0f; // Optional offset
+    [SerializeField] private float monsterYOffset = -0.76f; // Optional offset
 
     private EdgeCollider2D edgeCollider;
 

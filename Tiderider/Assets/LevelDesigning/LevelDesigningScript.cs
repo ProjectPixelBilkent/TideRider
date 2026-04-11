@@ -11,7 +11,8 @@ public class LevelDesignerScript : MonoBehaviour
         Obstacle,
         ExternalEffect,
         Enemy,
-        EndingObject
+        EndingObject,
+        Coin
     }
 
     public enum TerrainType
@@ -84,6 +85,7 @@ public class LevelDesignerScript : MonoBehaviour
         Enemy[] enemies = Object.FindObjectsByType<Enemy>(FindObjectsSortMode.None);
         ExternalEffect[] effects = Object.FindObjectsByType<ExternalEffect>(FindObjectsSortMode.None);
         EndingObject[] endings = Object.FindObjectsByType<EndingObject>(FindObjectsSortMode.None);
+        Coin[] coins = Object.FindObjectsByType<Coin>(FindObjectsSortMode.None);
 
         sortedObjects.AddRange(
             obstacles.Select(o =>
@@ -187,6 +189,31 @@ public class LevelDesignerScript : MonoBehaviour
                 scaleX = e.transform.localScale.x * saveConstant,
                 scaleY = e.transform.localScale.y * saveConstant,
                 scaleZ = e.transform.localScale.z * saveConstant
+            })
+        );
+
+        sortedObjects.AddRange(
+            coins.Select(c => new SavedObjectData
+            {
+                prefabId = c.prefabId,
+                name = c.gameObject.name,
+                objectType = SpawnObjectType.Coin,
+
+                spriteNo = -1,
+                typeOfTerrain = TerrainType.General,
+
+                posX = c.transform.position.x * saveConstant,
+                posY = c.transform.position.y * saveConstant,
+                posZ = c.transform.position.z * saveConstant,
+
+                rotX = c.transform.rotation.x,
+                rotY = c.transform.rotation.y,
+                rotZ = c.transform.rotation.z,
+                rotW = c.transform.rotation.w,
+
+                scaleX = c.transform.localScale.x * saveConstant,
+                scaleY = c.transform.localScale.y * saveConstant,
+                scaleZ = c.transform.localScale.z * saveConstant
             })
         );
 

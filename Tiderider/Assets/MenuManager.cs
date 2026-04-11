@@ -16,6 +16,7 @@ public class MenuManager : MonoBehaviour
     private Button restartButtonGameOverMenu;
     private Button resumeButtonPauseMenu;
     private Button pauseButton;
+    private Button mainMenuButtonGameOverMenu;
 
     private bool isPaused = false;
 
@@ -28,6 +29,7 @@ public class MenuManager : MonoBehaviour
         restartButtonGameOverMenu = transform.Find("SafeArea/GameOverMenu/RestartButton")?.GetComponent<Button>();
         resumeButtonPauseMenu = transform.Find("SafeArea/PauseMenu/ResumeButton")?.GetComponent<Button>();
         pauseButton = transform.Find("SafeArea/PauseButton")?.GetComponent<Button>();
+        mainMenuButtonGameOverMenu = transform.Find("SafeArea/GameOverMenu/MainMenuButton")?.GetComponent<Button>();
     }
 
     void Start()
@@ -38,6 +40,9 @@ public class MenuManager : MonoBehaviour
 
         if (restartButtonGameOverMenu != null)
             restartButtonGameOverMenu.onClick.AddListener(RestartScene);
+
+        if (mainMenuButtonGameOverMenu != null)
+            mainMenuButtonGameOverMenu.onClick.AddListener(GoToMainMenu);
 
         if (resumeButtonPauseMenu != null)
             resumeButtonPauseMenu.onClick.AddListener(Resume);
@@ -90,10 +95,21 @@ public class MenuManager : MonoBehaviour
 
     public void ShowGameOverMenu()
     {
+        // Hide pause menu (and its Continue button) when showing the death screen
+        if (pauseMenuUI != null)
+            pauseMenuUI.SetActive(false);
+
         if (gameOverMenuUI != null)
             gameOverMenuUI.SetActive(true);
 
+        isPaused = false;
         Time.timeScale = 0f;
+    }
+
+    public void GoToMainMenu()
+    {
+        Time.timeScale = 1f;
+        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }
 
     public void RestartScene()

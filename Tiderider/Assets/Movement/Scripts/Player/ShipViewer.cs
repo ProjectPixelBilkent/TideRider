@@ -20,8 +20,16 @@ public class ShipViewer : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        if (player != null)
+            player.HealthChanged += OnHealthChanged;
 
         UpdateView();
+    }
+
+    private void OnDestroy()
+    {
+        if (player != null)
+            player.HealthChanged -= OnHealthChanged;
     }
 
     /// <summary>

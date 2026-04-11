@@ -14,6 +14,7 @@ public class GameData
 {
     public int coinAmount;
     public Weapon[] playerArmory = new Weapon[6];
+    public int highestUnlockedLevelIndex = 0;
 }
 
 /// <summary>

@@ -34,6 +34,23 @@ public static class DataManager
     }
 
     /// <summary>
+    /// Updates the highest level unlocked only if the player completes their current furthest level.
+    /// </summary>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public static void CompleteLevel(int completedLevelIndex)
+    {
+        GameData gameData = LoadGameData();
+
+        if (completedLevelIndex == gameData.highestUnlockedLevelIndex)
+        {
+            gameData.highestUnlockedLevelIndex++;
+            SaveGameData(gameData);
+        }
+    }
+
+    /// <summary>
     /// Saves the selected weapon in player armory in game data.
     /// </summary>
     /// <remarks>
@@ -134,6 +151,15 @@ public static class DataManager
     /// Maintained by: Işık Dönger
     /// </remarks>
     public static int GetCoinAmount() => LoadGameData().coinAmount;
+
+    /// <summary>
+    /// Loads the current highest unlocked level index from the local backup.
+    /// </summary>
+    /// <returns>Highest Unlocked Level Index.</returns>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public static int GetHighestUnlockedIndex() => LoadGameData().highestUnlockedLevelIndex;
 
     /// <summary>
     /// Loads the player armory from the local backup.

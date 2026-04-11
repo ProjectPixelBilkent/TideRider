@@ -1597,6 +1597,7 @@ GameObject:
   - component: {fileID: 740800159}
   - component: {fileID: 740800158}
   - component: {fileID: 740800160}
+  - component: {fileID: 740800161}
   m_Layer: 0
   m_Name: LevelManager
   m_TagString: Untagged
@@ -1680,6 +1681,18 @@ EdgeCollider2D:
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
   m_UseAdjacentEndPoint: 0
+--- !u!114 &740800161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 740800157}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09cafc40c41720a4f98e60d8fc8b1435, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &810615114
 GameObject:
   m_ObjectHideFlags: 0

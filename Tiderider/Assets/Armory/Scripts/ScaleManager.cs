@@ -35,7 +35,7 @@ public class ScaleManager : MonoBehaviour
     [Header("Shop References")]
     [SerializeField] private RectTransform shopCanvas;
 
-    private void Start()
+    private void Awake()
     {
         Width = Camera.pixelWidth;
         Height = Camera.pixelHeight;

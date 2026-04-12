@@ -2,54 +2,51 @@ using GooglePlayGames;
 using GooglePlayGames.BasicApi;
 using Firebase.Auth;
 using UnityEngine;
+using System.Threading.Tasks;
 
-public class PlayServicesManager : MonoBehaviour
+public static class PlayServicesManager
 {
-    void Start()
+    public static async Task Init()
     {
-        // 1. Activate the platform. 
-        // Configuration is now pulled from the 'Android Setup' XML you pasted in the Editor.
         PlayGamesPlatform.Activate();
-
-        // 2. Trigger Login
-        SignIn();
-    }
-
-    public void SignIn()
-    {
-        PlayGamesPlatform.Instance.Authenticate(status =>
+        var dependencyStatus = await Firebase.FirebaseApp.CheckAndFixDependenciesAsync();
+        if (dependencyStatus == Firebase.DependencyStatus.Available)
         {
-            if (status == SignInStatus.Success)
-            {
-                Debug.Log("[GPGS] Login Successful!");
-
-                // 3. This is the new way to get the code for Firebase
-                PlayGamesPlatform.Instance.RequestServerSideAccess(true, code =>
-                {
-                    Debug.Log($"[GPGS] Received Auth Code: {code}");
-                    LinkWithFirebase(code);
-                });
-            }
-            else
-            {
-                Debug.LogError($"[GPGS] Login Failed. Status: {status}");
-            }
-        });
+            var auth = FirebaseAuth.DefaultInstance;
+        }
+        else
+        {
+            Debug.LogError($"Firebase Error: {dependencyStatus}");
+        }
     }
 
-    private void LinkWithFirebase(string authCode)
+    public static void SignIn()
     {
-        // This part remains the same
+        if (!PlayGamesPlatform.Instance.IsAuthenticated())
+        {
+            PlayGamesPlatform.Instance.Authenticate(status =>
+            {
+                Debug.Log($"Play Games Auth Status: {status}");
+                if (status == SignInStatus.Success)
+                {
+                    PlayGamesPlatform.Instance.RequestServerSideAccess(true, code => LinkWithFirebase(code));
+                }
+            });
+        }
+    }
+
+    private static void LinkWithFirebase(string authCode)
+    {
         Credential credential = PlayGamesAuthProvider.GetCredential(authCode);
         FirebaseAuth.DefaultInstance.SignInAndRetrieveDataWithCredentialAsync(credential).ContinueWith(task =>
         {
             if (task.IsCompleted && !task.IsFaulted)
             {
-                Debug.Log("[Firebase] Successfully Handshaked with Google Play Services!");
+                Debug.Log("Firebase Link Success");
             }
             else
             {
-                Debug.LogError("[Firebase] Handshake Failed. Verify your Web Client ID in the Unity GPGS Setup window.");
+                Debug.LogError($"Firebase Link Failed: {task.Exception}");
             }
         });
     }

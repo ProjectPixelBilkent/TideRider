@@ -19,8 +19,7 @@ public class ArmoryManager : MonoBehaviour
     private Weapon selectedWeapon = null; // To keep track of the currently selected weapon
     [SerializeField] private Weapon[] weaponList = new Weapon[6];
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
         PlayerPrefs.DeleteKey("PlayerArmory");
         if (!PlayerPrefs.HasKey("PlayerArmory"))
@@ -30,11 +29,11 @@ public class ArmoryManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // Keep this instance across scenes
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
-            Destroy(gameObject); // Ensure only one instance exists
+            Destroy(gameObject);
         }
     }
 

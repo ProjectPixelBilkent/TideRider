@@ -4,6 +4,7 @@ using System;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Text;
+using System.IO;
 
 /// <summary>
 /// Static class for managing local backups.
@@ -26,12 +27,14 @@ public static class LocalBackupManager
     /// </remarks>
     public static void SaveGameData(GameData data)
     {
-        string backupPath = System.IO.Path.Combine(Application.persistentDataPath, BackupDirectory);
-        if (!System.IO.Directory.Exists(backupPath))
+        string backupPath = Path.Combine(Application.persistentDataPath, BackupDirectory);
+
+        if (!Directory.Exists(backupPath))
         {
-            System.IO.Directory.CreateDirectory(backupPath);
+            Directory.CreateDirectory(backupPath);
         }
-        string filePath = System.IO.Path.Combine(backupPath, GameDataFile);
+
+        string filePath = Path.Combine(backupPath, GameDataFile);
 
         byte[] encryptionKey = GenerateEncryptionKey();
         if (encryptionKey == null || encryptionKey.Length != 32)
@@ -53,12 +56,12 @@ public static class LocalBackupManager
     /// </remarks>
     public static void SaveWeaponData(WeaponData data)
     {
-        string backupPath = System.IO.Path.Combine(Application.persistentDataPath, BackupDirectory);
-        if (!System.IO.Directory.Exists(backupPath))
+        string backupPath = Path.Combine(Application.persistentDataPath, BackupDirectory);
+        if (!Directory.Exists(backupPath))
         {
-            System.IO.Directory.CreateDirectory(backupPath);
+            Directory.CreateDirectory(backupPath);
         }
-        string filePath = System.IO.Path.Combine(backupPath, WeaponDataFile);
+        string filePath = Path.Combine(backupPath, WeaponDataFile);
 
         byte[] encryptionKey = GenerateEncryptionKey();
         if (encryptionKey == null || encryptionKey.Length != 32)
@@ -82,12 +85,16 @@ public static class LocalBackupManager
     /// </remarks>
     public static GameData LoadGameData()
     {
-        string backupPath = System.IO.Path.Combine(Application.persistentDataPath, BackupDirectory);
-        if (!System.IO.Directory.Exists(backupPath))
+        string backupPath = Path.Combine(Application.persistentDataPath, BackupDirectory);
+
+        if (!Directory.Exists(backupPath))
         {
-            System.IO.Directory.CreateDirectory(backupPath);
+            Directory.CreateDirectory(backupPath);
         }
-        string filePath = System.IO.Path.Combine(backupPath, GameDataFile);
+
+        string filePath = Path.Combine(backupPath, GameDataFile);
+
+        if (!File.Exists(filePath)) return new GameData();
 
         byte[] encryptionKey = GenerateEncryptionKey();
         if (encryptionKey == null || encryptionKey.Length != 32)
@@ -115,12 +122,16 @@ public static class LocalBackupManager
     /// </remarks>
     public static WeaponData LoadWeaponData()
     {
-        string backupPath = System.IO.Path.Combine(Application.persistentDataPath, BackupDirectory);
-        if (!System.IO.Directory.Exists(backupPath))
+        string backupPath = Path.Combine(Application.persistentDataPath, BackupDirectory);
+
+        if (Directory.Exists(backupPath))
         {
-            System.IO.Directory.CreateDirectory(backupPath);
+            Directory.CreateDirectory(backupPath);
         }
-        string filePath = System.IO.Path.Combine(backupPath, WeaponDataFile);
+
+        string filePath = Path.Combine(backupPath, WeaponDataFile);
+
+        if (!File.Exists(filePath)) return new WeaponData();
 
         byte[] encryptionKey = GenerateEncryptionKey();
         if (encryptionKey == null || encryptionKey.Length != 32)

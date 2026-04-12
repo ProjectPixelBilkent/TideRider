@@ -89,6 +89,7 @@ public class SceneObjectSpawner : MonoBehaviour
 
     private EndingObject[] endingObjects;
     [DoNotSerialize] public bool isInEndingSequence;
+    private bool dialogueStarted;
 
     private void Awake()
     {
@@ -111,13 +112,19 @@ public class SceneObjectSpawner : MonoBehaviour
     }
 
     public bool dialogueDone = false;
+    //public static string dialogueId = "scene_0"; did this for testing purposes 
     public static string dialogueId;
+    private DialogueManager dialogueManager;
 
     private void Update()
     {
-        if(!dialogueDone)
+        if (!dialogueDone)
         {
-            //dialogueDone = true;
+            if (!dialogueStarted)
+            {
+                TryStartDialogue();
+            }
+
             return;
         }
 
@@ -166,6 +173,50 @@ public class SceneObjectSpawner : MonoBehaviour
             if (isPausedForEnemy)
                 break;
         }
+    }
+
+    private void TryStartDialogue()
+    {
+        if (string.IsNullOrWhiteSpace(dialogueId))
+        {
+            dialogueDone = true;
+            return;
+        }
+
+        if (dialogueManager == null)
+        {
+            dialogueManager = FindObjectOfType<DialogueManager>();
+        }
+
+        if (dialogueManager == null)
+        {
+            return;
+        }
+
+        dialogueManager.ConversationFinished -= HandleDialogueFinished;
+        dialogueManager.ConversationFinished += HandleDialogueFinished;
+        dialogueStarted = true;
+        dialogueManager.PlayConversation(dialogueId);
+
+        if (!dialogueManager.IsConversationPlaying)
+        {
+            HandleDialogueFinished();
+        }
+    }
+
+    private void HandleDialogueFinished()
+    {
+        if (!dialogueStarted)
+        {
+            return;
+        }
+
+        if (dialogueManager != null)
+        {
+            dialogueManager.ConversationFinished -= HandleDialogueFinished;
+        }
+
+        dialogueDone = true;
     }
 
     private void BuildPrefabMap()

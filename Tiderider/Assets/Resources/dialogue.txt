@@ -57,12 +57,7 @@
           "emotion": "happy",
           "enterSide": 1
         },
-        {
-          "text": "maybe a short cutscene without dialogues where Aldric gets up or walks somewhere to get us to the portal scene",
-          "characterId": "narration",
-          "emotion": "default",
-          "enterSide": 2
-        },
+       
         {
           "text": "when portal appears",
           "characterId": "narration",

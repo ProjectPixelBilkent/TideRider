@@ -9,31 +9,27 @@ public class EndingObject : MonoBehaviour
 
     public static event Action OnLevelCompleted;
 
-    private SpriteRenderer spriteRenderer;
+    public SpriteRenderer SpriteRenderer { get; private set; }
 
     private void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        SpriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player") && !fake)
+        if(fake || !collision.CompareTag("Player"))
         {
-            OnLevelCompleted?.Invoke();
+            return;
         }
-    }
 
-    public void Pulse(float time)
-    {
-        if (fake)
+        BulletSpawner bulletSpawner = collision.GetComponent<BulletSpawner>();
+        if(bulletSpawner==null || bulletSpawner.objectSpawner.isInEndingSequence)
         {
-            Color current = spriteRenderer.color;
-            spriteRenderer.DOColor(new Color(0, 0, 0), time / 2).onComplete += () =>
-            {
-                spriteRenderer.DOColor(current, time / 2);
-            };
+            return;
         }
+
+        OnLevelCompleted?.Invoke();
     }
 
     private void FixedUpdate()

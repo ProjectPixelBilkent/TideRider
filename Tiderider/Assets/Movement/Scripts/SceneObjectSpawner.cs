@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
@@ -239,28 +240,164 @@ public class SceneObjectSpawner : MonoBehaviour
                 lastEnemyOriginalSpawnOffset = new Vector3(data.posX, data.posY + yOffset, data.posZ);
             }
         }
-        else if(data.objectType == SpawnObjectType.EndingObject)
+        else if (data.objectType == SpawnObjectType.EndingObject)
         {
             EndingObject ending = obj.GetComponent<EndingObject>();
-            if(ending != null && ending.fake)
+            if (ending != null && ending.fake)
             {
                 isInEndingSequence = true;
                 endingObjects = new EndingObject[3];
-                for(int i=0;i<endingObjects.Length; i++)
+
+                for (int i = 0; i < endingObjects.Length; i++)
                 {
                     endingObjects[i] = Instantiate(ending);
                     endingObjects[i].transform.SetParent(Camera.main.transform, false);
                     endingObjects[i].fake = true;
                 }
 
-                endingObjects[Random.Range(0,endingObjects.Length)].fake = false;
+                int trueEnding = Random.Range(0, endingObjects.Length);
+                endingObjects[trueEnding].fake = false;
 
-                for(int i=0;i<endingObjects.Length;i++)
+                Destroy(obj);
+
+                // Use localPosition because these are children of Camera.main.transform
+                endingObjects[0].transform.localPosition = new Vector3(0f, 8f, 2f);
+                endingObjects[1].transform.localPosition = new Vector3(-2.75f, 4f, 2f);
+                endingObjects[2].transform.localPosition = new Vector3(2.75f, 4f, 2f);
+
+                var mySequence = DOTween.Sequence();
+                float pulseTime = 1.5f;
+
+                mySequence.Append(DOVirtual.DelayedCall(pulseTime / 3f, () => { }));
+                mySequence.Append(DOVirtual.DelayedCall(0.1f, () => { }));
+
+                for (int i = 0; i < 3; i++)
                 {
-                    endingObjects[i].Pulse(1.5f);
+                    if (i == trueEnding)
+                    {
+                        continue;
+                    }
+
+                    mySequence.Join(
+                        endingObjects[i].SpriteRenderer.DOColor(Color.black, pulseTime / 2f)
+                    );
                 }
 
-                Destroy(ending);
+                mySequence.Append(DOVirtual.DelayedCall(0.1f, () => { }));
+
+                for (int i = 0; i < 3; i++)
+                {
+                    if (i == trueEnding)
+                    {
+                        continue;
+                    }
+
+                    mySequence.Join(
+                        endingObjects[i].SpriteRenderer.DOColor(Color.white, pulseTime / 2f)
+                    );
+                }
+
+                List<TweenCallback> tweenCallbacks = new();
+                float shiftTime = 0.35f;
+
+                for (int i = 0; i < 5; i++)
+                {
+                    tweenCallbacks.Add(() => { ShiftTwo(shiftTime); });
+                }
+
+                for (int i = 0; i < 2; i++)
+                {
+                    tweenCallbacks.Add(() => { RotateOnce(shiftTime); });
+                }
+
+                tweenCallbacks.Add(() => { ChangeOrganization(shiftTime); });
+
+                for (int i = 0; i < 20; i++)
+                {
+                    mySequence.Append(
+                        DOVirtual.DelayedCall(
+                            shiftTime,
+                            tweenCallbacks[Random.Range(0, tweenCallbacks.Count)]
+                        )
+                    );
+                }
+
+                mySequence.Append(DOVirtual.DelayedCall(shiftTime, () =>
+                {
+                    isInEndingSequence = false;
+                }));
+            }
+        }
+    }
+
+    private void ShiftTwo(float time)
+    {
+        if (endingObjects == null || endingObjects.Length == 0) return;
+
+        int first = Random.Range(0, endingObjects.Length);
+        int second = (first + 1 + Random.Range(0, endingObjects.Length - 1)) % endingObjects.Length;
+
+        Vector3 pos1 = endingObjects[first].transform.localPosition;
+        Vector3 pos2 = endingObjects[second].transform.localPosition;
+
+        endingObjects[first].transform.DOLocalMove(pos2, time);
+        endingObjects[second].transform.DOLocalMove(pos1, time);
+    }
+
+    private void RotateOnce(float time)
+    {
+        if (endingObjects == null || endingObjects.Length == 0) return;
+
+        int biggering = Random.Range(0, 2) == 0 ? 1 : -1;
+        Vector3[] positions = new Vector3[endingObjects.Length];
+
+        for (int i = 0; i < endingObjects.Length; i++)
+        {
+            positions[i] = endingObjects[i].transform.localPosition;
+        }
+
+        for (int i = 0; i < endingObjects.Length; i++)
+        {
+            endingObjects[i].transform.DOLocalMove(
+                positions[(i + biggering + positions.Length) % positions.Length],
+                time
+            );
+        }
+    }
+
+    private void ChangeOrganization(float time)
+    {
+        if (endingObjects == null || endingObjects.Length == 0) return;
+
+        float max = float.MinValue;
+        float min = float.MaxValue;
+
+        for (int i = 0; i < endingObjects.Length; i++)
+        {
+            float y = endingObjects[i].transform.localPosition.y;
+
+            if (max < y)
+            {
+                max = y;
+            }
+
+            if (min > y)
+            {
+                min = y;
+            }
+        }
+
+        for (int i = 0; i < endingObjects.Length; i++)
+        {
+            Vector3 localPos = endingObjects[i].transform.localPosition;
+
+            if (Mathf.Abs(localPos.y - max) < Mathf.Abs(localPos.y - min))
+            {
+                endingObjects[i].transform.DOLocalMoveY(min, time);
+            }
+            else
+            {
+                endingObjects[i].transform.DOLocalMoveY(max, time);
             }
         }
     }

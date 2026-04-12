@@ -113,8 +113,9 @@ public class SceneObjectSpawner : MonoBehaviour
     }
 
     public bool dialogueDone = false;
-    //public static string dialogueId = "scene_0"; did this for testing purposes 
-    public static string dialogueId;
+    public static string dialogueId = "scene_0"; 
+    //did this for testing purposes 
+    //public static string dialogueId;
     private DialogueManager dialogueManager;
 
     private void Update()
@@ -297,8 +298,12 @@ public class SceneObjectSpawner : MonoBehaviour
             .OrderBy(o => o.posY)
             .ToList();
 
-        dialogueId = sceneData.dialogueId;
-        if(dialogueId == null || dialogueId == "")
+        if (!string.IsNullOrWhiteSpace(sceneData.dialogueId))
+        {
+            dialogueId = sceneData.dialogueId;
+        }
+
+        if (string.IsNullOrWhiteSpace(dialogueId))
         {
             dialogueDone = true;
         }

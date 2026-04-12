@@ -84,6 +84,8 @@ public class DialogueController : MonoBehaviour
             yield break;
         }
 
+        dialogueText.text = "";
+        dialogueText.maxVisibleCharacters = 0;
         dialogueFrameImage.sprite = frameSprite;
         dialogueFrameImage.preserveAspect = true;
         dialogueFrameImage.type = Image.Type.Simple;

@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Kraken attack 6_0: 6965998385526568427
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

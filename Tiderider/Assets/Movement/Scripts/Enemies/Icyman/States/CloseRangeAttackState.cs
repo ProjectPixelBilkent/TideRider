@@ -5,9 +5,7 @@ public class CloseRangeAttackState : State
     private Rigidbody2D rb;
     private float speed;
     private float timer;
-    private bool attacked;
-    private bool telegraphCharged;
-    private Vector2 attackDirection;
+    private float damageTimer;
 
     public CloseRangeAttackState(StateMachine machine, Rigidbody2D rb, float speed, float targetX, float yOffsetFromTop) : base(machine)
     {
@@ -19,12 +17,7 @@ public class CloseRangeAttackState : State
     {
         Debug.Log("Icyman -> CloseRangeAttackState");
         timer = 0f;
-        attacked = false;
-        telegraphCharged = false;
-
-        var i = (Icyman)machine.Enemy;
-        attackDirection = i.GetSwipeDirection();
-        i.ShowSwipeTelegraph(attackDirection, false);
+        damageTimer = 0f;
     }
 
     public override void Update()
@@ -32,28 +25,31 @@ public class CloseRangeAttackState : State
         var i = (Icyman)machine.Enemy;
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, Camera.main.velocity.y);
         timer += Time.deltaTime;
+        damageTimer += Time.deltaTime;
+        i.transform.Rotate(0f, 0f, i.spinSpeed * Time.deltaTime);
 
-        if (!telegraphCharged && timer >= Mathf.Max(0f, i.swipeWindup - i.swipeTelegraphFullColorLead))
+        if (i.spinDamageInterval <= 0f)
         {
-            i.SetSwipeTelegraphCharged();
-            telegraphCharged = true;
+            i.DoSpinAttackDamage();
+        }
+        else
+        {
+            while (damageTimer >= i.spinDamageInterval)
+            {
+                i.DoSpinAttackDamage();
+                damageTimer -= i.spinDamageInterval;
+            }
         }
 
-        if (!attacked && timer >= i.swipeWindup)
+        if (timer >= i.spinDuration)
         {
-            i.DoSwipeAttack(attackDirection);
-            i.HideSwipeTelegraph();
-            attacked = true;
-        }
-
-        if (timer >= i.swipeWindup + i.attackRecovery)
-        {
+            i.ResetSpinRotation();
             machine.ChangeState(new Idle(machine, rb, speed));
         }
     }
 
     public override void Exit()
     {
-        ((Icyman)machine.Enemy).HideSwipeTelegraph();
+        ((Icyman)machine.Enemy).ResetSpinRotation();
     }
 }

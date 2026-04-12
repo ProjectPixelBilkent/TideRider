@@ -28,17 +28,7 @@ public class SnowballAttackState : State
 
         if (!shot && timer >= i.snowballWindup)
         {
-            var player = i.FindPlayerTransform();
-            Vector2 shootTarget = player != null ? (Vector2)player.position : (Vector2)i.transform.position;
-
-            float dist = player != null
-                ? Vector2.Distance(i.transform.position, player.position)
-                : 5f;
-
-            float offset = Mathf.Clamp(dist * 0.5f, 0f, 5f);
-            shootTarget += offset * Vector2.up;
-
-            i.ShootSnowballAt(shootTarget);
+            i.ShootSnowballAt(i.GetRandomSnowballTarget());
             shot = true;
             i.SetSnowballRecoverySprite();
         }

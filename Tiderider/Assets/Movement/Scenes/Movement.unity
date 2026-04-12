@@ -7840,10 +7840,10 @@ MonoBehaviour:
   enemySpawnAheadDistance: 7.5
   spawnedParent: {fileID: 0}
   prefabEntries:
-  - {fileID: 8291028243939827525, guid: b5b4d70c9af72ee45b8bf21f33d56cfe, type: 3}
+  - {fileID: 8291028243939827525, guid: 977d8197730b62b4d98dba89e62c084a, type: 3}
   - {fileID: 2037578664033997800, guid: 0bf3cf7e6d852f14cb531f408ea4ce0a, type: 3}
-  - {fileID: 6938519905356381504, guid: cad216ad90c971c44b7a5f65beb16431, type: 3}
-  - {fileID: 5326964346436984552, guid: c4dd961a27a4de641b3b576f983f7983, type: 3}
+  - {fileID: 6938519905356381504, guid: 7945a31c2a2f6b04d8b43af9233136fb, type: 3}
+  - {fileID: 5326964346436984552, guid: fcb8d4539d1e2264eb1c54cfa2b58a7e, type: 3}
   - {fileID: 39280020223836803, guid: a65fb8c0f60a44a448f40dfc691b00ef, type: 3}
   - {fileID: 39280020223836803, guid: 218ea8d5ff8341d4889f3dc1386c5eca, type: 3}
   - {fileID: 3089341489726441051, guid: 8de3179e932b5604c8178b7da6ac2934, type: 3}

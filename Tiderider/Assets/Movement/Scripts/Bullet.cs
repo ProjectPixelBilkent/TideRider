@@ -88,6 +88,13 @@ public class Bullet : MonoBehaviour
             return;
         }
 
+        if (collision.collider.TryGetComponent(out Obstacle _) || collision.collider.TryGetComponent(out Monster _))
+        {
+            transform.DOKill();
+            Destroy(gameObject);
+            return;
+        }
+
         if (collision.collider.TryGetComponent(out HasHealth health))
         {
             if (ShouldDamageTarget(health))

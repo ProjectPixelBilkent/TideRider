@@ -1,4 +1,5 @@
 {
+    "dialogueId": "",
     "objects": [
         {
             "prefabId": "basic",
@@ -431,7 +432,7 @@
             "objectType": 2,
             "spriteNo": -1,
             "typeOfTerrain": 0,
-            "posX": 0,
+            "posX": 0.0,
             "posY": 110.56539916992188,
             "posZ": -9.0,
             "rotX": 0.0,
@@ -450,6 +451,23 @@
             "typeOfTerrain": 0,
             "posX": 2.888580322265625,
             "posY": 114.83248901367188,
+            "posZ": 0.0,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "rotW": 1.0,
+            "scaleX": 1.7999999523162842,
+            "scaleY": 1.7999999523162842,
+            "scaleZ": 1.7999999523162842
+        },
+        {
+            "prefabId": "floating_orb",
+            "name": "Floating Orb",
+            "objectType": 3,
+            "spriteNo": -1,
+            "typeOfTerrain": 0,
+            "posX": -0.008271798491477967,
+            "posY": 120.05684661865235,
             "posZ": 0.0,
             "rotX": 0.0,
             "rotY": 0.0,

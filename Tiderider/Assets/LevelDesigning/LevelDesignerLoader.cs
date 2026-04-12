@@ -223,14 +223,9 @@ public class LevelDesignerLoader : MonoBehaviour
         if (obstacle == null)
             return;
 
-        // Set sprite if your Obstacle supports it.
-        // Assumes a method like SetSpriteNo(int) exists.
-        // If your actual method name differs, replace this call.
-        TrySetObstacleSprite(obstacle, data.spriteNo);
-
-        // Set terrain if your Obstacle supports it.
-        // Assumes a method or property exists to update terrain.
+        // Terrain must be set before sprite so SetSpriteIndex picks the correct sprite array.
         TrySetObstacleTerrain(obstacle, data.typeOfTerrain);
+        TrySetObstacleSprite(obstacle, data.spriteNo);
     }
 
     private static void TrySetObstacleSprite(Obstacle obstacle, int spriteNo)
@@ -238,34 +233,12 @@ public class LevelDesignerLoader : MonoBehaviour
         if (spriteNo < 0)
             return;
 
-        // Replace with your real method if different.
-        // Example:
-        // obstacle.SetSpriteNo(spriteNo);
-
-        var method = typeof(Obstacle).GetMethod("SetSpriteNo");
-        if (method != null)
-        {
-            method.Invoke(obstacle, new object[] { spriteNo });
-            return;
-        }
-
-        method = typeof(Obstacle).GetMethod("setSpriteNo");
-        if (method != null)
-        {
-            method.Invoke(obstacle, new object[] { spriteNo });
-            return;
-        }
-
-        Debug.LogWarning($"Obstacle '{obstacle.name}' could not restore spriteNo because no SetSpriteNo/setSpriteNo method was found.");
+        obstacle.SetSpriteIndex(spriteNo);
     }
 
     private static void TrySetObstacleTerrain(Obstacle obstacle, TerrainType terrainType)
     {
         Obstacle.TerrainType obstacleTerrain = ConvertTerrainTypeBack(terrainType);
-
-        // Replace with your real method if different.
-        // Example:
-        // obstacle.SetTerrainType(obstacleTerrain);
 
         var method = typeof(Obstacle).GetMethod("SetTerrainType");
         if (method != null)

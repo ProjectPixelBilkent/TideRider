@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2771103030357536697}
   m_Layer: 0
   m_Name: Il JellyFish
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -31,7 +31,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.99, y: -3.45, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -47,27 +47,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81ecedfd8b201ce45bbbb23f9ef59764, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  currentHealth: 100
+  maxHealth: 20
+  currentHealth: 20
   healthSlider: {fileID: 0}
   speed: 10
   prefabId: jellyfish
+  idleSprite: {fileID: 9011485830705485682, guid: f04b99a339d762147bd5a0960ae36128, type: 3}
+  movementStretchSprite: {fileID: 7223924231582018269, guid: d922d223b3147b744855ca1572d47d05, type: 3}
+  movementExtendSprite: {fileID: 3154729707373801358, guid: f8080e09f4952694c99b575fcd87bcf7, type: 3}
+  attackSprite: {fileID: 3154729707373801358, guid: f8080e09f4952694c99b575fcd87bcf7, type: 3}
+  idleSpriteInterval: 0.5
+  movementStretchSpriteInterval: 0.5
+  movementExtendSpriteInterval: 0.5
   topOffsetFromCamera: 3.5
   lingerTime: 20
   downSpeed: 1
   bottomOffsetFromCamera: -6
-  shockRadius: 2
+  shockRadius: 1.7
   shockDamage: 10
   shockCooldown: 3
+  shockDamageInterval: 0.25
   isShockCharged: 1
   playerTarget: {fileID: 0}
-  lightningPrefab: {fileID: 262501246757306288, guid: 0ed6d56a8768e53449f16c04fb83e954, type: 3}
+  lightningPrefab: {fileID: 0}
   lightningSpeed: 25
   chargedColor: {r: 0.5, g: 0.9, b: 1, a: 1}
   rechargingColor: {r: 0.4, g: 0.4, b: 0.4, a: 1}
+  attackFlashColorA: {r: 0.23137255, g: 0.23137255, b: 0.23137255, a: 1}
+  attackFlashColorB: {r: 0, g: 1, b: 0.9372549, a: 1}
+  attackFlashInterval: 0.08
   radiusAlpha: 0.4
+  attackFlashRadiusAlpha: 0.8
   radiusLineWidth: 0.05
   radiusSegments: 48
+  attackRingSprite: {fileID: -6233973749801714200, guid: b759e970d8e15d3449271c4514b3fbf8, type: 3}
+  attackRingSpriteCount: 8
+  attackRingRadiusFactor: 0.65
+  attackRingSpriteScale: {x: 1, y: 1}
+  attackRingSpriteAngleOffset: -60
   spriteRenderer: {fileID: 0}
 --- !u!58 &1832322654027101887
 CircleCollider2D:
@@ -149,7 +166,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 8876096623701088614, guid: 9a9ae9ffd229e6640acb245be6626218, type: 3}
+  m_Sprite: {fileID: 7223924231582018269, guid: d922d223b3147b744855ca1572d47d05, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

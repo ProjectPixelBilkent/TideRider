@@ -23,17 +23,17 @@ public class EndingObject : MonoBehaviour
             return;
         }
 
+        BulletSpawner bulletSpawner = collision.GetComponent<BulletSpawner>();
+        if (bulletSpawner == null || bulletSpawner.objectSpawner.isInEndingSequence)
+        {
+            return;
+        }
+
         if (fake)
         {
             Player player = collision.GetComponent<Player>();
             if (player != null)
                 player.TakeDamage(int.MaxValue);
-            return;
-        }
-
-        BulletSpawner bulletSpawner = collision.GetComponent<BulletSpawner>();
-        if(bulletSpawner==null || bulletSpawner.objectSpawner.isInEndingSequence)
-        {
             return;
         }
 

@@ -50,6 +50,7 @@ public class SceneObjectSpawner : MonoBehaviour
     [System.Serializable]
     public class SavedSceneData
     {
+        public string dialogueId = "";
         public List<SavedObjectData> objects = new List<SavedObjectData>();
     }
 
@@ -152,6 +153,14 @@ public class SceneObjectSpawner : MonoBehaviour
 
         if (Camera.main == null)
             return;
+
+        // Fallback: if the active enemy was destroyed without firing OnEnemyDied, resume spawning.
+        if (isPausedForEnemy && activeEnemy == null)
+        {
+            if (Camera.main != null)
+                postEnemyObstacleOffset = new Vector3(0, Camera.main.transform.position.y, 0);
+            isPausedForEnemy = false;
+        }
 
         if (isPausedForEnemy)
             return;
@@ -288,6 +297,12 @@ public class SceneObjectSpawner : MonoBehaviour
             .OrderBy(o => o.posY)
             .ToList();
 
+        dialogueId = sceneData.dialogueId;
+        if(dialogueId == null || dialogueId == "")
+        {
+            dialogueDone = true;
+        }
+
         nextSpawnIndex = 0;
 
         Debug.Log($"Loaded {objectsToSpawn.Count} objects from assigned TextAsset: {(sceneJsonFile == null ? jsonForTesting: sceneJsonFile).name}");
@@ -372,7 +387,6 @@ public class SceneObjectSpawner : MonoBehaviour
 
                 Destroy(obj);
 
-                // Use localPosition because these are children of Camera.main.transform
                 endingObjects[0].transform.localPosition = new Vector3(0f, 6f, 2f);
                 endingObjects[1].transform.localPosition = new Vector3(-2.75f, 2.5f, 2f);
                 endingObjects[2].transform.localPosition = new Vector3(2.75f, 2.5f, 2f);

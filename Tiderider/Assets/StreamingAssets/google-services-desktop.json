@@ -1,33 +1,41 @@
 {
   "project_info": {
-    "project_number": "871900798271",
-    "project_id": "tiderider-b0d71",
-    "storage_bucket": "tiderider-b0d71.firebasestorage.app"
+    "project_number": "340654532812",
+    "project_id": "tiderider-77667",
+    "storage_bucket": "tiderider-77667.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:871900798271:android:6c3acf39cd41bcf737478a",
+        "mobilesdk_app_id": "1:340654532812:android:5c88371845e7c7cb8f3a69",
         "android_client_info": {
           "package_name": "com.ProjectPixel.Tiderider"
         }
       },
       "oauth_client": [
         {
-          "client_id": "871900798271-26hgbkodr57aen0cp0sbh16caidm17ai.apps.googleusercontent.com",
+          "client_id": "340654532812-u5rrkeklev76mn2ih0cppelgqlsdgod3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ProjectPixel.Tiderider",
+            "certificate_hash": "18a00ed4b13a555155d48bc98d2e3251e891b566"
+          }
+        },
+        {
+          "client_id": "340654532812-ejh1upa9m41s4dkvgv726nrbavi1dfmo.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAr72IipOKenovXrVBmX2qSNKG6XIFRg90"
+          "current_key": "AIzaSyAS-cGry6tukfomXH0vyRLeB8XpiNJlCV4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "871900798271-26hgbkodr57aen0cp0sbh16caidm17ai.apps.googleusercontent.com",
+              "client_id": "340654532812-ejh1upa9m41s4dkvgv726nrbavi1dfmo.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.IO;
+#if UNITY_EDITOR
 using System.Linq;
-using UnityEngine;
 using UnityEditor;
+#endif
+using UnityEngine;
 
 public class LevelDesignerScript : MonoBehaviour
 {
@@ -53,7 +55,7 @@ public class LevelDesignerScript : MonoBehaviour
     }
     public static float saveConstant = 1.8f;
 
-
+#if UNITY_EDITOR
     [MenuItem("Tools/Save Scene Objects To JSON")]
     public static void SaveSceneObjects()
     {
@@ -98,7 +100,7 @@ public class LevelDesignerScript : MonoBehaviour
                     name = o.gameObject.name,
                     objectType = SpawnObjectType.Obstacle,
 
-                    spriteNo = o.getSpriteNo(),
+                    spriteNo = GetObstacleSpriteNo(o),
                     typeOfTerrain = ConvertTerrainType(obstacleTerrain),
 
                     posX = o.transform.position.x * saveConstant,
@@ -232,6 +234,31 @@ public class LevelDesignerScript : MonoBehaviour
         Debug.Log($"Saved {sortedObjects.Count} objects to: {path}");
     }
 
+    private static int GetObstacleSpriteNo(Obstacle o)
+    {
+        SpriteRenderer sr = o.GetComponent<SpriteRenderer>();
+        if (sr == null || sr.sprite == null)
+            return 0;
+
+        SerializedObject so = new SerializedObject(o);
+        string spriteName = sr.sprite.name.ToLowerInvariant();
+        string arrName = spriteName.Contains("ice") ? "iceSprites"
+                       : spriteName.Contains("misty") ? "mistySprites"
+                       : "generalSprites";
+
+        SerializedProperty arrProp = so.FindProperty(arrName);
+        if (arrProp == null || !arrProp.isArray)
+            return 0;
+
+        for (int i = 0; i < arrProp.arraySize; i++)
+        {
+            Sprite s = arrProp.GetArrayElementAtIndex(i).objectReferenceValue as Sprite;
+            if (s == sr.sprite)
+                return i;
+        }
+        return 0;
+    }
+
     private static TerrainType ConvertTerrainType(Obstacle.TerrainType obstacleTerrain)
     {
         switch (obstacleTerrain)
@@ -245,4 +272,5 @@ public class LevelDesignerScript : MonoBehaviour
                 return TerrainType.General;
         }
     }
+#endif
 }

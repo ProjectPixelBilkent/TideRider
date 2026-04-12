@@ -14,7 +14,6 @@ public class LevelController : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private Camera mainCamera;
-    [SerializeField] private ObstacleManager obstacleManager;
     [SerializeField] private float moveSpeed = 1f;
     [SerializeField] private string shipTag = "Player";
     [Header("Monster")]
@@ -34,8 +33,6 @@ public class LevelController : MonoBehaviour
 
         if (mainCamera == null)
             mainCamera = Camera.main;
-        if (obstacleManager == null)
-            obstacleManager = FindFirstObjectByType<ObstacleManager>();
 
         edgeCollider = GetComponent<EdgeCollider2D>();
         SetupEdgeCollider();
@@ -53,8 +50,6 @@ public class LevelController : MonoBehaviour
         Vector3 move = Vector3.up * moveSpeed * Time.deltaTime;
         if (mainCamera != null)
             mainCamera.transform.position += move;
-        if (obstacleManager != null)
-            obstacleManager.transform.position += move;
         if(edgeCollider != null)
             edgeCollider.transform.position += move;
 

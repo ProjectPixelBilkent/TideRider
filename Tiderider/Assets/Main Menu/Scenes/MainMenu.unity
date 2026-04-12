@@ -5795,7 +5795,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueManager: {fileID: 0}
-  conversationId: intro_scene
+  conversationId: intro
 --- !u!4 &696484013
 Transform:
   m_ObjectHideFlags: 0

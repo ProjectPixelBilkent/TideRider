@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 public class DialogueManager : MonoBehaviour
@@ -12,7 +13,21 @@ public class DialogueManager : MonoBehaviour
 
     private void Awake()
     {
+        AutoAssignDependencies();
         LoadDialogueDatabase();
+    }
+
+    private void AutoAssignDependencies()
+    {
+        if (dialogueController == null)
+        {
+            dialogueController = FindObjectOfType<DialogueController>();
+        }
+
+        if (spriteDatabase == null)
+        {
+            spriteDatabase = FindObjectOfType<CharacterSpriteDatabase>();
+        }
     }
 
     private void LoadDialogueDatabase()
@@ -41,11 +56,24 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
+        if (dialogueController == null)
+        {
+            Debug.LogError("DialogueController reference is missing on DialogueManager.");
+            return;
+        }
+
+        if (spriteDatabase == null)
+        {
+            Debug.LogError("CharacterSpriteDatabase reference is missing on DialogueManager.");
+            return;
+        }
+
         DialogueConversationData conversation = GetConversationById(conversationId);
 
         if (conversation == null)
         {
-            Debug.LogError($"Conversation with ID '{conversationId}' not found.");
+            string availableIds = string.Join(", ", database.conversations.Select(convo => convo.conversationId));
+            Debug.LogError($"Conversation with ID '{conversationId}' not found. Available IDs: {availableIds}");
             return;
         }
 
@@ -72,6 +100,13 @@ public class DialogueManager : MonoBehaviour
 
     private IEnumerator PlayConversationRoutine(DialogueConversationData conversation)
     {
+        if (conversation.lines == null || conversation.lines.Length == 0)
+        {
+            Debug.LogError($"Conversation '{conversation.conversationId}' has no dialogue lines.");
+            currentConversationRoutine = null;
+            yield break;
+        }
+
         foreach (var line in conversation.lines)
         {
             Sprite sprite = spriteDatabase.GetSprite(line.characterId, line.emotion);

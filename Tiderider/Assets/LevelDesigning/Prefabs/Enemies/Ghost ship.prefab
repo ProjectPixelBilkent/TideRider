@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 6135632261993531991}
   - component: {fileID: 3324982547572546397}
   - component: {fileID: 6054287319458533720}
-  - component: {fileID: 5247687667986329842}
   - component: {fileID: 4206087879975261282}
   m_Layer: 0
   m_Name: Ghost ship
@@ -155,21 +154,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &5247687667986329842
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2037578664033997800}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78d7f0a1f97a8d7459687305c0e4e140, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 100
-  currentHealth: 0
-  healthSlider: {fileID: 0}
 --- !u!114 &4206087879975261282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -182,8 +166,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6337065157edcbc46aebf18f0279592d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  currentHealth: 0
+  maxHealth: 50
+  currentHealth: 50
   healthSlider: {fileID: 0}
   speed: 0
   prefabId: ghost_ship

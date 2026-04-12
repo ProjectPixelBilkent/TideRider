@@ -213,7 +213,7 @@ public class GhostShip : Enemy
         if (level == null || level.speedOfBullet <= 0f)
             return fallbackBulletSpeed;
 
-        return level.speedOfBullet;
+        return level.speedOfBullet * 5f;
     }
 
     private Vector2 GetPlayerVelocity()
@@ -301,7 +301,7 @@ public class GhostShip : Enemy
             bullet.Weapon = weaponData;
             bullet.WeaponLevel = level;
             bullet.PlayerBullet = false;
-            bullet.Activate(dir, Vector2.zero);
+            bullet.Activate(dir, rb != null ? rb.linearVelocity : Vector2.zero);
         }
 
         Collider2D bulletCollider = bulletObj.GetComponent<Collider2D>();

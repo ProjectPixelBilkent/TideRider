@@ -51,6 +51,7 @@ public class LevelDesignerScript : MonoBehaviour
     [System.Serializable]
     public class SavedSceneData
     {
+        public string dialogueId = "";
         public List<SavedObjectData> objects = new List<SavedObjectData>();
     }
     public static float saveConstant = 1.8f;

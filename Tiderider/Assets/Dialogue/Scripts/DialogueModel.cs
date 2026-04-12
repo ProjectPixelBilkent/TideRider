@@ -25,6 +25,7 @@ public class DialogueDatabase
 
 public enum DialogueSide
 {
-    Left,
-    Right
+    Left = 0,
+    Right = 1,
+    Middle = 2
 }

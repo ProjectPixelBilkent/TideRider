@@ -21,7 +21,7 @@ public class DialogueManager : MonoBehaviour
 
         if (jsonFile == null)
         {
-            Debug.LogError("dialogues.json not found in Assets/Resources/");
+            Debug.LogError("Dialogue file not found in Assets/Resources/");
             return;
         }
 
@@ -75,9 +75,17 @@ public class DialogueManager : MonoBehaviour
         foreach (var line in conversation.lines)
         {
             Sprite sprite = spriteDatabase.GetSprite(line.characterId, line.emotion);
+
+            if (sprite == null)
+            {
+                Debug.LogError($"No sprite found for characterId='{line.characterId}', emotion='{line.emotion}'.");
+                yield break;
+            }
+
             yield return StartCoroutine(dialogueController.PlayDialogueLine(line, sprite));
             yield return StartCoroutine(WaitForContinueInput());
         }
+
         yield return StartCoroutine(dialogueController.HideDialogue());
         currentConversationRoutine = null;
     }
@@ -85,6 +93,7 @@ public class DialogueManager : MonoBehaviour
     private IEnumerator WaitForContinueInput()
     {
         yield return null;
+
         bool pressed = false;
         while (!pressed)
         {
@@ -92,8 +101,8 @@ public class DialogueManager : MonoBehaviour
             {
                 pressed = true;
             }
+
             yield return null;
         }
     }
-
 }

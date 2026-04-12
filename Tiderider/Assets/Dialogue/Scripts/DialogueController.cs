@@ -13,31 +13,68 @@ public class DialogueController : MonoBehaviour
     [Header("Frame Position Settings")]
     [SerializeField] private Vector2 leftShownPosition = new Vector2(-90f, -1050f);
     [SerializeField] private Vector2 rightShownPosition = new Vector2(110f, -1050f);
+    [SerializeField] private Vector2 middleShownPosition = new Vector2(0f, -1050f);
+
     [SerializeField] private Vector2 leftHiddenPosition = new Vector2(-1200f, -1050f);
     [SerializeField] private Vector2 rightHiddenPosition = new Vector2(1200f, -1050f);
+    [SerializeField] private Vector2 middleHiddenPosition = new Vector2(0f, -1400f);
 
     [Header("Animation Settings")]
     [SerializeField] private float slideDuration = 0.5f;
     [SerializeField] private float typingSpeed = 0.03f;
 
+    private void Start()
+    {
+        if (dialogueFrameTransform != null)
+        {
+            dialogueFrameTransform.anchoredPosition = middleHiddenPosition;
+        }
+
+        if (dialogueText != null)
+        {
+            dialogueText.text = "";
+        }
+    }
+
     public IEnumerator HideDialogue()
     {
+        if (dialogueFrameTransform == null || dialogueText == null)
+        {
+            Debug.LogError("DialogueController references are not assigned in the Inspector.");
+            yield break;
+        }
+
         Vector2 currentPosition = dialogueFrameTransform.anchoredPosition;
-        Vector2 hiddenPosition = currentPosition.x < 0 ? leftHiddenPosition : rightHiddenPosition;
+        Vector2 hiddenPosition;
+
+        if (ApproximatelySamePosition(currentPosition, leftShownPosition))
+        {
+            hiddenPosition = leftHiddenPosition;
+        }
+        else if (ApproximatelySamePosition(currentPosition, middleShownPosition))
+        {
+            hiddenPosition = middleHiddenPosition;
+        }
+        else
+        {
+            hiddenPosition = rightHiddenPosition;
+        }
+
         yield return StartCoroutine(Slide(dialogueFrameTransform, currentPosition, hiddenPosition));
         dialogueText.text = "";
     }
-    private void Start()
-    {
-        dialogueFrameTransform.anchoredPosition = leftHiddenPosition;
-        dialogueText.text = "";
-    }
+
     public IEnumerator PlayDialogueLine(DialogueLineData data, Sprite frameSprite)
     {
-
         if (dialogueFrameTransform == null || dialogueFrameImage == null || dialogueText == null)
         {
             Debug.LogError("DialogueController references are not assigned in the Inspector.");
+            yield break;
+        }
+
+        if (frameSprite == null)
+        {
+            Debug.LogError("Frame sprite is null.");
             yield break;
         }
 
@@ -46,15 +83,23 @@ public class DialogueController : MonoBehaviour
         Vector2 shownPosition;
         Vector2 hiddenPosition;
 
-        if (data.enterSide == DialogueSide.Left)
+        switch (data.enterSide)
         {
-            shownPosition = leftShownPosition;
-            hiddenPosition = leftHiddenPosition;
-        }
-        else
-        {
-            shownPosition = rightShownPosition;
-            hiddenPosition = rightHiddenPosition;
+            case DialogueSide.Left:
+                shownPosition = leftShownPosition;
+                hiddenPosition = leftHiddenPosition;
+                break;
+
+            case DialogueSide.Middle:
+                shownPosition = middleShownPosition;
+                hiddenPosition = middleHiddenPosition;
+                break;
+
+            case DialogueSide.Right:
+            default:
+                shownPosition = rightShownPosition;
+                hiddenPosition = rightHiddenPosition;
+                break;
         }
 
         dialogueFrameTransform.anchoredPosition = hiddenPosition;
@@ -91,5 +136,10 @@ public class DialogueController : MonoBehaviour
             dialogueText.maxVisibleCharacters = i;
             yield return new WaitForSeconds(typingSpeed);
         }
+    }
+
+    private bool ApproximatelySamePosition(Vector2 a, Vector2 b)
+    {
+        return Vector2.Distance(a, b) < 5f;
     }
 }

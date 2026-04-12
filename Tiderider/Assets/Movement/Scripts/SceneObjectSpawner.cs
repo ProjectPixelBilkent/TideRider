@@ -110,8 +110,18 @@ public class SceneObjectSpawner : MonoBehaviour
         gameObject.layer = LayerMask.NameToLayer("Default");
     }
 
+    public bool dialogueDone = false;
+    public static string dialogueId;
+
     private void Update()
     {
+        if(!dialogueDone)
+        {
+
+            return;
+        }
+
+
         // Move camera and boundary upward
         Vector3 move = Vector3.up * moveSpeed * Time.deltaTime;
         if (mainCamera != null)

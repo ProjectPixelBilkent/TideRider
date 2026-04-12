@@ -5,12 +5,18 @@ public class ShockedState : State
 {
     private Jellyfish jellyfish;
     private float rechargeTimer;
+    private float flashTimer;
+    private float damageTimer;
+    private bool showingFlashColor;
 
     public ShockedState(StateMachine machine) : base(machine) { }
 
     public override void Enter()
     {
         jellyfish = machine.Enemy as Jellyfish;
+        flashTimer = 0f;
+        damageTimer = 0f;
+        showingFlashColor = false;
 
         if (jellyfish.playerTarget != null)
         {
@@ -28,29 +34,26 @@ public class ShockedState : State
                 bolt.transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg);
 
                 Player playerRef = jellyfish.playerTarget;
-                int damage = jellyfish.shockDamage;
 
                 bolt.transform.DOMove(targetPos, duration)
                     .SetEase(Ease.Linear)
                     .OnComplete(() =>
                     {
-                        playerRef.TakeDamage(damage);
                         Object.Destroy(bolt);
                     });
-            }
-            else
-            {
-                // Fallback: deal damage immediately if no prefab is assigned
-                jellyfish.playerTarget.TakeDamage(jellyfish.shockDamage);
             }
         }
 
         rechargeTimer = jellyfish.shockCooldown;
+        jellyfish.StopMovementAnimation();
+        jellyfish.SetAttackSprite();
 
-        // Visual: dim the jellyfish while recharging
         if (jellyfish.spriteRenderer != null)
-            jellyfish.spriteRenderer.color = jellyfish.rechargingColor;
-        jellyfish.UpdateRadiusColor();
+        {
+            jellyfish.spriteRenderer.color = jellyfish.attackFlashColorA;
+        }
+        jellyfish.SetRadiusColor(jellyfish.attackFlashColorA, jellyfish.attackFlashRadiusAlpha);
+        jellyfish.SetAttackRingVisible(false, jellyfish.attackFlashColorB);
 
         // Stop moving during discharge
         jellyfish.rigidBody.linearVelocity = Vector2.zero;
@@ -58,23 +61,70 @@ public class ShockedState : State
 
     public override void Exit()
     {
-        // Restore charged glow when done recharging
+        jellyfish.StartMovementAnimation();
         if (jellyfish.spriteRenderer != null)
             jellyfish.spriteRenderer.color = jellyfish.chargedColor;
         jellyfish.UpdateRadiusColor();
+        jellyfish.SetAttackRingVisible(false, jellyfish.attackFlashColorB);
     }
 
     public override void Update()
     {
         rechargeTimer -= Time.fixedDeltaTime;
+        flashTimer += Time.deltaTime;
+        damageTimer += Time.deltaTime;
 
-        // Keep the jellyfish drifting with the camera scroll but not actively moving
         jellyfish.rigidBody.linearVelocityY = Camera.main.velocity.y;
+
+        if (jellyfish.spriteRenderer != null && jellyfish.attackFlashInterval > 0f)
+        {
+            while (flashTimer >= jellyfish.attackFlashInterval)
+            {
+                showingFlashColor = !showingFlashColor;
+                Color flashColor = showingFlashColor ? jellyfish.attackFlashColorB : jellyfish.attackFlashColorA;
+                jellyfish.spriteRenderer.color = flashColor;
+                jellyfish.SetRadiusColor(flashColor, jellyfish.attackFlashRadiusAlpha);
+                jellyfish.SetAttackRingVisible(showingFlashColor, jellyfish.attackFlashColorB);
+                flashTimer -= jellyfish.attackFlashInterval;
+            }
+        }
+
+        if (jellyfish.playerTarget != null)
+        {
+            if (jellyfish.shockDamageInterval <= 0f)
+            {
+                TryDamagePlayer();
+            }
+            else
+            {
+                while (damageTimer >= jellyfish.shockDamageInterval)
+                {
+                    TryDamagePlayer();
+                    damageTimer -= jellyfish.shockDamageInterval;
+                }
+            }
+        }
 
         if (rechargeTimer <= 0f)
         {
             jellyfish.isShockCharged = true;
             machine.ChangeState(new IdleState(machine));
         }
+    }
+
+    private void TryDamagePlayer()
+    {
+        if (jellyfish == null || jellyfish.playerTarget == null)
+        {
+            return;
+        }
+
+        float sqrDist = ((Vector2)(jellyfish.playerTarget.transform.position - jellyfish.transform.position)).sqrMagnitude;
+        if (sqrDist > jellyfish.shockRadius * jellyfish.shockRadius)
+        {
+            return;
+        }
+
+        jellyfish.playerTarget.TakeDamage(jellyfish.shockDamage);
     }
 }

@@ -74,6 +74,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if(!bulletSpawner.objectSpawner.dialogueDone)
+        {
+            return;
+        }
+
         if (isBouncing)
         {
             bounceTimer -= Time.deltaTime;
@@ -121,6 +126,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!bulletSpawner.objectSpawner.dialogueDone)
+        {
+            return;
+        }
+
         Vector2 externalBonus = GetExternalEffectBonus();
 
         if (isBouncing)

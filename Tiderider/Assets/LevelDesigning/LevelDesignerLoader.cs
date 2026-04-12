@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.IO;
+#if UNITY_EDITOR
 using System.Linq;
-using UnityEngine;
 using UnityEditor;
+#endif
+using UnityEngine;
 
 public class LevelDesignerLoader : MonoBehaviour
 {
@@ -52,6 +54,7 @@ public class LevelDesignerLoader : MonoBehaviour
         public List<SavedObjectData> objects = new List<SavedObjectData>();
     }
 
+#if UNITY_EDITOR
     [MenuItem("Tools/Load Scene Objects From JSON")]
     public static void LoadSceneObjects()
     {
@@ -301,4 +304,5 @@ public class LevelDesignerLoader : MonoBehaviour
                 return Obstacle.TerrainType.General;
         }
     }
+#endif
 }

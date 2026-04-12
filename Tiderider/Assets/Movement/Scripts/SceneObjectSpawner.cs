@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SceneObjectSpawner : MonoBehaviour
@@ -71,6 +72,9 @@ public class SceneObjectSpawner : MonoBehaviour
     private Vector3 lastEnemyOriginalSpawnOffset = Vector3.zero;
     private Vector3 postEnemyObstacleOffset = Vector3.zero;
 
+    private EndingObject[] endingObjects;
+    [DoNotSerialize] public bool isInEndingSequence;
+
     private void Awake()
     {
         BuildPrefabMap();
@@ -132,6 +136,13 @@ public class SceneObjectSpawner : MonoBehaviour
             {
                 if (!prefabMap.ContainsKey(effect.prefabId))
                     prefabMap.Add(effect.prefabId, entry);
+            }
+
+            EndingObject ending = entry.GetComponent<EndingObject>();
+            if(ending != null && !string.IsNullOrEmpty (ending.prefabId))
+            {
+                if(!prefabMap.ContainsKey (ending.prefabId))
+                    prefabMap.Add(ending.prefabId, entry);
             }
 
             Coin coin = entry.GetComponent<Coin>();
@@ -226,6 +237,30 @@ public class SceneObjectSpawner : MonoBehaviour
                 isPausedForEnemy = true;
                 enemy.OnEnemyDied += HandleEnemyDied;
                 lastEnemyOriginalSpawnOffset = new Vector3(data.posX, data.posY + yOffset, data.posZ);
+            }
+        }
+        else if(data.objectType == SpawnObjectType.EndingObject)
+        {
+            EndingObject ending = obj.GetComponent<EndingObject>();
+            if(ending != null && ending.fake)
+            {
+                isInEndingSequence = true;
+                endingObjects = new EndingObject[3];
+                for(int i=0;i<endingObjects.Length; i++)
+                {
+                    endingObjects[i] = Instantiate(ending);
+                    endingObjects[i].transform.SetParent(Camera.main.transform, false);
+                    endingObjects[i].fake = true;
+                }
+
+                endingObjects[Random.Range(0,endingObjects.Length)].fake = false;
+
+                for(int i=0;i<endingObjects.Length;i++)
+                {
+                    endingObjects[i].Pulse(1.5f);
+                }
+
+                Destroy(ending);
             }
         }
     }

@@ -1,4 +1,3 @@
-using UnityEditor.U2D;
 using UnityEngine;
 
 /// <summary>
@@ -32,27 +31,6 @@ public class Obstacle : MonoBehaviour
     private int spriteIndex;
 
     public TerrainType TypeOfTerrain => typeOfTerrain;
-
-    public int getSpriteNo()
-    {
-        SpriteRenderer sr = GetComponent<SpriteRenderer>();
-        if (sr == null || sr.sprite == null)
-            return 0;
-
-        TerrainType detectedTerrain = GetTerrainTypeFromSpriteName(sr.sprite.name);
-        Sprite[] terrainSprites = GetSpritesByTerrain(detectedTerrain);
-
-        for (int i = 0; i < terrainSprites.Length; i++)
-        {
-            Sprite s = terrainSprites[i];
-            if (s != null && s.GetSpriteID() == sr.sprite.GetSpriteID())
-            {
-                return i;
-            }
-        }
-
-        return 0;
-    }
 
     public TerrainType GetTerrainTypeFromCurrentSprite()
     {

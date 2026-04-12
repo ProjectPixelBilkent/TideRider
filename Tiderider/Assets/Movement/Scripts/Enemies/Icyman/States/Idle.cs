@@ -20,7 +20,7 @@ public class Idle : State
     public override void Enter()
     {
         Debug.Log("Icyman -> Idle");
-        next = Random.Range(1, 4);
+        next = Random.Range(1, 5);
         if (next == 1)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, Camera.main.velocity.y);
@@ -44,7 +44,7 @@ public class Idle : State
         pos.y = Mathf.SmoothDamp(pos.y, target.y, ref yVelocity, i.ySmoothTime, Mathf.Infinity, Time.fixedDeltaTime);
         rb.MovePosition(pos);
         rb.linearVelocity = Vector2.zero;
-
+        //idle
         if (next == 1)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, Camera.main.velocity.y);
@@ -55,15 +55,15 @@ public class Idle : State
                 return;
             }
         }
-
+        //move
         if (next == 2)
         {
             Vector2 candidate = new Vector2(Random.Range(-3f, 3f), 0f);
             machine.ChangeState(new MovesState(machine, candidate, speed, rb));
             return;
         }
-
-        if (next == 3)
+        // snowball/melee attack
+        if (next >= 3)
         {
             var player = i.FindPlayerTransform();
             float distanceToPlayer = player != null

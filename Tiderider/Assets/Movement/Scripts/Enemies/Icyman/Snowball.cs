@@ -10,6 +10,7 @@ public class Snowball : MonoBehaviour
     private int damage;
 
     [SerializeField] private float lifetime = 6f;
+    [SerializeField] private float spinSpeed = 360f;
 
     private void Awake()
     {
@@ -39,8 +40,14 @@ public class Snowball : MonoBehaviour
     {
         if (rb != null)
         {
-            rb.linearVelocity = direction * speed;
+            Vector2 screenVelocity = Camera.main != null ? Camera.main.velocity : Vector2.zero;
+            rb.linearVelocity = direction * speed + screenVelocity;
         }
+    }
+
+    private void Update()
+    {
+        transform.Rotate(0f, 0f, spinSpeed * Time.deltaTime);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

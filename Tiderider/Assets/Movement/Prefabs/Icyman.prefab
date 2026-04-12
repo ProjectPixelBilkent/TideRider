@@ -116,7 +116,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!58 &8136653383126230822
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -171,7 +171,6 @@ MonoBehaviour:
   speed: 1.2
   prefabId: 
   spriteRenderer: {fileID: 0}
-  swipeTelegraph: {fileID: 0}
   defaultSprite: {fileID: 3838674497056114677, guid: 070369bc8083f8348a902352b01208af, type: 3}
   snowballWindupSprite: {fileID: 4006508752840253220, guid: 4c80bc77173cfb948bf9d18adcfdcc0d, type: 3}
   snowballRecoverySprite: {fileID: 4016068991384510363, guid: e6753d069b23a8c4dbed506f215c53c3, type: 3}
@@ -179,20 +178,20 @@ MonoBehaviour:
   yMaxDist: 5
   ySmoothTime: 0.35
   idleDuration: 5
+  maxMoveDuration: 3
   attackRecovery: 1
-  swipeDamage: 10
-  swipeTriggerDistance: 2.5
-  swipeRange: 1.5
-  swipeAngle: 120
-  swipeWindup: 0.5
-  swipeTelegraphFullColorLead: 0.15
-  swipeTelegraphFadedColor: {r: 0.8, g: 0.95, b: 1, a: 0.2}
-  swipeTelegraphFullColor: {r: 0.8, g: 0.95, b: 1, a: 0.65}
+  swipeDamage: 5
+  swipeTriggerDistance: 4
+  swipeRange: 3
+  spinDuration: 2
+  spinSpeed: 720
+  spinDamageInterval: 0.25
   playerLayer:
     serializedVersion: 2
     m_Bits: 0
   snowballPrefab: {fileID: 177523828396537501, guid: 620e5e0d21dfbdc488005d5189f2ed45, type: 3}
   snowballSpawn: {fileID: 0}
-  snowballSpeed: 6
+  snowballSpeed: 12
   snowballWindup: 0.5
+  snowballAimConeAngle: 30
   topOffsetFromCamera: 3.5

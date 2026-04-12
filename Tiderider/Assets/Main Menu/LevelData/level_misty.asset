@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelDisplayName: Mist Level
   levelJson: {fileID: 4900000, guid: b2d04c3b83f02284b842cd9d6b14ebc0, type: 3}
-  dialogueId: world_3
   levelIndex: 1
   islandSprite: {fileID: 0}
   activeColor: {r: 1, g: 1, b: 1, a: 1}

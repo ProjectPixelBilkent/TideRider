@@ -49,8 +49,8 @@ MonoBehaviour:
   dialogueFrameTransform: {fileID: 0}
   dialogueFrameImage: {fileID: 0}
   dialogueText: {fileID: 0}
-  leftShownPosition: {x: -75, y: -1050}
-  rightShownPosition: {x: 75, y: -1050}
+  leftShownPosition: {x: -90, y: -1050}
+  rightShownPosition: {x: 110, y: -1050}
   leftHiddenPosition: {x: -1200, y: 0}
   rightHiddenPosition: {x: 1200, y: 0}
   slideDuration: 0.5

@@ -117,7 +117,7 @@ public class SceneObjectSpawner : MonoBehaviour
     {
         if(!dialogueDone)
         {
-            dialogueDone = true;
+            //dialogueDone = true;
             return;
         }
 

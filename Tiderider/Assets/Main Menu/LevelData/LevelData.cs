@@ -5,7 +5,6 @@ public class LevelData : ScriptableObject
 {
     public string levelDisplayName;
     public TextAsset levelJson;
-    public string dialogueId;
     public int levelIndex;
 
     [Header("Visuals")]

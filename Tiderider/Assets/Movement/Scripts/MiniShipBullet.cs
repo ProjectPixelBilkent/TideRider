@@ -14,7 +14,7 @@ public class MiniShipBullet : Bullet
     // Update is called once per frame
     void Update()
     {
-        transform.position += 0.5f * Time.deltaTime * LevelController.UpwardsMovement;
+        transform.position += 0.5f * Time.deltaTime * SceneObjectSpawner.UpwardsMovement;
     }
 
     private float timer = 0;

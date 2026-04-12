@@ -52,10 +52,13 @@ public class PlayerMovement : MonoBehaviour
 
     private readonly HashSet<ExternalEffect> activeExternalEffects = new HashSet<ExternalEffect>();
 
+    private BulletSpawner bulletSpawner;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         mainCam = Camera.main;
+        bulletSpawner = GetComponent<BulletSpawner>();
         if (spriteRenderer == null)
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
@@ -71,6 +74,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if(!bulletSpawner.objectSpawner.dialogueDone)
+        {
+            return;
+        }
+
         if (isBouncing)
         {
             bounceTimer -= Time.deltaTime;
@@ -118,6 +126,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!bulletSpawner.objectSpawner.dialogueDone)
+        {
+            return;
+        }
+
         Vector2 externalBonus = GetExternalEffectBonus();
 
         if (isBouncing)
@@ -130,6 +143,14 @@ public class PlayerMovement : MonoBehaviour
         float currentZ = rb.rotation;
         float newZ = Mathf.MoveTowardsAngle(currentZ, targetZRotation, rotationSpeed * Time.fixedDeltaTime);
         rb.MoveRotation(newZ);
+
+        bool inEndingSequence = bulletSpawner != null && bulletSpawner.objectSpawner != null && bulletSpawner.objectSpawner.isInEndingSequence;
+        if (inEndingSequence && transform.position.y >= Camera.main.transform.position.y)
+        {
+            rb.linearVelocity = externalBonus;
+            currentVelocity = rb.linearVelocity;
+            return;
+        }
 
         float currentSpeed = targetSpeed;
 

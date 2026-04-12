@@ -37,7 +37,7 @@ public class IceProjectile : Bullet
 
     private void Update()
     {
-        transform.position += Time.deltaTime * LevelController.UpwardsMovement;
+        transform.position += Time.deltaTime * SceneObjectSpawner.UpwardsMovement;
     }
 
     protected override void FixedUpdate()

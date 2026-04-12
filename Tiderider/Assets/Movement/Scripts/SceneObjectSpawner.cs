@@ -493,7 +493,9 @@ public class SceneObjectSpawner : MonoBehaviour
             return;
 
         float camHeight = 2f * mainCamera.orthographicSize;
-        float camWidth = camHeight * mainCamera.aspect;
+        float camWidth = AspectRatioController.DESIGN_ASPECT > 0f
+            ? 2f * AspectRatioController.DESIGN_ORTHO_SIZE * AspectRatioController.DESIGN_ASPECT
+            : camHeight * mainCamera.aspect;
         Vector3 camPos = mainCamera.transform.position;
 
         float left = camPos.x - camWidth / 2f;
@@ -520,7 +522,9 @@ public class SceneObjectSpawner : MonoBehaviour
             {
                 Vector3 camPos = mainCamera.transform.position;
                 float camHeight = 2f * mainCamera.orthographicSize;
-                float camWidth = camHeight * mainCamera.aspect;
+                float camWidth = AspectRatioController.DESIGN_ASPECT > 0f
+                    ? 2f * AspectRatioController.DESIGN_ORTHO_SIZE * AspectRatioController.DESIGN_ASPECT
+                    : camHeight * mainCamera.aspect;
                 float left = camPos.x - camWidth / 2f;
                 float right = camPos.x + camWidth / 2f;
                 float top = camPos.y + camHeight / 2f;

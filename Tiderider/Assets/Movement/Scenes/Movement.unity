@@ -608,8 +608,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -100, y: -20}
-  m_SizeDelta: {x: 130.14001, y: 82.54001}
+  m_AnchoredPosition: {x: 211.68, y: 695.4}
+  m_SizeDelta: {x: 172.78, y: 109.19}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &307083633
 PrefabInstance:
@@ -1994,7 +1994,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -300.00006, y: 300}
+  m_AnchoredPosition: {x: -321, y: 750}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &860832716
@@ -7630,7 +7630,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 41.7
+  m_fontSize: 55.4
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -7740,6 +7740,7 @@ MonoBehaviour:
   monsterYOffset: -0.76
   isPausedForEnemy: 0
   isInEndingSequence: 0
+  dialogueDone: 0
 --- !u!4 &1302116610
 Transform:
   m_ObjectHideFlags: 0

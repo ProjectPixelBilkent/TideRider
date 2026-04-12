@@ -58,6 +58,7 @@ public class SceneObjectSpawner : MonoBehaviour
     [Header("Spawn Control")]
     [SerializeField] private float yOffset = 0f;
     [SerializeField] private float spawnAheadDistance = 20f;
+    [SerializeField] private float enemySpawnAheadDistance = 7.5f;
     [SerializeField] private Transform spawnedParent;
 
     [Header("Prefabs")]
@@ -90,15 +91,20 @@ public class SceneObjectSpawner : MonoBehaviour
         if (Camera.main == null)
             return;
 
-        float currentY = Camera.main.transform.position.y + spawnAheadDistance;
-
         if (isPausedForEnemy)
             return;
 
-        while (nextSpawnIndex < objectsToSpawn.Count &&
-               GetSpawnPosition(objectsToSpawn[nextSpawnIndex]).y <= currentY)
+        float cameraY = Camera.main.transform.position.y;
+
+        while (nextSpawnIndex < objectsToSpawn.Count)
         {
             SavedObjectData data = objectsToSpawn[nextSpawnIndex];
+            bool isSpecialType = data.objectType == SpawnObjectType.Enemy || data.objectType == SpawnObjectType.EndingObject;
+            float threshold = isSpecialType ? enemySpawnAheadDistance : spawnAheadDistance;
+
+            if (GetSpawnPosition(data).y > cameraY + threshold)
+                break;
+
             SpawnObject(data);
             nextSpawnIndex++;
 
@@ -261,9 +267,9 @@ public class SceneObjectSpawner : MonoBehaviour
                 Destroy(obj);
 
                 // Use localPosition because these are children of Camera.main.transform
-                endingObjects[0].transform.localPosition = new Vector3(0f, 8f, 2f);
-                endingObjects[1].transform.localPosition = new Vector3(-2.75f, 4f, 2f);
-                endingObjects[2].transform.localPosition = new Vector3(2.75f, 4f, 2f);
+                endingObjects[0].transform.localPosition = new Vector3(0f, 6f, 2f);
+                endingObjects[1].transform.localPosition = new Vector3(-2.75f, 2.5f, 2f);
+                endingObjects[2].transform.localPosition = new Vector3(2.75f, 2.5f, 2f);
 
                 var mySequence = DOTween.Sequence();
                 float pulseTime = 1.5f;

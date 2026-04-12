@@ -56,13 +56,18 @@ MonoBehaviour:
   lingerTime: 20
   downSpeed: 1
   bottomOffsetFromCamera: -6
-  shockRadius: 3
+  shockRadius: 2
   shockDamage: 10
   shockCooldown: 3
   isShockCharged: 1
   playerTarget: {fileID: 0}
+  lightningPrefab: {fileID: 262501246757306288, guid: 0ed6d56a8768e53449f16c04fb83e954, type: 3}
+  lightningSpeed: 25
   chargedColor: {r: 0.5, g: 0.9, b: 1, a: 1}
   rechargingColor: {r: 0.4, g: 0.4, b: 0.4, a: 1}
+  radiusAlpha: 0.4
+  radiusLineWidth: 0.05
+  radiusSegments: 48
   spriteRenderer: {fileID: 0}
 --- !u!58 &1832322654027101887
 CircleCollider2D:

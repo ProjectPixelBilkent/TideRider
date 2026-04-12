@@ -16,6 +16,10 @@ public class Jellyfish : Enemy
     [HideInInspector] public bool isShockCharged = true;
     public Player playerTarget;
 
+    [Header("Lightning")]
+    public GameObject lightningPrefab;
+    public float lightningSpeed = 25f;
+
     [Header("Shock Visuals")]
     public Color chargedColor = new Color(0.5f, 0.9f, 1f);
     public Color rechargingColor = new Color(0.4f, 0.4f, 0.4f);

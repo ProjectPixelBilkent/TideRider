@@ -7832,7 +7832,7 @@ MonoBehaviour:
   monsterYOffset: -0.76
   isPausedForEnemy: 0
   isInEndingSequence: 0
-  dialogueDone: 1
+  dialogueDone: 0
 --- !u!4 &1302116610
 Transform:
   m_ObjectHideFlags: 0

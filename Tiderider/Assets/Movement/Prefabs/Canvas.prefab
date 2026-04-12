@@ -362,8 +362,8 @@ MonoBehaviour:
   dialogueFrameTransform: {fileID: 6656764564385306933}
   dialogueFrameImage: {fileID: 1968801738340070737}
   dialogueText: {fileID: 3819189770948105079}
-  leftShownPosition: {x: -90, y: -1050}
-  rightShownPosition: {x: 110, y: -1050}
+  leftShownPosition: {x: -75, y: -1050}
+  rightShownPosition: {x: 75, y: -1050}
   leftHiddenPosition: {x: -1200, y: -1050}
   rightHiddenPosition: {x: 1200, y: -1050}
   slideDuration: 0.5

@@ -53,6 +53,7 @@ public class LevelManager : MonoBehaviour
         {
             CurrentPlayingLevelIndex = data.levelIndex;
             SceneObjectSpawner.sceneJsonFile = data.levelJson;
+            SceneObjectSpawner.dialogueId = data.dialogueId;
             SceneManager.LoadScene("Movement");
         });
     }

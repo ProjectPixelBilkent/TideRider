@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
@@ -10,6 +11,10 @@ public class DialogueManager : MonoBehaviour
 
     private DialogueDatabase database;
     private Coroutine currentConversationRoutine;
+    private string activeConversationId;
+
+    public bool IsConversationPlaying => currentConversationRoutine != null;
+    public event Action<string> ConversationFinished;
 
     private void Awake()
     {
@@ -80,8 +85,10 @@ public class DialogueManager : MonoBehaviour
         if (currentConversationRoutine != null)
         {
             StopCoroutine(currentConversationRoutine);
+            CompleteConversation(activeConversationId);
         }
 
+        activeConversationId = conversationId;
         currentConversationRoutine = StartCoroutine(PlayConversationRoutine(conversation));
     }
 
@@ -103,7 +110,7 @@ public class DialogueManager : MonoBehaviour
         if (conversation.lines == null || conversation.lines.Length == 0)
         {
             Debug.LogError($"Conversation '{conversation.conversationId}' has no dialogue lines.");
-            currentConversationRoutine = null;
+            CompleteConversation(conversation.conversationId);
             yield break;
         }
 
@@ -114,6 +121,7 @@ public class DialogueManager : MonoBehaviour
             if (sprite == null)
             {
                 Debug.LogError($"No sprite found for characterId='{line.characterId}', emotion='{line.emotion}'.");
+                CompleteConversation(conversation.conversationId);
                 yield break;
             }
 
@@ -122,7 +130,7 @@ public class DialogueManager : MonoBehaviour
         }
 
         yield return StartCoroutine(dialogueController.HideDialogue());
-        currentConversationRoutine = null;
+        CompleteConversation(conversation.conversationId);
     }
 
     private IEnumerator WaitForContinueInput()
@@ -139,5 +147,12 @@ public class DialogueManager : MonoBehaviour
 
             yield return null;
         }
+    }
+
+    private void CompleteConversation(string conversationId)
+    {
+        currentConversationRoutine = null;
+        activeConversationId = null;
+        ConversationFinished?.Invoke(conversationId);
     }
 }

@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelDisplayName: Icy Level
   levelJson: {fileID: 4900000, guid: 4baa06af5ed890744ab3a068a2f5760d, type: 3}
+  dialogueId: world_2
   levelIndex: 2
   islandSprite: {fileID: 0}
   activeColor: {r: 1, g: 1, b: 1, a: 1}

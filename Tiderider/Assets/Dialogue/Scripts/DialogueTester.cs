@@ -7,6 +7,11 @@ public class DialogueTester : MonoBehaviour
 
     private void Start()
     {
+        if (FindObjectOfType<SceneObjectSpawner>() != null)
+        {
+            return;
+        }
+
         if (dialogueManager == null)
         {
             dialogueManager = FindObjectOfType<DialogueManager>();

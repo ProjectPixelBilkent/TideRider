@@ -11,8 +11,8 @@ public class DialogueController : MonoBehaviour
     [SerializeField] private TMP_Text dialogueText;
 
     [Header("Frame Position Settings")]
-    [SerializeField] private Vector2 leftShownPosition = new Vector2(-90f, -1050f);
-    [SerializeField] private Vector2 rightShownPosition = new Vector2(110f, -1050f);
+    [SerializeField] private Vector2 leftShownPosition = new Vector2(-75f, -1050f);
+    [SerializeField] private Vector2 rightShownPosition = new Vector2(75f, -1050f);
     [SerializeField] private Vector2 middleShownPosition = new Vector2(0f, -1050f);
 
     [SerializeField] private Vector2 leftHiddenPosition = new Vector2(-1200f, -1050f);
@@ -33,6 +33,12 @@ public class DialogueController : MonoBehaviour
         if (dialogueText != null)
         {
             dialogueText.text = "";
+        }
+
+        if (dialogueFrameImage != null)
+        {
+            dialogueFrameImage.preserveAspect = true;
+            dialogueFrameImage.type = Image.Type.Simple;
         }
     }
 
@@ -79,6 +85,8 @@ public class DialogueController : MonoBehaviour
         }
 
         dialogueFrameImage.sprite = frameSprite;
+        dialogueFrameImage.preserveAspect = true;
+        dialogueFrameImage.type = Image.Type.Simple;
 
         Vector2 shownPosition;
         Vector2 hiddenPosition;

@@ -96,6 +96,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -108,12 +121,40 @@ TextureImporter:
         width: 678
         height: 574
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
-      physicsShape: []
-      tessellationDetail: -1
+      physicsShape:
+      - - {x: -108, y: -204}
+        - {x: 226, y: -208}
+        - {x: 228, y: -119}
+        - {x: 255, y: -87}
+        - {x: 258, y: 33}
+        - {x: 314, y: 33}
+        - {x: 318, y: 243}
+        - {x: 313, y: 264}
+        - {x: 279, y: 211}
+        - {x: 242, y: 181}
+        - {x: 192, y: 112}
+        - {x: 90, y: 68}
+        - {x: 37, y: 46}
+        - {x: -35, y: 42}
+        - {x: -27, y: 175}
+        - {x: -56, y: 197}
+        - {x: -75, y: 77}
+        - {x: -116, y: 72}
+        - {x: -118, y: -24}
+        - {x: -194, y: -29}
+        - {x: -202, y: -97}
+        - {x: -255, y: -110}
+        - {x: -258, y: -150}
+        - {x: -312, y: -160}
+        - {x: -310, y: -204}
+        - {x: -215, y: -204}
+        - {x: -211, y: -259}
+        - {x: -116, y: -260}
+      tessellationDetail: 0
       bones: []
       spriteID: 0b3f6de35609fdd50800000000000000
       internalID: 6764283929854145456
@@ -125,7 +166,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: bc34ae4633c9c0c4394b64b71b9e8bc4
     internalID: 0
     vertices: []
     indices: 

@@ -22,10 +22,10 @@ public class Enemy : HasHealth
         rb = GetComponent<Rigidbody2D>();
 
         // Enemies should not collide with the level boundary (EdgeCollider2D on LevelManager)
-        LevelController levelController = FindFirstObjectByType<LevelController>();
-        if (levelController != null)
+        SceneObjectSpawner spawner = FindFirstObjectByType<SceneObjectSpawner>();
+        if (spawner != null)
         {
-            EdgeCollider2D boundary = levelController.GetComponent<EdgeCollider2D>();
+            EdgeCollider2D boundary = spawner.GetComponent<EdgeCollider2D>();
             Collider2D myCollider = GetComponent<Collider2D>();
             if (boundary != null && myCollider != null)
                 Physics2D.IgnoreCollision(myCollider, boundary, true);

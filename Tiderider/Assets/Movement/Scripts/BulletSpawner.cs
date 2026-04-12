@@ -3,7 +3,7 @@
 public class BulletSpawner : MonoBehaviour
 {
     [SerializeField] private WeaponStat[] armory;
-    [SerializeField] private SceneObjectSpawner objectSpawner;
+    [SerializeField] public SceneObjectSpawner objectSpawner;
 
     private float[] lastFired;
     private Rigidbody2D rb;

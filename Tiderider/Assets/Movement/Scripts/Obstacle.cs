@@ -78,18 +78,26 @@ public class Obstacle : MonoBehaviour
 
     protected virtual void UpdateColliderToMatchSprite(Sprite sprite)
     {
-        var existingCollider = GetComponent<CircleCollider2D>();
-        if (existingCollider != null)
-        {
-            Destroy(existingCollider);
-        }
+        var existingCircle = GetComponent<CircleCollider2D>();
+        if (existingCircle != null)
+            Destroy(existingCircle);
 
-        var newCollider = gameObject.AddComponent<CircleCollider2D>();
-        if (sprite != null)
+        var existingPoly = GetComponent<PolygonCollider2D>();
+        if (existingPoly != null)
+            Destroy(existingPoly);
+
+        if (sprite == null)
+            return;
+
+        var newCollider = gameObject.AddComponent<PolygonCollider2D>();
+        int pathCount = sprite.GetPhysicsShapeCount();
+        newCollider.pathCount = pathCount;
+        var pathPoints = new System.Collections.Generic.List<Vector2>();
+        for (int i = 0; i < pathCount; i++)
         {
-            Vector2 size = sprite.bounds.size;
-            newCollider.radius = Mathf.Max(size.x, size.y) / 2f;
-            newCollider.offset = sprite.bounds.center;
+            pathPoints.Clear();
+            sprite.GetPhysicsShape(i, pathPoints);
+            newCollider.SetPath(i, pathPoints);
         }
     }
 

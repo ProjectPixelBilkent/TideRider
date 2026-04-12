@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: ddb4ece29c8bed94b88936d4e82f5427
+guid: 72dd63e2c86568c448653dda345c9033
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4927765378794880426
-    second: generalisland6_0
+      213: 4180696165668470446
+    second: Lightning_bolt_simple_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 600
+  spritePixelsToUnits: 400
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -109,46 +109,40 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: generalisland6_0
+      name: Lightning_bolt_simple_0
       rect:
         serializedVersion: 2
-        x: 288
-        y: 435
-        width: 1120
-        height: 574
+        x: 25
+        y: 8
+        width: 141
+        height: 297
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
-      physicsShape:
-      - - {x: -111, y: -134}
-        - {x: 101, y: -106}
-        - {x: 378, y: -99}
-        - {x: 494, y: -72}
-        - {x: 498, y: 64}
-        - {x: 361, y: 103}
-        - {x: 313, y: 158}
-        - {x: 226, y: 185}
-        - {x: 185, y: 216}
-        - {x: 76, y: 256}
-        - {x: -286, y: 255}
-        - {x: -402, y: 226}
-        - {x: -462, y: 148}
-        - {x: -487, y: 15}
-        - {x: -535, y: -50}
-        - {x: -535, y: -134}
-        - {x: -480, y: -195}
-        - {x: -402, y: -251}
-        - {x: -227, y: -240}
-      tessellationDetail: 0
+      physicsShape: []
+      tessellationDetail: -1
       bones: []
-      spriteID: aad798be080f26440800000000000000
-      internalID: 4927765378794880426
+      spriteID: eaeb18c2301d40a30800000000000000
+      internalID: 4180696165668470446
       vertices: []
       indices: 
       edges: []
@@ -157,7 +151,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 17ff1dd8a76543c4c9d618b82e643531
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -167,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      generalisland6_0: 4927765378794880426
+      Lightning_bolt_simple_0: 4180696165668470446
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

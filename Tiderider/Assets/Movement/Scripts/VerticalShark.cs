@@ -25,7 +25,7 @@ public class VerticalShark : MonoBehaviour
                 shark.enabled = true;
                 sharkCollider.enabled = true;
                 shark.transform.position = new Vector3(exclamationMark.transform.position.x, exclamationMark.transform.position.y - 5, exclamationMark.transform.position.z);
-                shark.transform.DOMoveY(LevelController.GetScreenBounds().y + 6, 1f).onComplete += () =>
+                shark.transform.DOMoveY(SceneObjectSpawner.GetScreenBounds().y + 6, 1f).onComplete += () =>
                 {
                     if(gameObject != null)
                     {
@@ -42,6 +42,6 @@ public class VerticalShark : MonoBehaviour
     private void FixedUpdate()
     {
         transform.position = new Vector3(transform.position.x, mainCamera.transform.position.y, transform.position.z);
-        exclamationMark.transform.position = new Vector3(transform.position.x, 2 * mainCamera.transform.position.y - LevelController.GetScreenBounds().y + 1, -6);
+        exclamationMark.transform.position = new Vector3(transform.position.x, 2 * mainCamera.transform.position.y - SceneObjectSpawner.GetScreenBounds().y + 1, -6);
     }
 }

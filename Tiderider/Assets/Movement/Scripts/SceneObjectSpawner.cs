@@ -4,6 +4,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
+[RequireComponent(typeof(EdgeCollider2D))]
 public class SceneObjectSpawner : MonoBehaviour
 {
     public enum SpawnObjectType
@@ -64,6 +65,18 @@ public class SceneObjectSpawner : MonoBehaviour
     [Header("Prefabs")]
     [SerializeField] private List<GameObject> prefabEntries = new List<GameObject>();
 
+    [Header("Level Control")]
+    [SerializeField] private Camera mainCamera;
+    [SerializeField] private float moveSpeed = 1f;
+    [SerializeField] private string shipTag = "Player";
+    [Header("Monster")]
+    [SerializeField] private GameObject monster;
+    [SerializeField] private float monsterYOffset = -0.76f;
+
+    private EdgeCollider2D edgeCollider;
+
+    public static Vector3 UpwardsMovement { get; private set; }
+
     private readonly Dictionary<string, GameObject> prefabMap = new Dictionary<string, GameObject>();
     private List<SavedObjectData> objectsToSpawn = new List<SavedObjectData>();
     private int nextSpawnIndex = 0;
@@ -83,8 +96,40 @@ public class SceneObjectSpawner : MonoBehaviour
         LoadSceneData();
     }
 
+    private void Start()
+    {
+        UpwardsMovement = Vector3.up * moveSpeed;
+
+        if (mainCamera == null)
+            mainCamera = Camera.main;
+
+        edgeCollider = GetComponent<EdgeCollider2D>();
+        SetupEdgeCollider();
+
+        edgeCollider.isTrigger = false;
+        gameObject.layer = LayerMask.NameToLayer("Default");
+    }
+
     private void Update()
     {
+        // Move camera and boundary upward
+        Vector3 move = Vector3.up * moveSpeed * Time.deltaTime;
+        if (mainCamera != null)
+            mainCamera.transform.position += move;
+        if (edgeCollider != null)
+            edgeCollider.transform.position += move;
+
+        // Keep monster at the bottom edge of the camera
+        if (monster != null && mainCamera != null)
+        {
+            float camHeight = 2f * mainCamera.orthographicSize;
+            Vector3 camPos = mainCamera.transform.position;
+            float bottom = camPos.y - camHeight / 2f;
+            Vector3 targetPos = new Vector3(camPos.x, bottom + monsterYOffset, 0);
+            Vector3 delta = targetPos - monster.transform.position;
+            monster.transform.Translate(delta, Space.World);
+        }
+
         if (objectsToSpawn == null || objectsToSpawn.Count == 0)
             return;
 
@@ -430,5 +475,57 @@ public class SceneObjectSpawner : MonoBehaviour
         isPausedForEnemy = false;
         activeEnemy = null;
         postEnemyObstacleOffset = Vector3.zero;
+    }
+
+    private void SetupEdgeCollider()
+    {
+        if (mainCamera == null || edgeCollider == null)
+            return;
+
+        float camHeight = 2f * mainCamera.orthographicSize;
+        float camWidth = camHeight * mainCamera.aspect;
+        Vector3 camPos = mainCamera.transform.position;
+
+        float left = camPos.x - camWidth / 2f;
+        float right = camPos.x + camWidth / 2f;
+        float top = camPos.y + camHeight / 2f;
+        float bottom = camPos.y - camHeight / 2f;
+
+        Vector2[] points = new Vector2[5];
+        points[0] = new Vector2(left, bottom);
+        points[1] = new Vector2(left, top);
+        points[2] = new Vector2(right, top);
+        points[3] = new Vector2(right, bottom);
+        points[4] = points[0];
+
+        edgeCollider.points = points;
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag(shipTag))
+        {
+            Rigidbody2D rb = collision.gameObject.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                Vector3 camPos = mainCamera.transform.position;
+                float camHeight = 2f * mainCamera.orthographicSize;
+                float camWidth = camHeight * mainCamera.aspect;
+                float left = camPos.x - camWidth / 2f;
+                float right = camPos.x + camWidth / 2f;
+                float top = camPos.y + camHeight / 2f;
+                float bottom = camPos.y - camHeight / 2f;
+
+                Vector3 pos = rb.position;
+                pos.x = Mathf.Clamp(pos.x, left, right);
+                pos.y = Mathf.Clamp(pos.y, bottom, top);
+                rb.position = pos;
+            }
+        }
+    }
+
+    public static Vector2 GetScreenBounds()
+    {
+        return Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
     }
 }

@@ -36,11 +36,11 @@ public class ArmoryManager : MonoBehaviour
 
     private void LoadExistingArmory()
     {
-        Weapon[] savedArmory = DataManager.GetPlayerArmory();
+        weaponList = DataManager.GetPlayerArmory();
 
-        for (int i = 0; i < savedArmory.Length; i++)
+        for (int i = 0; i < weaponList.Length; i++)
         {
-            if (savedArmory[i] == null) continue;
+            if (weaponList[i] == null) continue;
 
             if (slotContainer != null && i < slotContainer.childCount)
             {
@@ -48,7 +48,7 @@ public class ArmoryManager : MonoBehaviour
                 Image slotImage = slotTransform.GetComponent<Image>();
                 if (slotImage != null)
                 {
-                    slotImage.sprite = savedArmory[i].weaponIcon;
+                    slotImage.sprite = weaponList[i].weaponIcon;
                 }
             }
         }

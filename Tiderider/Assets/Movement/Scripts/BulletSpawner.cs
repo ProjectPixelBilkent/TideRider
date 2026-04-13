@@ -16,7 +16,7 @@ public class BulletSpawner : MonoBehaviour
         col = GetComponent<Collider2D>();
         if (CompareTag("Player"))
         {
-            var playerArmory = TempWeaponManager.Instance.GetPlayerArmory();
+            var playerArmory = WeaponManager.Instance.GetPlayerArmory();
             armory = new WeaponStat[playerArmory.Length];
             for (int i=0; i<armory.Length; i++)
             {

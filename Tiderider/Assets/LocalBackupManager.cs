@@ -163,7 +163,7 @@ public static class LocalBackupManager
         using (var deriveBytes = new Rfc2898DeriveBytes(
             password: "asdnj21l2312",
             salt: salt,
-            iterations: 600000, // Increased for security
+            iterations: 1000, // Increased for security
             hashAlgorithm: HashAlgorithmName.SHA256))
         {
             return deriveBytes.GetBytes(32); // 32 bytes = 256-bit key

@@ -51,9 +51,17 @@ public class LevelManager : MonoBehaviour
 
         moveSequence.OnComplete(() =>
         {
-            CurrentPlayingLevelIndex = data.levelIndex;
-            SceneObjectSpawner.sceneJsonFile = data.levelJson;
-            SceneManager.LoadScene("Movement");
+            if (ResourceManager.isEnergyLeft())
+            {
+                DataManager.DecrementEnergyAmount();
+                CurrentPlayingLevelIndex = data.levelIndex;
+                SceneObjectSpawner.sceneJsonFile = data.levelJson;
+                SceneManager.LoadScene("Movement");
+            }
+            else
+            {
+                ResourceManager.HandleNoEnergy();
+            }
         });
     }
 

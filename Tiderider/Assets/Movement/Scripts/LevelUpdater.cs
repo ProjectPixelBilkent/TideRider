@@ -15,6 +15,7 @@ public class LevelUpdater : MonoBehaviour
 
     private void HandleLevelFinished()
     {
+        DataManager.IncrementEnergyAmount();
         DataManager.CompleteLevel(LevelManager.CurrentPlayingLevelIndex);
 
         SceneManager.LoadScene("MainMenu");

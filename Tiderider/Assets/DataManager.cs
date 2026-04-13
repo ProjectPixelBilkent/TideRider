@@ -26,10 +26,38 @@ public static class DataManager
     /// Created by: Ata Uzay Kuzey
     /// Maintained by: Işık Dönger
     /// </remarks>
-    public static void SubtractCoinAmount(int amount)
+    public static void SubtractCoinAmount(int amount = 1)
     {
         GameData gameData = LoadGameData();
         gameData.coinAmount -= amount;
+        SaveGameData(gameData);
+    }
+
+    /// <summary>
+    /// Increments the energy amount in game data.
+    /// </summary>
+    /// <remarks>
+    /// Created by: Işık Dönger
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public static void IncrementEnergyAmount()
+    {
+        GameData gameData = LoadGameData();
+        gameData.energyAmount += 1;
+        SaveGameData(gameData);
+    }
+
+    /// <summary>
+    /// Substracts from the energy amount in game data.
+    /// </summary>
+    /// <remarks>
+    /// Created by: Işık Dönger
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public static void DecrementEnergyAmount()
+    {
+        GameData gameData = LoadGameData();
+        gameData.energyAmount -= 1;
         SaveGameData(gameData);
     }
 
@@ -151,6 +179,16 @@ public static class DataManager
     /// Maintained by: Işık Dönger
     /// </remarks>
     public static int GetCoinAmount() => LoadGameData().coinAmount;
+
+    /// <summary>
+    /// Loads the energy amount from the local backup.
+    /// </summary>
+    /// <returns>Coin Amount.</returns>
+    /// <remarks>
+    /// Created by: Işık Dönger
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public static int GetEnergyAmount() => LoadGameData().energyAmount;
 
     /// <summary>
     /// Loads the current highest unlocked level index from the local backup.

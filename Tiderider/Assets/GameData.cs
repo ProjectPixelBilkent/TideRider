@@ -12,7 +12,8 @@ using JetBrains.Annotations;
 [Serializable]
 public class GameData
 {
-    public int coinAmount;
+    public int coinAmount = 0;
+    public int energyAmount = 5;
     public Weapon[] playerArmory = new Weapon[6];
     public int highestUnlockedLevelIndex = 0;
 }

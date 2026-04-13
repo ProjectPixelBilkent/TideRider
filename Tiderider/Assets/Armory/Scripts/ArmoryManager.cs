@@ -15,33 +15,43 @@ using UnityEngine.UI;
 public class ArmoryManager : MonoBehaviour
 {
     public static ArmoryManager Instance { get; private set; }
-    private GameObject shipSlot = null, weaponSlot = null; // To keep track of the currently selected slot index
-    private Weapon selectedWeapon = null; // To keep track of the currently selected weapon
+    private GameObject shipSlot = null, weaponSlot = null;
+    private Weapon selectedWeapon = null;
     [SerializeField] private Weapon[] weaponList = new Weapon[6];
+    [SerializeField] private Transform slotContainer;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
-        PlayerPrefs.DeleteKey("PlayerArmory");
-        if (!PlayerPrefs.HasKey("PlayerArmory"))
-        {
-            InitPlayerArmory();
-        }
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // Keep this instance across scenes
+            DontDestroyOnLoad(gameObject);
+            LoadExistingArmory();
         }
         else
         {
-            Destroy(gameObject); // Ensure only one instance exists
+            Destroy(gameObject);
         }
     }
 
-    private void InitPlayerArmory()
+    private void LoadExistingArmory()
     {
-        PlayerPrefs.SetString("PlayerArmory", "Canon|Canon|Canon|Canon|Canon|Canon");
-        Debug.Log(PlayerPrefs.GetString("PlayerArmory"));
+        Weapon[] savedArmory = DataManager.GetPlayerArmory();
+
+        for (int i = 0; i < savedArmory.Length; i++)
+        {
+            if (savedArmory[i] == null) continue;
+
+            if (slotContainer != null && i < slotContainer.childCount)
+            {
+                Transform slotTransform = slotContainer.GetChild(i).GetChild(0);
+                Image slotImage = slotTransform.GetComponent<Image>();
+                if (slotImage != null)
+                {
+                    slotImage.sprite = savedArmory[i].weaponIcon;
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -57,23 +67,23 @@ public class ArmoryManager : MonoBehaviour
         {
             if (weaponSlot != null)
             {
-                WeaponSlotManager.ShrinkInfoCard(weaponSlot); // Shrink the info card if a weapon slot is selected
-                weaponSlot = null; // Clear the weapon slot variable
+                WeaponSlotManager.ShrinkInfoCard(weaponSlot);
+                weaponSlot = null;
             }
 
             if (shipSlot == Slot)
             {
-                DeselectSlot(); // If the same slot is clicked, deselect it
+                DeselectSlot();
                 return;
             }
             else
             {
-                DeselectSlot(); // Deselect the previously selected slot
+                DeselectSlot();
             }
         }
 
         shipSlot = Slot;
-        shipSlot.GetComponent<Image>().color = shipSlot.GetComponent<Button>().colors.pressedColor; // Change the color of the slot to indicate selection
+        shipSlot.GetComponent<Image>().color = shipSlot.GetComponent<Button>().colors.pressedColor;
     }
 
     /// <summary>
@@ -95,11 +105,11 @@ public class ArmoryManager : MonoBehaviour
     /// </remarks>
     private IEnumerator DeselectShipSlotCoroutine(float delay)
     {
-        yield return new WaitForSeconds(delay); // To prevent conflict with SelectWeapon method
+        yield return new WaitForSeconds(delay);
 
         if (shipSlot != null)
         {
-            shipSlot.GetComponent<Image>().color = Color.white; //Deselect the slot by changing its color back to black
+            shipSlot.GetComponent<Image>().color = Color.white;
             shipSlot = null;
         }
     }
@@ -107,7 +117,7 @@ public class ArmoryManager : MonoBehaviour
     /// <summary>
     /// Selects a weapon for the currently selected slot in the armory UI.
     /// </summary>
-    /// <param name="Weapon">Weapon to be selected to the slot</param>
+    /// <param name="WeaponSlot">Weapon to be selected to the slot</param>
     /// <remarks>
     /// Maintained by: Işık Dönger
     /// </remarks>
@@ -115,80 +125,37 @@ public class ArmoryManager : MonoBehaviour
     {
         if (shipSlot == null)
         {
-            //Show Info Card of the Weapon
             if (weaponSlot == null)
             {
-                weaponSlot = WeaponSlot; // Assign the selected weapon slot to the weapon slot variable
-                Debug.Log("Weapon Set To: " + weaponSlot.GetComponent<WeaponSlotManager>().weapon);
-                WeaponSlotManager.ExpandInfoCard(weaponSlot); // Expand the info card of the weapon
+                weaponSlot = WeaponSlot;
+                WeaponSlotManager.ExpandInfoCard(weaponSlot);
             }
             else if (weaponSlot != WeaponSlot)
             {
-                Debug.Log("Previous Weapon Was: " + weaponSlot.GetComponent <WeaponSlotManager>().weapon);
                 DOTween.Sequence()
                 .AppendCallback(() => WeaponSlotManager.ShrinkInfoCard(weaponSlot))
-                .AppendInterval(0.5f) // Wait for shrink animation duration
+                .AppendInterval(0.5f)
                 .AppendCallback(() =>
                 {
                     weaponSlot = WeaponSlot;
-                    Debug.Log("Weapon Changed To: " + weaponSlot.GetComponent<WeaponSlotManager>().weapon);
                     WeaponSlotManager.ExpandInfoCard(weaponSlot);
                 });
             }
             else
             {
-                Debug.Log("a");
-                DeselectWeapon(0); // If the same weapon slot is clicked, deselect it
+                DeselectWeapon(0);
             }
         }
         else
         {
-            // Put the selected weapon into the currently selected slot
-            selectedWeapon = WeaponSlot.GetComponent<WeaponSlotManager>().weapon; // Assign the selected weapon to the slot's manager
-            shipSlot.GetComponent<Image>().sprite = selectedWeapon.weaponIcon; // Set the icon of the weapon in the slot
-            //DataManager.SaveToArmory(shipSlot.transform.GetSiblingIndex(), selectedWeapon);
-            SaveToPlayerArmory(selectedWeapon, shipSlot.transform.parent.GetSiblingIndex());
-            Debug.Log(PlayerPrefs.GetString("PlayerArmory"));
+            selectedWeapon = WeaponSlot.GetComponent<WeaponSlotManager>().weapon;
+            shipSlot.GetComponent<Image>().sprite = selectedWeapon.weaponIcon;
+
+            DataManager.SaveToArmory(shipSlot.transform.parent.GetSiblingIndex(), selectedWeapon);
+
             DeselectSlot();
-            Debug.Log("b");
-            DeselectWeapon(0); // Deselect the weapon slot after assigning the weapon
+            DeselectWeapon(0);
         }
-    }
-
-    private void SaveToPlayerArmory(Weapon weapon, int index)
-    {
-        Debug.Log(index);
-        string[] currentArmory = PlayerPrefs.GetString("PlayerArmory").Split("|");
-        string temp = "";
-        for (int i=0;i<6;i++)
-        {
-            if (i!=index)
-            {
-                temp += currentArmory[i];
-            }
-            else
-            {
-                temp += weapon.weaponName;
-            }
-            if (i!=5)
-            {
-                temp += "|";
-            }
-            Debug.Log(temp);
-        }
-        PlayerPrefs.SetString("PlayerArmory", temp);
-    }
-
-    private Weapon GetWeaponByName(string name)
-    {
-        foreach (Weapon weapon in weaponList)
-        {
-            if (weapon.name == name)
-            {
-                return weapon;
-            }
-        }
-        return null;
     }
 
     /// <summary>
@@ -210,14 +177,13 @@ public class ArmoryManager : MonoBehaviour
     /// </remarks>
     private IEnumerator DeselectWeaponCoroutine(float delay)
     {
-        yield return new WaitForSeconds(delay); // To prevent conflict with SelectWeapon method
+        yield return new WaitForSeconds(delay);
 
         if (weaponSlot != null)
         {
             EventSystem.current.SetSelectedGameObject(null);
-            WeaponSlotManager.ShrinkInfoCard(weaponSlot); // Shrink the info card of the weapon
-            weaponSlot = null; // Clear the weapon slot variable
-            Debug.Log("Weapon Deselected");
+            WeaponSlotManager.ShrinkInfoCard(weaponSlot);
+            weaponSlot = null;
         }
     }
 }

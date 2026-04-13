@@ -26,10 +26,10 @@ public class GameData
 [Serializable]
 public class WeaponData
 {
-    public int canonLevel;
-    public int minigunLevel;
-    public int shieldLevel;
-    public int lasergunLevel;
-    public int flamethrowerLevel;
-    public int icegunLevel;
+    public int canonLevel = 0;
+    public int minigunLevel = 0;
+    public int shieldLevel = 0;
+    public int lasergunLevel = 0;
+    public int flamethrowerLevel = 0;
+    public int icegunLevel = 0;
 }

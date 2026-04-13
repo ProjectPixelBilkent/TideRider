@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class IslandVisual : MonoBehaviour
+public class LevelVisual : MonoBehaviour
 {
     public LevelData myData;
     public Color lockedColor = new Color(0.2f, 0.2f, 0.2f);

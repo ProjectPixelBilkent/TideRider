@@ -7668,6 +7668,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93c4922890ce87f439eb6c6a6dc6e1b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteSwapInterval: 0.12
+  specialCycleInterval: 20
+  krakenAttack1: {fileID: 1541168869169713946, guid: 28925277def4c834fa1b0689150225ec, type: 3}
+  krakenAttack2: {fileID: -4007571609018231526, guid: 2385af3552a462f44be8ad8d19ee1ac1, type: 3}
+  krakenAttack3: {fileID: 8617971173470257827, guid: dcb4597ee1ba8a84cbfc198db7262e6b, type: 3}
+  krakenAttack4: {fileID: -3271278684828011678, guid: c03cc55111762fd4993c243e99ba4734, type: 3}
+  krakenAttack5: {fileID: -8756729978192746693, guid: c76109bb32f68c84e99f02e7482dee2e, type: 3}
+  krakenAttack6: {fileID: 6965998385526568427, guid: 52dcfa578dc097846a34643230ca1c1a, type: 3}
+  krakenAttack7: {fileID: -2689194371186497518, guid: dc1a3321168acc14fa449cd19215ef71, type: 3}
+  krakenAttack8: {fileID: -4041316565468922498, guid: d8f17405df143e24ba18e2e460a1ccea, type: 3}
 --- !u!1 &1300685034
 GameObject:
   m_ObjectHideFlags: 0
@@ -7834,7 +7844,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c122640e09b76f74f9b50afea70ad25b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jsonForTesting: {fileID: 4900000, guid: 9c54411951fa52b4a9235188cd995450, type: 3}
+  jsonForTesting: {fileID: 4900000, guid: a3a0b2f010314b74baabb084fc1ff381, type: 3}
   yOffset: 0
   spawnAheadDistance: 20
   enemySpawnAheadDistance: 7.5
@@ -7898,10 +7908,10 @@ EdgeCollider2D:
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 63
   m_ForceReceiveLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 63
   m_ContactCaptureLayers:
     serializedVersion: 2
     m_Bits: 4294967295

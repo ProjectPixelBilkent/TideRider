@@ -15,11 +15,8 @@ public class CharacterSpriteDatabase : MonoBehaviour
 
     public Sprite GetSprite(string characterId, string emotion)
     {
-        print("---------");
-        print(characterId + ", " +  emotion);
         foreach (var entry in spriteEntries)
         {
-            print(entry.characterId + ", " + entry.emotion);
             if (entry.characterId == characterId && entry.emotion == emotion)
             {
                 return entry.sprite;

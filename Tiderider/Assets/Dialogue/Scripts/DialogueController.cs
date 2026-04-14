@@ -23,6 +23,11 @@ public class DialogueController : MonoBehaviour
     [SerializeField] private float slideDuration = 0.5f;
     [SerializeField] private float typingSpeed = 0.03f;
 
+    public bool IsTyping { get; private set; }
+    private bool _skipTyping = false;
+
+    public void SkipTyping() { _skipTyping = true; }
+
     private void Start()
     {
         if (dialogueFrameTransform != null)
@@ -135,6 +140,8 @@ public class DialogueController : MonoBehaviour
 
     private IEnumerator TypeText(string sentence)
     {
+        _skipTyping = false;
+        IsTyping = true;
         dialogueText.text = sentence;
         dialogueText.maxVisibleCharacters = 0;
         dialogueText.ForceMeshUpdate();
@@ -143,9 +150,16 @@ public class DialogueController : MonoBehaviour
 
         for (int i = 0; i <= totalCharacters; i++)
         {
+            if (_skipTyping)
+            {
+                dialogueText.maxVisibleCharacters = totalCharacters;
+                break;
+            }
             dialogueText.maxVisibleCharacters = i;
             yield return new WaitForSeconds(typingSpeed);
         }
+
+        IsTyping = false;
     }
 
     private bool ApproximatelySamePosition(Vector2 a, Vector2 b)

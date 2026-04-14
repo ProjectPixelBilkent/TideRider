@@ -8,52 +8,6 @@ using UnityEngine;
 
 public class LevelDesignerLoader : MonoBehaviour
 {
-    public enum SpawnObjectType
-    {
-        Obstacle,
-        ExternalEffect,
-        Enemy,
-        EndingObject,
-        Coin
-    }
-
-    public enum TerrainType
-    {
-        General,
-        Ice,
-        Misty
-    }
-
-    [System.Serializable]
-    public class SavedObjectData
-    {
-        public string prefabId;
-        public string name;
-        public SpawnObjectType objectType;
-
-        public int spriteNo;
-        public TerrainType typeOfTerrain;
-
-        public float posX;
-        public float posY;
-        public float posZ;
-
-        public float rotX;
-        public float rotY;
-        public float rotZ;
-        public float rotW;
-
-        public float scaleX;
-        public float scaleY;
-        public float scaleZ;
-    }
-
-    [System.Serializable]
-    public class SavedSceneData
-    {
-        public List<SavedObjectData> objects = new List<SavedObjectData>();
-    }
-
 #if UNITY_EDITOR
     [MenuItem("Tools/Load Scene Objects From JSON")]
     public static void LoadSceneObjects()
@@ -198,6 +152,14 @@ public class LevelDesignerLoader : MonoBehaviour
         if (coin != null)
             return coin.prefabId;
 
+        EndingObject ending = prefab.GetComponent<EndingObject>();
+        if (ending != null)
+            return ending.prefabId;
+
+        DialogueTrigger trigger = prefab.GetComponent<DialogueTrigger>();
+        if (trigger != null)
+            return trigger.prefabId;
+
         return null;
     }
 
@@ -209,12 +171,26 @@ public class LevelDesignerLoader : MonoBehaviour
                 ApplyObstacleData(instance, data);
                 break;
 
+            case SpawnObjectType.Dialogue:
+                ApplyDialogueTriggerData(instance, data);
+                break;
+
             case SpawnObjectType.Enemy:
             case SpawnObjectType.ExternalEffect:
             case SpawnObjectType.EndingObject:
             default:
                 break;
         }
+    }
+
+    private static void ApplyDialogueTriggerData(GameObject instance, SavedObjectData data)
+    {
+        DialogueTrigger trigger = instance.GetComponent<DialogueTrigger>();
+        if (trigger == null)
+            return;
+
+        if (!string.IsNullOrEmpty(data.conversationId))
+            trigger.conversationId = data.conversationId;
     }
 
     private static void ApplyObstacleData(GameObject instance, SavedObjectData data)

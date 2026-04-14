@@ -7,53 +7,6 @@ using UnityEngine;
 [RequireComponent(typeof(EdgeCollider2D))]
 public class SceneObjectSpawner : MonoBehaviour
 {
-    public enum SpawnObjectType
-    {
-        Obstacle,
-        ExternalEffect,
-        Enemy,
-        EndingObject,
-        Coin
-    }
-
-    public enum TerrainType
-    {
-        General,
-        Ice,
-        Misty
-    }
-
-    [System.Serializable]
-    public class SavedObjectData
-    {
-        public string prefabId;
-        public string name;
-        public SpawnObjectType objectType;
-
-        public int spriteNo;
-        public TerrainType typeOfTerrain;
-
-        public float posX;
-        public float posY;
-        public float posZ;
-
-        public float rotX;
-        public float rotY;
-        public float rotZ;
-        public float rotW;
-
-        public float scaleX;
-        public float scaleY;
-        public float scaleZ;
-    }
-
-    [System.Serializable]
-    public class SavedSceneData
-    {
-        public string dialogueId = "";
-        public List<SavedObjectData> objects = new List<SavedObjectData>();
-    }
-
     public static TextAsset sceneJsonFile;
     [SerializeField] private TextAsset jsonForTesting;
 
@@ -84,13 +37,13 @@ public class SceneObjectSpawner : MonoBehaviour
 
     private Enemy activeEnemy;
     public bool isPausedForEnemy = false;
+    public bool isPausedForDialogue = false;
 
     private Vector3 lastEnemyOriginalSpawnOffset = Vector3.zero;
     private Vector3 postEnemyObstacleOffset = Vector3.zero;
 
     private EndingObject[] endingObjects;
     [DoNotSerialize] public bool isInEndingSequence;
-    private bool dialogueStarted;
 
     private void Awake()
     {
@@ -112,24 +65,12 @@ public class SceneObjectSpawner : MonoBehaviour
         gameObject.layer = LayerMask.NameToLayer("Default");
     }
 
-    public bool dialogueDone = false;
-    public static string dialogueId = "scene_0"; 
-    //did this for testing purposes 
-    //public static string dialogueId;
     private DialogueManager dialogueManager;
 
     private void Update()
     {
-        if (!dialogueDone)
-        {
-            if (!dialogueStarted)
-            {
-                TryStartDialogue();
-            }
-
+        if (isPausedForDialogue)
             return;
-        }
-
 
         // Move camera and boundary upward
         Vector3 move = Vector3.up * moveSpeed * Time.deltaTime;
@@ -172,7 +113,7 @@ public class SceneObjectSpawner : MonoBehaviour
         {
             SavedObjectData data = objectsToSpawn[nextSpawnIndex];
             bool isSpecialType = data.objectType == SpawnObjectType.Enemy || data.objectType == SpawnObjectType.EndingObject;
-            float threshold = isSpecialType ? enemySpawnAheadDistance : spawnAheadDistance;
+            float threshold = isSpecialType ? enemySpawnAheadDistance : (data.objectType == SpawnObjectType.Dialogue ? 0: spawnAheadDistance);
 
             if (GetSpawnPosition(data).y > cameraY + threshold)
                 break;
@@ -180,53 +121,9 @@ public class SceneObjectSpawner : MonoBehaviour
             SpawnObject(data);
             nextSpawnIndex++;
 
-            if (isPausedForEnemy)
+            if (isPausedForEnemy || isPausedForDialogue)
                 break;
         }
-    }
-
-    private void TryStartDialogue()
-    {
-        if (string.IsNullOrWhiteSpace(dialogueId))
-        {
-            dialogueDone = true;
-            return;
-        }
-
-        if (dialogueManager == null)
-        {
-            dialogueManager = FindObjectOfType<DialogueManager>();
-        }
-
-        if (dialogueManager == null)
-        {
-            return;
-        }
-
-        dialogueManager.ConversationFinished -= HandleDialogueFinished;
-        dialogueManager.ConversationFinished += HandleDialogueFinished;
-        dialogueStarted = true;
-        dialogueManager.PlayConversation(dialogueId);
-
-        if (!dialogueManager.IsConversationPlaying)
-        {
-            HandleDialogueFinished();
-        }
-    }
-
-    private void HandleDialogueFinished()
-    {
-        if (!dialogueStarted)
-        {
-            return;
-        }
-
-        if (dialogueManager != null)
-        {
-            dialogueManager.ConversationFinished -= HandleDialogueFinished;
-        }
-
-        dialogueDone = true;
     }
 
     private void BuildPrefabMap()
@@ -298,16 +195,6 @@ public class SceneObjectSpawner : MonoBehaviour
             .OrderBy(o => o.posY)
             .ToList();
 
-        if (!string.IsNullOrWhiteSpace(sceneData.dialogueId))
-        {
-            dialogueId = sceneData.dialogueId;
-        }
-
-        if (string.IsNullOrWhiteSpace(dialogueId))
-        {
-            dialogueDone = true;
-        }
-
         nextSpawnIndex = 0;
 
         Debug.Log($"Loaded {objectsToSpawn.Count} objects from assigned TextAsset: {(sceneJsonFile == null ? jsonForTesting: sceneJsonFile).name}");
@@ -326,8 +213,45 @@ public class SceneObjectSpawner : MonoBehaviour
         return basePosition;
     }
 
+    private void TriggerMidLevelDialogue(string conversationId)
+    {
+        if (string.IsNullOrWhiteSpace(conversationId))
+            return;
+
+        if (dialogueManager == null)
+            dialogueManager = FindFirstObjectByType<DialogueManager>();
+
+        if (dialogueManager == null)
+        {
+            Debug.LogWarning("DialogueManager not found; skipping mid-level dialogue.");
+            return;
+        }
+
+        isPausedForDialogue = true;
+        dialogueManager.ConversationFinished -= HandleMidLevelDialogueFinished;
+        dialogueManager.ConversationFinished += HandleMidLevelDialogueFinished;
+        dialogueManager.PlayConversation(conversationId);
+
+        if (!dialogueManager.IsConversationPlaying)
+            HandleMidLevelDialogueFinished();
+    }
+
+    private void HandleMidLevelDialogueFinished()
+    {
+        if (dialogueManager != null)
+            dialogueManager.ConversationFinished -= HandleMidLevelDialogueFinished;
+
+        isPausedForDialogue = false;
+    }
+
     private void SpawnObject(SavedObjectData data)
     {
+        if (data.objectType == SpawnObjectType.Dialogue)
+        {
+            TriggerMidLevelDialogue(data.conversationId);
+            return;
+        }
+
         if (!prefabMap.TryGetValue(data.prefabId, out GameObject prefab) || prefab == null)
         {
             Debug.LogWarning($"No prefab mapped for prefabId: {data.prefabId}");

@@ -1,6 +1,41 @@
 {
-    "dialogueId": "world_1",
     "objects": [
+        {
+            "prefabId": "dialogue",
+            "name": "Dialogue",
+            "objectType": 5,
+            "spriteNo": -1,
+            "typeOfTerrain": 0,
+            "posX": -0.28670281171798708,
+            "posY": -3.0912551879882814,
+            "posZ": -0.09052177518606186,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "rotW": 1.0,
+            "scaleX": 1.7999999523162842,
+            "scaleY": 1.7999999523162842,
+            "scaleZ": 1.7999999523162842,
+            "conversationId": "intro"
+        },
+        {
+            "prefabId": "dialogue",
+            "name": "Dialogue (1)",
+            "objectType": 5,
+            "spriteNo": -1,
+            "typeOfTerrain": 0,
+            "posX": 0.001129102660343051,
+            "posY": 3.6207644939422609,
+            "posZ": -0.09052177518606186,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "rotW": 1.0,
+            "scaleX": 1.7999999523162842,
+            "scaleY": 1.7999999523162842,
+            "scaleZ": 1.7999999523162842,
+            "conversationId": "world_1"
+        },
         {
             "prefabId": "basic",
             "name": "Basic_Obstacle (1)",
@@ -16,7 +51,8 @@
             "rotW": 1.0,
             "scaleX": 1.7999999523162842,
             "scaleY": 1.7999999523162842,
-            "scaleZ": 1.7999999523162842
+            "scaleZ": 1.7999999523162842,
+            "conversationId": ""
         },
         {
             "prefabId": "basic",
@@ -33,7 +69,8 @@
             "rotW": 1.0,
             "scaleX": 1.7999999523162842,
             "scaleY": 1.7999999523162842,
-            "scaleZ": 1.7999999523162842
+            "scaleZ": 1.7999999523162842,
+            "conversationId": ""
         },
         {
             "prefabId": "forward",
@@ -50,7 +87,8 @@
             "rotW": 1.0,
             "scaleX": 6.070669174194336,
             "scaleY": 5.081509590148926,
-            "scaleZ": 1.7999999523162842
+            "scaleZ": 1.7999999523162842,
+            "conversationId": ""
         },
         {
             "prefabId": "big",
@@ -67,7 +105,8 @@
             "rotW": 1.0,
             "scaleX": 1.4534999132156373,
             "scaleY": 1.4608800411224366,
-            "scaleZ": 1.7999999523162842
+            "scaleZ": 1.7999999523162842,
+            "conversationId": ""
         },
         {
             "prefabId": "basic",
@@ -84,7 +123,8 @@
             "rotW": 1.0,
             "scaleX": 1.7999999523162842,
             "scaleY": 1.7999999523162842,
-            "scaleZ": 1.7999999523162842
+            "scaleZ": 1.7999999523162842,
+            "conversationId": ""
         },
         {
             "prefabId": "basic",
@@ -101,7 +141,8 @@
             "rotW": 1.0,
             "scaleX": 1.7999999523162842,
             "scaleY": 1.7999999523162842,
-            "scaleZ": 1.7999999523162842
+            "scaleZ": 1.7999999523162842,
+            "conversationId": ""
         },
         {
             "prefabId": "jellyfish",
@@ -118,7 +159,8 @@
             "rotW": 1.0,
             "scaleX": 1.7999999523162842,
             "scaleY": 1.7999999523162842,
-            "scaleZ": 1.7999999523162842
+            "scaleZ": 1.7999999523162842,
+            "conversationId": ""
         },
         {
             "prefabId": "basic",
@@ -135,7 +177,8 @@
             "rotW": 1.0,
             "scaleX": 1.7999999523162842,
             "scaleY": 1.7999999523162842,
-            "scaleZ": 1.7999999523162842
+            "scaleZ": 1.7999999523162842,
+            "conversationId": ""
         },
         {
             "prefabId": "big",
@@ -152,7 +195,8 @@
             "rotW": 1.0,
             "scaleX": 1.7999999523162842,
             "scaleY": 1.7999999523162842,
-            "scaleZ": 1.7999999523162842
+            "scaleZ": 1.7999999523162842,
+            "conversationId": ""
         },
         {
             "prefabId": "basic",
@@ -169,7 +213,8 @@
             "rotW": 1.0,
             "scaleX": 1.7999999523162842,
             "scaleY": 1.7999999523162842,
-            "scaleZ": 1.7999999523162842
+            "scaleZ": 1.7999999523162842,
+            "conversationId": ""
         },
         {
             "prefabId": "backward",
@@ -186,7 +231,8 @@
             "rotW": 1.0,
             "scaleX": 1.7999999523162842,
             "scaleY": 1.7999999523162842,
-            "scaleZ": 1.7999999523162842
+            "scaleZ": 1.7999999523162842,
+            "conversationId": ""
         },
         {
             "prefabId": "basic",
@@ -203,7 +249,8 @@
             "rotW": 1.0,
             "scaleX": 1.7999999523162842,
             "scaleY": 1.7999999523162842,
-            "scaleZ": 1.7999999523162842
+            "scaleZ": 1.7999999523162842,
+            "conversationId": ""
         },
         {
             "prefabId": "big",
@@ -220,7 +267,8 @@
             "rotW": 1.0,
             "scaleX": 1.7999999523162842,
             "scaleY": 1.7999999523162842,
-            "scaleZ": 1.7999999523162842
+            "scaleZ": 1.7999999523162842,
+            "conversationId": ""
         },
         {
             "prefabId": "forward",
@@ -237,7 +285,8 @@
             "rotW": 1.0,
             "scaleX": 1.7999999523162842,
             "scaleY": 1.7999999523162842,
-            "scaleZ": 1.7999999523162842
+            "scaleZ": 1.7999999523162842,
+            "conversationId": ""
         },
         {
             "prefabId": "basic",
@@ -254,7 +303,8 @@
             "rotW": 1.0,
             "scaleX": 1.7999999523162842,
             "scaleY": 1.7999999523162842,
-            "scaleZ": 1.7999999523162842
+            "scaleZ": 1.7999999523162842,
+            "conversationId": ""
         },
         {
             "prefabId": "forward",
@@ -271,7 +321,8 @@
             "rotW": 1.0,
             "scaleX": 5.624105930328369,
             "scaleY": 6.506612777709961,
-            "scaleZ": 1.7999999523162842
+            "scaleZ": 1.7999999523162842,
+            "conversationId": ""
         },
         {
             "prefabId": "big",
@@ -288,7 +339,8 @@
             "rotW": 1.0,
             "scaleX": 1.7999999523162842,
             "scaleY": 1.7999999523162842,
-            "scaleZ": 1.7999999523162842
+            "scaleZ": 1.7999999523162842,
+            "conversationId": ""
         },
         {
             "prefabId": "basic",
@@ -305,7 +357,8 @@
             "rotW": 1.0,
             "scaleX": 1.7999999523162842,
             "scaleY": 1.7999999523162842,
-            "scaleZ": 1.7999999523162842
+            "scaleZ": 1.7999999523162842,
+            "conversationId": ""
         },
         {
             "prefabId": "anglerfish",
@@ -322,7 +375,8 @@
             "rotW": 1.0,
             "scaleX": 0.5880599617958069,
             "scaleY": 0.8306999802589417,
-            "scaleZ": 1.7999999523162842
+            "scaleZ": 1.7999999523162842,
+            "conversationId": ""
         },
         {
             "prefabId": "big",
@@ -339,7 +393,8 @@
             "rotW": 1.0,
             "scaleX": 1.7999999523162842,
             "scaleY": 1.7999999523162842,
-            "scaleZ": 1.7999999523162842
+            "scaleZ": 1.7999999523162842,
+            "conversationId": ""
         },
         {
             "prefabId": "basic",
@@ -356,7 +411,8 @@
             "rotW": 1.0,
             "scaleX": 1.7999999523162842,
             "scaleY": 1.7999999523162842,
-            "scaleZ": 1.7999999523162842
+            "scaleZ": 1.7999999523162842,
+            "conversationId": ""
         },
         {
             "prefabId": "backward",
@@ -373,7 +429,8 @@
             "rotW": 1.0,
             "scaleX": 6.408360004425049,
             "scaleY": 6.506279945373535,
-            "scaleZ": 1.7999999523162842
+            "scaleZ": 1.7999999523162842,
+            "conversationId": ""
         },
         {
             "prefabId": "big",
@@ -390,7 +447,8 @@
             "rotW": 1.0,
             "scaleX": 1.7999999523162842,
             "scaleY": 1.7999999523162842,
-            "scaleZ": 1.7999999523162842
+            "scaleZ": 1.7999999523162842,
+            "conversationId": ""
         },
         {
             "prefabId": "basic",
@@ -407,7 +465,8 @@
             "rotW": 1.0,
             "scaleX": 1.7999999523162842,
             "scaleY": 1.7999999523162842,
-            "scaleZ": 1.7999999523162842
+            "scaleZ": 1.7999999523162842,
+            "conversationId": ""
         },
         {
             "prefabId": "big",
@@ -424,7 +483,8 @@
             "rotW": 1.0,
             "scaleX": 1.7999999523162842,
             "scaleY": 1.7999999523162842,
-            "scaleZ": 1.7999999523162842
+            "scaleZ": 1.7999999523162842,
+            "conversationId": ""
         },
         {
             "prefabId": "jellyfish",
@@ -441,7 +501,8 @@
             "rotW": 1.0,
             "scaleX": 1.7999999523162842,
             "scaleY": 1.7999999523162842,
-            "scaleZ": 1.7999999523162842
+            "scaleZ": 1.7999999523162842,
+            "conversationId": ""
         },
         {
             "prefabId": "basic",
@@ -458,7 +519,8 @@
             "rotW": 1.0,
             "scaleX": 1.7999999523162842,
             "scaleY": 1.7999999523162842,
-            "scaleZ": 1.7999999523162842
+            "scaleZ": 1.7999999523162842,
+            "conversationId": ""
         },
         {
             "prefabId": "floating_orb",
@@ -466,8 +528,8 @@
             "objectType": 3,
             "spriteNo": -1,
             "typeOfTerrain": 0,
-            "posX": -0.008271798491477967,
-            "posY": 120.05684661865235,
+            "posX": 0.006252765655517578,
+            "posY": 120.64643096923828,
             "posZ": 0.0,
             "rotX": 0.0,
             "rotY": 0.0,
@@ -475,7 +537,8 @@
             "rotW": 1.0,
             "scaleX": 1.7999999523162842,
             "scaleY": 1.7999999523162842,
-            "scaleZ": 1.7999999523162842
+            "scaleZ": 1.7999999523162842,
+            "conversationId": ""
         }
     ]
 }

@@ -74,7 +74,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if(!bulletSpawner.objectSpawner.dialogueDone)
+        if (bulletSpawner.objectSpawner.isPausedForDialogue)
         {
             return;
         }
@@ -93,11 +93,12 @@ public class PlayerMovement : MonoBehaviour
             postBounceSlowTimer -= Time.deltaTime;
         }
 
-        hasInput = Input.GetMouseButton(mouseButton);
+        bool isTouching = Input.touchCount > 0;
+        hasInput = Input.GetMouseButton(mouseButton) || isTouching;
 
         if (hasInput)
         {
-            Vector3 mouseScreenPos = Input.mousePosition;
+            Vector3 mouseScreenPos = isTouching ? (Vector3)Input.GetTouch(0).position : Input.mousePosition;
             Vector3 mouseWorldPos = mainCam.ScreenToWorldPoint(mouseScreenPos) + new Vector3(0, 1, 0);
             mouseWorldPos.z = 0f;
 
@@ -126,8 +127,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!bulletSpawner.objectSpawner.dialogueDone)
+        if (bulletSpawner.objectSpawner.isPausedForDialogue)
         {
+            rb.linearVelocity = Vector2.zero;
             return;
         }
 

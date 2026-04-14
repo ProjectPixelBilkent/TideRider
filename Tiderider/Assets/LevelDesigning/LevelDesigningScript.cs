@@ -8,52 +8,6 @@ using UnityEngine;
 
 public class LevelDesignerScript : MonoBehaviour
 {
-    public enum SpawnObjectType
-    {
-        Obstacle,
-        ExternalEffect,
-        Enemy,
-        EndingObject,
-        Coin
-    }
-
-    public enum TerrainType
-    {
-        General,
-        Ice,
-        Misty
-    }
-
-    [System.Serializable]
-    public class SavedObjectData
-    {
-        public string prefabId;
-        public string name;
-        public SpawnObjectType objectType;
-
-        public int spriteNo;
-        public TerrainType typeOfTerrain;
-
-        public float posX;
-        public float posY;
-        public float posZ;
-
-        public float rotX;
-        public float rotY;
-        public float rotZ;
-        public float rotW;
-
-        public float scaleX;
-        public float scaleY;
-        public float scaleZ;
-    }
-
-    [System.Serializable]
-    public class SavedSceneData
-    {
-        public string dialogueId = "";
-        public List<SavedObjectData> objects = new List<SavedObjectData>();
-    }
     public static float saveConstant = 1.8f;
 
 #if UNITY_EDITOR
@@ -217,6 +171,30 @@ public class LevelDesignerScript : MonoBehaviour
                 scaleX = c.transform.localScale.x * saveConstant,
                 scaleY = c.transform.localScale.y * saveConstant,
                 scaleZ = c.transform.localScale.z * saveConstant
+            })
+        );
+
+        DialogueTrigger[] dialogueTriggers = Object.FindObjectsByType<DialogueTrigger>(FindObjectsSortMode.None);
+
+        sortedObjects.AddRange(
+            dialogueTriggers.Select(d => new SavedObjectData
+            {
+                prefabId = d.prefabId,
+                name = d.gameObject.name,
+                objectType = SpawnObjectType.Dialogue,
+                conversationId = d.conversationId,
+                spriteNo = -1,
+                typeOfTerrain = TerrainType.General,
+                posX = d.transform.position.x * saveConstant,
+                posY = d.transform.position.y * saveConstant,
+                posZ = d.transform.position.z * saveConstant,
+                rotX = d.transform.rotation.x,
+                rotY = d.transform.rotation.y,
+                rotZ = d.transform.rotation.z,
+                rotW = d.transform.rotation.w,
+                scaleX = d.transform.localScale.x * saveConstant,
+                scaleY = d.transform.localScale.y * saveConstant,
+                scaleZ = d.transform.localScale.z * saveConstant
             })
         );
 

@@ -7865,14 +7865,15 @@ MonoBehaviour:
   - {fileID: 1014947555034517380, guid: 98ecedc4c3002624f9d0d1d635178777, type: 3}
   - {fileID: 1913479563316951313, guid: 7a082bed7b6b24c47af22bd152c66f4e, type: 3}
   - {fileID: 8492155602311516759, guid: 3d9bfaec147d3604fb65bb53493e1510, type: 3}
+  - {fileID: 5041261505637483910, guid: bd22cf8192522e04581a36fee7bb60e7, type: 3}
   mainCamera: {fileID: 519420031}
   moveSpeed: 5
   shipTag: Player
   monster: {fileID: 1264881555}
   monsterYOffset: -0.76
   isPausedForEnemy: 0
+  isPausedForDialogue: 0
   isInEndingSequence: 0
-  dialogueDone: 0
 --- !u!4 &1302116610
 Transform:
   m_ObjectHideFlags: 0

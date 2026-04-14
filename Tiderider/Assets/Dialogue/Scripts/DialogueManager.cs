@@ -125,12 +125,34 @@ public class DialogueManager : MonoBehaviour
                 yield break;
             }
 
-            yield return StartCoroutine(dialogueController.PlayDialogueLine(line, sprite));
+            bool lineComplete = false;
+            StartCoroutine(PlayLineAndSignal(line, sprite, () => lineComplete = true));
+
+            while (!lineComplete)
+            {
+                if (IsInputPressed() && dialogueController.IsTyping)
+                {
+                    dialogueController.SkipTyping();
+                }
+                yield return null;
+            }
+
             yield return StartCoroutine(WaitForContinueInput());
         }
 
         yield return StartCoroutine(dialogueController.HideDialogue());
         CompleteConversation();
+    }
+
+    private IEnumerator PlayLineAndSignal(DialogueLineData line, Sprite sprite, System.Action onComplete)
+    {
+        yield return StartCoroutine(dialogueController.PlayDialogueLine(line, sprite));
+        onComplete?.Invoke();
+    }
+
+    private bool IsInputPressed()
+    {
+        return Input.GetMouseButtonDown(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began);
     }
 
     private IEnumerator WaitForContinueInput()
@@ -140,7 +162,7 @@ public class DialogueManager : MonoBehaviour
         bool pressed = false;
         while (!pressed)
         {
-            if (Input.GetMouseButtonDown(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began))
+            if (IsInputPressed())
             {
                 pressed = true;
             }

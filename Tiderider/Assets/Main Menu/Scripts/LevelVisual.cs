@@ -18,6 +18,7 @@ public class LevelVisual : MonoBehaviour
     {
         int highest = DataManager.GetHighestUnlockedIndex();
 
+        image.sprite = myData.islandSprite;
         image.color = (myData.levelIndex <= highest) ? myData.activeColor : lockedColor;
     }
 }

@@ -30,9 +30,13 @@ public class LevelManager : MonoBehaviour
     {
         int highest = DataManager.GetHighestUnlockedIndex();
 
-        if (data.levelIndex <= highest)
+        if (data.levelIndex < highest)
         {
             MoveShipToIsland(data);
+        }
+        else
+        {
+            StartGameplay(data);
         }
     }
 
@@ -51,22 +55,27 @@ public class LevelManager : MonoBehaviour
 
         moveSequence.OnComplete(() =>
         {
-            if (ResourceManager.isEnergyLeft())
-            {
-                DataManager.DecrementEnergyAmount();
-                CurrentPlayingLevelIndex = data.levelIndex;
-                SceneObjectSpawner.sceneJsonFile = data.levelJson;
-                SceneManager.LoadScene("Movement");
-            }
-            else
-            {
-                ResourceManager.HandleNoEnergy();
-            }
+            StartGameplay(data);
         });
     }
 
     private float FindIslandPosition(int index)
     {
         return levelObjects[index].transform.position.y;
+    }
+
+    private void StartGameplay(LevelData data)
+    {
+        if (ResourceManager.isEnergyLeft())
+        {
+            DataManager.DecrementEnergyAmount();
+            CurrentPlayingLevelIndex = data.levelIndex;
+            SceneObjectSpawner.sceneJsonFile = data.levelJson;
+            SceneManager.LoadScene("Movement");
+        }
+        else
+        {
+            ResourceManager.HandleNoEnergy();
+        }
     }
 }

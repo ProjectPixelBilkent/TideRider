@@ -2609,6 +2609,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 4349765089199864341, guid: 1a292a5329629ce4881fe3d93363cff2, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -1735201125806331265, guid: 3684590359e24724c870a476b15a2b15, type: 3}
     - target: {fileID: 5899827920120710848, guid: 1a292a5329629ce4881fe3d93363cff2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 1
@@ -2709,6 +2713,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7036646282591698951, guid: 1a292a5329629ce4881fe3d93363cff2, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -7714588399865822475, guid: 7c2e2a146e7c2854b946e0cf70587b74, type: 3}
     - target: {fileID: 8033611981162956541, guid: 1a292a5329629ce4881fe3d93363cff2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 1
@@ -9993,7 +10001,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1920, y: 1200}
+  m_AnchoredPosition: {x: -2700, y: 1200}
   m_SizeDelta: {x: 3240, y: 2400}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1156037593
@@ -17050,6 +17058,22 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
       value: 
       objectReference: {fileID: 1426956769}
+    - target: {fileID: 5661080433532981093, guid: 2ded278888470e5468b3826df36ddffc, type: 3}
+      propertyPath: m_Name
+      value: Energy
+      objectReference: {fileID: 0}
+    - target: {fileID: 6626018473657890941, guid: 2ded278888470e5468b3826df36ddffc, type: 3}
+      propertyPath: m_text
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6626018473657890941, guid: 2ded278888470e5468b3826df36ddffc, type: 3}
+      propertyPath: m_fontSize
+      value: 80.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 7376278402230058841, guid: 2ded278888470e5468b3826df36ddffc, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 7675826601332790545, guid: b27eb980cec8acd42a4482223cd41e1f, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

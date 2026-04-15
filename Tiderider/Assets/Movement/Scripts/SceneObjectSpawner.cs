@@ -27,6 +27,9 @@ public class SceneObjectSpawner : MonoBehaviour
     [SerializeField] private GameObject monster;
     [SerializeField] private float monsterYOffset = -0.76f;
 
+    [Header("Scene Objects")]
+    [SerializeField] private GameObject blackBackground;
+
     private EdgeCollider2D edgeCollider;
 
     public static Vector3 UpwardsMovement { get; private set; }
@@ -38,6 +41,7 @@ public class SceneObjectSpawner : MonoBehaviour
     private Enemy activeEnemy;
     public bool isPausedForEnemy = false;
     public bool isPausedForDialogue = false;
+    private string lastConversationId;
 
     private Vector3 lastEnemyOriginalSpawnOffset = Vector3.zero;
     private Vector3 postEnemyObstacleOffset = Vector3.zero;
@@ -85,7 +89,7 @@ public class SceneObjectSpawner : MonoBehaviour
             float camHeight = 2f * mainCamera.orthographicSize;
             Vector3 camPos = mainCamera.transform.position;
             float bottom = camPos.y - camHeight / 2f;
-            Vector3 targetPos = new Vector3(camPos.x, bottom + monsterYOffset, 0);
+            Vector3 targetPos = new Vector3(camPos.x, bottom + monsterYOffset, 1);
             Vector3 delta = targetPos - monster.transform.position;
             monster.transform.Translate(delta, Space.World);
         }
@@ -213,6 +217,11 @@ public class SceneObjectSpawner : MonoBehaviour
         return basePosition;
     }
 
+    private bool StandaloneConversation(string id)
+    {
+        return id == "scene_0" || id == "reunion_scene";
+    }
+
     private void TriggerMidLevelDialogue(string conversationId)
     {
         if (string.IsNullOrWhiteSpace(conversationId))
@@ -227,6 +236,10 @@ public class SceneObjectSpawner : MonoBehaviour
             return;
         }
 
+        if (StandaloneConversation(conversationId))
+            blackBackground.SetActive(true);
+
+        lastConversationId = conversationId;
         isPausedForDialogue = true;
         dialogueManager.ConversationFinished -= HandleMidLevelDialogueFinished;
         dialogueManager.ConversationFinished += HandleMidLevelDialogueFinished;
@@ -242,6 +255,13 @@ public class SceneObjectSpawner : MonoBehaviour
             dialogueManager.ConversationFinished -= HandleMidLevelDialogueFinished;
 
         isPausedForDialogue = false;
+
+        if (StandaloneConversation(lastConversationId))
+        {
+            EndingObject.InvokeOnLevelCompleted();
+        }
+
+        lastConversationId = null;
     }
 
     private void SpawnObject(SavedObjectData data)

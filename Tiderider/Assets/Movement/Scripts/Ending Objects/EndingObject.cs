@@ -11,6 +11,11 @@ public class EndingObject : MonoBehaviour
 
     public SpriteRenderer SpriteRenderer { get; private set; }
 
+    public static void InvokeOnLevelCompleted()
+    {
+        OnLevelCompleted?.Invoke();
+    }
+
     private void Awake()
     {
         SpriteRenderer = GetComponent<SpriteRenderer>();
@@ -37,7 +42,7 @@ public class EndingObject : MonoBehaviour
             return;
         }
 
-        OnLevelCompleted?.Invoke();
+        InvokeOnLevelCompleted();
     }
 
     private void FixedUpdate()

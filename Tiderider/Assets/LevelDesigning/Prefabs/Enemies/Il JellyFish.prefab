@@ -47,8 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81ecedfd8b201ce45bbbb23f9ef59764, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 20
-  currentHealth: 20
+  maxHealth: 100
+  currentHealth: 100
   healthSlider: {fileID: 0}
   speed: 10
   prefabId: jellyfish

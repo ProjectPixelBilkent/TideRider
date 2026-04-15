@@ -32,10 +32,59 @@ public class Enemy : HasHealth
         }
     }
 
+    private void LateUpdate()
+    {
+        EnforceCameraBounds();
+    }
+
     private void FixedUpdate()
     {
         if (fsm != null)
             fsm.FixedUpdate();
+    }
+
+    private void EnforceCameraBounds()
+    {
+        Camera cam = Camera.main;
+        if (cam == null) return;
+
+        float halfHeight = cam.orthographicSize;
+        float halfWidth = AspectRatioController.DesignedHalfWidth;
+        Vector3 camPos = cam.transform.position;
+
+        float leftBound = camPos.x - halfWidth;
+        float rightBound = camPos.x + halfWidth;
+        float bottomBound = camPos.y - halfHeight;
+
+        Vector3 pos = transform.position;
+
+        // Out of bounds at the bottom — kill the enemy
+        if (pos.y < bottomBound)
+        {
+            TakeDamage(int.MaxValue);
+            return;
+        }
+
+        // Out of bounds left or right — push back inside
+        bool clamped = false;
+        if (pos.x < leftBound)
+        {
+            pos.x = leftBound;
+            clamped = true;
+        }
+        else if (pos.x > rightBound)
+        {
+            pos.x = rightBound;
+            clamped = true;
+        }
+
+        if (clamped)
+        {
+            transform.position = pos;
+            // Kill horizontal velocity so the enemy doesn't slide right back out
+            if (rb != null)
+                rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+        }
     }
 
     public override void Die()

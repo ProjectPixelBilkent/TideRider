@@ -57,6 +57,7 @@ public class PlayerMovement : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         mainCam = Camera.main;
         bulletSpawner = GetComponent<BulletSpawner>();
         if (spriteRenderer == null)

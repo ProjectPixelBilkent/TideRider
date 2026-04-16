@@ -29,6 +29,7 @@ public class SceneObjectSpawner : MonoBehaviour
 
     [Header("Scene Objects")]
     [SerializeField] private GameObject blackBackground;
+    [SerializeField] private GameObject dialogueCanvas;
 
     private EdgeCollider2D edgeCollider;
 
@@ -241,6 +242,8 @@ public class SceneObjectSpawner : MonoBehaviour
 
         lastConversationId = conversationId;
         isPausedForDialogue = true;
+        if (dialogueCanvas != null)
+            dialogueCanvas.SetActive(true);
         dialogueManager.ConversationFinished -= HandleMidLevelDialogueFinished;
         dialogueManager.ConversationFinished += HandleMidLevelDialogueFinished;
         dialogueManager.PlayConversation(conversationId);
@@ -255,6 +258,8 @@ public class SceneObjectSpawner : MonoBehaviour
             dialogueManager.ConversationFinished -= HandleMidLevelDialogueFinished;
 
         isPausedForDialogue = false;
+        if (dialogueCanvas != null)
+            dialogueCanvas.SetActive(false);
 
         if (StandaloneConversation(lastConversationId))
         {

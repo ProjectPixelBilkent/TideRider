@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using DG.Tweening;
+using System.Threading;
+using UnityEngine;
 
 public class BulletSpawner : MonoBehaviour
 {
@@ -43,7 +45,7 @@ public class BulletSpawner : MonoBehaviour
             return;
         }
         var monster = GameObject.FindGameObjectWithTag("LevelMonster").GetComponent<Collider2D>();
-        for(int i=0; i< armory.Length ; i++)
+        for(int i=0; i < armory.Length ; i++)
         {
             var weaponStat = armory[i];
             if (weaponStat.weaponInfo == null)
@@ -55,49 +57,68 @@ public class BulletSpawner : MonoBehaviour
             if (weaponLevel == null)
             {
                 Debug.LogWarning($"Skipping slot {i} on '{gameObject.name}': weapon '{weaponStat.weaponInfo.weaponName}' has no valid weapon level.");
-                continue;
+                return;
             }
 
-            if(Time.time - lastFired[i] < GetWeaponCooldown(weaponStat, weaponLevel))
+            if (Time.time - lastFired[i] < GetWeaponCooldown(weaponStat, weaponLevel))
             {
                 continue;
             }
-
             lastFired[i] = Time.time;
 
-            //Might be better to implement an object pool.
-            if (weaponStat.weaponInfo.projectilePrefab == null)
+            int j = i;
+            SpawnWeapon(weaponStat, j, monster);
+            if(weaponStat.weaponInfo.weaponName == "Minigun")
             {
-                Debug.LogWarning($"Skipping slot {i} on '{gameObject.name}': weapon '{weaponStat.weaponInfo.weaponName}' has no projectile prefab.");
-                continue;
+                float delayTime = 0.15f;
+                DOVirtual.DelayedCall(delayTime, () =>
+                {
+                    SpawnWeapon(weaponStat, j, monster);
+                    DOVirtual.DelayedCall(delayTime, () =>
+                    {
+                        SpawnWeapon(weaponStat, j, monster);
+                    });
+                });
             }
+        }
+    }
 
-            var currentBullet = Instantiate(weaponStat.weaponInfo.projectilePrefab).GetComponent<Bullet>();
-            if (currentBullet == null)
-            {
-                Debug.LogWarning($"Skipping slot {i} on '{gameObject.name}': prefab '{weaponStat.weaponInfo.projectilePrefab.name}' has no Bullet component.");
-                continue;
-            }
+    private void SpawnWeapon(WeaponStat weaponStat, int i, Collider2D monster)
+    {
+        var weaponLevel = weaponStat.WeaponLevel;
 
-            currentBullet.Weapon = weaponStat.weaponInfo;
-            currentBullet.Level = weaponStat.level;
-            currentBullet.WeaponLevel = weaponLevel;
-            currentBullet.PlayerBullet = CompareTag("Player");
-            currentBullet.OwnerTransform = transform;
+        //Might be better to implement an object pool.
+        if (weaponStat.weaponInfo.projectilePrefab == null)
+        {
+            Debug.LogWarning($"Skipping slot {i} on '{gameObject.name}': weapon '{weaponStat.weaponInfo.weaponName}' has no projectile prefab.");
+            return;
+        }
 
-            currentBullet.transform.position = Weapon.BulletOffsets[i] + transform.position;
-            currentBullet.Activate(Weapon.BulletDirections[i], rb.linearVelocity);
+        var currentBullet = Instantiate(weaponStat.weaponInfo.projectilePrefab).GetComponent<Bullet>();
+        if (currentBullet == null)
+        {
+            Debug.LogWarning($"Skipping slot {i} on '{gameObject.name}': prefab '{weaponStat.weaponInfo.projectilePrefab.name}' has no Bullet component.");
+            return;
+        }
 
-            if (currentBullet.circleCollider != null)
-            {
-                Physics2D.IgnoreCollision(currentBullet.circleCollider, col, true);
-                Physics2D.IgnoreCollision(currentBullet.circleCollider, monster, true);
-            }
+        currentBullet.Weapon = weaponStat.weaponInfo;
+        currentBullet.Level = weaponStat.level;
+        currentBullet.WeaponLevel = weaponLevel;
+        currentBullet.PlayerBullet = CompareTag("Player");
+        currentBullet.OwnerTransform = transform;
 
-            if (weaponStat.weaponInfo.spawningSound != null)
-            {
-                AudioSource.PlayClipAtPoint(weaponStat.weaponInfo.spawningSound, transform.position);
-            }
+        currentBullet.transform.position = Weapon.BulletOffsets[i] + transform.position;
+        currentBullet.Activate(Weapon.BulletDirections[i], rb.linearVelocity);
+
+        if (currentBullet.circleCollider != null)
+        {
+            Physics2D.IgnoreCollision(currentBullet.circleCollider, col, true);
+            Physics2D.IgnoreCollision(currentBullet.circleCollider, monster, true);
+        }
+
+        if (weaponStat.weaponInfo.spawningSound != null)
+        {
+            AudioSource.PlayClipAtPoint(weaponStat.weaponInfo.spawningSound, transform.position);
         }
     }
 

@@ -79,6 +79,28 @@ public static class DataManager
     }
 
     /// <summary>
+    /// Adds the conversation to the completed list and saves the game data.
+    /// </summary>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public static void MarkConversationCompleted(string conversationId)
+    {
+        GameData gameData = LoadGameData();
+
+        if (gameData.completedConversations == null)
+        {
+            gameData.completedConversations = new List<string>();
+        }
+
+        if (!gameData.completedConversations.Contains(conversationId))
+        {
+            gameData.completedConversations.Add(conversationId);
+            SaveGameData(gameData);
+        }
+    }
+
+    /// <summary>
     /// Saves the selected weapon in player armory in game data.
     /// </summary>
     /// <remarks>
@@ -198,6 +220,23 @@ public static class DataManager
     /// Maintained by: Işık Dönger
     /// </remarks>
     public static int GetHighestUnlockedIndex() => LoadGameData().highestUnlockedLevelIndex;
+
+    /// <summary>
+    /// Checks if a conversation has already been shown based on the local backup.
+    /// </summary>
+    /// <returns>True if completed, false otherwise.</returns>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public static bool IsConversationCompleted(string conversationId)
+    {
+        GameData gameData = LoadGameData();
+
+        if (gameData.completedConversations == null)
+            return false;
+
+        return gameData.completedConversations.Contains(conversationId);
+    }
 
     /// <summary>
     /// Loads the player armory from the local backup.

@@ -16,6 +16,7 @@ public class GameData
     public int energyAmount = 5;
     public Weapon[] playerArmory = new Weapon[6];
     public int highestUnlockedLevelIndex = 0;
+    public List<string> completedConversations = new List<string>();
 }
 
 /// <summary>

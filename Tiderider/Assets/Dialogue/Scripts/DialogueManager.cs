@@ -73,6 +73,12 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
+        if (DataManager.IsConversationCompleted(conversationId))
+        {
+            Debug.Log($"Conversation '{conversationId}' has already been played. Skipping.");
+            return;
+        }
+
         DialogueConversationData conversation = GetConversationById(conversationId);
 
         if (conversation == null)
@@ -173,6 +179,11 @@ public class DialogueManager : MonoBehaviour
 
     private void CompleteConversation()
     {
+        if (!string.IsNullOrEmpty(activeConversationId))
+        {
+            DataManager.MarkConversationCompleted(activeConversationId);
+        }
+
         currentConversationRoutine = null;
         activeConversationId = null;
         ConversationFinished?.Invoke();

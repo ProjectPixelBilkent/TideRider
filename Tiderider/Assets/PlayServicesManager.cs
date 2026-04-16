@@ -8,7 +8,7 @@ public static class PlayServicesManager
 {
     public static async Task Init()
     {
-        PlayGamesPlatform.Activate();
+        // PlayGamesPlatform.Activate();
         var dependencyStatus = await Firebase.FirebaseApp.CheckAndFixDependenciesAsync();
         if (dependencyStatus == Firebase.DependencyStatus.Available)
         {
@@ -22,17 +22,17 @@ public static class PlayServicesManager
 
     public static void SignIn()
     {
-        if (!PlayGamesPlatform.Instance.IsAuthenticated())
-        {
-            PlayGamesPlatform.Instance.Authenticate(status =>
-            {
-                Debug.Log($"Play Games Auth Status: {status}");
-                if (status == SignInStatus.Success)
-                {
-                    PlayGamesPlatform.Instance.RequestServerSideAccess(true, code => LinkWithFirebase(code));
-                }
-            });
-        }
+        // if (!PlayGamesPlatform.Instance.IsAuthenticated())
+        // {
+        //     PlayGamesPlatform.Instance.Authenticate(status =>
+        //     {
+        //         Debug.Log($"Play Games Auth Status: {status}");
+        //         if (status == SignInStatus.Success)
+        //         {
+        //             PlayGamesPlatform.Instance.RequestServerSideAccess(true, code => LinkWithFirebase(code));
+        //         }
+        //     });
+        // }
     }
 
     private static void LinkWithFirebase(string authCode)

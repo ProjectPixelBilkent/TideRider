@@ -14,6 +14,7 @@ public class SceneObjectSpawner : MonoBehaviour
     [SerializeField] private float yOffset = 0f;
     [SerializeField] private float spawnAheadDistance = 20f;
     [SerializeField] private float enemySpawnAheadDistance = 7.5f;
+    [SerializeField] private float bufferAfterEnemy = 7.5f;
     [SerializeField] private Transform spawnedParent;
 
     [Header("Prefabs")]
@@ -105,7 +106,7 @@ public class SceneObjectSpawner : MonoBehaviour
         if (isPausedForEnemy && activeEnemy == null)
         {
             if (Camera.main != null)
-                postEnemyObstacleOffset = new Vector3(0, Camera.main.transform.position.y, 0);
+                postEnemyObstacleOffset = new Vector3(0, Camera.main.transform.position.y + bufferAfterEnemy, 0);
             isPausedForEnemy = false;
         }
 

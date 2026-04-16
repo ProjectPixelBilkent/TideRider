@@ -7779,6 +7779,7 @@ MonoBehaviour:
   yOffset: 0
   spawnAheadDistance: 20
   enemySpawnAheadDistance: 7.5
+  bufferAfterEnemy: 7.5
   spawnedParent: {fileID: 0}
   prefabEntries:
   - {fileID: 8291028243939827525, guid: 977d8197730b62b4d98dba89e62c084a, type: 3}

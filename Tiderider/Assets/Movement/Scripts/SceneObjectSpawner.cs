@@ -214,7 +214,7 @@ public class SceneObjectSpawner : MonoBehaviour
             data.posZ
         );
 
-        basePosition += postEnemyObstacleOffset - lastEnemyOriginalSpawnOffset;
+        basePosition += postEnemyObstacleOffset - lastEnemyOriginalSpawnOffset + new Vector3(0,  bufferAfterEnemy, 0);
 
         return basePosition;
     }

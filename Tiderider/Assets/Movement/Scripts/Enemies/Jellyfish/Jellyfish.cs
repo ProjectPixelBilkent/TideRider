@@ -6,6 +6,10 @@ using UnityEditor;
 
 public class Jellyfish : Enemy
 {
+    private const int RadiusFillTextureSize = 128;
+    private const float RadiusFillSoftEdge = 0.08f;
+    private static Sprite radiusFillSprite;
+
     [Header("Animation")]
     public Sprite idleSprite;
     public Sprite movementStretchSprite;
@@ -36,10 +40,15 @@ public class Jellyfish : Enemy
     [Header("Shock Visuals")]
     public Color chargedColor = new Color(0.5f, 0.9f, 1f);
     public Color rechargingColor = new Color(0.4f, 0.4f, 0.4f);
+    public Color chargedRadiusColor = new Color(0.35f, 0.75f, 1f);
+    public Color rechargingRadiusColor = new Color(0.45f, 0.45f, 0.5f);
+    public Color chargedRadiusFillColor = new Color(0.35f, 0.75f, 1f);
+    public Color rechargingRadiusFillColor = new Color(0.45f, 0.45f, 0.5f);
     public Color attackFlashColorA = Color.white;
     public Color attackFlashColorB = new Color(0.5f, 0.9f, 1f);
     [Min(0f)] public float attackFlashInterval = 0.08f;
     [Range(0f, 1f)] public float radiusAlpha = 0.4f;
+    [Range(0f, 1f)] public float radiusFillAlpha = 0.14f;
     [Range(0f, 1f)] public float attackFlashRadiusAlpha = 0.8f;
     public float radiusLineWidth = 0.05f;
     [Tooltip("Number of segments used to draw the radius circle.")]
@@ -54,6 +63,7 @@ public class Jellyfish : Enemy
 
     [HideInInspector] public SpriteRenderer spriteRenderer;
     private LineRenderer radiusLine;
+    private SpriteRenderer radiusFillRenderer;
     private Coroutine spriteSwapLoop;
     private Transform attackRingRoot;
     private SpriteRenderer[] attackRingRenderers;
@@ -227,6 +237,8 @@ public class Jellyfish : Enemy
 
     private void SetupRadiusLine()
     {
+        SetupRadiusFill();
+
         GameObject lineObj = new GameObject("ShockRadiusVisual");
         lineObj.transform.SetParent(transform, false);
 
@@ -246,6 +258,20 @@ public class Jellyfish : Enemy
         UpdateRadiusColor();
     }
 
+    private void SetupRadiusFill()
+    {
+        GameObject fillObj = new GameObject("ShockRadiusFill");
+        fillObj.transform.SetParent(transform, false);
+        fillObj.transform.localPosition = Vector3.zero;
+
+        radiusFillRenderer = fillObj.AddComponent<SpriteRenderer>();
+        radiusFillRenderer.sprite = GetRadiusFillSprite();
+        radiusFillRenderer.sortingLayerID = spriteRenderer != null ? spriteRenderer.sortingLayerID : 0;
+        radiusFillRenderer.sortingOrder = spriteRenderer != null ? spriteRenderer.sortingOrder - 2 : -2;
+
+        UpdateRadiusFillScale();
+    }
+
     private void DrawRadiusCircle()
     {
         if (radiusLine == null) return;
@@ -257,13 +283,28 @@ public class Jellyfish : Enemy
         }
     }
 
+    private void UpdateRadiusFillScale()
+    {
+        if (radiusFillRenderer == null) return;
+
+        float diameter = shockRadius * 2f;
+        radiusFillRenderer.transform.localScale = new Vector3(diameter, diameter, 1f);
+    }
+
     public void UpdateRadiusColor()
     {
         if (radiusLine == null) return;
-        Color c = isShockCharged ? chargedColor : rechargingColor;
+        Color c = isShockCharged ? chargedRadiusColor : rechargingRadiusColor;
         c.a = radiusAlpha;
         radiusLine.startColor = c;
         radiusLine.endColor = c;
+
+        if (radiusFillRenderer != null)
+        {
+            Color fill = isShockCharged ? chargedRadiusFillColor : rechargingRadiusFillColor;
+            fill.a = radiusFillAlpha;
+            radiusFillRenderer.color = fill;
+        }
     }
 
     public void SetRadiusColor(Color color, float alpha)
@@ -272,6 +313,13 @@ public class Jellyfish : Enemy
         color.a = alpha;
         radiusLine.startColor = color;
         radiusLine.endColor = color;
+
+        if (radiusFillRenderer != null)
+        {
+            Color fill = color;
+            fill.a = Mathf.Clamp01(alpha * 0.25f);
+            radiusFillRenderer.color = fill;
+        }
     }
 
     private IEnumerator ShockCheckLoop()
@@ -294,9 +342,14 @@ public class Jellyfish : Enemy
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = isShockCharged ? new Color(0.2f, 0.8f, 1f, 0.35f) : new Color(0.5f, 0.5f, 0.5f, 0.2f);
+        Color fillColor = isShockCharged ? chargedRadiusColor : rechargingRadiusColor;
+        fillColor.a = isShockCharged ? 0.35f : 0.2f;
+        Gizmos.color = fillColor;
         Gizmos.DrawSphere(transform.position, shockRadius);
-        Gizmos.color = isShockCharged ? new Color(0.2f, 0.8f, 1f, 0.9f) : new Color(0.5f, 0.5f, 0.5f, 0.6f);
+
+        Color wireColor = isShockCharged ? chargedRadiusColor : rechargingRadiusColor;
+        wireColor.a = isShockCharged ? 0.9f : 0.6f;
+        Gizmos.color = wireColor;
         Gizmos.DrawWireSphere(transform.position, shockRadius);
     }
 
@@ -306,6 +359,40 @@ public class Jellyfish : Enemy
         SetAttackRingVisible(false, Color.white);
     }
 
+    private static Sprite GetRadiusFillSprite()
+    {
+        if (radiusFillSprite != null)
+        {
+            return radiusFillSprite;
+        }
+
+        Texture2D texture = new Texture2D(RadiusFillTextureSize, RadiusFillTextureSize, TextureFormat.RGBA32, false);
+        texture.name = "JellyfishRadiusFill";
+        texture.wrapMode = TextureWrapMode.Clamp;
+        texture.filterMode = FilterMode.Bilinear;
+
+        Vector2 center = new Vector2((RadiusFillTextureSize - 1) * 0.5f, (RadiusFillTextureSize - 1) * 0.5f);
+        float radius = (RadiusFillTextureSize - 1) * 0.5f;
+
+        for (int y = 0; y < RadiusFillTextureSize; y++)
+        {
+            for (int x = 0; x < RadiusFillTextureSize; x++)
+            {
+                float distance = Vector2.Distance(new Vector2(x, y), center) / radius;
+                float alpha = Mathf.Clamp01((1f - distance) / RadiusFillSoftEdge);
+                texture.SetPixel(x, y, new Color(1f, 1f, 1f, alpha));
+            }
+        }
+
+        texture.Apply();
+        radiusFillSprite = Sprite.Create(
+            texture,
+            new Rect(0f, 0f, RadiusFillTextureSize, RadiusFillTextureSize),
+            new Vector2(0.5f, 0.5f),
+            RadiusFillTextureSize);
+        return radiusFillSprite;
+    }
+
 #if UNITY_EDITOR
     private void OnValidate()
     {
@@ -313,6 +400,13 @@ public class Jellyfish : Enemy
         {
             attackRingSprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Movement/RealAssets/jellyfish/jellyfish attack.png");
         }
+
+        radiusSegments = Mathf.Max(3, radiusSegments);
+        shockRadius = Mathf.Max(0f, shockRadius);
+
+        DrawRadiusCircle();
+        UpdateRadiusFillScale();
+        UpdateRadiusColor();
     }
 #endif
 }

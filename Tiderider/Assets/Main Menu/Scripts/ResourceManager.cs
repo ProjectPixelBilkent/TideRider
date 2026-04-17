@@ -9,10 +9,19 @@ public class ResourceManager : MonoBehaviour
     [SerializeField] private TMP_Text energyAmount;
     [SerializeField] private TMP_Text energyTimerText;
     [SerializeField] private TMP_Text coinAmount;
+    private bool hasLoggedMissingReferences;
 
     void Awake()
     {
         Instance = this;
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
     }
 
     void Start()
@@ -22,13 +31,24 @@ public class ResourceManager : MonoBehaviour
 
     public void UpdateUI()
     {
+        if (energyAmount == null || coinAmount == null)
+        {
+            if (!hasLoggedMissingReferences)
+            {
+                Debug.LogWarning("ResourceManager.UpdateUI skipped because UI text references are missing.", this);
+                hasLoggedMissingReferences = true;
+            }
+            return;
+        }
+
+        hasLoggedMissingReferences = false;
         energyAmount.text = DataManager.GetEnergyAmount() + "/5";
         coinAmount.text = DataManager.GetCoinAmount().ToString();
     }
 
     void Update()
     {
-        if (energyTimerText != null)
+        if (energyTimerText != null && EnergyRecoveryManager.Instance != null)
         {
             energyTimerText.text = EnergyRecoveryManager.Instance.GetFormattedTime();
         }

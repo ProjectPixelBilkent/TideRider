@@ -49,6 +49,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   currentHealth: 100
+  damageFlashColor: {r: 1, g: 0.5019608, b: 0.5019608, a: 1}
+  damageFlashDuration: 0.45
   healthSlider: {fileID: 0}
   speed: 10
   prefabId: jellyfish
@@ -73,10 +75,15 @@ MonoBehaviour:
   lightningSpeed: 25
   chargedColor: {r: 0.5, g: 0.9, b: 1, a: 1}
   rechargingColor: {r: 0.4, g: 0.4, b: 0.4, a: 1}
+  chargedRadiusColor: {r: 0.35, g: 0.75, b: 1, a: 1}
+  rechargingRadiusColor: {r: 0.45, g: 0.45, b: 0.5, a: 1}
+  chargedRadiusFillColor: {r: 0, g: 0.4521482, b: 0.735849, a: 1}
+  rechargingRadiusFillColor: {r: 0.45, g: 0.45, b: 0.5, a: 1}
   attackFlashColorA: {r: 0.23137255, g: 0.23137255, b: 0.23137255, a: 1}
   attackFlashColorB: {r: 0, g: 1, b: 0.9372549, a: 1}
   attackFlashInterval: 0.08
   radiusAlpha: 0.4
+  radiusFillAlpha: 0.14
   attackFlashRadiusAlpha: 0.8
   radiusLineWidth: 0.05
   radiusSegments: 48

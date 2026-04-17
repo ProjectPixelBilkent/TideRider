@@ -66,6 +66,12 @@ public class LevelManager : MonoBehaviour
 
     private void StartGameplay(LevelData data)
     {
+        if (!ArmoryManager.Instance.isArmoryComplete())
+        {
+            NotificationManager.Instance.ShowNotification("Complete your armory!", NotificationManager.UITab.Armory);
+            return;
+        }
+
         if (ResourceManager.isEnergyLeft())
         {
             DataManager.DecrementEnergyAmount();

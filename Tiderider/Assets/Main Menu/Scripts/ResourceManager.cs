@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using DG.Tweening;
 
 public class ResourceManager : MonoBehaviour
 {
@@ -9,10 +8,6 @@ public class ResourceManager : MonoBehaviour
     [Header("UI Elements")]
     [SerializeField] private TMP_Text energyAmount;
     [SerializeField] private TMP_Text coinAmount;
-
-    [Header("Notification System")]
-    [SerializeField] private GameObject notificationPrefab;
-    [SerializeField] private Transform notificationPanel;
 
     void Awake()
     {
@@ -28,7 +23,6 @@ public class ResourceManager : MonoBehaviour
     {
         energyAmount.text = DataManager.GetEnergyAmount() + "/5";
         coinAmount.text = DataManager.GetCoinAmount().ToString();
-        Debug.Log(DataManager.GetCoinAmount());
     }
 
     public static bool isEnergyLeft()
@@ -38,7 +32,7 @@ public class ResourceManager : MonoBehaviour
 
     public static void HandleNoEnergy()
     {
-        Instance.ShowNotification("Not enough energy!");
+        NotificationManager.Instance.ShowNotification("Not enough energy!");
     }
 
     public static void UpgradeWeapon(Weapon weapon)
@@ -62,14 +56,6 @@ public class ResourceManager : MonoBehaviour
 
     private static void HandleNoCoin()
     {
-        Instance.ShowNotification("Not enough coins!");
-    }
-
-    public void ShowNotification(string message)
-    {
-        GameObject go = Instantiate(notificationPrefab, notificationPanel);
-        go.GetComponent<NotificationItem>().Setup(message);
-
-        go.transform.SetAsLastSibling();
+        NotificationManager.Instance.ShowNotification("Not enough coins!", NotificationManager.UITab.Shop);
     }
 }

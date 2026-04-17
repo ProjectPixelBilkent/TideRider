@@ -5927,10 +5927,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1366446002}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -1200}
-  m_SizeDelta: {x: 800, y: 0}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: -200, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &710446841
 MonoBehaviour:
@@ -11066,6 +11066,7 @@ GameObject:
   - component: {fileID: 1319880915}
   - component: {fileID: 1319880916}
   - component: {fileID: 1319880917}
+  - component: {fileID: 1319880918}
   m_Layer: 0
   m_Name: ScriptController
   m_TagString: Untagged
@@ -11163,7 +11164,6 @@ MonoBehaviour:
   - {fileID: 625692180}
   levelCanvas: {fileID: 1315146796}
   shopCanvas: {fileID: 1573667363}
-  notificationPanel: {fileID: 710446840}
 --- !u!114 &1319880913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11254,6 +11254,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   energyAmount: {fileID: 2144502394}
   coinAmount: {fileID: 729330569}
+--- !u!114 &1319880918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1319880908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 062e7abb9b9140042819044af917af38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   notificationPrefab: {fileID: 5256738014107654808, guid: 8ab5ed6f29fbc3443a83e10c2dd8932d, type: 3}
   notificationPanel: {fileID: 710446840}
 --- !u!1001 &1320192107

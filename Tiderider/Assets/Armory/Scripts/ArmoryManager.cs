@@ -186,4 +186,16 @@ public class ArmoryManager : MonoBehaviour
             weaponSlot = null;
         }
     }
+
+    public bool isArmoryComplete()
+    {
+        for (int i = 0; i < weaponList.Length; i++)
+        {
+            if (weaponList[i] == null)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 }

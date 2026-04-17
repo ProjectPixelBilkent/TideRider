@@ -35,10 +35,6 @@ public class ScaleManager : MonoBehaviour
     [Header("Shop References")]
     [SerializeField] private RectTransform shopCanvas;
 
-    [Header("Notification References")]
-    [SerializeField] private RectTransform notificationPanel;
-    private const int NOTIFICATION_WIDTH = 800;
-
     private void Awake()
     {
         Width = Camera.pixelWidth;
@@ -50,7 +46,6 @@ public class ScaleManager : MonoBehaviour
         ScaleLevels();
         ScaleShop();
         ScaleNavigationMenu();
-        ScaleNotifications();
     }
 
     /// <summary>
@@ -206,14 +201,5 @@ public class ScaleManager : MonoBehaviour
         SelectedColor = mainMenuIconRect.GetComponent<Image>().color;
         shopIconRect.sizeDelta = new Vector2(shopIconRect.sizeDelta.x * scaleFactor, ICON_MENU_HEIGHT);
         shopIconRect.anchoredPosition = new Vector2(-shopIconRect.sizeDelta.x / 2, 0);
-    }
-
-    private void ScaleNotifications()
-    {
-        float scaleFactor = Width / (float)ORIGINAL_WIDTH;
-
-        notificationPanel.sizeDelta = new Vector2(NOTIFICATION_WIDTH * scaleFactor, 0);
-
-        notificationPanel.anchoredPosition = new Vector2(0, -TOP_MENU_HEIGHT - 50 * scaleFactor);
     }
 }

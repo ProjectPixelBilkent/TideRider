@@ -16,39 +16,15 @@
           "enterSide": 0
         },
         {
-          "text": "a moment of silence where we can see Marina's discomfort",
-          "characterId": "narration",
-          "emotion": "default",
-          "enterSide": 2
-        },
-        {
-          "text": "....",
+          "text": "Does it hurt?",
           "characterId": "aldric",
           "emotion": "sad",
           "enterSide": 1
         },
         {
-          "text": "Does it hurt ?",
-          "characterId": "aldric",
-          "emotion": "sad",
-          "enterSide": 1
-        },
-        {
-          "text": "...",
+          "text": "A little...",
           "characterId": "marina",
           "emotion": "sick",
-          "enterSide": 0
-        },
-        {
-          "text": "You can tell me if it does.",
-          "characterId": "aldric",
-          "emotion": "sad",
-          "enterSide": 1
-        },
-        {
-          "text": "I know...",
-          "characterId": "marina",
-          "emotion": "sad",
           "enterSide": 0
         },
         {
@@ -56,18 +32,6 @@
           "characterId": "aldric",
           "emotion": "happy",
           "enterSide": 1
-        },
-        {
-          "text": "maybe a short cutscene without dialogues where Aldric gets up or walks somewhere to get us to the portal scene",
-          "characterId": "narration",
-          "emotion": "default",
-          "enterSide": 2
-        },
-        {
-          "text": "when portal appears",
-          "characterId": "narration",
-          "emotion": "default",
-          "enterSide": 2
         },
         {
           "text": "What is this?!",
@@ -82,13 +46,7 @@
           "enterSide": 1
         },
         {
-          "text": "Marina ! reaching out for her",
-          "characterId": "aldric",
-          "emotion": "angry",
-          "enterSide": 1
-        },
-        {
-          "text": "Dad ! Wait, no !",
+          "text": "Dad! Wait, no!",
           "characterId": "marina",
           "emotion": "sad",
           "enterSide": 0
@@ -105,40 +63,10 @@
           "enterSide": 1
         },
         {
-          "text": "I need to get back to Marina !",
+          "text": "I need to get back to Marina!",
           "characterId": "aldric",
           "emotion": "angry",
           "enterSide": 1
-        },
-        {
-          "text": "siren humming voices",
-          "characterId": "narration",
-          "emotion": "default",
-          "enterSide": 2
-        },
-        {
-          "text": "Huh? What is that sound ?",
-          "characterId": "aldric",
-          "emotion": "sad",
-          "enterSide": 1
-        },
-        {
-          "text": "It sounds heavenly...",
-          "characterId": "aldric",
-          "emotion": "happy",
-          "enterSide": 1
-        },
-        {
-          "text": "Almost like...",
-          "characterId": "aldric",
-          "emotion": "sad",
-          "enterSide": 1
-        },
-        {
-          "text": "Lyralei appears",
-          "characterId": "narration",
-          "emotion": "default",
-          "enterSide": 2
         },
         {
           "text": "You don't belong here... do you?",
@@ -147,130 +75,28 @@
           "enterSide": 0
         },
         {
-          "text": "What the- How'd you- Who are you?!",
+          "text": "Who are you?!",
           "characterId": "aldric",
           "emotion": "angry",
           "enterSide": 1
         },
         {
-          "text": "I am Lyralei. And you're...",
+          "text": "I am Lyralei. I can help you get back to your daughter.",
           "characterId": "siren",
           "emotion": "happy",
           "enterSide": 0
         },
         {
-          "text": "I need to go back to my daughter!",
-          "characterId": "aldric",
-          "emotion": "angry",
-          "enterSide": 1
-        },
-        {
-          "text": "Your... daughter?",
-          "characterId": "siren",
-          "emotion": "sad",
-          "enterSide": 0
-        },
-        {
-          "text": "Yes ! I can't leave her alone...",
+          "text": "Marina is very sick.",
           "characterId": "aldric",
           "emotion": "sad",
           "enterSide": 1
         },
         {
-          "text": "You're holding onto her very tightly...",
-          "characterId": "siren",
-          "emotion": "sad",
-          "enterSide": 0
-        },
-        {
-          "text": "Yes... After all... she's...",
+          "text": "Void Sickness. It slowly drains her life force.",
           "characterId": "aldric",
           "emotion": "sad",
           "enterSide": 1
-        },
-        {
-          "text": "Hm?",
-          "characterId": "siren",
-          "emotion": "happy",
-          "enterSide": 0
-        },
-        {
-          "text": "Nothing...",
-          "characterId": "aldric",
-          "emotion": "sad",
-          "enterSide": 1
-        },
-        {
-          "text": "You still haven't told me your name.",
-          "characterId": "siren",
-          "emotion": "happy",
-          "enterSide": 0
-        },
-        {
-          "text": "Aldric.",
-          "characterId": "aldric",
-          "emotion": "sad",
-          "enterSide": 1
-        },
-        {
-          "text": "Do you know why you were brought here, Aldric ?",
-          "characterId": "siren",
-          "emotion": "sad",
-          "enterSide": 0
-        },
-        {
-          "text": "I don't care why! Send me back!",
-          "characterId": "aldric",
-          "emotion": "angry",
-          "enterSide": 1
-        },
-        {
-          "text": "I am not the one who brought you here.",
-          "characterId": "siren",
-          "emotion": "sad",
-          "enterSide": 0
-        },
-        {
-          "text": "But I can help you get back to your daughter.",
-          "characterId": "siren",
-          "emotion": "happy",
-          "enterSide": 0
-        },
-        {
-          "text": "Now tell me about her.",
-          "characterId": "siren",
-          "emotion": "happy",
-          "enterSide": 0
-        },
-        {
-          "text": "Marina... My daughter...",
-          "characterId": "aldric",
-          "emotion": "sad",
-          "enterSide": 1
-        },
-        {
-          "text": "She's very sick.",
-          "characterId": "aldric",
-          "emotion": "sad",
-          "enterSide": 1
-        },
-        {
-          "text": "Sick, you say?",
-          "characterId": "siren",
-          "emotion": "sad",
-          "enterSide": 0
-        },
-        {
-          "text": "Void Sickness. It's a sickness that slowly drains her life force.",
-          "characterId": "aldric",
-          "emotion": "sad",
-          "enterSide": 1
-        },
-        {
-          "text": "Hmm... I've heard about that...",
-          "characterId": "siren",
-          "emotion": "sad",
-          "enterSide": 0
         },
         {
           "text": "She can't be left alone.",
@@ -279,28 +105,10 @@
           "enterSide": 1
         },
         {
-          "text": "Alone?",
-          "characterId": "siren",
-          "emotion": "sad",
-          "enterSide": 0
-        },
-        {
-          "text": "My wife... She-",
+          "text": "I'm all Marina has.",
           "characterId": "aldric",
           "emotion": "sad",
           "enterSide": 1
-        },
-        {
-          "text": "I'm... I'm all Marina has.",
-          "characterId": "aldric",
-          "emotion": "sad",
-          "enterSide": 1
-        },
-        {
-          "text": "I see...",
-          "characterId": "siren",
-          "emotion": "sad",
-          "enterSide": 0
         },
         {
           "text": "Then we shouldn't keep her waiting.",
@@ -309,31 +117,19 @@
           "enterSide": 0
         },
         {
-          "text": "Yes ! Please !",
-          "characterId": "aldric",
-          "emotion": "happy",
-          "enterSide": 1
-        },
-        {
-          "text": "Getting back to her is possible. And her illness... can be touched.",
-          "characterId": "siren",
-          "emotion": "happy",
-          "enterSide": 0
-        },
-        {
-          "text": "Now. This place doesn't take people without reason.",
+          "text": "This place doesn't take people without reason.",
           "characterId": "siren",
           "emotion": "sad",
           "enterSide": 0
         },
         {
-          "text": "And I will guide you throughout this adventure. So listen carefully.",
+          "text": "I will guide you, but you must listen carefully.",
           "characterId": "siren",
           "emotion": "happy",
           "enterSide": 0
         },
         {
-          "text": "We need to gather three portal fragments and then you can go back to your daughter using them.",
+          "text": "We need to gather three portal fragments so you can return to your daughter.",
           "characterId": "siren",
           "emotion": "happy",
           "enterSide": 0
@@ -344,91 +140,49 @@
       "conversationId": "world_1",
       "lines": [
         {
-          "text": "This journey will take us to three different dimensions, this being the first one.",
+          "text": "This journey will take us through three dimensions. This is the first: The Shattered Calm.",
           "characterId": "siren",
           "emotion": "happy",
           "enterSide": 0
         },
         {
-          "text": "You will face different obstacles in every dimension.",
+          "text": "We need the Compass Shard from the eye of the giant statue on the floating island.",
           "characterId": "siren",
           "emotion": "sad",
           "enterSide": 0
         },
         {
-          "text": "This is The Shattered Calm.",
-          "characterId": "siren",
-          "emotion": "happy",
-          "enterSide": 0
-        },
-        {
-          "text": "The Shattered Calm?",
-          "characterId": "aldric",
-          "emotion": "sad",
-          "enterSide": 1
-        },
-        {
-          "text": "Yes. We will need the Compass Shard, which is embedded in the eye of the giant statue on the floating island, to get out of this dimension.",
+          "text": "To get it, you must solve a puzzle while avoiding the statue's sight.",
           "characterId": "siren",
           "emotion": "sad",
           "enterSide": 0
         },
         {
-          "text": "To get the fragment, you will have to solve a puzzle while avoiding getting caught by the eye's sight.",
-          "characterId": "siren",
-          "emotion": "sad",
-          "enterSide": 0
-        },
-        {
-          "text": "But first...",
-          "characterId": "siren",
-          "emotion": "sad",
-          "enterSide": 0
-        },
-        {
-          "text": "you need to beat the kraken, which will be your first obstacle.",
+          "text": "But first, you must defeat the Mirage Kraken.",
           "characterId": "siren",
           "emotion": "scary",
           "enterSide": 0
         },
         {
-          "text": "THE WHAT?",
+          "text": "The what?!",
           "characterId": "aldric",
           "emotion": "angry",
           "enterSide": 1
         },
         {
-          "text": "The Mirage Kraken. A massive translucent squid that shifts between dimensions",
-          "characterId": "siren",
-          "emotion": "scary",
-          "enterSide": 0
-        },
-        {
-          "text": "I'm only a retired sailor! How am I supposed to beat that thing!",
+          "text": "I'm only a retired sailor! How am I supposed to beat that thing?!",
           "characterId": "aldric",
           "emotion": "angry",
           "enterSide": 1
         },
         {
-          "text": "Now, now... Calm down...",
+          "text": "Stay with me and you'll make it through.",
           "characterId": "siren",
           "emotion": "happy",
           "enterSide": 0
         },
         {
-          "text": "Stay with me and you'll make it through. I know you will.",
-          "characterId": "siren",
-          "emotion": "happy",
-          "enterSide": 0
-        },
-        {
-          "text": "at the end",
-          "characterId": "narration",
-          "emotion": "default",
-          "enterSide": 2
-        },
-        {
-          "text": "Now. This fragment will allow us navigate between dimensional boundaries.",
+          "text": "This fragment will let us navigate between dimensional boundaries.",
           "characterId": "siren",
           "emotion": "happy",
           "enterSide": 0
@@ -439,22 +193,10 @@
       "conversationId": "world_2",
       "lines": [
         {
-          "text": "I knew you could do it! You see? You're stronger than you think.",
+          "text": "You did well, but we're not done yet.",
           "characterId": "siren",
           "emotion": "happy",
           "enterSide": 0
-        },
-        {
-          "text": "But that was only the first step. Come now... we're not done yet.",
-          "characterId": "siren",
-          "emotion": "happy",
-          "enterSide": 0
-        },
-        {
-          "text": "Woah... What is this place...",
-          "characterId": "aldric",
-          "emotion": "sad",
-          "enterSide": 1
         },
         {
           "text": "This is The Icy Shores.",
@@ -463,91 +205,37 @@
           "enterSide": 0
         },
         {
-          "text": "We will need a fragment to get out of this place as well. The Eternal Ice.",
+          "text": "We need the Eternal Ice to leave this place.",
           "characterId": "siren",
           "emotion": "sad",
           "enterSide": 0
         },
         {
-          "text": "To get to the Eternal Ice, you will have to sneak through the palace while the Frost Empress is sleeping, using your Storm Core power to melt ice barriers.",
+          "text": "To reach it, you must sneak through the palace and use your Storm Core to melt the ice barriers.",
           "characterId": "siren",
           "emotion": "sad",
           "enterSide": 0
         },
         {
-          "text": "But first-",
-          "characterId": "siren",
-          "emotion": "sad",
-          "enterSide": 0
-        },
-        {
-          "text": "Let me guess. I have to fight a giant snowman.",
-          "characterId": "aldric",
-          "emotion": "happy",
-          "enterSide": 1
-        },
-        {
-          "text": "Well... Something like that…",
-          "characterId": "siren",
-          "emotion": "happy",
-          "enterSide": 0
-        },
-        {
-          "text": "Really? It'll be a piece of cake then.",
-          "characterId": "aldric",
-          "emotion": "happy",
-          "enterSide": 1
-        },
-        {
-          "text": "Not really.",
-          "characterId": "siren",
-          "emotion": "sad",
-          "enterSide": 0
-        },
-        {
-          "text": "Icy Man was once the Frost Empress's greatest warrior but he was cursed into an eternal, mindless guardian after failing to break her spell of endless winter.",
+          "text": "But first, you must defeat Icy Man.",
           "characterId": "siren",
           "emotion": "scary",
           "enterSide": 0
         },
         {
-          "text": "Well, I'd be surprised.",
+          "text": "I have to... for my daughter.",
           "characterId": "aldric",
           "emotion": "sad",
           "enterSide": 1
         },
         {
-          "text": "This is not an easy road, Aldric. But I know you will make it.",
+          "text": "I know. Now go.",
           "characterId": "siren",
           "emotion": "happy",
           "enterSide": 0
         },
         {
-          "text": "I have to... for my-",
-          "characterId": "aldric",
-          "emotion": "sad",
-          "enterSide": 1
-        },
-        {
-          "text": "Daughter. I know. Now go...",
-          "characterId": "siren",
-          "emotion": "happy",
-          "enterSide": 0
-        },
-        {
-          "text": "Uhh, okay...",
-          "characterId": "aldric",
-          "emotion": "sad",
-          "enterSide": 1
-        },
-        {
-          "text": "2nd world end",
-          "characterId": "narration",
-          "emotion": "default",
-          "enterSide": 2
-        },
-        {
-          "text": "The Eternal Ice's power is to freeze dimensional barriers to make them solid and croassable.",
+          "text": "The Eternal Ice can freeze dimensional barriers and make them solid enough to cross.",
           "characterId": "siren",
           "emotion": "happy",
           "enterSide": 0
@@ -558,145 +246,31 @@
       "conversationId": "world_3",
       "lines": [
         {
-          "text": "*sigh* That was... something...",
+          "text": "You're getting stronger.",
+          "characterId": "siren",
+          "emotion": "happy",
+          "enterSide": 0
+        },
+        {
+          "text": "I have to. We're close to getting back to Marina.",
           "characterId": "aldric",
           "emotion": "sad",
           "enterSide": 1
         },
         {
-          "text": "You're getting the hang of this.",
-          "characterId": "siren",
-          "emotion": "happy",
-          "enterSide": 0
-        },
-        {
-          "text": "....Yeah. I guess I am.",
-          "characterId": "aldric",
-          "emotion": "happy",
-          "enterSide": 1
-        },
-        {
-          "text": "I'll admit... I didn't expect us to make it out of even the first world.",
-          "characterId": "siren",
-          "emotion": "happy",
-          "enterSide": 0
-        },
-        {
-          "text": "But you sai-",
-          "characterId": "aldric",
-          "emotion": "sad",
-          "enterSide": 1
-        },
-        {
-          "text": "But now... You seem to have it under control.",
-          "characterId": "siren",
-          "emotion": "happy",
-          "enterSide": 0
-        },
-        {
-          "text": "Heh... I'm starting to feel that way too.",
-          "characterId": "aldric",
-          "emotion": "happy",
-          "enterSide": 1
-        },
-        {
-          "text": "Then perhaps... I'm no longer needed?",
+          "text": "This is The Mistland.",
           "characterId": "siren",
           "emotion": "sad",
           "enterSide": 0
         },
         {
-          "text": "WHAT? NO!",
-          "characterId": "aldric",
-          "emotion": "angry",
-          "enterSide": 1
-        },
-        {
-          "text": "Hm... so you do rely on me.",
+          "text": "You will fight the Imitator Angler.",
           "characterId": "siren",
-          "emotion": "happy",
+          "emotion": "scary",
           "enterSide": 0
         },
         {
-          "text": "That's not what I-",
-          "characterId": "aldric",
-          "emotion": "sad",
-          "enterSide": 1
-        },
-        {
-          "text": "Relax. I'm only teasing. You gullible old man...",
-          "characterId": "siren",
-          "emotion": "happy",
-          "enterSide": 0
-        },
-        {
-          "text": "Hey! I'm not that old!",
-          "characterId": "aldric",
-          "emotion": "angry",
-          "enterSide": 1
-        },
-        {
-          "text": "So you accept that you're gullible?",
-          "characterId": "siren",
-          "emotion": "happy",
-          "enterSide": 0
-        },
-        {
-          "text": "Wha- NO!",
-          "characterId": "aldric",
-          "emotion": "angry",
-          "enterSide": 1
-        },
-        {
-          "text": "You're impossible.",
-          "characterId": "aldric",
-          "emotion": "sad",
-          "enterSide": 1
-        },
-        {
-          "text": "I know.",
-          "characterId": "siren",
-          "emotion": "happy",
-          "enterSide": 0
-        },
-        {
-          "text": "I like tha-",
-          "characterId": "aldric",
-          "emotion": "happy",
-          "enterSide": 1
-        },
-        {
-          "text": "We need to hurry up. We are close to getting you back to your daughter.",
-          "characterId": "siren",
-          "emotion": "sad",
-          "enterSide": 0
-        },
-        {
-          "text": "...",
-          "characterId": "aldric",
-          "emotion": "sad",
-          "enterSide": 1
-        },
-        {
-          "text": "This is The Mistland-",
-          "characterId": "siren",
-          "emotion": "sad",
-          "enterSide": 0
-        },
-        {
-          "text": "I already know... I have to beat a monster to get the fragment.",
-          "characterId": "aldric",
-          "emotion": "sad",
-          "enterSide": 1
-        },
-        {
-          "text": "Yes, indeed.",
-          "characterId": "siren",
-          "emotion": "happy",
-          "enterSide": 0
-        },
-        {
-          "text": "You will fight The Imitator Angler. And to get the The Truth Prism, the fragment, you must trick the Angler into revealing its true form, and strike at the exact moment the prism is exposed.",
+          "text": "To claim the Truth Prism, you must force it to reveal its true form and strike when the prism is exposed.",
           "characterId": "siren",
           "emotion": "scary",
           "enterSide": 0
@@ -708,34 +282,16 @@
           "enterSide": 1
         },
         {
-          "text": "Say... Do you MAYBE want to help me this time?",
+          "text": "Do you maybe want to help me this time?",
           "characterId": "aldric",
           "emotion": "happy",
           "enterSide": 1
         },
         {
-          "text": "I...",
+          "text": "I have to protect you from a distance.",
           "characterId": "siren",
           "emotion": "sad",
           "enterSide": 0
-        },
-        {
-          "text": "Uhh...",
-          "characterId": "siren",
-          "emotion": "sad",
-          "enterSide": 0
-        },
-        {
-          "text": "I- I have to protect you from a distance.",
-          "characterId": "siren",
-          "emotion": "sad",
-          "enterSide": 0
-        },
-        {
-          "text": "Well... Okay then...",
-          "characterId": "aldric",
-          "emotion": "sad",
-          "enterSide": 1
         }
       ]
     },
@@ -743,39 +299,9 @@
       "conversationId": "end_of_world_3_boss_fight",
       "lines": [
         {
-          "text": "ALDRIC!! We made it! I can't believe!",
+          "text": "Aldric. We made it.",
           "characterId": "siren",
           "emotion": "happy",
-          "enterSide": 0
-        },
-        {
-          "text": "Yeah... well, I did most of the-",
-          "characterId": "aldric",
-          "emotion": "happy",
-          "enterSide": 1
-        },
-        {
-          "text": "Finally.",
-          "characterId": "siren",
-          "emotion": "scary",
-          "enterSide": 0
-        },
-        {
-          "text": "You've done well.",
-          "characterId": "siren",
-          "emotion": "happy",
-          "enterSide": 0
-        },
-        {
-          "text": "\"Done well\"? That's it?",
-          "characterId": "aldric",
-          "emotion": "angry",
-          "enterSide": 1
-        },
-        {
-          "text": "Hush.",
-          "characterId": "siren",
-          "emotion": "angry",
           "enterSide": 0
         },
         {
@@ -785,82 +311,28 @@
           "enterSide": 0
         },
         {
-          "text": "...?",
-          "characterId": "aldric",
-          "emotion": "sad",
-          "enterSide": 1
-        },
-        {
-          "text": "I've been waiting for this moment... for longer than you can imagine.",
+          "text": "The fragments you gathered were never for you.",
           "characterId": "siren",
           "emotion": "scary",
           "enterSide": 0
         },
         {
-          "text": "The fragments you gathered-",
-          "characterId": "siren",
-          "emotion": "scary",
-          "enterSide": 0
-        },
-        {
-          "text": "The fragments?",
+          "text": "What?",
           "characterId": "aldric",
           "emotion": "sad",
           "enterSide": 1
         },
         {
-          "text": "Do not interrupt me.",
-          "characterId": "siren",
-          "emotion": "angry",
-          "enterSide": 0
-        },
-        {
-          "text": "...?",
-          "characterId": "aldric",
-          "emotion": "sad",
-          "enterSide": 1
-        },
-        {
-          "text": "The fragments that you've gathered... They were never for you.",
+          "text": "They are the key to my freedom from the Void Depths.",
           "characterId": "siren",
           "emotion": "scary",
           "enterSide": 0
         },
         {
-          "text": "...What?",
+          "text": "But what about Marina?",
           "characterId": "aldric",
           "emotion": "sad",
           "enterSide": 1
-        },
-        {
-          "text": "They are the key to my freedom.",
-          "characterId": "siren",
-          "emotion": "scary",
-          "enterSide": 0
-        },
-        {
-          "text": "The Void Depths... my prison.",
-          "characterId": "siren",
-          "emotion": "scary",
-          "enterSide": 0
-        },
-        {
-          "text": "Prison? What are you talking about?",
-          "characterId": "aldric",
-          "emotion": "angry",
-          "enterSide": 1
-        },
-        {
-          "text": "But what about Mari-",
-          "characterId": "aldric",
-          "emotion": "sad",
-          "enterSide": 1
-        },
-        {
-          "text": "Marina? You really are a gullible old man, aren't you!",
-          "characterId": "siren",
-          "emotion": "angry",
-          "enterSide": 0
         },
         {
           "text": "You really believed I cared about her.",
@@ -869,55 +341,19 @@
           "enterSide": 0
         },
         {
-          "text": "...",
-          "characterId": "aldric",
-          "emotion": "sad",
-          "enterSide": 1
-        },
-        {
-          "text": "Everything I told you... Every step...",
+          "text": "Everything I told you was to lead you here.",
           "characterId": "siren",
           "emotion": "scary",
           "enterSide": 0
         },
         {
-          "text": "It was all to lead you here.",
-          "characterId": "siren",
-          "emotion": "scary",
-          "enterSide": 0
-        },
-        {
-          "text": "And now... you've brought me exactly what I needed.",
-          "characterId": "siren",
-          "emotion": "happy",
-          "enterSide": 0
-        },
-        {
-          "text": "Lyralei...",
+          "text": "You used me.",
           "characterId": "aldric",
           "emotion": "sad",
           "enterSide": 1
         },
         {
-          "text": "Don't look so surprised.",
-          "characterId": "siren",
-          "emotion": "happy",
-          "enterSide": 0
-        },
-        {
-          "text": "You were useful. That's all.",
-          "characterId": "siren",
-          "emotion": "angry",
-          "enterSide": 0
-        },
-        {
-          "text": "...",
-          "characterId": "aldric",
-          "emotion": "sad",
-          "enterSide": 1
-        },
-        {
-          "text": "Now give them to me!",
+          "text": "You were useful. Now give them to me.",
           "characterId": "siren",
           "emotion": "angry",
           "enterSide": 0
@@ -928,22 +364,10 @@
       "conversationId": "boss_fight_losing",
       "lines": [
         {
-          "text": "HAHAHAHA! Is that all?",
+          "text": "Is that all?",
           "characterId": "siren",
           "emotion": "angry",
           "enterSide": 0
-        },
-        {
-          "text": "aldric collapses",
-          "characterId": "narration",
-          "emotion": "default",
-          "enterSide": 2
-        },
-        {
-          "text": "Nghhh...",
-          "characterId": "aldric",
-          "emotion": "sad",
-          "enterSide": 1
         },
         {
           "text": "Lyralei... stop...",
@@ -952,49 +376,31 @@
           "enterSide": 1
         },
         {
-          "text": "I would've expected more from you.",
-          "characterId": "siren",
-          "emotion": "angry",
-          "enterSide": 0
-        },
-        {
-          "text": "You... lied to me...",
+          "text": "You lied to me...",
           "characterId": "aldric",
           "emotion": "sad",
           "enterSide": 1
         },
         {
-          "text": "Nghhh... Marina...",
+          "text": "Marina...",
           "characterId": "aldric",
           "emotion": "sad",
           "enterSide": 1
         },
         {
-          "text": "Still clinging to her...",
-          "characterId": "siren",
-          "emotion": "sad",
-          "enterSide": 0
-        },
-        {
-          "text": "Pathetic.",
+          "text": "Still clinging to her. Pathetic.",
           "characterId": "siren",
           "emotion": "angry",
           "enterSide": 0
         },
         {
-          "text": "This is... not... over...",
+          "text": "This is not over...",
           "characterId": "aldric",
           "emotion": "angry",
           "enterSide": 1
         },
         {
-          "text": "No.",
-          "characterId": "siren",
-          "emotion": "scary",
-          "enterSide": 0
-        },
-        {
-          "text": "Now it begins. My freedom.",
+          "text": "No. Now it begins. My freedom.",
           "characterId": "siren",
           "emotion": "scary",
           "enterSide": 0
@@ -1005,7 +411,7 @@
       "conversationId": "boss_fight_win",
       "lines": [
         {
-          "text": "...You've grown stronger than I expected.",
+          "text": "You've grown stronger than I expected.",
           "characterId": "siren",
           "emotion": "sad",
           "enterSide": 0
@@ -1029,46 +435,16 @@
           "enterSide": 1
         },
         {
-          "text": "And you still made it here.",
-          "characterId": "siren",
-          "emotion": "sad",
-          "enterSide": 0
-        },
-        {
-          "text": "...",
-          "characterId": "aldric",
-          "emotion": "sad",
-          "enterSide": 1
-        },
-        {
-          "text": "Tell me, Aldric...",
-          "characterId": "siren",
-          "emotion": "sad",
-          "enterSide": 0
-        },
-        {
           "text": "Do you even know the way back?",
           "characterId": "siren",
           "emotion": "scary",
           "enterSide": 0
         },
         {
-          "text": "Shut up! I'm done with your games!",
+          "text": "I'm done with your games. I don't need your help anymore.",
           "characterId": "aldric",
           "emotion": "angry",
           "enterSide": 1
-        },
-        {
-          "text": "I don't need your help anymore.",
-          "characterId": "aldric",
-          "emotion": "angry",
-          "enterSide": 1
-        },
-        {
-          "text": "Aldric leaves",
-          "characterId": "narration",
-          "emotion": "default",
-          "enterSide": 2
         }
       ]
     },
@@ -1088,37 +464,19 @@
           "enterSide": 0
         },
         {
-          "text": "I've missed you!",
+          "text": "I've missed you.",
           "characterId": "aldric",
           "emotion": "happy",
           "enterSide": 1
         },
         {
-          "text": "I've missed you too, dad! Where'd you go!",
+          "text": "I've missed you too, dad!",
           "characterId": "marina",
           "emotion": "happy",
           "enterSide": 0
         },
         {
-          "text": "I'm here. I'm here...",
-          "characterId": "aldric",
-          "emotion": "happy",
-          "enterSide": 1
-        },
-        {
-          "text": "I thought-",
-          "characterId": "marina",
-          "emotion": "sad",
-          "enterSide": 0
-        },
-        {
-          "text": "Hey... no. It's okay now.",
-          "characterId": "aldric",
-          "emotion": "happy",
-          "enterSide": 1
-        },
-        {
-          "text": "I'm not going anywhere.",
+          "text": "I'm here now. I'm not going anywhere.",
           "characterId": "aldric",
           "emotion": "happy",
           "enterSide": 1
@@ -1127,4 +485,3 @@
     }
   ]
 }
-

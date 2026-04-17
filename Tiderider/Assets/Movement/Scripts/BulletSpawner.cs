@@ -70,7 +70,7 @@ public class BulletSpawner : MonoBehaviour
             SpawnWeapon(weaponStat, j, monster);
             if(weaponStat.weaponInfo.weaponName == "Minigun")
             {
-                float delayTime = 0.15f;
+                float delayTime = 0.28f;
                 DOVirtual.DelayedCall(delayTime, () =>
                 {
                     SpawnWeapon(weaponStat, j, monster);
@@ -79,6 +79,11 @@ public class BulletSpawner : MonoBehaviour
                         SpawnWeapon(weaponStat, j, monster);
                     });
                 });
+            }
+
+            if (weaponStat.weaponInfo.spawningSound != null)
+            {
+                AudioSource.PlayClipAtPoint(weaponStat.weaponInfo.spawningSound, transform.position);
             }
         }
     }
@@ -114,11 +119,6 @@ public class BulletSpawner : MonoBehaviour
         {
             Physics2D.IgnoreCollision(currentBullet.circleCollider, col, true);
             Physics2D.IgnoreCollision(currentBullet.circleCollider, monster, true);
-        }
-
-        if (weaponStat.weaponInfo.spawningSound != null)
-        {
-            AudioSource.PlayClipAtPoint(weaponStat.weaponInfo.spawningSound, transform.position);
         }
     }
 

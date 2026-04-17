@@ -36,7 +36,7 @@ public class MiniShipBullet : Bullet
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f; 
             transform.rotation = Quaternion.Euler(0, 0, angle);
         }
-        rigidBody.linearVelocity = Enemy==null ? Vector3.zero: (direction * WeaponLevel.speedOfBullet);
+        rigidBody.linearVelocity = direction * WeaponLevel.speedOfBullet;
     }
 
     public override void Activate(Vector3 direction, Vector3 shipSpeed)

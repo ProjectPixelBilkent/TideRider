@@ -99,6 +99,9 @@ public class ChaseState : State
             HasHealth health = a.ship.GetComponent<HasHealth>();
             if (health != null)
             {
+                if (SoundLibrary.Instance != null)
+                    SoundLibrary.Instance.Play("anglerfish");
+
                 health.TakeDamage(a.chaseContactDamage);
                 damageCooldownTimer = a.damageCooldown;
             }

@@ -25,6 +25,6 @@ MonoBehaviour:
   weaponIcon: {fileID: 4849304724019256761, guid: 5d1cfe9c6f1882f46b8288ddccdafb18, type: 3}
   projectilePrefab: {fileID: 1440320539427034115, guid: f4650f193aef8ac4fa59739588abd535, type: 3}
   onCollisionWithBulletMethodName: 
-  spawningSound: {fileID: 0}
+  spawningSound: {fileID: 8300000, guid: b5a0c3bcebcfbcc428967aba5138bdf9, type: 3}
   extraSounds: []
   extraSprites: []

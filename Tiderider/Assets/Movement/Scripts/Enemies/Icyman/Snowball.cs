@@ -54,6 +54,9 @@ public class Snowball : MonoBehaviour
     {
         if (collision.collider.TryGetComponent(out HasHealth health) && health.CompareTag("Player"))
         {
+            if (SoundLibrary.Instance != null)
+                SoundLibrary.Instance.Play("icy_man");
+
             health.TakeDamage(damage);
             DestroySelf();
             return;

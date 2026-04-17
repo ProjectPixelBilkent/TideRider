@@ -146,6 +146,29 @@ public class Obstacle : MonoBehaviour
     protected virtual void OnHitByPlayer(Player player)
     {
         player.TakeDamage(damageAmount);
+
+        if (SoundLibrary.Instance != null)
+        {
+            switch (typeOfTerrain)
+            {
+                case TerrainType.Ice:
+                    SoundLibrary.Instance.Play("iceberg_hit");
+                    break;
+                case TerrainType.Misty:
+                    SoundLibrary.Instance.Play("rock_hit");
+                    break;
+                case TerrainType.General:
+                default:
+                    SoundLibrary.Instance.Play("island_hit");
+                    break;
+            }
+        }
+
+        DestructionForSmallObstacle();
+    }
+
+    protected virtual void DestructionForSmallObstacle()
+    {
         Destroy(gameObject);
     }
 

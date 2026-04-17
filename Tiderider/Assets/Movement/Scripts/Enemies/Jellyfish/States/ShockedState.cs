@@ -6,7 +6,6 @@ public class ShockedState : State
     private Jellyfish jellyfish;
     private float rechargeTimer;
     private float flashTimer;
-    private float damageTimer;
     private bool showingFlashColor;
 
     public ShockedState(StateMachine machine) : base(machine) { }
@@ -15,7 +14,6 @@ public class ShockedState : State
     {
         jellyfish = machine.Enemy as Jellyfish;
         flashTimer = 0f;
-        damageTimer = 0f;
         showingFlashColor = false;
 
         if (jellyfish.playerTarget != null)
@@ -42,9 +40,15 @@ public class ShockedState : State
                         Object.Destroy(bolt);
                     });
             }
+
+            jellyfish.playerTarget.TakeDamage(jellyfish.shockDamage);
         }
 
         rechargeTimer = jellyfish.shockCooldown;
+
+        if (SoundLibrary.Instance != null)
+            SoundLibrary.Instance.Play("jellyfish");
+
         jellyfish.StopMovementAnimation();
         jellyfish.SetAttackSprite();
 
@@ -72,7 +76,6 @@ public class ShockedState : State
     {
         rechargeTimer -= Time.fixedDeltaTime;
         flashTimer += Time.deltaTime;
-        damageTimer += Time.deltaTime;
 
         jellyfish.rigidBody.linearVelocityY = Camera.main.velocity.y;
 
@@ -89,22 +92,6 @@ public class ShockedState : State
             }
         }
 
-        if (jellyfish.playerTarget != null)
-        {
-            if (jellyfish.shockDamageInterval <= 0f)
-            {
-                TryDamagePlayer();
-            }
-            else
-            {
-                while (damageTimer >= jellyfish.shockDamageInterval)
-                {
-                    TryDamagePlayer();
-                    damageTimer -= jellyfish.shockDamageInterval;
-                }
-            }
-        }
-
         if (rechargeTimer <= 0f)
         {
             jellyfish.isShockCharged = true;
@@ -112,19 +99,4 @@ public class ShockedState : State
         }
     }
 
-    private void TryDamagePlayer()
-    {
-        if (jellyfish == null || jellyfish.playerTarget == null)
-        {
-            return;
-        }
-
-        float sqrDist = ((Vector2)(jellyfish.playerTarget.transform.position - jellyfish.transform.position)).sqrMagnitude;
-        if (sqrDist > jellyfish.shockRadius * jellyfish.shockRadius)
-        {
-            return;
-        }
-
-        jellyfish.playerTarget.TakeDamage(jellyfish.shockDamage);
-    }
 }

@@ -69,6 +69,28 @@ public class SceneObjectSpawner : MonoBehaviour
 
         edgeCollider.isTrigger = false;
         gameObject.layer = LayerMask.NameToLayer("Default");
+
+        PlayBGMForTerrain();
+    }
+
+    private void PlayBGMForTerrain()
+    {
+        if (SoundLibrary.Instance == null || objectsToSpawn == null)
+            return;
+
+        var firstObstacle = objectsToSpawn.FirstOrDefault(o => o.objectType == SpawnObjectType.Obstacle);
+        if (firstObstacle == null)
+            return;
+
+        string bgmId = firstObstacle.typeOfTerrain switch
+        {
+            TerrainType.General => "world_1",
+            TerrainType.Ice => "world_3",
+            TerrainType.Misty => "world_2",
+            _ => "world_1"
+        };
+
+        SoundLibrary.Instance.PlayBGM(bgmId);
     }
 
     private DialogueManager dialogueManager;

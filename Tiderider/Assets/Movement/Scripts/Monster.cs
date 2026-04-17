@@ -122,6 +122,9 @@ public class Monster : MonoBehaviour
         Player player = target.GetComponent<Player>();
         if (player != null)
         {
+            if (SoundLibrary.Instance != null)
+                SoundLibrary.Instance.Play("kraken");
+
             player.TakeDamage(player.MaxHealth);
         }
     }

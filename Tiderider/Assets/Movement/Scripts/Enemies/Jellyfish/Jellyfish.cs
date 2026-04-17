@@ -25,7 +25,7 @@ public class Jellyfish : Enemy
     public float shockRadius = 1.7f;
     public int shockDamage = 10;
     public float shockCooldown = 3f;
-    [Min(0f)] public float shockDamageInterval = 0.25f;
+    [Min(0f)] public float shockDamageInterval = 0.5f;
     [HideInInspector] public bool isShockCharged = true;
     public Player playerTarget;
 
@@ -69,6 +69,15 @@ public class Jellyfish : Enemy
 
         if (playerTarget == null)
             playerTarget = FindFirstObjectByType<Player>();
+
+        // Ignore physical collision with the player so they don't bounce out of shock radius
+        if (playerTarget != null)
+        {
+            Collider2D myCol = GetComponent<Collider2D>();
+            Collider2D playerCol = playerTarget.GetComponent<Collider2D>();
+            if (myCol != null && playerCol != null)
+                Physics2D.IgnoreCollision(myCol, playerCol, true);
+        }
 
         SetupRadiusLine();
         SetupAttackRing();

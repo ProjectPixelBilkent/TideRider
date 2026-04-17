@@ -11,6 +11,9 @@ public class AnglerFishContactDamage : MonoBehaviour
         HasHealth health = other.GetComponent<HasHealth>();
         if (health != null)
         {
+            if (SoundLibrary.Instance != null)
+                SoundLibrary.Instance.Play("anglerfish");
+
             health.TakeDamage(contactDamage);
         }
     }

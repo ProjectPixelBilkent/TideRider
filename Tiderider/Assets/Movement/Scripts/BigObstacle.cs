@@ -21,9 +21,8 @@ public class BigObstacle : Obstacle
         //transform.localScale = bigSize;
     }
 
-    protected override void OnHitByPlayer(Player player)
+    protected override void DestructionForSmallObstacle()
     {
-        player.TakeDamage(damageAmount);
         // Big obstacles stay — do not destroy
     }
 }

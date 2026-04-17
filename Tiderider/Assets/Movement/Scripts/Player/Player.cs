@@ -12,6 +12,9 @@ public class Player : HasHealth
         if (playerMovement != null)
             playerMovement.enabled = false;
 
+        if (SoundLibrary.Instance != null)
+            SoundLibrary.Instance.StopBGM();
+
         MenuManager menuManager = FindFirstObjectByType<MenuManager>();
         if (menuManager != null)
             menuManager.ShowGameOverMenu();

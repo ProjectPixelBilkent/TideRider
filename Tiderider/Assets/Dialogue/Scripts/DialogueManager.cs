@@ -11,6 +11,7 @@ public class DialogueManager : MonoBehaviour
 
     private DialogueDatabase database;
     private Coroutine currentConversationRoutine;
+    private Coroutine currentLineRoutine;
     private string activeConversationId;
 
     public bool IsConversationPlaying => currentConversationRoutine != null;
@@ -91,11 +92,27 @@ public class DialogueManager : MonoBehaviour
         if (currentConversationRoutine != null)
         {
             StopCoroutine(currentConversationRoutine);
+            if (currentLineRoutine != null)
+            {
+                StopCoroutine(currentLineRoutine);
+                currentLineRoutine = null;
+            }
             CompleteConversation();
         }
 
         activeConversationId = conversationId;
+        dialogueController.ClearSkipConversationRequest();
         currentConversationRoutine = StartCoroutine(PlayConversationRoutine(conversation));
+    }
+
+    public void SkipConversation()
+    {
+        if (currentConversationRoutine == null || dialogueController == null)
+        {
+            return;
+        }
+
+        dialogueController.RequestSkipConversation();
     }
 
     private DialogueConversationData GetConversationById(string conversationId)
@@ -120,6 +137,8 @@ public class DialogueManager : MonoBehaviour
             yield break;
         }
 
+        dialogueController.ClearSkipConversationRequest();
+
         foreach (var line in conversation.lines)
         {
             Sprite sprite = spriteDatabase.GetSprite(line.characterId, line.emotion);
@@ -132,10 +151,23 @@ public class DialogueManager : MonoBehaviour
             }
 
             bool lineComplete = false;
-            StartCoroutine(PlayLineAndSignal(line, sprite, () => lineComplete = true));
+            currentLineRoutine = StartCoroutine(PlayLineAndSignal(line, sprite, () => lineComplete = true));
 
             while (!lineComplete)
             {
+                if (dialogueController.ConsumeSkipConversationRequest())
+                {
+                    if (currentLineRoutine != null)
+                    {
+                        StopCoroutine(currentLineRoutine);
+                        currentLineRoutine = null;
+                    }
+
+                    yield return StartCoroutine(dialogueController.HideDialogue());
+                    CompleteConversation();
+                    yield break;
+                }
+
                 if (IsInputPressed() && dialogueController.IsTyping)
                 {
                     dialogueController.SkipTyping();
@@ -143,7 +175,26 @@ public class DialogueManager : MonoBehaviour
                 yield return null;
             }
 
-            yield return StartCoroutine(WaitForContinueInput());
+            currentLineRoutine = null;
+            yield return null;
+
+            bool pressed = false;
+            while (!pressed)
+            {
+                if (dialogueController.ConsumeSkipConversationRequest())
+                {
+                    yield return StartCoroutine(dialogueController.HideDialogue());
+                    CompleteConversation();
+                    yield break;
+                }
+
+                if (IsInputPressed())
+                {
+                    pressed = true;
+                }
+
+                yield return null;
+            }
         }
 
         yield return StartCoroutine(dialogueController.HideDialogue());
@@ -184,6 +235,7 @@ public class DialogueManager : MonoBehaviour
             DataManager.MarkConversationCompleted(activeConversationId);
         }
 
+        currentLineRoutine = null;
         currentConversationRoutine = null;
         activeConversationId = null;
         ConversationFinished?.Invoke();

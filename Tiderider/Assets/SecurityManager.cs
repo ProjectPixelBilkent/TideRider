@@ -37,7 +37,7 @@ public static class SecurityManager
             string hash = ComputeSHA256(encryptedData);
 
             // Combine encrypted data with hash and save to file
-            string filePath = Path.Combine(Application.persistentDataPath, filename);
+            string filePath = ResolveFilePath(filename);
             File.WriteAllText(filePath, encryptedData + "\n" + hash);
         }
         catch (Exception ex)
@@ -64,7 +64,7 @@ public static class SecurityManager
             return null;
         }
 
-        string filePath = Path.Combine(Application.persistentDataPath, filename);
+        string filePath = ResolveFilePath(filename);
         if (!File.Exists(filePath)) return null;
 
         try
@@ -85,6 +85,16 @@ public static class SecurityManager
             }
 
             return Decrypt(encryptedData, encryptionKey);
+        }
+        catch (CryptographicException ex)
+        {
+            Debug.LogWarning("Encrypted data is invalid or corrupted. Resetting backup. " + ex.Message);
+            return null;
+        }
+        catch (FormatException ex)
+        {
+            Debug.LogWarning("Encrypted data is not valid Base64. Resetting backup. " + ex.Message);
+            return null;
         }
         catch (Exception ex)
         {
@@ -140,6 +150,10 @@ public static class SecurityManager
     public static string Decrypt(string encryptedText, byte[] encryptionKey)
     {
         byte[] encryptedBytes = Convert.FromBase64String(encryptedText);
+        if (encryptedBytes.Length <= 16)
+        {
+            throw new CryptographicException("Encrypted payload is too short.");
+        }
 
         using (Aes aes = Aes.Create())
         {
@@ -158,6 +172,16 @@ public static class SecurityManager
                 return streamReader.ReadToEnd();
             }
         }
+    }
+
+    private static string ResolveFilePath(string filename)
+    {
+        if (Path.IsPathRooted(filename))
+        {
+            return filename;
+        }
+
+        return Path.Combine(Application.persistentDataPath, filename);
     }
 
     /// <summary>

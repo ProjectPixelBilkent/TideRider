@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
-using UnityEngine;
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 using static LocalBackupManager;
 
 public static class DataManager
@@ -58,6 +59,12 @@ public static class DataManager
     {
         GameData gameData = LoadGameData();
         gameData.energyAmount -= 1;
+
+        if (string.IsNullOrEmpty(gameData.lastEnergyUpdateTime))
+        {
+            gameData.lastEnergyUpdateTime = DateTime.Now.ToString();
+        }
+
         SaveGameData(gameData);
     }
 

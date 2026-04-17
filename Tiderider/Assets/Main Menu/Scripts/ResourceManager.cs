@@ -7,6 +7,7 @@ public class ResourceManager : MonoBehaviour
 
     [Header("UI Elements")]
     [SerializeField] private TMP_Text energyAmount;
+    [SerializeField] private TMP_Text energyTimerText;
     [SerializeField] private TMP_Text coinAmount;
 
     void Awake()
@@ -23,6 +24,14 @@ public class ResourceManager : MonoBehaviour
     {
         energyAmount.text = DataManager.GetEnergyAmount() + "/5";
         coinAmount.text = DataManager.GetCoinAmount().ToString();
+    }
+
+    void Update()
+    {
+        if (energyTimerText != null)
+        {
+            energyTimerText.text = EnergyRecoveryManager.Instance.GetFormattedTime();
+        }
     }
 
     public static bool isEnergyLeft()

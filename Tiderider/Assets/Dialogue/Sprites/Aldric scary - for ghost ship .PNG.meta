@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: b29ec44d307569342939e2eec3b295b8
+guid: f3bef47c0bbba374c9985dcf2eb42d82
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 458824991955294
-    second: Aldric mad_0
+      213: 4313943548843684613
+    second: Aldric scary - for ghost ship _0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Aldric mad_0
+      name: Aldric scary - for ghost ship _0
       rect:
         serializedVersion: 2
         x: 31
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e59d8a48c41a10000800000000000000
-      internalID: 458824991955294
+      spriteID: 5037ae92dc43edb30800000000000000
+      internalID: 4313943548843684613
       vertices: []
       indices: 
       edges: []

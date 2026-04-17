@@ -7,6 +7,7 @@ public class LevelManager : MonoBehaviour
 {
     public static LevelManager Instance;
     public static int CurrentPlayingLevelIndex;
+    private const int TotalLevelCount = 3;
 
     [Header("LevelObjects")]
     [SerializeField] private List<GameObject> levelObjects = new List<GameObject>();
@@ -84,4 +85,22 @@ public class LevelManager : MonoBehaviour
             ResourceManager.HandleNoEnergy();
         }
     }
+
+    //private void UnlockAllLevelsForDebug()
+    //{
+    //    int highestUnlocked = DataManager.GetHighestUnlockedIndex();
+
+    //    while (highestUnlocked < TotalLevelCount)
+    //    {
+    //        DataManager.CompleteLevel(highestUnlocked);
+    //        highestUnlocked = DataManager.GetHighestUnlockedIndex();
+    //    }
+
+    //    if (highestUnlocked > 0 && highestUnlocked - 1 < levelObjects.Count)
+    //    {
+    //        ship.position = new Vector3(ship.position.x, levelObjects[highestUnlocked - 1].transform.position.y, ship.position.z);
+    //    }
+
+    //    Debug.Log("Debug unlock applied up to level 3.");
+    //}
 }

@@ -1,6 +1,13 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 public class BossFightController : MonoBehaviour
 {
+    private const string MovementSceneName = "Movement";
+    private const string MainMenuSceneName = "MainMenu";
+    private const int FinalGameplayLevelIndex = 2;
+
     private enum SirenPhase
     {
         Standing,
@@ -18,6 +25,23 @@ public class BossFightController : MonoBehaviour
     [SerializeField] private int sirenStartingHp = 10;
     [SerializeField] private int aldricPunchDamage = 1;
     [SerializeField] private int sirenAttackDamage = 1;
+
+    [Header("Boss Dialogue")]
+    [SerializeField] private int dialogueTriggerSirenHp = 10;
+    [SerializeField] private string midFightConversationId = "boss_phase_2_intro";
+    [SerializeField] private string bossWinConversationId = "boss_fight_win";
+    [SerializeField] private string bossLoseConversationId = "boss_fight_losing";
+    [SerializeField] private TextAsset finaleLevelJson;
+    [SerializeField] private DialogueManager dialogueManager;
+    [SerializeField] private GameObject dialogueCanvas;
+    [SerializeField] private Sprite dialogueFrameSprite;
+    [SerializeField] private Sprite sirenDialogueHappySprite;
+    [SerializeField] private Sprite sirenDialogueSadSprite;
+    [SerializeField] private Sprite sirenDialogueAngrySprite;
+    [SerializeField] private Sprite sirenDialogueScarySprite;
+    [SerializeField] private Sprite aldricDialogueHappySprite;
+    [SerializeField] private Sprite aldricDialogueSadSprite;
+    [SerializeField] private Sprite aldricDialogueAngrySprite;
 
     [Header("Gameplay Timing")]
     [SerializeField] private float punchDuration = 0.25f;
@@ -109,6 +133,10 @@ public class BossFightController : MonoBehaviour
     private Vector3 aldricPunchAnchorPosition;
     private Vector3 sirenBasePosition;
     private SirenPhase currentPhase;
+    private bool hasTriggeredMidFightDialogue;
+    private bool isPausedForDialogue;
+    private bool fightEnded;
+    private bool playerWonFight;
 
     private void Awake()
     {
@@ -124,6 +152,7 @@ public class BossFightController : MonoBehaviour
         currentAldricHp = Mathf.Max(0, aldricStartingHp);
         currentSirenHp = Mathf.Max(0, sirenStartingHp);
         sirenBasePosition = sirenRenderer != null ? sirenRenderer.transform.position : Vector3.zero;
+        EnsureDialogueSetup();
 
         SetupLineRenderer(ref topLineRenderer, telegraphLineTop, "TelegraphLineTopRenderer");
         SetupLineRenderer(ref bottomLineRenderer, telegraphLineBottom, "TelegraphLineBottomRenderer");
@@ -155,16 +184,39 @@ public class BossFightController : MonoBehaviour
             return;
         }
 
-        HandleSwipeInput();
         UpdateSirenMovement();
         UpdateAldricMovement();
+        UpdateDamageFlash();
+
+        if (isPausedForDialogue)
+        {
+            SetTelegraphVisible(false);
+            return;
+        }
+
+        TryTriggerMidFightDialogue();
+
+        if (isPausedForDialogue)
+        {
+            SetTelegraphVisible(false);
+            return;
+        }
+
+        TryHandleFightOutcome();
+
+        if (isPausedForDialogue || fightEnded)
+        {
+            SetTelegraphVisible(false);
+            return;
+        }
+
+        HandleSwipeInput();
         UpdateReturnToMiddle();
         UpdatePunchState();
         UpdatePunchCooldown();
         UpdateSirenState();
         UpdateSirenAttackDamage();
         UpdateTelegraphVisual();
-        UpdateDamageFlash();
     }
 
     private void HandleSwipeInput()
@@ -814,5 +866,291 @@ public class BossFightController : MonoBehaviour
         {
             telegraphFillMeshRenderer.enabled = visible;
         }
+    }
+
+    private void TryTriggerMidFightDialogue()
+    {
+        if (hasTriggeredMidFightDialogue || currentSirenHp != dialogueTriggerSirenHp)
+        {
+            return;
+        }
+
+        hasTriggeredMidFightDialogue = true;
+        isPausedForDialogue = true;
+        isPunching = false;
+        punchTimer = 0f;
+        sirenAttackHasDamagedAldrich = true;
+        returnToMiddleTimer = -1f;
+
+        if (aldricRenderer != null && aldricIdleSprite != null)
+        {
+            aldricRenderer.sprite = aldricIdleSprite;
+        }
+
+        if (sirenRenderer != null)
+        {
+            sirenRenderer.sprite = ResolveStandingSprite();
+        }
+
+        SetTelegraphVisible(false);
+        EnsureDialogueSetup();
+
+        if (dialogueCanvas != null)
+        {
+            dialogueCanvas.SetActive(true);
+        }
+
+        if (dialogueManager == null)
+        {
+            Debug.LogWarning("BossFightController could not find a DialogueManager. Mid-fight dialogue was skipped.");
+            ResumeAfterMidFightDialogue();
+            return;
+        }
+
+        dialogueManager.ConversationFinished -= HandleMidFightDialogueFinished;
+        dialogueManager.ConversationFinished += HandleMidFightDialogueFinished;
+        dialogueManager.PlayConversation(midFightConversationId, true, false);
+
+        if (!dialogueManager.IsConversationPlaying)
+        {
+            dialogueManager.ConversationFinished -= HandleMidFightDialogueFinished;
+            ResumeAfterMidFightDialogue();
+        }
+    }
+
+    private void HandleMidFightDialogueFinished()
+    {
+        if (dialogueManager != null)
+        {
+            dialogueManager.ConversationFinished -= HandleMidFightDialogueFinished;
+        }
+
+        ResumeAfterMidFightDialogue();
+    }
+
+    private void ResumeAfterMidFightDialogue()
+    {
+        isPausedForDialogue = false;
+
+        if (dialogueCanvas != null)
+        {
+            dialogueCanvas.SetActive(false);
+        }
+
+        EnterStandingPhase();
+    }
+
+    private void TryHandleFightOutcome()
+    {
+        if (fightEnded)
+        {
+            return;
+        }
+
+        if (currentSirenHp <= 0)
+        {
+            StartOutcomeDialogue(true);
+            return;
+        }
+
+        if (currentAldricHp <= 0)
+        {
+            StartOutcomeDialogue(false);
+        }
+    }
+
+    private void StartOutcomeDialogue(bool didPlayerWin)
+    {
+        fightEnded = true;
+        playerWonFight = didPlayerWin;
+        isPausedForDialogue = true;
+        isPunching = false;
+        punchTimer = 0f;
+        punchCooldownTimer = 0f;
+        returnToMiddleTimer = -1f;
+        sirenAttackHasDamagedAldrich = true;
+        swipeInProgress = false;
+
+        if (aldricRenderer != null && aldricIdleSprite != null)
+        {
+            aldricRenderer.sprite = aldricIdleSprite;
+        }
+
+        if (sirenRenderer != null)
+        {
+            sirenRenderer.sprite = ResolveStandingSprite();
+        }
+
+        SetTelegraphVisible(false);
+        EnsureDialogueSetup();
+
+        if (dialogueCanvas != null)
+        {
+            dialogueCanvas.SetActive(true);
+        }
+
+        if (dialogueManager == null)
+        {
+            CompleteFightFlow();
+            return;
+        }
+
+        string conversationId = didPlayerWin ? bossWinConversationId : bossLoseConversationId;
+        Debug.Log($"Boss outcome dialogue starting: {conversationId}");
+        dialogueManager.ConversationFinished -= HandleOutcomeDialogueFinished;
+        dialogueManager.ConversationFinished += HandleOutcomeDialogueFinished;
+        dialogueManager.PlayConversation(conversationId, true, false);
+
+        if (!dialogueManager.IsConversationPlaying)
+        {
+            dialogueManager.ConversationFinished -= HandleOutcomeDialogueFinished;
+            CompleteFightFlow();
+        }
+    }
+
+    private void HandleOutcomeDialogueFinished()
+    {
+        if (dialogueManager != null)
+        {
+            dialogueManager.ConversationFinished -= HandleOutcomeDialogueFinished;
+        }
+
+        CompleteFightFlow();
+    }
+
+    private void CompleteFightFlow()
+    {
+        isPausedForDialogue = false;
+
+        if (dialogueCanvas != null)
+        {
+            dialogueCanvas.SetActive(false);
+        }
+
+        if (playerWonFight)
+        {
+            DataManager.IncrementEnergyAmount();
+            DataManager.CompleteLevel(LevelManager.CurrentPlayingLevelIndex);
+            if (finaleLevelJson == null)
+            {
+                Debug.LogWarning("Boss win could not find level_finale JSON. Returning to main menu instead.");
+                SceneManager.LoadScene(MainMenuSceneName);
+                return;
+            }
+
+            LevelManager.CurrentPlayingLevelIndex = -1;
+            SceneObjectSpawner.sceneJsonFile = finaleLevelJson;
+            SceneManager.LoadScene(MovementSceneName);
+            return;
+        }
+
+        LevelManager.CurrentPlayingLevelIndex = FinalGameplayLevelIndex;
+
+        if (SceneObjectSpawner.sceneJsonFile == null)
+        {
+            Debug.LogWarning("Boss loss retry could not find the saved level JSON. Returning to main menu instead.");
+            SceneManager.LoadScene(MainMenuSceneName);
+            return;
+        }
+
+        SceneManager.LoadScene(MovementSceneName);
+    }
+
+    private void EnsureDialogueSetup()
+    {
+        if (dialogueManager == null)
+        {
+            dialogueManager = FindFirstObjectByType<DialogueManager>();
+        }
+
+        if (dialogueCanvas == null)
+        {
+            Canvas existingCanvas = FindFirstObjectByType<Canvas>();
+            if (existingCanvas != null && existingCanvas.gameObject.name == "BossFightDialogueCanvas")
+            {
+                dialogueCanvas = existingCanvas.gameObject;
+            }
+        }
+
+        if (dialogueManager != null && dialogueCanvas != null)
+        {
+            return;
+        }
+
+        GameObject canvasRoot = new GameObject("BossFightDialogueCanvas");
+        Canvas canvas = canvasRoot.AddComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.sortingOrder = 500;
+        canvasRoot.AddComponent<CanvasScaler>().uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        canvasRoot.GetComponent<CanvasScaler>().referenceResolution = new Vector2(1080f, 1920f);
+        canvasRoot.AddComponent<GraphicRaycaster>();
+
+        GameObject frameObject = new GameObject("DialogueFrame");
+        frameObject.transform.SetParent(canvasRoot.transform, false);
+        RectTransform frameRect = frameObject.AddComponent<RectTransform>();
+        frameRect.anchorMin = new Vector2(0.5f, 0f);
+        frameRect.anchorMax = new Vector2(0.5f, 0f);
+        frameRect.pivot = new Vector2(0.5f, 0f);
+        frameRect.anchoredPosition = new Vector2(0.6079f, 150f);
+        frameRect.sizeDelta = new Vector2(1064.227f, 989.105f);
+        frameRect.localScale = new Vector3(0.8459f, 0.8459f, 0.8459f);
+        Image frameImage = frameObject.AddComponent<Image>();
+        frameImage.sprite = dialogueFrameSprite;
+        frameImage.preserveAspect = true;
+
+        GameObject textObject = new GameObject("DialogueText");
+        textObject.transform.SetParent(frameObject.transform, false);
+        RectTransform textRect = textObject.AddComponent<RectTransform>();
+        textRect.anchorMin = new Vector2(0f, 0f);
+        textRect.anchorMax = new Vector2(1f, 1f);
+        textRect.offsetMin = new Vector2(110f, -264f);
+        textRect.offsetMax = new Vector2(-110f, -794f);
+
+        TextMeshProUGUI dialogueTextComponent = textObject.AddComponent<TextMeshProUGUI>();
+        TMP_FontAsset runtimeFont = Resources.Load<TMP_FontAsset>("Fonts & Materials/LiberationSans SDF");
+        if (runtimeFont != null)
+        {
+            dialogueTextComponent.font = runtimeFont;
+        }
+        else
+        {
+            dialogueTextComponent.font = TMPro.TMP_Settings.defaultFontAsset;
+            Debug.LogWarning("BossFightController could not load LiberationSans SDF from Resources. Falling back to TMP default font.");
+        }
+        dialogueTextComponent.fontSize = 50f;
+        dialogueTextComponent.alignment = TextAlignmentOptions.TopLeft;
+        dialogueTextComponent.enableWordWrapping = true;
+        dialogueTextComponent.color = new Color(0.10943389f, 0.101381205f, 0.101381205f, 1f);
+
+        GameObject managerObject = new GameObject("BossFightDialogueManager");
+        DialogueController controller = managerObject.AddComponent<DialogueController>();
+        controller.ConfigureReferences(frameRect, frameImage, dialogueTextComponent);
+        controller.ConfigurePositions(
+            new Vector2(0.6079f, 150f),
+            new Vector2(0.6079f, 150f),
+            new Vector2(0.6079f, 150f),
+            new Vector2(-1200f, 150f),
+            new Vector2(1200f, 150f),
+            new Vector2(0f, -1400f));
+
+        CharacterSpriteDatabase database = managerObject.AddComponent<CharacterSpriteDatabase>();
+        database.ConfigureEntries(new[]
+        {
+            new CharacterEmotionSprite { characterId = "siren", emotion = "default", sprite = sirenDialogueHappySprite != null ? sirenDialogueHappySprite : ResolveStandingSprite() },
+            new CharacterEmotionSprite { characterId = "siren", emotion = "happy", sprite = sirenDialogueHappySprite != null ? sirenDialogueHappySprite : ResolveStandingSprite() },
+            new CharacterEmotionSprite { characterId = "siren", emotion = "sad", sprite = sirenDialogueSadSprite != null ? sirenDialogueSadSprite : ResolveStandingSprite() },
+            new CharacterEmotionSprite { characterId = "siren", emotion = "angry", sprite = sirenDialogueAngrySprite != null ? sirenDialogueAngrySprite : ResolveStandingSprite() },
+            new CharacterEmotionSprite { characterId = "siren", emotion = "scary", sprite = sirenDialogueScarySprite != null ? sirenDialogueScarySprite : ResolveStandingSprite() },
+            new CharacterEmotionSprite { characterId = "aldric", emotion = "default", sprite = aldricDialogueSadSprite != null ? aldricDialogueSadSprite : aldricIdleSprite },
+            new CharacterEmotionSprite { characterId = "aldric", emotion = "happy", sprite = aldricDialogueHappySprite != null ? aldricDialogueHappySprite : aldricIdleSprite },
+            new CharacterEmotionSprite { characterId = "aldric", emotion = "sad", sprite = aldricDialogueSadSprite != null ? aldricDialogueSadSprite : aldricIdleSprite },
+            new CharacterEmotionSprite { characterId = "aldric", emotion = "angry", sprite = aldricDialogueAngrySprite != null ? aldricDialogueAngrySprite : aldricIdleSprite }
+        });
+
+        dialogueManager = managerObject.AddComponent<DialogueManager>();
+        dialogueManager.ConfigureDependencies(controller, database);
+
+        dialogueCanvas = canvasRoot;
+        dialogueCanvas.SetActive(false);
     }
 }

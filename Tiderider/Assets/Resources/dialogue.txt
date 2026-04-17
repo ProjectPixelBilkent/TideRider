@@ -408,6 +408,29 @@
       ]
     },
     {
+      "conversationId": "boss_phase_2_intro",
+      "lines": [
+        {
+          "text": "Why won't you break?!",
+          "characterId": "siren",
+          "emotion": "angry",
+          "enterSide": 0
+        },
+        {
+          "text": "You dragged me across worlds. I'm not dying here.",
+          "characterId": "aldric",
+          "emotion": "angry",
+          "enterSide": 1
+        },
+        {
+          "text": "Then stop pretending you can survive what's coming next.",
+          "characterId": "siren",
+          "emotion": "scary",
+          "enterSide": 0
+        }
+      ]
+    },
+    {
       "conversationId": "boss_fight_win",
       "lines": [
         {

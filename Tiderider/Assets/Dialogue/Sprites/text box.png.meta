@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 6a9b451768e7461468d527b6182b8f3e
+guid: d14a93f934f546442b00d0a0f3b7e2d7
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 945447764543787595
-    second: spraits-05_0
+      213: 5330588049982923306
+    second: text box_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,30 +96,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: spraits-05_0
+      name: text box_0
       rect:
         serializedVersion: 2
-        x: 22
-        y: 48
-        width: 341
-        height: 288
+        x: 26
+        y: 43
+        width: 1450
+        height: 409
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b42d15f8bb7ee1d00800000000000000
-      internalID: 945447764543787595
+      spriteID: a22ac2bb69d0af940800000000000000
+      internalID: 5330588049982923306
       vertices: []
       indices: 
       edges: []
@@ -147,8 +134,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      spraits-05_0: 945447764543787595
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

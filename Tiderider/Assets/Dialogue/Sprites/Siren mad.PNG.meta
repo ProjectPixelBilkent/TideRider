@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: f0c873f168b1912469a3509312aef6ed
+guid: 9371d319958a15a43a88998e6ab20cb9
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 9195998212940743236
-    second: Siren mad _0
+      213: -4183719319544129170
+    second: Siren mad_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,37 +96,11 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Siren mad _0
+      name: Siren mad_0
       rect:
         serializedVersion: 2
         x: 31
@@ -141,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 442c575f6afbe9f70800000000000000
-      internalID: 9195998212940743236
+      spriteID: e6912a6f17170f5c0800000000000000
+      internalID: -4183719319544129170
       vertices: []
       indices: 
       edges: []
@@ -160,8 +134,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      Siren mad _0: 9195998212940743236
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -51,6 +51,8 @@ public class SceneObjectSpawner : MonoBehaviour
     private EndingObject[] endingObjects;
     [DoNotSerialize] public bool isInEndingSequence;
 
+    public bool HasGameplayStarted { get; private set; }
+
     private void Awake()
     {
         BuildPrefabMap();
@@ -71,6 +73,7 @@ public class SceneObjectSpawner : MonoBehaviour
         gameObject.layer = LayerMask.NameToLayer("Default");
 
         PlayBGMForTerrain();
+        TryStartWithOpeningStandaloneDialogue();
     }
 
     private void PlayBGMForTerrain()
@@ -94,11 +97,23 @@ public class SceneObjectSpawner : MonoBehaviour
     }
 
     private DialogueManager dialogueManager;
+    private System.Action runtimeDialogueFinishedCallback;
+    private bool runtimeDialogueIgnoreCompletion;
+    private bool runtimeDialogueMarkCompleted = true;
 
     private void Update()
     {
         if (isPausedForDialogue)
             return;
+
+        if (ProcessPendingDialogueBeforeGameplayStart())
+            return;
+
+        if (!HasGameplayStarted)
+        {
+            TryStartGameplayFromCurrentInput();
+            return;
+        }
 
         // Move camera and boundary upward
         Vector3 move = Vector3.up * moveSpeed * Time.deltaTime;
@@ -246,6 +261,49 @@ public class SceneObjectSpawner : MonoBehaviour
         return id == "scene_0" || id == "reunion_scene";
     }
 
+    private bool ProcessPendingDialogueBeforeGameplayStart()
+    {
+        if (HasGameplayStarted || objectsToSpawn == null || nextSpawnIndex >= objectsToSpawn.Count || Camera.main == null)
+            return false;
+
+        SavedObjectData data = objectsToSpawn[nextSpawnIndex];
+        if (data.objectType != SpawnObjectType.Dialogue)
+            return false;
+
+        float cameraY = Camera.main.transform.position.y;
+        if (GetPreGameplaySpawnPosition(data).y > cameraY)
+            return false;
+
+        TriggerMidLevelDialogue(data.conversationId);
+        nextSpawnIndex++;
+        return true;
+    }
+
+    private Vector3 GetPreGameplaySpawnPosition(SavedObjectData data)
+    {
+        return new Vector3(
+            data.posX,
+            data.posY + yOffset,
+            data.posZ
+        );
+    }
+
+    private void TryStartWithOpeningStandaloneDialogue()
+    {
+        if (objectsToSpawn == null || objectsToSpawn.Count == 0)
+            return;
+
+        SavedObjectData firstObject = objectsToSpawn[0];
+        if (firstObject.objectType != SpawnObjectType.Dialogue || !StandaloneConversation(firstObject.conversationId))
+            return;
+
+        if (blackBackground != null)
+            blackBackground.SetActive(true);
+
+        nextSpawnIndex = 1;
+        TriggerMidLevelDialogue(firstObject.conversationId);
+    }
+
     private void TriggerMidLevelDialogue(string conversationId)
     {
         if (string.IsNullOrWhiteSpace(conversationId))
@@ -269,7 +327,7 @@ public class SceneObjectSpawner : MonoBehaviour
             dialogueCanvas.SetActive(true);
         dialogueManager.ConversationFinished -= HandleMidLevelDialogueFinished;
         dialogueManager.ConversationFinished += HandleMidLevelDialogueFinished;
-        dialogueManager.PlayConversation(conversationId);
+        dialogueManager.PlayConversation(conversationId, runtimeDialogueIgnoreCompletion, runtimeDialogueMarkCompleted);
 
         if (!dialogueManager.IsConversationPlaying)
             HandleMidLevelDialogueFinished();
@@ -289,7 +347,24 @@ public class SceneObjectSpawner : MonoBehaviour
             EndingObject.InvokeOnLevelCompleted();
         }
 
+        runtimeDialogueFinishedCallback?.Invoke();
+        runtimeDialogueFinishedCallback = null;
+        runtimeDialogueIgnoreCompletion = false;
+        runtimeDialogueMarkCompleted = true;
         lastConversationId = null;
+    }
+
+    public void PlayRuntimeDialogue(string conversationId, System.Action onFinished = null)
+    {
+        PlayRuntimeDialogue(conversationId, onFinished, false, true);
+    }
+
+    public void PlayRuntimeDialogue(string conversationId, System.Action onFinished, bool ignoreCompletion, bool markCompleted)
+    {
+        runtimeDialogueFinishedCallback = onFinished;
+        runtimeDialogueIgnoreCompletion = ignoreCompletion;
+        runtimeDialogueMarkCompleted = markCompleted;
+        TriggerMidLevelDialogue(conversationId);
     }
 
     private void SpawnObject(SavedObjectData data)
@@ -527,6 +602,33 @@ public class SceneObjectSpawner : MonoBehaviour
         isPausedForEnemy = false;
         activeEnemy = null;
         postEnemyObstacleOffset = Vector3.zero;
+        HasGameplayStarted = false;
+    }
+
+    public bool TryStartGameplayFromCurrentInput()
+    {
+        if (HasGameplayStarted || isPausedForDialogue)
+            return HasGameplayStarted;
+
+        if (!IsFreshPressThisFrame())
+            return false;
+
+        HasGameplayStarted = true;
+        return true;
+    }
+
+    private bool IsFreshPressThisFrame()
+    {
+        if (Input.GetMouseButtonDown(0))
+            return true;
+
+        for (int i = 0; i < Input.touchCount; i++)
+        {
+            if (Input.GetTouch(i).phase == TouchPhase.Began)
+                return true;
+        }
+
+        return false;
     }
 
     private void SetupEdgeCollider()

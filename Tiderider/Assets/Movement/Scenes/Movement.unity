@@ -8048,6 +8048,24 @@ MonoBehaviour:
   monsterYOffset: -0.76
   blackBackground: {fileID: 1995050607}
   dialogueCanvas: {fileID: 873976237}
+  normalWorldBackgroundPrefab: {fileID: 2519342885135262941, guid: a8b92042a0f8b0746922bce3a3d7644a, type: 3}
+  mistyWorldBackgroundPrefab: {fileID: 65192298542884525, guid: 1ba3ac7e0f87cf444b26acdefc14bc2e, type: 3}
+  mistyWaterBackgroundPrefab: {fileID: 6941037714616256007, guid: 8a0d1a7b08e9d024fbf350796cd2ec3e, type: 3}
+  icyWorldBackgroundPrefab: {fileID: 3796985206574264292, guid: 377c516f99b25da429f93a0ec320fdb3, type: 3}
+  icyWaterBackgroundPrefab: {fileID: 7470224602057056925, guid: 6432b7d0677b6b545b5b30d220560d8f, type: 3}
+  mistOverlaySprites:
+  - {fileID: -7081887453426946432, guid: 3442ddd5c82b59a44b5ad45bcce180b1, type: 3}
+  - {fileID: 5296610037586251359, guid: 36f06cda50c70194d95eb07883977971, type: 3}
+  - {fileID: -7341633401880629902, guid: e503d90d31cf9d845ac9b3893c4ca81c, type: 3}
+  - {fileID: 6525436877554798740, guid: 831a945b08b9daf41ae1e94d1f6682d0, type: 3}
+  mistSpawnIntervalRange: {x: 1, y: 2.5}
+  mistLifetimeRange: {x: 3.5, y: 6}
+  mistScaleRange: {x: 0.7, y: 1.2}
+  mistMaxAlpha: 0.3
+  mistSortingOrder: 200
+  mistZPosition: 8
+  mistDriftDistance: 0.75
+  mistMinDistanceFromRecent: 3.5
   isPausedForEnemy: 0
   isPausedForDialogue: 0
   isInEndingSequence: 0

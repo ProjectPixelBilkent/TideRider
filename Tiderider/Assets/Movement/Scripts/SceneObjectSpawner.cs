@@ -32,6 +32,24 @@ public class SceneObjectSpawner : MonoBehaviour
     [SerializeField] private GameObject blackBackground;
     [SerializeField] private GameObject dialogueCanvas;
 
+    [Header("Background Prefabs")]
+    [SerializeField] private GameObject normalWorldBackgroundPrefab;
+    [SerializeField] private GameObject mistyWorldBackgroundPrefab;
+    [SerializeField] private GameObject mistyWaterBackgroundPrefab;
+    [SerializeField] private GameObject icyWorldBackgroundPrefab;
+    [SerializeField] private GameObject icyWaterBackgroundPrefab;
+
+    [Header("Misty Atmosphere")]
+    [SerializeField] private List<Sprite> mistOverlaySprites = new List<Sprite>();
+    [SerializeField] private Vector2 mistSpawnIntervalRange = new Vector2(1f, 2.5f);
+    [SerializeField] private Vector2 mistLifetimeRange = new Vector2(3.5f, 6f);
+    [SerializeField] private Vector2 mistScaleRange = new Vector2(0.7f, 1.2f);
+    [SerializeField] private float mistMaxAlpha = 0.5f;
+    [SerializeField] private float mistSortingOrder = 200f;
+    [SerializeField] private float mistZPosition = 8f;
+    [SerializeField] private float mistDriftDistance = 0.75f;
+    [SerializeField] private float mistMinDistanceFromRecent = 3.5f;
+
     private EdgeCollider2D edgeCollider;
 
     public static Vector3 UpwardsMovement { get; private set; }
@@ -52,6 +70,9 @@ public class SceneObjectSpawner : MonoBehaviour
     [DoNotSerialize] public bool isInEndingSequence;
 
     public bool HasGameplayStarted { get; private set; }
+    private TerrainType currentTerrain;
+    private float mistSpawnTimer;
+    private readonly Queue<Vector2> recentMistPositions = new Queue<Vector2>(2);
 
     private void Awake()
     {
@@ -72,8 +93,9 @@ public class SceneObjectSpawner : MonoBehaviour
         edgeCollider.isTrigger = false;
         gameObject.layer = LayerMask.NameToLayer("Default");
 
+        currentTerrain = GetLevelTerrain();
+        SpawnBackgrounds();
         PlayBGMForTerrain();
-        TryStartWithOpeningStandaloneDialogue();
     }
 
     private void PlayBGMForTerrain()
@@ -81,11 +103,7 @@ public class SceneObjectSpawner : MonoBehaviour
         if (SoundLibrary.Instance == null || objectsToSpawn == null)
             return;
 
-        var firstObstacle = objectsToSpawn.FirstOrDefault(o => o.objectType == SpawnObjectType.Obstacle);
-        if (firstObstacle == null)
-            return;
-
-        string bgmId = firstObstacle.typeOfTerrain switch
+        string bgmId = GetLevelTerrain() switch
         {
             TerrainType.General => "world_1",
             TerrainType.Ice => "world_3",
@@ -94,6 +112,57 @@ public class SceneObjectSpawner : MonoBehaviour
         };
 
         SoundLibrary.Instance.PlayBGM(bgmId);
+    }
+
+    private TerrainType GetLevelTerrain()
+    {
+        var firstObstacle = objectsToSpawn.FirstOrDefault(o => o.objectType == SpawnObjectType.Obstacle);
+        if (firstObstacle == null)
+        {
+            Debug.LogWarning("No obstacle found in level data. Defaulting terrain to General.");
+            return TerrainType.General;
+        }
+
+        return firstObstacle.typeOfTerrain;
+    }
+
+    private void SpawnBackgrounds()
+    {
+        DestroyExistingBackground("NormalWorldBackground");
+        DestroyExistingBackground("MistyWorldBackground");
+        DestroyExistingBackground("MistyWater");
+        DestroyExistingBackground("icyBackground");
+        DestroyExistingBackground("Icywater");
+
+        switch (currentTerrain)
+        {
+            case TerrainType.General:
+                SpawnBackgroundPrefab(normalWorldBackgroundPrefab);
+                break;
+            case TerrainType.Misty:
+                SpawnBackgroundPrefab(mistyWorldBackgroundPrefab);
+                SpawnBackgroundPrefab(mistyWaterBackgroundPrefab);
+                break;
+            case TerrainType.Ice:
+                SpawnBackgroundPrefab(icyWaterBackgroundPrefab);
+                SpawnBackgroundPrefab(icyWorldBackgroundPrefab);
+                break;
+        }
+    }
+
+    private void SpawnBackgroundPrefab(GameObject prefab)
+    {
+        if (prefab == null)
+            return;
+
+        Instantiate(prefab);
+    }
+
+    private void DestroyExistingBackground(string objectName)
+    {
+        GameObject existing = GameObject.Find(objectName);
+        if (existing != null)
+            Destroy(existing);
     }
 
     private DialogueManager dialogueManager;
@@ -121,6 +190,8 @@ public class SceneObjectSpawner : MonoBehaviour
             mainCamera.transform.position += move;
         if (edgeCollider != null)
             edgeCollider.transform.position += move;
+
+        HandleMistyAtmosphere();
 
         // Keep monster at the bottom edge of the camera
         if (monster != null && mainCamera != null)
@@ -167,6 +238,104 @@ public class SceneObjectSpawner : MonoBehaviour
             if (isPausedForEnemy || isPausedForDialogue)
                 break;
         }
+    }
+
+    private void HandleMistyAtmosphere()
+    {
+        if (currentTerrain != TerrainType.Misty || mainCamera == null || mistOverlaySprites.Count == 0)
+            return;
+
+        mistSpawnTimer -= Time.deltaTime;
+        if (mistSpawnTimer > 0f)
+            return;
+
+        SpawnMistOverlay();
+        ResetMistSpawnTimer();
+    }
+
+    private void ResetMistSpawnTimer()
+    {
+        mistSpawnTimer = Random.Range(mistSpawnIntervalRange.x, mistSpawnIntervalRange.y);
+    }
+
+    private void SpawnMistOverlay()
+    {
+        Sprite mistSprite = mistOverlaySprites[Random.Range(0, mistOverlaySprites.Count)];
+        if (mistSprite == null)
+            return;
+
+        float camHeight = 2f * mainCamera.orthographicSize;
+        float camWidth = camHeight * mainCamera.aspect;
+
+        Vector2 localPosition = FindMistSpawnPosition(camWidth, camHeight);
+        float localX = localPosition.x;
+        float localY = localPosition.y;
+        float scale = Random.Range(mistScaleRange.x, mistScaleRange.y);
+        float lifetime = Random.Range(mistLifetimeRange.x, mistLifetimeRange.y);
+
+        GameObject mistObject = new GameObject("MistyFogOverlay");
+        mistObject.transform.SetParent(mainCamera.transform, false);
+        mistObject.transform.localPosition = new Vector3(localX, localY, mistZPosition);
+        mistObject.transform.localScale = new Vector3(scale, scale, 1f);
+
+        SpriteRenderer renderer = mistObject.AddComponent<SpriteRenderer>();
+        renderer.sprite = mistSprite;
+        renderer.sortingOrder = Mathf.RoundToInt(mistSortingOrder);
+        renderer.color = new Color(1f, 1f, 1f, 0f);
+
+        float fadeDuration = lifetime * 0.3f;
+        float visibleDuration = lifetime - (fadeDuration * 2f);
+
+        DG.Tweening.Sequence sequence = DOTween.Sequence();
+        sequence.Append(renderer.DOFade(mistMaxAlpha, fadeDuration));
+        sequence.Join(mistObject.transform.DOLocalMoveY(localY + mistDriftDistance, lifetime).SetEase(Ease.Linear));
+        sequence.AppendInterval(Mathf.Max(0f, visibleDuration));
+        sequence.Append(renderer.DOFade(0f, fadeDuration));
+        sequence.OnComplete(() => Destroy(mistObject));
+    }
+
+    private Vector2 FindMistSpawnPosition(float camWidth, float camHeight)
+    {
+        const int maxAttempts = 10;
+
+        for (int attempt = 0; attempt < maxAttempts; attempt++)
+        {
+            Vector2 candidate = new Vector2(
+                Random.Range(-camWidth * 0.5f, camWidth * 0.5f),
+                Random.Range(-camHeight * 0.4f, camHeight * 0.25f)
+            );
+
+            bool tooClose = false;
+            foreach (Vector2 recentPosition in recentMistPositions)
+            {
+                if (Vector2.Distance(candidate, recentPosition) < mistMinDistanceFromRecent)
+                {
+                    tooClose = true;
+                    break;
+                }
+            }
+
+            if (tooClose)
+                continue;
+
+            RememberMistPosition(candidate);
+            return candidate;
+        }
+
+        Vector2 fallback = new Vector2(
+            Random.Range(-camWidth * 0.5f, camWidth * 0.5f),
+            Random.Range(-camHeight * 0.4f, camHeight * 0.25f)
+        );
+        RememberMistPosition(fallback);
+        return fallback;
+    }
+
+    private void RememberMistPosition(Vector2 position)
+    {
+        if (recentMistPositions.Count >= 2)
+            recentMistPositions.Dequeue();
+
+        recentMistPositions.Enqueue(position);
     }
 
     private void BuildPrefabMap()

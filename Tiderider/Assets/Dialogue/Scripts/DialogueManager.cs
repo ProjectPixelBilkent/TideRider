@@ -13,9 +13,16 @@ public class DialogueManager : MonoBehaviour
     private Coroutine currentConversationRoutine;
     private Coroutine currentLineRoutine;
     private string activeConversationId;
+    private bool markActiveConversationAsCompleted = true;
 
     public bool IsConversationPlaying => currentConversationRoutine != null;
     public event Action ConversationFinished;
+
+    public void ConfigureDependencies(DialogueController controller, CharacterSpriteDatabase databaseRef)
+    {
+        dialogueController = controller;
+        spriteDatabase = databaseRef;
+    }
 
     private void Awake()
     {
@@ -56,6 +63,11 @@ public class DialogueManager : MonoBehaviour
 
     public void PlayConversation(string conversationId)
     {
+        PlayConversation(conversationId, false, true);
+    }
+
+    public void PlayConversation(string conversationId, bool ignoreCompletion, bool markCompleted)
+    {
         if (database == null)
         {
             Debug.LogError("Dialogue database is not loaded.");
@@ -74,11 +86,7 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        if (DataManager.IsConversationCompleted(conversationId))
-        {
-            Debug.Log($"Conversation '{conversationId}' has already been played. Skipping.");
-            return;
-        }
+        // Temporary debug behavior: always allow conversations to replay.
 
         DialogueConversationData conversation = GetConversationById(conversationId);
 
@@ -102,6 +110,7 @@ public class DialogueManager : MonoBehaviour
 
         activeConversationId = conversationId;
         dialogueController.ClearSkipConversationRequest();
+        markActiveConversationAsCompleted = markCompleted;
         currentConversationRoutine = StartCoroutine(PlayConversationRoutine(conversation));
     }
 
@@ -230,7 +239,7 @@ public class DialogueManager : MonoBehaviour
 
     private void CompleteConversation()
     {
-        if (!string.IsNullOrEmpty(activeConversationId))
+        if (markActiveConversationAsCompleted && !string.IsNullOrEmpty(activeConversationId))
         {
             DataManager.MarkConversationCompleted(activeConversationId);
         }
@@ -238,6 +247,7 @@ public class DialogueManager : MonoBehaviour
         currentLineRoutine = null;
         currentConversationRoutine = null;
         activeConversationId = null;
+        markActiveConversationAsCompleted = true;
         ConversationFinished?.Invoke();
     }
 }

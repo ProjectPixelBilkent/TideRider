@@ -27,6 +27,29 @@ public class DialogueController : MonoBehaviour
     private bool _skipTyping = false;
     private bool _skipConversationRequested = false;
 
+    public void ConfigureReferences(RectTransform frameTransform, Image frameImage, TMP_Text text)
+    {
+        dialogueFrameTransform = frameTransform;
+        dialogueFrameImage = frameImage;
+        dialogueText = text;
+    }
+
+    public void ConfigurePositions(
+        Vector2 leftShown,
+        Vector2 rightShown,
+        Vector2 middleShown,
+        Vector2 leftHidden,
+        Vector2 rightHidden,
+        Vector2 middleHidden)
+    {
+        leftShownPosition = leftShown;
+        rightShownPosition = rightShown;
+        middleShownPosition = middleShown;
+        leftHiddenPosition = leftHidden;
+        rightHiddenPosition = rightHidden;
+        middleHiddenPosition = middleHidden;
+    }
+
     public void SkipTyping() { _skipTyping = true; }
     public void RequestSkipConversation()
     {

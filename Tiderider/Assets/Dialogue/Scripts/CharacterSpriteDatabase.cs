@@ -13,6 +13,11 @@ public class CharacterSpriteDatabase : MonoBehaviour
 {
     [SerializeField] private CharacterEmotionSprite[] spriteEntries;
 
+    public void ConfigureEntries(CharacterEmotionSprite[] entries)
+    {
+        spriteEntries = entries;
+    }
+
     public Sprite GetSprite(string characterId, string emotion)
     {
         foreach (var entry in spriteEntries)

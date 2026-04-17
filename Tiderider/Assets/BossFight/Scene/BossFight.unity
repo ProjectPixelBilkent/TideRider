@@ -177,9 +177,24 @@ MonoBehaviour:
   currentAldricHp: 0
   currentSirenHp: 0
   aldricStartingHp: 3
-  sirenStartingHp: 10
+  sirenStartingHp: 20
   aldricPunchDamage: 1
   sirenAttackDamage: 1
+  dialogueTriggerSirenHp: 10
+  midFightConversationId: boss_phase_2_intro
+  bossWinConversationId: boss_fight_win
+  bossLoseConversationId: boss_fight_losing
+  finaleLevelJson: {fileID: 4900000, guid: 953ad8f24839fc146bfc03ac7b668981, type: 3}
+  dialogueManager: {fileID: 0}
+  dialogueCanvas: {fileID: 0}
+  dialogueFrameSprite: {fileID: 5330588049982923306, guid: d14a93f934f546442b00d0a0f3b7e2d7, type: 3}
+  sirenDialogueHappySprite: {fileID: 401084836128048702, guid: 44cfe053a0a09204883a6cbb605e7b7f, type: 3}
+  sirenDialogueSadSprite: {fileID: -7049959098458918333, guid: 49a8361865569dc488172341fbd6ecfb, type: 3}
+  sirenDialogueAngrySprite: {fileID: -4183719319544129170, guid: 9371d319958a15a43a88998e6ab20cb9, type: 3}
+  sirenDialogueScarySprite: {fileID: 9206116322438441063, guid: 35d1e30c46941cd46b8ad98b258e2355, type: 3}
+  aldricDialogueHappySprite: {fileID: -2334500910581636795, guid: d0ad19a7482a2f746af66f451f1da0a1, type: 3}
+  aldricDialogueSadSprite: {fileID: -6908869362446399523, guid: e6c14fb4713988c4badc4f38415530cc, type: 3}
+  aldricDialogueAngrySprite: {fileID: 458824991955294, guid: b29ec44d307569342939e2eec3b295b8, type: 3}
   punchDuration: 0.25
   aldricPunchCooldown: 0.4
   returnToMiddleDelay: 0.3

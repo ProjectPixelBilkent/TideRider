@@ -80,6 +80,16 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
+        if (!bulletSpawner.objectSpawner.HasGameplayStarted)
+        {
+            hasInput = false;
+            targetZRotation = 0f;
+            targetSpeed = 0f;
+            targetMouseAngle = 0f;
+            UpdateTurnSprite();
+            return;
+        }
+
         if (isBouncing)
         {
             bounceTimer -= Time.deltaTime;
@@ -131,6 +141,13 @@ public class PlayerMovement : MonoBehaviour
         if (bulletSpawner.objectSpawner.isPausedForDialogue)
         {
             rb.linearVelocity = Vector2.zero;
+            return;
+        }
+
+        if (!bulletSpawner.objectSpawner.HasGameplayStarted)
+        {
+            rb.linearVelocity = Vector2.zero;
+            currentVelocity = rb.linearVelocity;
             return;
         }
 

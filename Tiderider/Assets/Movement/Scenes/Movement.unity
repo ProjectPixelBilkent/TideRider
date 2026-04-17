@@ -8018,7 +8018,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c122640e09b76f74f9b50afea70ad25b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jsonForTesting: {fileID: 4900000, guid: a3a0b2f010314b74baabb084fc1ff381, type: 3}
+  jsonForTesting: {fileID: 4900000, guid: c088c325508f0c9439eddeba884bbf86, type: 3}
   yOffset: 0
   spawnAheadDistance: 20
   enemySpawnAheadDistance: 7.5

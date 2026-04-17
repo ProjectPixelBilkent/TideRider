@@ -13,6 +13,7 @@ public class EndingObject : MonoBehaviour
 
     public static void InvokeOnLevelCompleted()
     {
+        Debug.Log("Level Completed!");
         OnLevelCompleted?.Invoke();
     }
 

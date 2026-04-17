@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -148,10 +149,13 @@ public class ArmoryManager : MonoBehaviour
         }
         else
         {
+            int slotIndex = shipSlot.transform.parent.GetSiblingIndex();
+
             selectedWeapon = WeaponSlot.GetComponent<WeaponSlotManager>().weapon;
             shipSlot.GetComponent<Image>().sprite = selectedWeapon.weaponIcon;
+            weaponList[slotIndex] = selectedWeapon;
 
-            DataManager.SaveToArmory(shipSlot.transform.parent.GetSiblingIndex(), selectedWeapon);
+            DataManager.SaveToArmory(slotIndex, selectedWeapon);
 
             DeselectSlot();
             DeselectWeapon(0);

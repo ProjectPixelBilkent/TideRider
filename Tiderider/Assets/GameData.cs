@@ -17,6 +17,7 @@ public class GameData
     public Weapon[] playerArmory = new Weapon[6];
     public int highestUnlockedLevelIndex = 0;
     public List<string> completedConversations = new List<string>();
+    public string lastEnergyUpdateTime = "";
 }
 
 /// <summary>

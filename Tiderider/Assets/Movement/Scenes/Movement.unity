@@ -695,11 +695,11 @@ PrefabInstance:
     - target: {fileID: 2278480362476395312, guid: a12d74ab6e20def488d320a2703693f5, type: 3}
       propertyPath: spriteEntries.Array.data[1].sprite
       value: 
-      objectReference: {fileID: -8832012085281090287, guid: 9716f3bd83f051b498e567d773f6ff55, type: 3}
+      objectReference: {fileID: 401084836128048702, guid: 44cfe053a0a09204883a6cbb605e7b7f, type: 3}
     - target: {fileID: 2278480362476395312, guid: a12d74ab6e20def488d320a2703693f5, type: 3}
       propertyPath: spriteEntries.Array.data[2].sprite
       value: 
-      objectReference: {fileID: 9195998212940743236, guid: f0c873f168b1912469a3509312aef6ed, type: 3}
+      objectReference: {fileID: -4183719319544129170, guid: 9371d319958a15a43a88998e6ab20cb9, type: 3}
     - target: {fileID: 2278480362476395312, guid: a12d74ab6e20def488d320a2703693f5, type: 3}
       propertyPath: spriteEntries.Array.data[3].sprite
       value: 
@@ -707,7 +707,7 @@ PrefabInstance:
     - target: {fileID: 2278480362476395312, guid: a12d74ab6e20def488d320a2703693f5, type: 3}
       propertyPath: spriteEntries.Array.data[4].sprite
       value: 
-      objectReference: {fileID: -8934618504620760228, guid: 3c5c900ce8c0bbb4a9376e738a700c34, type: 3}
+      objectReference: {fileID: 4313943548843684613, guid: f3bef47c0bbba374c9985dcf2eb42d82, type: 3}
     - target: {fileID: 2278480362476395312, guid: a12d74ab6e20def488d320a2703693f5, type: 3}
       propertyPath: spriteEntries.Array.data[5].sprite
       value: 
@@ -731,7 +731,7 @@ PrefabInstance:
     - target: {fileID: 2278480362476395312, guid: a12d74ab6e20def488d320a2703693f5, type: 3}
       propertyPath: spriteEntries.Array.data[10].sprite
       value: 
-      objectReference: {fileID: -2334500910581636795, guid: d0ad19a7482a2f746af66f451f1da0a1, type: 3}
+      objectReference: {fileID: 5330588049982923306, guid: d14a93f934f546442b00d0a0f3b7e2d7, type: 3}
     - target: {fileID: 2278480362476395312, guid: a12d74ab6e20def488d320a2703693f5, type: 3}
       propertyPath: spriteEntries.Array.data[11].sprite
       value: 
@@ -14605,6 +14605,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   currentHealth: 100
+  damageFlashColor: {r: 1, g: 0.5019608, b: 0.5019608, a: 1}
+  damageFlashDuration: 0.45
   healthSlider: {fileID: 1528757455}
   playerMovement: {fileID: 2062790734}
 --- !u!114 &2062790736

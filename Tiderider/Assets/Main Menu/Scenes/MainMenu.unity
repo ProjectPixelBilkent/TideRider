@@ -11204,6 +11204,7 @@ GameObject:
   - component: {fileID: 1319880917}
   - component: {fileID: 1319880918}
   - component: {fileID: 1319880919}
+  - component: {fileID: 1319880920}
   m_Layer: 0
   m_Name: ScriptController
   m_TagString: Untagged
@@ -11418,6 +11419,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc8a7de4eb4bb814ea8a37499bd5fa99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1319880920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1319880908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b218eecc76547b4a57dd5f3f7c5ad24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  energyToSet: 5
+  maxEnergy: 5
 --- !u!1001 &1320192107
 PrefabInstance:
   m_ObjectHideFlags: 0

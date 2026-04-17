@@ -25,6 +25,7 @@ public class DialogueController : MonoBehaviour
 
     public bool IsTyping { get; private set; }
     private bool _skipTyping = false;
+    private bool _skipConversationRequested = false;
 
     public void ConfigureReferences(RectTransform frameTransform, Image frameImage, TMP_Text text)
     {
@@ -50,6 +51,27 @@ public class DialogueController : MonoBehaviour
     }
 
     public void SkipTyping() { _skipTyping = true; }
+    public void RequestSkipConversation()
+    {
+        _skipConversationRequested = true;
+        _skipTyping = true;
+    }
+
+    public bool ConsumeSkipConversationRequest()
+    {
+        if (!_skipConversationRequested)
+        {
+            return false;
+        }
+
+        _skipConversationRequested = false;
+        return true;
+    }
+
+    public void ClearSkipConversationRequest()
+    {
+        _skipConversationRequested = false;
+    }
 
     private void Start()
     {
@@ -61,6 +83,7 @@ public class DialogueController : MonoBehaviour
         if (dialogueText != null)
         {
             dialogueText.text = "";
+            dialogueText.maxVisibleCharacters = 0;
         }
 
         if (dialogueFrameImage != null)

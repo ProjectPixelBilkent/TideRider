@@ -94,7 +94,12 @@ public static class LocalBackupManager
 
         string filePath = Path.Combine(backupPath, GameDataFile);
 
-        if (!File.Exists(filePath)) return new GameData();
+        if (!File.Exists(filePath))
+        {
+            GameData defaultData = new GameData();
+            SaveGameData(defaultData);
+            return defaultData;
+        }
 
         byte[] encryptionKey = GenerateEncryptionKey();
         if (encryptionKey == null || encryptionKey.Length != 32)
@@ -106,8 +111,10 @@ public static class LocalBackupManager
         string jsonData = SecurityManager.LoadEncryptedData(filePath, encryptionKey);
         if (string.IsNullOrEmpty(jsonData))
         {
-            Debug.LogWarning("Failed to load weapon data.");
-            return new GameData();
+            Debug.LogWarning("Failed to load game data. Resetting local backup to defaults.");
+            GameData defaultData = new GameData();
+            SaveGameData(defaultData);
+            return defaultData;
         }
 
         return JsonUtility.FromJson<GameData>(jsonData);
@@ -124,14 +131,19 @@ public static class LocalBackupManager
     {
         string backupPath = Path.Combine(Application.persistentDataPath, BackupDirectory);
 
-        if (Directory.Exists(backupPath))
+        if (!Directory.Exists(backupPath))
         {
             Directory.CreateDirectory(backupPath);
         }
 
         string filePath = Path.Combine(backupPath, WeaponDataFile);
 
-        if (!File.Exists(filePath)) return new WeaponData();
+        if (!File.Exists(filePath))
+        {
+            WeaponData defaultData = new WeaponData();
+            SaveWeaponData(defaultData);
+            return defaultData;
+        }
 
         byte[] encryptionKey = GenerateEncryptionKey();
         if (encryptionKey == null || encryptionKey.Length != 32)
@@ -144,7 +156,9 @@ public static class LocalBackupManager
         if (string.IsNullOrEmpty(jsonData))
         {
             Debug.LogWarning("Failed to load weapon data.");
-            return new WeaponData();
+            WeaponData defaultData = new WeaponData();
+            SaveWeaponData(defaultData);
+            return defaultData;
         }
 
        return JsonUtility.FromJson<WeaponData>(jsonData);

@@ -113,20 +113,35 @@ public class HasHealth: MonoBehaviour
             return;
         }
 
-        for (int i = 0; i < damageFlashRenderers.Length; i++)
-        {
-            SpriteRenderer renderer = damageFlashRenderers[i];
-            if (renderer == null)
-            {
-                continue;
-            }
+        bool isFlashActive = damageFlashRoutine != null;
 
-            baseRendererColors[i] = renderer.color;
-        }
-
-        if (damageFlashRoutine != null)
+        if (isFlashActive)
         {
             StopCoroutine(damageFlashRoutine);
+
+            for (int i = 0; i < damageFlashRenderers.Length; i++)
+            {
+                SpriteRenderer renderer = damageFlashRenderers[i];
+                if (renderer == null)
+                {
+                    continue;
+                }
+
+                renderer.color = i < baseRendererColors.Length ? baseRendererColors[i] : Color.white;
+            }
+        }
+        else
+        {
+            for (int i = 0; i < damageFlashRenderers.Length; i++)
+            {
+                SpriteRenderer renderer = damageFlashRenderers[i];
+                if (renderer == null)
+                {
+                    continue;
+                }
+
+                baseRendererColors[i] = renderer.color;
+            }
         }
 
         damageFlashRoutine = StartCoroutine(DamageFlashRoutine());

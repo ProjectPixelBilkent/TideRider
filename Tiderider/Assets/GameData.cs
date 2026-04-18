@@ -15,9 +15,13 @@ public class GameData
     public int coinAmount = 0;
     public int energyAmount = 5;
     public Weapon[] playerArmory = new Weapon[6];
-    public int highestUnlockedLevelIndex = 0;
+    public int highestUnlockedLevelIndex = 2;
     public List<string> completedConversations = new List<string>();
     public string lastEnergyUpdateTime = "";
+    public string lastDailyResetTime = "";
+    public string lastEnergyAdTime = "";
+    public string lastWeaponAdTime = "";
+    public List<int> dailyShopWeaponIndices = new List<int>();
 }
 
 /// <summary>

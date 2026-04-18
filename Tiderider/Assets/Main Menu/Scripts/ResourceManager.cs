@@ -87,4 +87,47 @@ public class ResourceManager : MonoBehaviour
     {
         NotificationManager.Instance.ShowNotification("Not enough coins!", NotificationManager.UITab.Shop);
     }
+
+    public void AddEnergy(int amount)
+    {
+        GameData data = LocalBackupManager.LoadGameData();
+        data.energyAmount += amount;
+        LocalBackupManager.SaveGameData(data);
+        UpdateUI();
+        NotificationManager.Instance.ShowNotification($"+{amount} Energy!");
+    }
+
+    public void AddCoins(int amount)
+    {
+        DataManager.IncrementCoinAmount(amount);
+        UpdateUI();
+        NotificationManager.Instance.ShowNotification($"+{amount} Coins!");
+    }
+
+    public bool TryBuyWithCoins(int cost)
+    {
+        if (DataManager.GetCoinAmount() >= cost)
+        {
+            DataManager.SubtractCoinAmount(cost);
+            UpdateUI();
+            return true;
+        }
+
+        HandleNoCoin();
+        return false;
+    }
+
+    public void UpgradeWeaponDirectly(int weaponIndex)
+    {
+        switch (weaponIndex)
+        {
+            case 0: DataManager.IncrementCanonLevel(); break;
+            case 1: DataManager.IncrementMinigunLevel(); break;
+            case 2: DataManager.IncrementShieldLevel(); break;
+            case 3: DataManager.IncrementLasergunLevel(); break;
+            case 4: DataManager.IncrementFlamethrowerLevel(); break;
+            case 5: DataManager.IncrementIcegunLevel(); break;
+        }
+        NotificationManager.Instance.ShowNotification("Weapon Upgraded!");
+    }
 }

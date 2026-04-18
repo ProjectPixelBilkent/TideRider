@@ -1,10 +1,22 @@
 fileFormatVersion: 2
-guid: 134677a46de7cf143b71a6c2cf8fab1e
+guid: feaf3d9bcbcb6684d8a4ee8bd8fe00f7
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8934618504620760228
-    second: Aldric scary - for ghost ship_0
+      213: -8006010831126221047
+    second: boomerang-3_0
+  - first:
+      213: -8091560801728130142
+    second: boomerang-3_1
+  - first:
+      213: 1832436871482053850
+    second: boomerang-3_2
+  - first:
+      213: -2257249767272266973
+    second: boomerang-3_3
+  - first:
+      213: 6468789397297014593
+    second: boomerang-3_4
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,101 +108,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-<<<<<<< HEAD
-=======
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: iOS
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
->>>>>>> b203731811f4f9473904a079e8abb4b0a9c5781a
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-<<<<<<< HEAD
-=======
-  - serializedVersion: 4
-    buildTarget: VisionOS
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: tvOS
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WindowsStoreApps
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
->>>>>>> b203731811f4f9473904a079e8abb4b0a9c5781a
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Aldric scary - for ghost ship_0
+      name: boomerang-3_0
       rect:
         serializedVersion: 2
-        x: 31
-        y: 46
-        width: 1365
-        height: 819
+        x: 613
+        y: 617
+        width: 234
+        height: 233
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -199,8 +127,96 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c53a274cecbd10480800000000000000
-      internalID: -8934618504620760228
+      spriteID: 90faac6119fe4e090800000000000000
+      internalID: -8006010831126221047
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boomerang-3_1
+      rect:
+        serializedVersion: 2
+        x: 637
+        y: 848
+        width: 187
+        height: 395
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2a3158e525005bf80800000000000000
+      internalID: -8091560801728130142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boomerang-3_2
+      rect:
+        serializedVersion: 2
+        x: 220
+        y: 640
+        width: 395
+        height: 187
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad4140e30af1e6910800000000000000
+      internalID: 1832436871482053850
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boomerang-3_3
+      rect:
+        serializedVersion: 2
+        x: 845
+        y: 640
+        width: 395
+        height: 187
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 323476ccb43aca0e0800000000000000
+      internalID: -2257249767272266973
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boomerang-3_4
+      rect:
+        serializedVersion: 2
+        x: 637
+        y: 224
+        width: 187
+        height: 395
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 147a3b80fa1c5c950800000000000000
+      internalID: 6468789397297014593
       vertices: []
       indices: 
       edges: []
@@ -218,8 +234,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      Aldric scary - for ghost ship_0: -8934618504620760228
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

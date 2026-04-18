@@ -934,16 +934,6 @@ public class BossFightController : MonoBehaviour
 
         StartCoroutine(PlayMidFightManiacalLaughsThenDialogue());
     }
-        dialogueManager.ConversationFinished -= HandleMidFightDialogueFinished;
-        dialogueManager.ConversationFinished += HandleMidFightDialogueFinished;
-        dialogueManager.PlayConversation(midFightConversationId, false);
-
-        if (!dialogueManager.IsConversationPlaying)
-        {
-            dialogueManager.ConversationFinished -= HandleMidFightDialogueFinished;
-            ResumeAfterMidFightDialogue();
-        }
-    }
 
     private void HandleMidFightDialogueFinished()
     {
@@ -1217,17 +1207,6 @@ public class BossFightController : MonoBehaviour
 
     private IEnumerator PlayMidFightManiacalLaughsThenDialogue()
     {
-        dialogueManager.ConversationFinished -= HandleMidFightDialogueFinished;
-        dialogueManager.ConversationFinished += HandleMidFightDialogueFinished;
-        dialogueManager.PlayConversation(midFightConversationId, true, false);
-
-        if (!dialogueManager.IsConversationPlaying)
-        {
-            dialogueManager.ConversationFinished -= HandleMidFightDialogueFinished;
-            ResumeAfterMidFightDialogue();
-            yield break;
-        }
-
         if (sirenManiacalLaughSounds != null && sirenManiacalLaughSounds.Length > 0)
         {
             for (int i = 0; i < sirenManiacalLaughSounds.Length; i++)
@@ -1241,6 +1220,22 @@ public class BossFightController : MonoBehaviour
                 PlaySfxClip(clip, sirenManiacalLaughSoundMultiplier, 0f);
                 yield return new WaitForSeconds(clip.length);
             }
+        }
+
+        if (dialogueManager == null)
+        {
+            ResumeAfterMidFightDialogue();
+            yield break;
+        }
+
+        dialogueManager.ConversationFinished -= HandleMidFightDialogueFinished;
+        dialogueManager.ConversationFinished += HandleMidFightDialogueFinished;
+        dialogueManager.PlayConversation(midFightConversationId, false);
+
+        if (!dialogueManager.IsConversationPlaying)
+        {
+            dialogueManager.ConversationFinished -= HandleMidFightDialogueFinished;
+            ResumeAfterMidFightDialogue();
         }
     }
 

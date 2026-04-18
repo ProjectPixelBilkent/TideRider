@@ -47,8 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81ecedfd8b201ce45bbbb23f9ef59764, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  currentHealth: 100
+  maxHealth: 150
+  currentHealth: 150
   damageFlashColor: {r: 1, g: 0.5019608, b: 0.5019608, a: 1}
   damageFlashDuration: 0.45
   healthSlider: {fileID: 0}
@@ -65,10 +65,12 @@ MonoBehaviour:
   lingerTime: 20
   downSpeed: 1
   bottomOffsetFromCamera: -6
-  shockRadius: 1.7
+  shockRadius: 3.7
+  visualShockRadius: 2.2
   shockDamage: 10
+  shockDuration: 3
   shockCooldown: 3
-  shockDamageInterval: 0.25
+  shockDamageInterval: 0.33
   isShockCharged: 1
   playerTarget: {fileID: 0}
   lightningPrefab: {fileID: 0}

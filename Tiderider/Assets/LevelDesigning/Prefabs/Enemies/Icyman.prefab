@@ -165,8 +165,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 302a95aaedbbc7449873d1fd599dd3c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  currentHealth: 100
+  maxHealth: 150
+  currentHealth: 150
+  damageFlashColor: {r: 1, g: 0.5019608, b: 0.5019608, a: 1}
+  damageFlashDuration: 0.15
   healthSlider: {fileID: 0}
   speed: 1.2
   prefabId: icyman

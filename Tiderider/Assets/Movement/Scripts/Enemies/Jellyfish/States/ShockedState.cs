@@ -4,7 +4,8 @@ using UnityEngine;
 public class ShockedState : State
 {
     private Jellyfish jellyfish;
-    private float rechargeTimer;
+    private float durationTimer;
+    private float damageTimer;
     private float flashTimer;
     private bool showingFlashColor;
 
@@ -14,6 +15,7 @@ public class ShockedState : State
     {
         jellyfish = machine.Enemy as Jellyfish;
         flashTimer = 0f;
+        damageTimer = 0f;
         showingFlashColor = false;
 
         if (jellyfish.playerTarget != null)
@@ -41,10 +43,10 @@ public class ShockedState : State
                     });
             }
 
-            jellyfish.playerTarget.TakeDamage(jellyfish.shockDamage);
+            TryApplyShockDamage();
         }
 
-        rechargeTimer = jellyfish.shockCooldown;
+        durationTimer = jellyfish.shockDuration;
 
         if (SoundLibrary.Instance != null)
             SoundLibrary.Instance.Play("jellyfish");
@@ -66,18 +68,33 @@ public class ShockedState : State
     public override void Exit()
     {
         jellyfish.StartMovementAnimation();
-        if (jellyfish.spriteRenderer != null)
-            jellyfish.spriteRenderer.color = jellyfish.chargedColor;
-        jellyfish.UpdateRadiusColor();
+        jellyfish.StartShockCooldown();
         jellyfish.SetAttackRingVisible(false, jellyfish.attackFlashColorB);
     }
 
     public override void Update()
     {
-        rechargeTimer -= Time.fixedDeltaTime;
+        durationTimer -= Time.fixedDeltaTime;
+        damageTimer += Time.fixedDeltaTime;
         flashTimer += Time.deltaTime;
 
         jellyfish.rigidBody.linearVelocityY = Camera.main.velocity.y;
+
+        if (jellyfish.playerTarget != null)
+        {
+            if (jellyfish.shockDamageInterval <= 0f)
+            {
+                TryApplyShockDamage();
+            }
+            else
+            {
+                while (damageTimer >= jellyfish.shockDamageInterval)
+                {
+                    TryApplyShockDamage();
+                    damageTimer -= jellyfish.shockDamageInterval;
+                }
+            }
+        }
 
         if (jellyfish.spriteRenderer != null && jellyfish.attackFlashInterval > 0f)
         {
@@ -92,11 +109,23 @@ public class ShockedState : State
             }
         }
 
-        if (rechargeTimer <= 0f)
+        if (durationTimer <= 0f)
         {
-            jellyfish.isShockCharged = true;
             machine.ChangeState(new IdleState(machine));
         }
     }
 
+    private void TryApplyShockDamage()
+    {
+        if (jellyfish.playerTarget == null)
+        {
+            return;
+        }
+
+        float sqrDist = ((Vector2)(jellyfish.playerTarget.transform.position - jellyfish.GetShockCenterWorld())).sqrMagnitude;
+        if (sqrDist <= jellyfish.shockRadius * jellyfish.shockRadius)
+        {
+            jellyfish.playerTarget.TakeDamage(jellyfish.shockDamage);
+        }
+    }
 }

@@ -12,9 +12,13 @@ public struct SoundEntry
 public class SoundLibrary : MonoBehaviour
 {
     [SerializeField] private SoundEntry[] entries;
+    [SerializeField, Range(0f, 1f)] private float world1BgmMultiplier = 0.65f;
+    [SerializeField, Range(0f, 1f)] private float world2BgmMultiplier = 1f;
+    [SerializeField, Range(0f, 1f)] private float world3BgmMultiplier = 0.1f;
 
     private Dictionary<string, AudioClip> entriesDict;
     private AudioSource bgmSource;
+    private string currentBgmId;
     public static SoundLibrary Instance;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -35,6 +39,7 @@ public class SoundLibrary : MonoBehaviour
 
         bgmSource.loop = true;
         bgmSource.playOnAwake = false;
+        bgmSource.volume = GetBgmVolumeMultiplier(null) * GetSavedMusicVolume();
     }
 
     public void Play(string id)
@@ -59,10 +64,13 @@ public class SoundLibrary : MonoBehaviour
     {
         if (entriesDict.TryGetValue(id, out AudioClip clip))
         {
+            bgmSource.volume = GetBgmVolumeMultiplier(id) * GetSavedMusicVolume();
+
             if (bgmSource.clip == clip && bgmSource.isPlaying)
                 return; // already playing
 
             bgmSource.clip = clip;
+            currentBgmId = id;
             bgmSource.Play();
         }
         else
@@ -75,5 +83,30 @@ public class SoundLibrary : MonoBehaviour
     public void StopBGM()
     {
         bgmSource.Stop();
+        currentBgmId = null;
+    }
+
+    private float GetSavedMusicVolume()
+    {
+        return PlayerPrefs.GetFloat("MusicVolume", 1f);
+    }
+
+    private float GetBgmVolumeMultiplier(string id)
+    {
+        return id switch
+        {
+            "world_1" => world1BgmMultiplier,
+            "world_2" => world2BgmMultiplier,
+            "world_3" => world3BgmMultiplier,
+            _ => 1f
+        };
+    }
+
+    private void OnValidate()
+    {
+        if (bgmSource == null || string.IsNullOrEmpty(currentBgmId))
+            return;
+
+        bgmSource.volume = GetBgmVolumeMultiplier(currentBgmId) * GetSavedMusicVolume();
     }
 }

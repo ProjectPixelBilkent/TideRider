@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -42,6 +43,20 @@ public class BossFightController : MonoBehaviour
     [SerializeField] private Sprite aldricDialogueHappySprite;
     [SerializeField] private Sprite aldricDialogueSadSprite;
     [SerializeField] private Sprite aldricDialogueAngrySprite;
+
+    [Header("Audio")]
+    [SerializeField] private AudioClip bossFightMusic;
+    [SerializeField, Range(0f, 1f)] private float bossFightMusicMultiplier = 1f;
+    [SerializeField] private AudioClip[] sirenDamageSounds;
+    [SerializeField, Range(0f, 1f)] private float sirenDamageSoundMultiplier = 1f;
+    [SerializeField, Min(0f)] private float sirenDamageSoundStartOffset = 0.2f;
+    [SerializeField] private AudioClip[] sirenEvilLaughSounds;
+    [SerializeField, Range(0f, 1f)] private float sirenEvilLaughSoundMultiplier = 1f;
+    [SerializeField, Min(0f)] private float sirenEvilLaughInterval = 20f;
+    [SerializeField] private AudioClip[] sirenAttackSounds;
+    [SerializeField, Range(0f, 1f)] private float sirenAttackSoundMultiplier = 1f;
+    [SerializeField] private AudioClip[] sirenManiacalLaughSounds;
+    [SerializeField, Range(0f, 1f)] private float sirenManiacalLaughSoundMultiplier = 1f;
 
     [Header("Gameplay Timing")]
     [SerializeField] private float punchDuration = 0.25f;
@@ -137,6 +152,10 @@ public class BossFightController : MonoBehaviour
     private bool isPausedForDialogue;
     private bool fightEnded;
     private bool playerWonFight;
+    private AudioSource bossMusicSource;
+    private AudioSource bossSfxSource;
+    private AudioSource bossSfxSourceAlt;
+    private float sirenLaughTimer;
 
     private void Awake()
     {
@@ -173,6 +192,9 @@ public class BossFightController : MonoBehaviour
             aldricRenderer.transform.position = ResolveAldricLanePosition(currentLaneIndex);
         }
 
+        SetupBossAudioSources();
+        SetupBossMusic();
+        ResetSirenLaughTimer();
         SetTelegraphVisible(false);
         EnterStandingPhase();
     }
@@ -187,6 +209,7 @@ public class BossFightController : MonoBehaviour
         UpdateSirenMovement();
         UpdateAldricMovement();
         UpdateDamageFlash();
+        UpdateSirenLaughTimer();
 
         if (isPausedForDialogue)
         {
@@ -429,6 +452,7 @@ public class BossFightController : MonoBehaviour
         currentPhase = SirenPhase.Warning;
         phaseTimer = warningDuration;
         attackUsesRightSprite = Random.value > 0.5f;
+        PlayRandomSirenAttackSound();
 
         if (sirenRenderer != null)
         {
@@ -597,6 +621,7 @@ public class BossFightController : MonoBehaviour
 
         currentSirenHp = Mathf.Max(0, currentSirenHp - damage);
         sirenDamageFlashTimer = damageFlashDuration;
+        PlayRandomSirenDamageSound();
     }
 
     private void ApplyDamageToAldrich(int damage)
@@ -907,15 +932,7 @@ public class BossFightController : MonoBehaviour
             return;
         }
 
-        dialogueManager.ConversationFinished -= HandleMidFightDialogueFinished;
-        dialogueManager.ConversationFinished += HandleMidFightDialogueFinished;
-        dialogueManager.PlayConversation(midFightConversationId, true, false);
-
-        if (!dialogueManager.IsConversationPlaying)
-        {
-            dialogueManager.ConversationFinished -= HandleMidFightDialogueFinished;
-            ResumeAfterMidFightDialogue();
-        }
+        StartCoroutine(PlayMidFightManiacalLaughsThenDialogue());
     }
 
     private void HandleMidFightDialogueFinished()
@@ -1020,6 +1037,7 @@ public class BossFightController : MonoBehaviour
 
     private void CompleteFightFlow()
     {
+        StopBossMusic();
         isPausedForDialogue = false;
 
         if (dialogueCanvas != null)
@@ -1054,6 +1072,204 @@ public class BossFightController : MonoBehaviour
         }
 
         SceneManager.LoadScene(MovementSceneName);
+    }
+
+    private void SetupBossAudioSources()
+    {
+        AudioSource[] audioSources = GetComponents<AudioSource>();
+        bossMusicSource = audioSources.Length > 0 ? audioSources[0] : gameObject.AddComponent<AudioSource>();
+        bossSfxSource = audioSources.Length > 1 ? audioSources[1] : gameObject.AddComponent<AudioSource>();
+        bossSfxSourceAlt = audioSources.Length > 2 ? audioSources[2] : gameObject.AddComponent<AudioSource>();
+
+        ConfigureAudioSource(bossMusicSource, true);
+        ConfigureAudioSource(bossSfxSource, false);
+        ConfigureAudioSource(bossSfxSourceAlt, false);
+    }
+
+    private void ConfigureAudioSource(AudioSource source, bool loop)
+    {
+        if (source == null)
+        {
+            return;
+        }
+
+        source.playOnAwake = false;
+        source.loop = loop;
+        source.spatialBlend = 0f;
+        source.dopplerLevel = 0f;
+        source.rolloffMode = AudioRolloffMode.Linear;
+        source.minDistance = 1f;
+        source.maxDistance = 500f;
+    }
+
+    private void SetupBossMusic()
+    {
+        if (bossFightMusic == null)
+        {
+            return;
+        }
+
+        bossMusicSource.clip = bossFightMusic;
+        UpdateBossAudioVolumes();
+
+        if (!bossMusicSource.isPlaying)
+        {
+            bossMusicSource.Play();
+        }
+    }
+
+    private void StopBossMusic()
+    {
+        if (bossMusicSource != null && bossMusicSource.isPlaying)
+        {
+            bossMusicSource.Stop();
+        }
+    }
+
+    private void PlayRandomSirenDamageSound()
+    {
+        if (sirenDamageSounds == null || sirenDamageSounds.Length == 0)
+        {
+            return;
+        }
+
+        AudioClip clip = sirenDamageSounds[Random.Range(0, sirenDamageSounds.Length)];
+        if (clip == null)
+        {
+            return;
+        }
+
+        PlaySfxClip(clip, sirenDamageSoundMultiplier, sirenDamageSoundStartOffset);
+    }
+
+    private void UpdateSirenLaughTimer()
+    {
+        if (fightEnded || isPausedForDialogue || currentSirenHp <= 0 || sirenEvilLaughInterval <= 0f)
+        {
+            return;
+        }
+
+        sirenLaughTimer -= Time.deltaTime;
+        if (sirenLaughTimer > 0f)
+        {
+            return;
+        }
+
+        PlayRandomSirenEvilLaugh();
+        ResetSirenLaughTimer();
+    }
+
+    private void PlayRandomSirenEvilLaugh()
+    {
+        if (sirenEvilLaughSounds == null || sirenEvilLaughSounds.Length == 0)
+        {
+            return;
+        }
+
+        AudioClip clip = sirenEvilLaughSounds[Random.Range(0, sirenEvilLaughSounds.Length)];
+        if (clip == null)
+        {
+            return;
+        }
+
+        PlaySfxClip(clip, sirenEvilLaughSoundMultiplier, 0f);
+    }
+
+    private void PlayRandomSirenAttackSound()
+    {
+        if (sirenAttackSounds == null || sirenAttackSounds.Length == 0)
+        {
+            return;
+        }
+
+        AudioClip clip = sirenAttackSounds[Random.Range(0, sirenAttackSounds.Length)];
+        if (clip == null)
+        {
+            return;
+        }
+
+        PlaySfxClip(clip, sirenAttackSoundMultiplier, 0f);
+    }
+
+    private void ResetSirenLaughTimer()
+    {
+        if (sirenEvilLaughInterval <= 0f)
+        {
+            sirenLaughTimer = 0f;
+            return;
+        }
+
+        float variation = Mathf.Min(2f, sirenEvilLaughInterval);
+        sirenLaughTimer = Random.Range(
+            Mathf.Max(0.1f, sirenEvilLaughInterval - variation),
+            sirenEvilLaughInterval + variation);
+    }
+
+    private IEnumerator PlayMidFightManiacalLaughsThenDialogue()
+    {
+        dialogueManager.ConversationFinished -= HandleMidFightDialogueFinished;
+        dialogueManager.ConversationFinished += HandleMidFightDialogueFinished;
+        dialogueManager.PlayConversation(midFightConversationId, true, false);
+
+        if (!dialogueManager.IsConversationPlaying)
+        {
+            dialogueManager.ConversationFinished -= HandleMidFightDialogueFinished;
+            ResumeAfterMidFightDialogue();
+            yield break;
+        }
+
+        if (sirenManiacalLaughSounds != null && sirenManiacalLaughSounds.Length > 0)
+        {
+            for (int i = 0; i < sirenManiacalLaughSounds.Length; i++)
+            {
+                AudioClip clip = sirenManiacalLaughSounds[i];
+                if (clip == null)
+                {
+                    continue;
+                }
+
+                PlaySfxClip(clip, sirenManiacalLaughSoundMultiplier, 0f);
+                yield return new WaitForSeconds(clip.length);
+            }
+        }
+    }
+
+    private void PlaySfxClip(AudioClip clip, float volumeMultiplier, float startOffset)
+    {
+        if (clip == null)
+        {
+            return;
+        }
+
+        if (bossSfxSource == null || bossSfxSourceAlt == null)
+        {
+            SetupBossAudioSources();
+        }
+
+        AudioSource sourceToUse = bossSfxSource.isPlaying ? bossSfxSourceAlt : bossSfxSource;
+        sourceToUse.Stop();
+        sourceToUse.clip = clip;
+        sourceToUse.volume = volumeMultiplier * PlayerPrefs.GetFloat("SFXVolume", 1f);
+        sourceToUse.time = Mathf.Clamp(startOffset, 0f, Mathf.Max(0f, clip.length - 0.01f));
+        sourceToUse.Play();
+    }
+
+    private void UpdateBossAudioVolumes()
+    {
+        if (bossMusicSource != null)
+        {
+            bossMusicSource.volume = bossFightMusicMultiplier * PlayerPrefs.GetFloat("MusicVolume", 1f);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        StopBossMusic();
+    }
+
+    private void OnValidate()
+    {
+        UpdateBossAudioVolumes();
     }
 
     private void EnsureDialogueSetup()

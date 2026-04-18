@@ -176,8 +176,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentAldricHp: 0
   currentSirenHp: 0
-  aldricStartingHp: 3
-  sirenStartingHp: 20
+  aldricStartingHp: 5
+  sirenStartingHp: 25
   aldricPunchDamage: 1
   sirenAttackDamage: 1
   dialogueTriggerSirenHp: 10
@@ -195,6 +195,30 @@ MonoBehaviour:
   aldricDialogueHappySprite: {fileID: -2334500910581636795, guid: d0ad19a7482a2f746af66f451f1da0a1, type: 3}
   aldricDialogueSadSprite: {fileID: -6908869362446399523, guid: e6c14fb4713988c4badc4f38415530cc, type: 3}
   aldricDialogueAngrySprite: {fileID: 458824991955294, guid: b29ec44d307569342939e2eec3b295b8, type: 3}
+  bossFightMusic: {fileID: 8300000, guid: 0422fefaf319e02499308ad675775467, type: 3}
+  bossFightMusicMultiplier: 0.5
+  sirenDamageSounds:
+  - {fileID: 8300000, guid: ece4e9762e58e41488e871e4e96222c3, type: 3}
+  - {fileID: 8300000, guid: 9ef994dd67f79814cb50551e274ed841, type: 3}
+  - {fileID: 8300000, guid: aa6bed083248f4545bdcb919e04bfa33, type: 3}
+  sirenDamageSoundMultiplier: 1
+  sirenDamageSoundStartOffset: 0.2
+  sirenEvilLaughSounds:
+  - {fileID: 8300000, guid: b25904de8f8e7ae4f87e8b60e9aedab8, type: 3}
+  - {fileID: 8300000, guid: fc95ec31bcba69346984ce0bb3ba31f1, type: 3}
+  - {fileID: 8300000, guid: f910df0ee64981444840bd116d860072, type: 3}
+  sirenEvilLaughSoundMultiplier: 1
+  sirenEvilLaughInterval: 7
+  sirenAttackSounds:
+  - {fileID: 8300000, guid: 528cd57f7f9e9af45afac6d9eb8e25e0, type: 3}
+  - {fileID: 8300000, guid: 24020e2446f541b448ef34e43d9e23bb, type: 3}
+  - {fileID: 8300000, guid: 219621c659a79db4c94c474666f54721, type: 3}
+  - {fileID: 8300000, guid: 4fb7dea54a9e75c4d85ae7ea658ce5e4, type: 3}
+  sirenAttackSoundMultiplier: 1
+  sirenManiacalLaughSounds:
+  - {fileID: 8300000, guid: 9314bb2da917d9b439c8624e8436ebbe, type: 3}
+  - {fileID: 8300000, guid: 8798bb4c26634f54fb32e50e4f11a201, type: 3}
+  sirenManiacalLaughSoundMultiplier: 1
   punchDuration: 0.25
   aldricPunchCooldown: 0.4
   returnToMiddleDelay: 0.3

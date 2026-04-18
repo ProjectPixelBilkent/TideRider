@@ -22,6 +22,20 @@ MonoBehaviour:
     range: 1
     HP: 1
     duration: 1
+  - cost: 0
+    damage: 12
+    fireRate: 1
+    speedOfBullet: 1
+    range: 1
+    HP: 1
+    duration: 1
+  - cost: 0
+    damage: 14
+    fireRate: 1
+    speedOfBullet: 1
+    range: 1
+    HP: 1
+    duration: 1
   weaponIcon: {fileID: 5194246080318966883, guid: d896083069b2f1d4f95161037de3eb27, type: 3}
   projectilePrefab: {fileID: 2336648605986147696, guid: 0891872e0c5b5894aa3079def1382602, type: 3}
   onCollisionWithBulletMethodName: 

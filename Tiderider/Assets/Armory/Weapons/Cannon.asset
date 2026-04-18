@@ -23,9 +23,16 @@ MonoBehaviour:
     HP: 1
     duration: 1
   - cost: 0
-    damage: 10
-    fireRate: 1
-    speedOfBullet: 7.98
+    damage: 12
+    fireRate: 0.9
+    speedOfBullet: 1
+    range: 1
+    HP: 1
+    duration: 1
+  - cost: 0
+    damage: 14
+    fireRate: 0.8
+    speedOfBullet: 1
     range: 1
     HP: 1
     duration: 1

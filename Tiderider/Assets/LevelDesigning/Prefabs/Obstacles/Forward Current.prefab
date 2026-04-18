@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2741872444988514531}
   - component: {fileID: 2505371606092800989}
-  - component: {fileID: -364935425406671484}
   - component: {fileID: -217810467041598506}
+  - component: {fileID: -8576339830000600928}
   m_Layer: 0
   m_Name: Forward Current
   m_TagString: Untagged
@@ -89,21 +89,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-364935425406671484
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 39280020223836803}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f03b04d9bb8f8847bfabd8a0e9786c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  direction: 0
-  speed: 10
-  prefabId: forward
 --- !u!61 &-217810467041598506
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -150,3 +135,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.6495454, y: 0.9729226}
   m_EdgeRadius: 0
+--- !u!114 &-8576339830000600928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 39280020223836803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 779be29229052734f8d96a007bd7af0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  direction: 0
+  speed: 10
+  prefabId: forward
+  soundId: speed_boost

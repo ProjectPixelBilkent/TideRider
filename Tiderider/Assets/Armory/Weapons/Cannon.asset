@@ -40,5 +40,6 @@ MonoBehaviour:
   projectilePrefab: {fileID: 2743745310613609813, guid: 8a864efbb24199d40b37dad37ebbe3f4, type: 3}
   onCollisionWithBulletMethodName: NormalBullet
   spawningSound: {fileID: 8300000, guid: fba2af0315952ca448eda860cb74f44f, type: 3}
+  volume: 0.5
   extraSounds: []
   extraSprites: []

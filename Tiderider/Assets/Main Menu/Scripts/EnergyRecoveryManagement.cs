@@ -49,14 +49,11 @@ public class EnergyRecoveryManager : MonoBehaviour
 
         if (string.IsNullOrEmpty(data.lastEnergyUpdateTime))
         {
-            // First time or no saved time, just start timer
             timer = RecoverySeconds;
             return;
         }
 
-        // Calculate time difference
-        DateTime lastUpdate = DateTime.Parse(data.lastEnergyUpdateTime);
-        TimeSpan elapsed = DateTime.Now - lastUpdate;
+        TimeSpan elapsed = TimeManager.GetTimePassed(data.lastEnergyUpdateTime);
 
         int totalSecondsElapsed = (int)elapsed.TotalSeconds;
         int energyToAdd = totalSecondsElapsed / RecoverySeconds;
@@ -64,20 +61,16 @@ public class EnergyRecoveryManager : MonoBehaviour
 
         if (energyToAdd > 0)
         {
-            // Cap energy at MaxEnergy
             int newEnergy = Mathf.Min(currentEnergy + energyToAdd, MaxEnergy);
-
-            // We use a modified save loop here to update both at once
             data.energyAmount = newEnergy;
 
             if (newEnergy >= MaxEnergy)
             {
-                data.lastEnergyUpdateTime = ""; // Reset
+                data.lastEnergyUpdateTime = "";
                 timer = RecoverySeconds;
             }
             else
             {
-                // Set timer to the "leftover" time from the last tick
                 timer = RecoverySeconds - remainingSeconds;
                 data.lastEnergyUpdateTime = DateTime.Now.AddSeconds(-remainingSeconds).ToString();
             }
@@ -87,7 +80,6 @@ public class EnergyRecoveryManager : MonoBehaviour
         }
         else
         {
-            // Less than 5 mins passed, just adjust local timer
             timer = RecoverySeconds - totalSecondsElapsed;
         }
     }
@@ -97,9 +89,8 @@ public class EnergyRecoveryManager : MonoBehaviour
         GameData data = LocalBackupManager.LoadGameData();
         data.energyAmount++;
 
-        // If still below max, set the timestamp for the next tick
         data.lastEnergyUpdateTime = (data.energyAmount < MaxEnergy)
-            ? DateTime.Now.ToString()
+            ? TimeManager.GetCurrentTimeString()
             : "";
 
         LocalBackupManager.SaveGameData(data);
@@ -108,13 +99,12 @@ public class EnergyRecoveryManager : MonoBehaviour
         timer = RecoverySeconds;
     }
 
-    // Call this specifically when a player spends energy to start the clock
     public void OnEnergySpent()
     {
         GameData data = LocalBackupManager.LoadGameData();
         if (string.IsNullOrEmpty(data.lastEnergyUpdateTime))
         {
-            data.lastEnergyUpdateTime = DateTime.Now.ToString();
+            data.lastEnergyUpdateTime = TimeManager.GetCurrentTimeString();
             LocalBackupManager.SaveGameData(data);
         }
         timer = RecoverySeconds;

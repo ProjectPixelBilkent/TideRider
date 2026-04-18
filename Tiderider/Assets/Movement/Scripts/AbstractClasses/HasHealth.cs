@@ -49,6 +49,8 @@ public class HasHealth: MonoBehaviour
 
     public int TakeDamage(int damage)
     {
+        SoundLibrary.Instance.Play("ship_damage");
+
         if (damage <= 0)
         {
             return currentHealth;

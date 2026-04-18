@@ -1,4 +1,4 @@
-# Install script for directory: C:/Programming Projects/Project Pixel/Project-Pixel/Tiderider/Library/PramData/AndroidApplicationController/Cache/com.ProjectPixel.Tiderider/gradle-project/unityLibrary/src/main/cpp/GameActivity
+# Install script for directory: C:/Programming Projects/Project Pixel/Project-Pixel/Tiderider/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/src/main/cpp/GameActivity
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

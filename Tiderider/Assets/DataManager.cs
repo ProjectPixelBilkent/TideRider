@@ -121,6 +121,28 @@ public static class DataManager
         SaveGameData(gameData);
     }
 
+    public static void SetDailyShopData(string resetTime, List<int> weaponIndices)
+    {
+        GameData data = LoadGameData();
+        data.lastDailyResetTime = resetTime;
+        data.dailyShopWeaponIndices = weaponIndices;
+        SaveGameData(data);
+    }
+
+    public static void SetLastEnergyAdTime(string time)
+    {
+        GameData data = LoadGameData();
+        data.lastEnergyAdTime = time;
+        SaveGameData(data);
+    }
+
+    public static void SetLastWeaponAdTime(string time)
+    {
+        GameData data = LoadGameData();
+        data.lastWeaponAdTime = time;
+        SaveGameData(data);
+    }
+
     /// <summary>
     /// Increments the canon level in weapon data.
     /// </summary>
@@ -244,6 +266,11 @@ public static class DataManager
 
         return gameData.completedConversations.Contains(conversationId);
     }
+
+    public static string GetLastDailyResetTime() => LoadGameData().lastDailyResetTime;
+    public static string GetLastEnergyAdTime() => LoadGameData().lastEnergyAdTime;
+    public static string GetLastWeaponAdTime() => LoadGameData().lastWeaponAdTime;
+    public static List<int> GetDailyShopWeapons() => LoadGameData().dailyShopWeaponIndices;
 
     /// <summary>
     /// Loads the player armory from the local backup.

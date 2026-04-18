@@ -41,6 +41,8 @@ public class CentralUIController : MonoBehaviour
             navIcons[i] = IconPanel.transform.GetChild(i).GetComponent<RectTransform>();
             navImages[i] = navIcons[i].GetComponent<Image>();
         }
+
+        SoundLibrary.Instance.PlayBGM("main_music");
     }
 
     /// <summary>

@@ -505,27 +505,46 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entries:
   - id: world_1
+    volume: 0.35
     audioClip: {fileID: 8300000, guid: 9b8dc4639ab3fff4882a765955605ad4, type: 3}
   - id: world_2
+    volume: 0.5
     audioClip: {fileID: 8300000, guid: ba4e833440b27f647ab008433a04e498, type: 3}
   - id: world_3
+    volume: 0.5
     audioClip: {fileID: 8300000, guid: 42e3a41a5d3bd764b8cd0fb8326a1d5e, type: 3}
   - id: anglerfish
+    volume: 0.5
     audioClip: {fileID: 8300000, guid: c1baa327782ad2a4e956b4fefa44a13a, type: 3}
   - id: icy_man_throw
+    volume: 0.5
     audioClip: {fileID: 8300000, guid: e9f9ed391d7c559419ed5d70c742b7df, type: 3}
   - id: icy_man_hit
     audioClip: {fileID: 8300000, guid: 5787572c66274d04297bd2a7d84987c3, type: 3}
   - id: iceberg_hit
+    volume: 0.5
     audioClip: {fileID: 8300000, guid: 2b2a275bfb0863348830884e374c2051, type: 3}
   - id: island_hit
+    volume: 0.5
     audioClip: {fileID: 8300000, guid: 2d2c1400f12c989409c97614ec59fa30, type: 3}
   - id: kraken
+    volume: 0.7
     audioClip: {fileID: 8300000, guid: c93990dd0d39d89438bbd6851797e976, type: 3}
   - id: jellyfish
+    volume: 0.7
     audioClip: {fileID: 8300000, guid: d392087d98902ca4f94386e5f950f154, type: 3}
   - id: rock_hit
+    volume: 0.5
     audioClip: {fileID: 8300000, guid: 08450c1482620324dbd8540fc42f65be, type: 3}
+  - id: ship_damage
+    volume: 0.5
+    audioClip: {fileID: 8300000, guid: 9bb490c3070ad5c4ea547cf24252f037, type: 3}
+  - id: speed_boost
+    volume: 0.5
+    audioClip: {fileID: 8300000, guid: 50cd796622092df4f87fd57901e3602f, type: 3}
+  - id: final_victory
+    volume: 0.5
+    audioClip: {fileID: 8300000, guid: 496147ab2439e9d4c9e9dcbc94c6f3b4, type: 3}
 --- !u!1 &127158725
 GameObject:
   m_ObjectHideFlags: 0

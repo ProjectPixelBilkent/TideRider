@@ -63,10 +63,10 @@ public class DialogueManager : MonoBehaviour
 
     public void PlayConversation(string conversationId)
     {
-        PlayConversation(conversationId, false, true);
+        PlayConversation(conversationId, true);
     }
 
-    public void PlayConversation(string conversationId, bool ignoreCompletion, bool markCompleted)
+    public void PlayConversation(string conversationId, bool markCompleted)
     {
         if (database == null)
         {
@@ -86,7 +86,11 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        // Temporary debug behavior: always allow conversations to replay.
+        if (DataManager.IsConversationCompleted(conversationId))
+        {
+            Debug.Log($"Conversation '{conversationId}' has already been played. Skipping.");
+            return;
+        }
 
         DialogueConversationData conversation = GetConversationById(conversationId);
 

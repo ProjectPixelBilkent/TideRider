@@ -72,6 +72,7 @@ public class Weapon : ScriptableObject
     public GameObject projectilePrefab; // Prefab for the projectile fired by the weapon
     [SerializeField] private string onCollisionWithBulletMethodName;
     public AudioClip spawningSound;
+    [Range(0f, 1f)] public float volume;
     public AudioClip[] extraSounds;
     public Sprite[] extraSprites;
 

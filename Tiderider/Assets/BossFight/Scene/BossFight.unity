@@ -176,8 +176,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentAldricHp: 0
   currentSirenHp: 0
-  aldricStartingHp: 5
-  sirenStartingHp: 25
+  aldricStartingHp: 3
+  sirenStartingHp: 20
   aldricPunchDamage: 1
   sirenAttackDamage: 1
   dialogueTriggerSirenHp: 10
@@ -269,11 +269,11 @@ MonoBehaviour:
   rightAttackOriginOffset: {x: -0.7, y: -0.4}
   topLineAngleOffset: 0
   bottomLineAngleOffset: 0
-  warningFillStartColor: {r: 1, g: 0.6933962, b: 0.6933962, a: 0.08}
-  warningFillEndColor: {r: 1, g: 0.4862745, b: 0.4862745, a: 0.2}
+  warningFillStartColor: {r: 1, g: 0.8745098, b: 0.8745098, a: 0.08}
+  warningFillEndColor: {r: 1, g: 0.7490196, b: 0.7490196, a: 0.2}
   attackFillColor: {r: 1, g: 0.05, b: 0.05, a: 0.45}
-  warningStartColor: {r: 1, g: 0.69411767, b: 0.69411767, a: 0.55}
-  warningEndColor: {r: 1, g: 0.4862745, b: 0.4862745, a: 0.8}
+  warningStartColor: {r: 1, g: 0.80784315, b: 0.80784315, a: 0.55}
+  warningEndColor: {r: 1, g: 0.6666667, b: 0.6666667, a: 0.8}
   attackColor: {r: 1, g: 0, b: 0, a: 1}
   aldrichDamageFlashColor: {r: 1, g: 0.5137255, b: 0.34117648, a: 1}
   sirenDamageFlashColor: {r: 1, g: 0.5, b: 0.5, a: 1}

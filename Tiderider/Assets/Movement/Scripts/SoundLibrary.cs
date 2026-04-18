@@ -42,7 +42,7 @@ public class SoundLibrary : MonoBehaviour
         bgmSource.volume = GetBgmVolumeMultiplier(null) * GetSavedMusicVolume();
     }
 
-    public void Play(string id)
+    public void Play(string id, float volumeMultiplier = 1f, float startOffset = 0f)
     {
         if (entriesDict == null)
         {
@@ -52,7 +52,27 @@ public class SoundLibrary : MonoBehaviour
 
         if (entriesDict.TryGetValue(id, out AudioClip clip))
         {
-            AudioSource.PlayClipAtPoint(clip, Camera.main.transform.position);
+            Camera mainCamera = Camera.main;
+            if (mainCamera == null)
+            {
+                Debug.LogWarning("Main camera not found for sound playback.");
+                return;
+            }
+
+            GameObject tempAudio = new GameObject($"One shot audio: {id}");
+            tempAudio.transform.position = mainCamera.transform.position;
+
+            AudioSource source = tempAudio.AddComponent<AudioSource>();
+            source.clip = clip;
+            source.volume = Mathf.Max(0f, volumeMultiplier) * PlayerPrefs.GetFloat("SFXVolume", 1f);
+            source.spatialBlend = 0f;
+            source.playOnAwake = false;
+
+            float safeOffset = Mathf.Clamp(startOffset, 0f, Mathf.Max(0f, clip.length - 0.01f));
+            source.time = safeOffset;
+            source.Play();
+
+            Destroy(tempAudio, Mathf.Max(0.1f, clip.length - safeOffset) + 0.1f);
         }
         else
         {

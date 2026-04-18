@@ -49,7 +49,7 @@ public class ShockedState : State
         durationTimer = jellyfish.shockDuration;
 
         if (SoundLibrary.Instance != null)
-            SoundLibrary.Instance.Play("jellyfish");
+            SoundLibrary.Instance.Play("jellyfish", volumeMultiplier: 1.25f, startOffset: 0.5f);
 
         jellyfish.StopMovementAnimation();
         jellyfish.SetAttackSprite();

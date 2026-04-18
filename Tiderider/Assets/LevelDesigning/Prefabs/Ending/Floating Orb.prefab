@@ -78,7 +78,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -3560586031666220473, guid: 46eeea4b982c2af4eb192d178ec0537f, type: 3}
+  m_Sprite: {fileID: -7901955932606859685, guid: 6b0acfd8396bec74ba38f307a3ac905a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -138,4 +138,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabId: floating_orb
-  real: 1
+  fake: 0

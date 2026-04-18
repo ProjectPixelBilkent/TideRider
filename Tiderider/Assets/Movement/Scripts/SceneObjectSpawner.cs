@@ -1,8 +1,10 @@
 using DG.Tweening;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(EdgeCollider2D))]
 public class SceneObjectSpawner : MonoBehaviour
@@ -73,6 +75,7 @@ public class SceneObjectSpawner : MonoBehaviour
     private TerrainType currentTerrain;
     private float mistSpawnTimer;
     private readonly Queue<Vector2> recentMistPositions = new Queue<Vector2>(2);
+    private TMP_Text tapToStartText;
 
     private void Awake()
     {
@@ -95,6 +98,8 @@ public class SceneObjectSpawner : MonoBehaviour
 
         currentTerrain = GetLevelTerrain();
         SpawnBackgrounds();
+        EnsureTapToStartPrompt();
+        UpdateTapToStartPrompt();
         PlayBGMForTerrain();
     }
 
@@ -173,16 +178,25 @@ public class SceneObjectSpawner : MonoBehaviour
     private void Update()
     {
         if (isPausedForDialogue)
+        {
+            UpdateTapToStartPrompt();
             return;
+        }
 
         if (ProcessPendingDialogueBeforeGameplayStart())
+        {
+            UpdateTapToStartPrompt();
             return;
+        }
 
         if (!HasGameplayStarted)
         {
+            UpdateTapToStartPrompt();
             TryStartGameplayFromCurrentInput();
             return;
         }
+
+        UpdateTapToStartPrompt();
 
         // Move camera and boundary upward
         Vector3 move = Vector3.up * moveSpeed * Time.deltaTime;
@@ -521,6 +535,7 @@ public class SceneObjectSpawner : MonoBehaviour
         runtimeDialogueIgnoreCompletion = false;
         runtimeDialogueMarkCompleted = true;
         lastConversationId = null;
+        UpdateTapToStartPrompt();
     }
 
     public void PlayRuntimeDialogue(string conversationId, System.Action onFinished = null)
@@ -772,6 +787,7 @@ public class SceneObjectSpawner : MonoBehaviour
         activeEnemy = null;
         postEnemyObstacleOffset = Vector3.zero;
         HasGameplayStarted = false;
+        UpdateTapToStartPrompt();
     }
 
     public bool TryStartGameplayFromCurrentInput()
@@ -783,6 +799,7 @@ public class SceneObjectSpawner : MonoBehaviour
             return false;
 
         HasGameplayStarted = true;
+        UpdateTapToStartPrompt();
         return true;
     }
 
@@ -854,5 +871,77 @@ public class SceneObjectSpawner : MonoBehaviour
     public static Vector2 GetScreenBounds()
     {
         return Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+    }
+
+    private void EnsureTapToStartPrompt()
+    {
+        if (tapToStartText != null)
+            return;
+
+        Transform safeArea = FindSafeAreaTransform();
+        if (safeArea == null)
+            return;
+
+        Transform existingPrompt = safeArea.Find("TapToStartPrompt");
+        if (existingPrompt != null)
+        {
+            tapToStartText = existingPrompt.GetComponent<TMP_Text>();
+            return;
+        }
+
+        GameObject promptObject = new GameObject("TapToStartPrompt", typeof(RectTransform), typeof(TextMeshProUGUI));
+        promptObject.transform.SetParent(safeArea, false);
+
+        RectTransform rectTransform = promptObject.GetComponent<RectTransform>();
+        rectTransform.anchorMin = new Vector2(0.5f, 0.12f);
+        rectTransform.anchorMax = new Vector2(0.5f, 0.12f);
+        rectTransform.pivot = new Vector2(0.5f, 0.5f);
+        rectTransform.anchoredPosition = Vector2.zero;
+        rectTransform.sizeDelta = new Vector2(720f, 120f);
+
+        TextMeshProUGUI text = promptObject.GetComponent<TextMeshProUGUI>();
+        text.text = "Tap To Start";
+        text.fontSize = 44f;
+        text.fontStyle = FontStyles.Bold;
+        text.alignment = TextAlignmentOptions.Center;
+        text.color = new Color(1f, 1f, 1f, 0.95f);
+        text.raycastTarget = false;
+
+        Outline outline = promptObject.AddComponent<Outline>();
+        outline.effectColor = new Color(0f, 0f, 0f, 0.75f);
+        outline.effectDistance = new Vector2(3f, -3f);
+
+        tapToStartText = text;
+    }
+
+    private void UpdateTapToStartPrompt()
+    {
+        if (tapToStartText == null)
+        {
+            EnsureTapToStartPrompt();
+        }
+
+        if (tapToStartText == null)
+            return;
+
+        bool shouldShow = !HasGameplayStarted && !isPausedForDialogue;
+        if (tapToStartText.gameObject.activeSelf != shouldShow)
+        {
+            tapToStartText.gameObject.SetActive(shouldShow);
+        }
+    }
+
+    private Transform FindSafeAreaTransform()
+    {
+        MenuManager menuManager = FindFirstObjectByType<MenuManager>();
+        if (menuManager != null)
+        {
+            Transform safeArea = menuManager.transform.Find("SafeArea");
+            if (safeArea != null)
+                return safeArea;
+        }
+
+        Canvas canvas = FindFirstObjectByType<Canvas>();
+        return canvas != null ? canvas.transform : null;
     }
 }

@@ -112,8 +112,11 @@ public class BulletSpawner : MonoBehaviour
         currentBullet.PlayerBullet = CompareTag("Player");
         currentBullet.OwnerTransform = transform;
 
-        currentBullet.transform.position = Weapon.BulletOffsets[i] + transform.position;
-        currentBullet.Activate(Weapon.BulletDirections[i], rb.linearVelocity);
+        Vector3 spawnOffset = transform.TransformDirection(Weapon.BulletOffsets[i]);
+        Vector3 fireDirection = transform.TransformDirection(Weapon.BulletDirections[i]);
+
+        currentBullet.transform.position = transform.position + spawnOffset;
+        currentBullet.Activate(fireDirection, rb.linearVelocity);
 
         if (currentBullet.circleCollider != null)
         {

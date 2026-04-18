@@ -78,7 +78,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7745868862786289509, guid: 8142bad7cd99bda43b1b4d42748f8c1c, type: 3}
+  m_Sprite: {fileID: 981121476684756277, guid: 3870ee8fe789b7a40b7412703551d557, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -138,4 +138,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabId: ice_spike
-  real: 1
+  fake: 0

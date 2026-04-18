@@ -158,7 +158,7 @@
           "enterSide": 0
         },
         {
-          "text": "But first, you must defeat the Mirage Kraken.",
+          "text": "One of the creatures stalking this place is the Imitator Angler. Defeat it if you want to keep going.",
           "characterId": "siren",
           "emotion": "scary",
           "enterSide": 0
@@ -197,6 +197,59 @@
           "characterId": "siren",
           "emotion": "happy",
           "enterSide": 0
+        },
+        {
+          "text": "This is The Mistland.",
+          "characterId": "siren",
+          "emotion": "sad",
+          "enterSide": 0
+        },
+        {
+          "text": "You will fight the Ghost Ship.",
+          "characterId": "siren",
+          "emotion": "scary",
+          "enterSide": 0
+        },
+        {
+          "text": "To claim the Truth Prism, you must force it to reveal its true form and strike when the prism is exposed.",
+          "characterId": "siren",
+          "emotion": "scary",
+          "enterSide": 0
+        },
+        {
+          "text": "That sounds easier than the last two.",
+          "characterId": "aldric",
+          "emotion": "happy",
+          "enterSide": 1
+        },
+        {
+          "text": "Do you maybe want to help me this time?",
+          "characterId": "aldric",
+          "emotion": "happy",
+          "enterSide": 1
+        },
+        {
+          "text": "I have to protect you from a distance.",
+          "characterId": "siren",
+          "emotion": "sad",
+          "enterSide": 0
+        }
+      ]
+    },
+    {
+      "conversationId": "world_3",
+      "lines": [
+        {
+          "text": "You're getting stronger.",
+          "characterId": "siren",
+          "emotion": "happy",
+          "enterSide": 0
+        },
+        {
+          "text": "I have to. We're close to getting back to Marina.",
+          "characterId": "aldric",
+          "emotion": "sad",
+          "enterSide": 1
         },
         {
           "text": "This is The Icy Shores.",
@@ -238,59 +291,6 @@
           "text": "The Eternal Ice can freeze dimensional barriers and make them solid enough to cross.",
           "characterId": "siren",
           "emotion": "happy",
-          "enterSide": 0
-        }
-      ]
-    },
-    {
-      "conversationId": "world_3",
-      "lines": [
-        {
-          "text": "You're getting stronger.",
-          "characterId": "siren",
-          "emotion": "happy",
-          "enterSide": 0
-        },
-        {
-          "text": "I have to. We're close to getting back to Marina.",
-          "characterId": "aldric",
-          "emotion": "sad",
-          "enterSide": 1
-        },
-        {
-          "text": "This is The Mistland.",
-          "characterId": "siren",
-          "emotion": "sad",
-          "enterSide": 0
-        },
-        {
-          "text": "You will fight the Imitator Angler.",
-          "characterId": "siren",
-          "emotion": "scary",
-          "enterSide": 0
-        },
-        {
-          "text": "To claim the Truth Prism, you must force it to reveal its true form and strike when the prism is exposed.",
-          "characterId": "siren",
-          "emotion": "scary",
-          "enterSide": 0
-        },
-        {
-          "text": "That sounds easier than the last two.",
-          "characterId": "aldric",
-          "emotion": "happy",
-          "enterSide": 1
-        },
-        {
-          "text": "Do you maybe want to help me this time?",
-          "characterId": "aldric",
-          "emotion": "happy",
-          "enterSide": 1
-        },
-        {
-          "text": "I have to protect you from a distance.",
-          "characterId": "siren",
-          "emotion": "sad",
           "enterSide": 0
         }
       ]

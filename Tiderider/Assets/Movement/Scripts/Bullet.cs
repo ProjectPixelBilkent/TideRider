@@ -48,6 +48,7 @@ public class Bullet : MonoBehaviour
             return;
         }
 
+        UpdateRotation();
         rigidBody.linearVelocity = (direction * WeaponLevel.speedOfBullet * 5f + shipSpeed);
     }
 
@@ -72,6 +73,7 @@ public class Bullet : MonoBehaviour
 
         this.direction = direction;
         this.shipSpeed = shipSpeed;
+        UpdateRotation();
     }
 
     public virtual void OnBecameInvisible()
@@ -119,5 +121,16 @@ public class Bullet : MonoBehaviour
         }
 
         return health.CompareTag("Player");
+    }
+
+    protected void UpdateRotation()
+    {
+        if (direction.sqrMagnitude <= 0.001f)
+        {
+            return;
+        }
+
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
+        transform.rotation = Quaternion.Euler(0f, 0f, angle);
     }
 }

@@ -909,7 +909,7 @@ public class BossFightController : MonoBehaviour
 
         dialogueManager.ConversationFinished -= HandleMidFightDialogueFinished;
         dialogueManager.ConversationFinished += HandleMidFightDialogueFinished;
-        dialogueManager.PlayConversation(midFightConversationId, true, false);
+        dialogueManager.PlayConversation(midFightConversationId, false);
 
         if (!dialogueManager.IsConversationPlaying)
         {
@@ -999,7 +999,7 @@ public class BossFightController : MonoBehaviour
         Debug.Log($"Boss outcome dialogue starting: {conversationId}");
         dialogueManager.ConversationFinished -= HandleOutcomeDialogueFinished;
         dialogueManager.ConversationFinished += HandleOutcomeDialogueFinished;
-        dialogueManager.PlayConversation(conversationId, true, false);
+        dialogueManager.PlayConversation(conversationId, false);
 
         if (!dialogueManager.IsConversationPlaying)
         {

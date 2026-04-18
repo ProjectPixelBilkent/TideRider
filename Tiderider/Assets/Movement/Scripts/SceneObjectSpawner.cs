@@ -172,7 +172,6 @@ public class SceneObjectSpawner : MonoBehaviour
 
     private DialogueManager dialogueManager;
     private System.Action runtimeDialogueFinishedCallback;
-    private bool runtimeDialogueIgnoreCompletion;
     private bool runtimeDialogueMarkCompleted = true;
 
     private void Update()
@@ -510,7 +509,7 @@ public class SceneObjectSpawner : MonoBehaviour
             dialogueCanvas.SetActive(true);
         dialogueManager.ConversationFinished -= HandleMidLevelDialogueFinished;
         dialogueManager.ConversationFinished += HandleMidLevelDialogueFinished;
-        dialogueManager.PlayConversation(conversationId, runtimeDialogueIgnoreCompletion, runtimeDialogueMarkCompleted);
+        dialogueManager.PlayConversation(conversationId, runtimeDialogueMarkCompleted);
 
         if (!dialogueManager.IsConversationPlaying)
             HandleMidLevelDialogueFinished();
@@ -532,7 +531,6 @@ public class SceneObjectSpawner : MonoBehaviour
 
         runtimeDialogueFinishedCallback?.Invoke();
         runtimeDialogueFinishedCallback = null;
-        runtimeDialogueIgnoreCompletion = false;
         runtimeDialogueMarkCompleted = true;
         lastConversationId = null;
         UpdateTapToStartPrompt();
@@ -540,13 +538,12 @@ public class SceneObjectSpawner : MonoBehaviour
 
     public void PlayRuntimeDialogue(string conversationId, System.Action onFinished = null)
     {
-        PlayRuntimeDialogue(conversationId, onFinished, false, true);
+        PlayRuntimeDialogue(conversationId, onFinished, true);
     }
 
-    public void PlayRuntimeDialogue(string conversationId, System.Action onFinished, bool ignoreCompletion, bool markCompleted)
+    public void PlayRuntimeDialogue(string conversationId, System.Action onFinished, bool markCompleted)
     {
         runtimeDialogueFinishedCallback = onFinished;
-        runtimeDialogueIgnoreCompletion = ignoreCompletion;
         runtimeDialogueMarkCompleted = markCompleted;
         TriggerMidLevelDialogue(conversationId);
     }

@@ -24,7 +24,7 @@ public class LevelUpdater : MonoBehaviour
             SceneObjectSpawner spawner = FindFirstObjectByType<SceneObjectSpawner>();
             if (spawner != null)
             {
-                spawner.PlayRuntimeDialogue(FinalLevelBossIntroConversationId, LoadBossFightScene, true, false);
+                spawner.PlayRuntimeDialogue(FinalLevelBossIntroConversationId, LoadBossFightScene, false);
                 return;
             }
 

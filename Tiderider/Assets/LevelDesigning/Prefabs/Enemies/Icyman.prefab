@@ -167,6 +167,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   currentHealth: 100
+  damageFlashColor: {r: 1, g: 0.5019608, b: 0.5019608, a: 1}
+  damageFlashDuration: 0.15
   healthSlider: {fileID: 0}
   speed: 1.2
   prefabId: icyman

@@ -195,6 +195,30 @@ MonoBehaviour:
   aldricDialogueHappySprite: {fileID: -2334500910581636795, guid: d0ad19a7482a2f746af66f451f1da0a1, type: 3}
   aldricDialogueSadSprite: {fileID: -6908869362446399523, guid: e6c14fb4713988c4badc4f38415530cc, type: 3}
   aldricDialogueAngrySprite: {fileID: 458824991955294, guid: b29ec44d307569342939e2eec3b295b8, type: 3}
+  bossFightMusic: {fileID: 8300000, guid: 0422fefaf319e02499308ad675775467, type: 3}
+  bossFightMusicMultiplier: 0.5
+  sirenDamageSounds:
+  - {fileID: 8300000, guid: ece4e9762e58e41488e871e4e96222c3, type: 3}
+  - {fileID: 8300000, guid: 9ef994dd67f79814cb50551e274ed841, type: 3}
+  - {fileID: 8300000, guid: aa6bed083248f4545bdcb919e04bfa33, type: 3}
+  sirenDamageSoundMultiplier: 1
+  sirenDamageSoundStartOffset: 0.2
+  sirenEvilLaughSounds:
+  - {fileID: 8300000, guid: b25904de8f8e7ae4f87e8b60e9aedab8, type: 3}
+  - {fileID: 8300000, guid: fc95ec31bcba69346984ce0bb3ba31f1, type: 3}
+  - {fileID: 8300000, guid: f910df0ee64981444840bd116d860072, type: 3}
+  sirenEvilLaughSoundMultiplier: 1
+  sirenEvilLaughInterval: 7
+  sirenAttackSounds:
+  - {fileID: 8300000, guid: 528cd57f7f9e9af45afac6d9eb8e25e0, type: 3}
+  - {fileID: 8300000, guid: 24020e2446f541b448ef34e43d9e23bb, type: 3}
+  - {fileID: 8300000, guid: 219621c659a79db4c94c474666f54721, type: 3}
+  - {fileID: 8300000, guid: 4fb7dea54a9e75c4d85ae7ea658ce5e4, type: 3}
+  sirenAttackSoundMultiplier: 1
+  sirenManiacalLaughSounds:
+  - {fileID: 8300000, guid: 9314bb2da917d9b439c8624e8436ebbe, type: 3}
+  - {fileID: 8300000, guid: 8798bb4c26634f54fb32e50e4f11a201, type: 3}
+  sirenManiacalLaughSoundMultiplier: 1
   punchDuration: 0.25
   aldricPunchCooldown: 0.4
   returnToMiddleDelay: 0.3
@@ -245,11 +269,11 @@ MonoBehaviour:
   rightAttackOriginOffset: {x: -0.7, y: -0.4}
   topLineAngleOffset: 0
   bottomLineAngleOffset: 0
-  warningFillStartColor: {r: 1, g: 0.6933962, b: 0.6933962, a: 0.08}
-  warningFillEndColor: {r: 1, g: 0.4862745, b: 0.4862745, a: 0.2}
+  warningFillStartColor: {r: 1, g: 0.8745098, b: 0.8745098, a: 0.08}
+  warningFillEndColor: {r: 1, g: 0.7490196, b: 0.7490196, a: 0.2}
   attackFillColor: {r: 1, g: 0.05, b: 0.05, a: 0.45}
-  warningStartColor: {r: 1, g: 0.69411767, b: 0.69411767, a: 0.55}
-  warningEndColor: {r: 1, g: 0.4862745, b: 0.4862745, a: 0.8}
+  warningStartColor: {r: 1, g: 0.80784315, b: 0.80784315, a: 0.55}
+  warningEndColor: {r: 1, g: 0.6666667, b: 0.6666667, a: 0.8}
   attackColor: {r: 1, g: 0, b: 0, a: 1}
   aldrichDamageFlashColor: {r: 1, g: 0.5137255, b: 0.34117648, a: 1}
   sirenDamageFlashColor: {r: 1, g: 0.5, b: 0.5, a: 1}

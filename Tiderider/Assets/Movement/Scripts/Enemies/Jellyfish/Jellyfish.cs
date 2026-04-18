@@ -27,7 +27,9 @@ public class Jellyfish : Enemy
 
     [Header("Shock")]
     public float shockRadius = 1.7f;
+    public float visualShockRadius = 1.7f;
     public int shockDamage = 10;
+    public float shockDuration = 3f;
     public float shockCooldown = 3f;
     [Min(0f)] public float shockDamageInterval = 0.5f;
     [HideInInspector] public bool isShockCharged = true;
@@ -65,8 +67,11 @@ public class Jellyfish : Enemy
     private LineRenderer radiusLine;
     private SpriteRenderer radiusFillRenderer;
     private Coroutine spriteSwapLoop;
+    private Transform radiusLineRoot;
+    private Transform radiusFillRoot;
     private Transform attackRingRoot;
     private SpriteRenderer[] attackRingRenderers;
+    private float shockCooldownTimer;
 
     protected override void Start()
     {
@@ -91,6 +96,7 @@ public class Jellyfish : Enemy
 
         SetupRadiusLine();
         SetupAttackRing();
+        RefreshShockChargeVisuals();
 
         fsm = new StateMachine();
         fsm.Init(new IdleState(fsm), this);
@@ -119,6 +125,7 @@ public class Jellyfish : Enemy
         if (spriteRenderer != null && sprite != null)
         {
             spriteRenderer.sprite = sprite;
+            UpdateShockVisualAlignment();
         }
     }
 
@@ -169,8 +176,9 @@ public class Jellyfish : Enemy
         {
             attackRingRoot = new GameObject("AttackRingSprites").transform;
             attackRingRoot.SetParent(transform, false);
-            attackRingRoot.localPosition = Vector3.zero;
         }
+
+        UpdateShockVisualAlignment();
 
         int count = Mathf.Max(1, attackRingSpriteCount);
         attackRingRenderers = new SpriteRenderer[count];
@@ -202,13 +210,13 @@ public class Jellyfish : Enemy
             return;
         }
 
-        float radius = shockRadius * attackRingRadiusFactor;
+        float visualRadius = visualShockRadius * attackRingRadiusFactor;
         float angleStep = 360f / attackRingRenderers.Length;
 
         for (int i = 0; i < attackRingRenderers.Length; i++)
         {
             float angle = angleStep * i * Mathf.Deg2Rad;
-            Vector3 localPosition = new Vector3(Mathf.Cos(angle) * radius, Mathf.Sin(angle) * radius, 0f);
+            Vector3 localPosition = new Vector3(Mathf.Cos(angle) * visualRadius, Mathf.Sin(angle) * visualRadius, 0f);
             var sr = attackRingRenderers[i];
             sr.transform.localPosition = localPosition;
             sr.transform.localRotation = Quaternion.Euler(0f, 0f, angleStep * i + attackRingSpriteAngleOffset);
@@ -235,12 +243,65 @@ public class Jellyfish : Enemy
         }
     }
 
+    public void StartShockCooldown()
+    {
+        shockCooldownTimer = Mathf.Max(0f, shockCooldown);
+        isShockCharged = shockCooldownTimer <= 0f;
+        RefreshShockChargeVisuals();
+    }
+
+    public void RefreshShockChargeVisuals()
+    {
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.color = isShockCharged ? chargedColor : rechargingColor;
+        }
+
+        UpdateRadiusColor();
+    }
+
+    public Vector3 GetShockCenterWorld()
+    {
+        return transform.TransformPoint(GetShockCenterLocal());
+    }
+
+    private Vector3 GetShockCenterLocal()
+    {
+        if (spriteRenderer != null && spriteRenderer.sprite != null)
+        {
+            return spriteRenderer.sprite.bounds.center;
+        }
+
+        return Vector3.zero;
+    }
+
+    private void UpdateShockVisualAlignment()
+    {
+        Vector3 localCenter = GetShockCenterLocal();
+
+        if (radiusLineRoot != null)
+        {
+            radiusLineRoot.localPosition = localCenter;
+        }
+
+        if (radiusFillRoot != null)
+        {
+            radiusFillRoot.localPosition = localCenter;
+        }
+
+        if (attackRingRoot != null)
+        {
+            attackRingRoot.localPosition = localCenter;
+        }
+    }
+
     private void SetupRadiusLine()
     {
         SetupRadiusFill();
 
         GameObject lineObj = new GameObject("ShockRadiusVisual");
-        lineObj.transform.SetParent(transform, false);
+        radiusLineRoot = lineObj.transform;
+        radiusLineRoot.SetParent(transform, false);
 
         radiusLine = lineObj.AddComponent<LineRenderer>();
         radiusLine.useWorldSpace = false;
@@ -256,13 +317,14 @@ public class Jellyfish : Enemy
 
         DrawRadiusCircle();
         UpdateRadiusColor();
+        UpdateShockVisualAlignment();
     }
 
     private void SetupRadiusFill()
     {
         GameObject fillObj = new GameObject("ShockRadiusFill");
-        fillObj.transform.SetParent(transform, false);
-        fillObj.transform.localPosition = Vector3.zero;
+        radiusFillRoot = fillObj.transform;
+        radiusFillRoot.SetParent(transform, false);
 
         radiusFillRenderer = fillObj.AddComponent<SpriteRenderer>();
         radiusFillRenderer.sprite = GetRadiusFillSprite();
@@ -270,6 +332,7 @@ public class Jellyfish : Enemy
         radiusFillRenderer.sortingOrder = spriteRenderer != null ? spriteRenderer.sortingOrder - 2 : -2;
 
         UpdateRadiusFillScale();
+        UpdateShockVisualAlignment();
     }
 
     private void DrawRadiusCircle()
@@ -279,7 +342,7 @@ public class Jellyfish : Enemy
         for (int i = 0; i < radiusSegments; i++)
         {
             float angle = i * angleStep * Mathf.Deg2Rad;
-            radiusLine.SetPosition(i, new Vector3(Mathf.Cos(angle) * shockRadius, Mathf.Sin(angle) * shockRadius, 0f));
+            radiusLine.SetPosition(i, new Vector3(Mathf.Cos(angle) * visualShockRadius, Mathf.Sin(angle) * visualShockRadius, 0f));
         }
     }
 
@@ -287,7 +350,7 @@ public class Jellyfish : Enemy
     {
         if (radiusFillRenderer == null) return;
 
-        float diameter = shockRadius * 2f;
+        float diameter = visualShockRadius * 2f;
         radiusFillRenderer.transform.localScale = new Vector3(diameter, diameter, 1f);
     }
 
@@ -327,9 +390,19 @@ public class Jellyfish : Enemy
         WaitForFixedUpdate wait = new WaitForFixedUpdate();
         while (true)
         {
+            if (!isShockCharged && shockCooldownTimer > 0f)
+            {
+                shockCooldownTimer = Mathf.Max(0f, shockCooldownTimer - Time.fixedDeltaTime);
+                if (shockCooldownTimer <= 0f)
+                {
+                    isShockCharged = true;
+                    RefreshShockChargeVisuals();
+                }
+            }
+
             if (isShockCharged && playerTarget != null)
             {
-                float sqrDist = ((Vector2)(playerTarget.transform.position - transform.position)).sqrMagnitude;
+                float sqrDist = ((Vector2)(playerTarget.transform.position - GetShockCenterWorld())).sqrMagnitude;
                 if (sqrDist <= shockRadius * shockRadius)
                 {
                     isShockCharged = false;
@@ -345,12 +418,12 @@ public class Jellyfish : Enemy
         Color fillColor = isShockCharged ? chargedRadiusColor : rechargingRadiusColor;
         fillColor.a = isShockCharged ? 0.35f : 0.2f;
         Gizmos.color = fillColor;
-        Gizmos.DrawSphere(transform.position, shockRadius);
+        Gizmos.DrawSphere(GetShockCenterWorld(), visualShockRadius);
 
         Color wireColor = isShockCharged ? chargedRadiusColor : rechargingRadiusColor;
         wireColor.a = isShockCharged ? 0.9f : 0.6f;
         Gizmos.color = wireColor;
-        Gizmos.DrawWireSphere(transform.position, shockRadius);
+        Gizmos.DrawWireSphere(GetShockCenterWorld(), visualShockRadius);
     }
 
     private void OnDisable()
@@ -403,10 +476,14 @@ public class Jellyfish : Enemy
 
         radiusSegments = Mathf.Max(3, radiusSegments);
         shockRadius = Mathf.Max(0f, shockRadius);
+        visualShockRadius = Mathf.Max(0f, visualShockRadius);
+        shockDuration = Mathf.Max(0f, shockDuration);
+        shockCooldown = Mathf.Max(0f, shockCooldown);
 
         DrawRadiusCircle();
         UpdateRadiusFillScale();
         UpdateRadiusColor();
+        UpdateShockVisualAlignment();
     }
 #endif
 }

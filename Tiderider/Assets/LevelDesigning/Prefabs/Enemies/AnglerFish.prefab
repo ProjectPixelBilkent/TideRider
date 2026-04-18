@@ -168,6 +168,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 0
   currentHealth: 0
+  damageFlashColor: {r: 1, g: 0.5019608, b: 0.5019608, a: 1}
+  damageFlashDuration: 0.45
   healthSlider: {fileID: 0}
   speed: 0
   prefabId: anglerfish
@@ -193,7 +195,7 @@ MonoBehaviour:
   wobbleSpeed: 1.2
   chaseSpeed: 0.5
   chaseYOffset: 2
-  chaseContactDamage: 10
+  chaseContactDamage: 20
   contactDamageDistance: 0.8
   damageCooldown: 1
   revealTimer: 0

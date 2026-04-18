@@ -65,10 +65,12 @@ MonoBehaviour:
   lingerTime: 20
   downSpeed: 1
   bottomOffsetFromCamera: -6
-  shockRadius: 1.7
+  shockRadius: 3.7
+  visualShockRadius: 2.2
   shockDamage: 10
+  shockDuration: 3
   shockCooldown: 3
-  shockDamageInterval: 0.25
+  shockDamageInterval: 0.33
   isShockCharged: 1
   playerTarget: {fileID: 0}
   lightningPrefab: {fileID: 0}

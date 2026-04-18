@@ -512,8 +512,10 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: 42e3a41a5d3bd764b8cd0fb8326a1d5e, type: 3}
   - id: anglerfish
     audioClip: {fileID: 8300000, guid: c1baa327782ad2a4e956b4fefa44a13a, type: 3}
-  - id: icy_man
-    audioClip: {fileID: 8300000, guid: 74b63c1723f746f4eb1790d09dd5303f, type: 3}
+  - id: icy_man_throw
+    audioClip: {fileID: 8300000, guid: e9f9ed391d7c559419ed5d70c742b7df, type: 3}
+  - id: icy_man_hit
+    audioClip: {fileID: 8300000, guid: 5787572c66274d04297bd2a7d84987c3, type: 3}
   - id: iceberg_hit
     audioClip: {fileID: 8300000, guid: 2b2a275bfb0863348830884e374c2051, type: 3}
   - id: island_hit

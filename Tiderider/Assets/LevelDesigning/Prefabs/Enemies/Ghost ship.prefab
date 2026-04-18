@@ -200,5 +200,6 @@ MonoBehaviour:
   fallbackBulletSpeed: 0.1
   minimumAimDistance: 11.4
   bulletIgnoreDuration: 0.3
+  bulletTint: {r: 1, g: 0, b: 0, a: 1}
   cameraPadding: 0.49
   despawnBelowCameraMargin: 0.75

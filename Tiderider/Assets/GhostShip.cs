@@ -51,6 +51,7 @@ public class GhostShip : Enemy
     public float fallbackBulletSpeed = 8f;
     public float minimumAimDistance = 0.1f;
     public float bulletIgnoreDuration = 0.3f;
+    public Color bulletTint = Color.cyan;
 
     [Header("Camera")]
     public float cameraPadding = 0.5f;
@@ -378,6 +379,9 @@ public class GhostShip : Enemy
             bullet.WeaponLevel = CreateGhostWeaponLevel(level);
             bullet.PlayerBullet = false;
             bullet.Activate(dir, rb != null ? rb.linearVelocity : Vector2.zero);
+
+            if (bullet.spriteRenderer != null)
+                bullet.spriteRenderer.color = bulletTint;
         }
 
         Collider2D bulletCollider = bulletObj.GetComponent<Collider2D>();

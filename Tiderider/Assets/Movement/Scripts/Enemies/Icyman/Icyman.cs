@@ -130,6 +130,9 @@ public class Icyman : Enemy
             snowballScript.Init(dir, snowballSpeed);
             snowballScript.IgnoreCollider(GetComponent<Collider2D>());
         }
+
+        if (SoundLibrary.Instance != null)
+            SoundLibrary.Instance.Play("icy_man_throw");
     }
 
     public Vector2 GetRandomSnowballTarget()

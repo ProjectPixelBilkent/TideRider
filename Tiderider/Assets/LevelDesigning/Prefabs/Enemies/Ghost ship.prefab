@@ -166,34 +166,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6337065157edcbc46aebf18f0279592d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 50
-  currentHealth: 50
+  maxHealth: 40
+  currentHealth: 40
+  damageFlashColor: {r: 1, g: 0.5019608, b: 0.5019608, a: 1}
+  damageFlashDuration: 0.45
   healthSlider: {fileID: 0}
   speed: 0
   prefabId: ghost_ship
   playerTransform: {fileID: 0}
   shipSprite: {fileID: 6135632261993531991}
   shipCollider: {fileID: 3324982547572546397}
-  spawnFromLeft: 1
-  topSpawnInset: 1
+  topSpawnBandHeightRatio: 0.1
   sideSpawnInset: 1.5
+  headingWallSafetyInset: 2.5
   disappearDelay: 1
-  respawnDelay: 2
-  sailSpeed: 7.4
+  respawnDelay: 1.5
+  fadeDuration: 0.35
+  sailSpeed: 1.8
   sailTime: 1.73
-  minDistanceToPlayer: 2.12
-  maxDistanceBelowPlayer: 1.8
-  leftSpawnDirection: {x: 1, y: -0.5}
-  rightSpawnDirection: {x: -1, y: -0.5}
+  minDistanceToPlayer: 1
+  maxDistanceBelowPlayer: 2
+  minTravelAngle: -45
+  maxTravelAngle: 45
   noseAngleOffset: 90
   weaponData: {fileID: 11400000, guid: b3e878eb06da4434b9a7e8241f255f8c, type: 2}
   weaponLevel: 1
-  fireCooldown: 0.61
+  fireCooldown: 1
   shotsPerCycle: 2
-  aimRandomness: 0.01
+  aimRandomness: 0.4
   aimIterations: 4
-  extraAimAheadMultiplier: 2.42
-  fallbackBulletSpeed: 8
+  extraAimAheadMultiplier: 1
+  ghostBulletSpeed: 12
+  fallbackBulletSpeed: 0.1
   minimumAimDistance: 11.4
   bulletIgnoreDuration: 0.3
-  cameraPadding: 0.5
+  cameraPadding: 0.49
+  despawnBelowCameraMargin: 0.75

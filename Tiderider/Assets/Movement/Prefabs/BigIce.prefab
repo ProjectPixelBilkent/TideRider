@@ -173,7 +173,7 @@ MonoBehaviour:
   pauseDurationSeconds: 1
   coneLength: 2
   rowSpacing: 0.3
-  rowMultiplier: 5
+  rowMultiplier: 1
   rowEmitInterval: 0.025
   iceLifetime: 0.5
   spawnOffset: -0.1

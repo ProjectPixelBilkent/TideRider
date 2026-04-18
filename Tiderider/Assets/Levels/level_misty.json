@@ -541,13 +541,13 @@
             "conversationId": ""
         },
         {
-            "prefabId": "tdsotm",
-            "name": "TDSOTM",
+            "prefabId": "finish_line",
+            "name": "Finish Line",
             "objectType": 3,
             "spriteNo": -1,
             "typeOfTerrain": 0,
-            "posX": 0.035999998450279239,
-            "posY": 139.96800231933595,
+            "posX": -0.07021679729223252,
+            "posY": 120.60429382324219,
             "posZ": 0.0,
             "rotX": 0.0,
             "rotY": 0.0,

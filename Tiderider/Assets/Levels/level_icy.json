@@ -541,13 +541,13 @@
             "conversationId": ""
         },
         {
-            "prefabId": "ice_spike",
-            "name": "Ice Spike",
+            "prefabId": "finish_line",
+            "name": "Finish Line",
             "objectType": 3,
             "spriteNo": -1,
             "typeOfTerrain": 0,
-            "posX": 0.0976598709821701,
-            "posY": 120.77112579345703,
+            "posX": -0.13283778727054597,
+            "posY": 119.61038970947266,
             "posZ": 0.0,
             "rotX": 0.0,
             "rotY": 0.0,

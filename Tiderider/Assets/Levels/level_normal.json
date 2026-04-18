@@ -523,13 +523,13 @@
             "conversationId": ""
         },
         {
-            "prefabId": "floating_orb",
-            "name": "Floating Orb",
+            "prefabId": "finish_line",
+            "name": "Finish Line",
             "objectType": 3,
             "spriteNo": -1,
             "typeOfTerrain": 0,
-            "posX": 0.006252765655517578,
-            "posY": 120.64643096923828,
+            "posX": -0.0771111473441124,
+            "posY": 119.4534912109375,
             "posZ": 0.0,
             "rotX": 0.0,
             "rotY": 0.0,

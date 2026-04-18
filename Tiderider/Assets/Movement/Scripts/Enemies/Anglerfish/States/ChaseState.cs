@@ -18,6 +18,9 @@ public class ChaseState : State
         damageCooldownTimer = 0f;
         lurkTimer = 0f;
         isLurking = false;
+
+        var a = (AnglerFish)machine.Enemy;
+        a.SetTopView();
     }
 
     public override void Exit() { }

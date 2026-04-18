@@ -7,6 +7,7 @@ public class AnglerFish : Enemy
     public SpriteRenderer renderer;
     public Sprite disguisedSprite;
     public Sprite revealedSprite;
+    public Sprite topViewSprite;
 
     [Header("Reveal")]
     public float revealDelay = 0.4f;
@@ -93,6 +94,12 @@ public class AnglerFish : Enemy
 
         if (renderer != null && revealedSprite != null)
             renderer.sprite = revealedSprite;
+    }
+
+    public void SetTopView()
+    {
+        if (renderer != null && topViewSprite != null)
+            renderer.sprite = topViewSprite;
     }
 
     public void ForceSpawnFromCameraTop()

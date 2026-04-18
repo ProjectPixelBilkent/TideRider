@@ -80,7 +80,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -801776766171507223, guid: ff9dafa9d25710b47b94c92c25dbf29e, type: 3}
+  m_Sprite: {fileID: -8447643013437326587, guid: e1227e588371eba429943ba52f61629b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -173,8 +173,9 @@ MonoBehaviour:
   prefabId: anglerfish
   ship: {fileID: 0}
   renderer: {fileID: 0}
-  disguisedSprite: {fileID: 0}
-  revealedSprite: {fileID: 0}
+  disguisedSprite: {fileID: -8447643013437326587, guid: e1227e588371eba429943ba52f61629b, type: 3}
+  revealedSprite: {fileID: 6851785784955793566, guid: cb2e63b59456ce1418a32bf8e5aa02f3, type: 3}
+  topViewSprite: {fileID: -4560520590864625344, guid: ea8e19cc5bd976d43b88211d2e6fc0f3, type: 3}
   revealDelay: 0.4
   revealDistance: 1.8
   isRevealed: 0

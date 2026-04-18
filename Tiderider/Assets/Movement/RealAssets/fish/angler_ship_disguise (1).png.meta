@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      angler_ship_disguise (1)_0: -8447643013437326587
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -78,8 +78,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: 8b06968604bccda438ad16ff6e35916d, type: 3}
-  m_Color: {r: 0.7584905, g: 0.7584905, b: 0.7584905, a: 1}
+  m_Sprite: {fileID: 7675826601332790545, guid: 7ea1f4cafc1f74e4184023f8b5761193, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -139,5 +139,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabId: silver_coin
   coinValue: 1
-  collectDuration: 0.5
-  flyDistance: 2

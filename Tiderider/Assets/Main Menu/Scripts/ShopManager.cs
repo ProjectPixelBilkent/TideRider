@@ -6,10 +6,12 @@ public class ShopManager : MonoBehaviour
 {
     public static ShopManager Instance { get; private set; }
 
-    [Header("Shop Settings")]
-    public int totalWeaponsInGame = 6;
+    [Header("Game Data")]
+    public Weapon[] allAvailableWeapons;
 
-    // Define the cooldowns
+    [Header("Weapon Frames")]
+    public ShopItem[] weaponFrames = new ShopItem[4];
+
     private readonly TimeSpan energyAdCooldown = TimeSpan.FromHours(1);
     private readonly TimeSpan weaponAdCooldown = TimeSpan.FromDays(1);
     private readonly TimeSpan dailyResetCooldown = TimeSpan.FromDays(1);
@@ -23,124 +25,145 @@ public class ShopManager : MonoBehaviour
     private void Start()
     {
         CheckDailyReset();
+        UpdateWeaponShopUI();
     }
 
-    /// <summary>
-    /// Checks if a day has passed. If so, rolls new weapons for the shop.
-    /// </summary>
     private void CheckDailyReset()
     {
         string lastReset = DataManager.GetLastDailyResetTime();
-
-        if (TimeManager.HasPassed(lastReset, dailyResetCooldown))
+        if (TimeManager.HasPassed(lastReset, dailyResetCooldown) || DataManager.GetDailyShopWeapons().Count == 0)
         {
             List<int> newDailyWeapons = GenerateRandomDailyWeapons(4);
             DataManager.SetDailyShopData(TimeManager.GetCurrentTimeString(), newDailyWeapons);
-            Debug.Log("Shop weapons rolled for the day!");
         }
     }
 
     private List<int> GenerateRandomDailyWeapons(int count)
     {
         List<int> available = new List<int>();
-        for (int i = 0; i < totalWeaponsInGame; i++) available.Add(i);
-
+        for (int i = 0; i < allAvailableWeapons.Length; i++) available.Add(i);
         List<int> dailyPicks = new List<int>();
-
-        // Shuffle and pick
         for (int i = 0; i < count; i++)
         {
             int randomIndex = UnityEngine.Random.Range(0, available.Count);
             dailyPicks.Add(available[randomIndex]);
-            available.RemoveAt(randomIndex); // Ensure no duplicates
+            available.RemoveAt(randomIndex);
         }
         return dailyPicks;
     }
 
-    // ==========================================
-    // ENERGY ROW (4 Frames)
-    // ==========================================
-
-    public void OnBuyEnergyWithAd()
+    public void UpdateWeaponShopUI()
     {
-        if (TimeManager.HasPassed(DataManager.GetLastEnergyAdTime(), energyAdCooldown))
+        List<int> dailyWeaponIndices = DataManager.GetDailyShopWeapons();
+        List<int> currentLevels = DataManager.GetWeaponLevels();
+
+        for (int i = 0; i < weaponFrames.Length; i++)
         {
-            // TODO: Call your Ad Network here. Example: AdManager.ShowRewarded(() => { ... })
-            // On Ad Success callback:
+            if (i >= dailyWeaponIndices.Count) break;
 
-            ResourceManager.Instance.AddEnergy(1); // Give reward
-            DataManager.SetLastEnergyAdTime(TimeManager.GetCurrentTimeString()); // Reset timer
+            int weaponIdx = dailyWeaponIndices[i];
+            Weapon weapon = allAvailableWeapons[weaponIdx];
+            int level = currentLevels[weaponIdx];
+            ShopItem frame = weaponFrames[i];
+
+            if (frame.iconImage != null) frame.iconImage.sprite = weapon.weaponIcon;
+            if (frame.nameText != null) frame.nameText.text = weapon.weaponName;
+
+            if (level >= weapon.weaponLevelCount)
+            {
+                if (frame.levelOrDescText != null) frame.levelOrDescText.text = "MAX LEVEL";
+                if (frame.costText != null) frame.costText.text = "COMPLETED";
+                if (frame.entireFrameButton != null) frame.entireFrameButton.interactable = false;
+            }
+            else
+            {
+                if (frame.levelOrDescText != null) frame.levelOrDescText.text = $"Lv. {level} -> {level + 1}";
+                if (frame.entireFrameButton != null) frame.entireFrameButton.interactable = true;
+
+                if (i == 0)
+                {
+                    bool ready = TimeManager.HasPassed(DataManager.GetLastWeaponAdTime(), weaponAdCooldown);
+                    if (frame.costText != null) frame.costText.text = ready ? "FREE (AD)" : "COOLDOWN";
+                }
+                else
+                {
+                    if (frame.costText != null) frame.costText.text = $"{weapon.weaponLevels[level].cost} COINS";
+                }
+            }
         }
-        else
+    }
+
+    public void ProcessPurchase(ShopItem item)
+    {
+        ShopItemData.ItemType currentType = item.itemData != null ? item.itemData.type : ShopItemData.ItemType.Weapon;
+
+        switch (currentType)
         {
-            string remain = TimeManager.GetRemainingTimeFormatted(DataManager.GetLastEnergyAdTime(), energyAdCooldown);
-            Debug.Log($"Ad not ready. Wait: {remain}");
-            NotificationManager.Instance.ShowNotification($"Wait {remain}");
+            case ShopItemData.ItemType.Weapon:
+                if (item.frameIndex == 0) OnUpgradeWeaponWithAd(item.frameIndex);
+                else OnUpgradeWeaponWithCoins(item.frameIndex);
+                break;
+
+            case ShopItemData.ItemType.Energy:
+                if (item.itemData.isAdReward) OnBuyEnergyWithAd();
+                else OnBuyEnergyWithCoins(item.itemData.coinCost, item.itemData.amountToGive);
+                break;
+
+            case ShopItemData.ItemType.Coin:
+                NotificationManager.Instance.ShowNotification("Opening Store...");
+                break;
         }
     }
 
-    public void OnBuyEnergyWithCoins(int coinCost, int energyAmount)
-    {
-        if (ResourceManager.Instance.TryBuyWithCoins(coinCost))
-        {
-            ResourceManager.Instance.AddEnergy(energyAmount);
-        }
-    }
-
-    public void OnBuyEnergyWithIAP(int energyAmount)
-    {
-        // TODO: Hook up to Unity IAP
-        // On Purchase Success:
-        // ResourceManager.Instance.AddEnergy(energyAmount);
-    }
-
-    // ==========================================
-    // COIN ROW (4 Frames)
-    // ==========================================
-
-    public void OnBuyCoinsWithIAP(int coinAmount)
-    {
-        // TODO: Hook up to Unity IAP
-        // On Purchase Success:
-        // ResourceManager.Instance.AddCoins(coinAmount);
-    }
-
-    // ==========================================
-    // WEAPON UPGRADE ROW (4 Frames)
-    // ==========================================
-
-    public void OnUpgradeWeaponWithAd(int frameIndex)
+    private void OnUpgradeWeaponWithAd(int frameIndex)
     {
         if (TimeManager.HasPassed(DataManager.GetLastWeaponAdTime(), weaponAdCooldown))
         {
-            // TODO: Call your Ad Network here.
-            // On Ad Success callback:
-
-            int weaponIndexToUpgrade = DataManager.GetDailyShopWeapons()[frameIndex];
-            ResourceManager.Instance.UpgradeWeaponDirectly(weaponIndexToUpgrade);
+            int weaponIdx = DataManager.GetDailyShopWeapons()[frameIndex];
+            ResourceManager.Instance.UpgradeWeaponDirectly(weaponIdx);
             DataManager.SetLastWeaponAdTime(TimeManager.GetCurrentTimeString());
+            UpdateWeaponShopUI();
         }
         else
         {
             string remain = TimeManager.GetRemainingTimeFormatted(DataManager.GetLastWeaponAdTime(), weaponAdCooldown);
-            Debug.Log($"Ad not ready. Wait: {remain}");
+            NotificationManager.Instance.ShowNotification($"Ad ready in: {remain}");
         }
     }
 
-    public void OnUpgradeWeaponWithCoins(int frameIndex, int coinCost)
+    private void OnUpgradeWeaponWithCoins(int frameIndex)
     {
-        if (ResourceManager.Instance.TryBuyWithCoins(coinCost))
+        int weaponIdx = DataManager.GetDailyShopWeapons()[frameIndex];
+        int level = DataManager.GetWeaponLevels()[weaponIdx];
+        int cost = allAvailableWeapons[weaponIdx].weaponLevels[level].cost;
+
+        if (ResourceManager.Instance.TryBuyWithCoins(cost))
         {
-            int weaponIndexToUpgrade = DataManager.GetDailyShopWeapons()[frameIndex];
-            ResourceManager.Instance.UpgradeWeaponDirectly(weaponIndexToUpgrade);
+            ResourceManager.Instance.UpgradeWeaponDirectly(weaponIdx);
+            UpdateWeaponShopUI();
         }
     }
 
-    public void OnUpgradeWeaponWithIAP(int frameIndex)
+    private void OnBuyEnergyWithAd()
     {
-        // TODO: Hook up to Unity IAP
-        // On Purchase Success:
-        // int weaponIndexToUpgrade = DataManager.GetDailyShopWeapons()[frameIndex];
-        // ResourceManager.Instance.UpgradeWeaponDirectly(weaponIndexToUpgrade);
+        if (TimeManager.HasPassed(DataManager.GetLastEnergyAdTime(), energyAdCooldown))
+        {
+            ResourceManager.Instance.AddEnergy(1);
+            DataManager.SetLastEnergyAdTime(TimeManager.GetCurrentTimeString());
+            ResourceManager.Instance.UpdateUI();
+        }
+        else
+        {
+            string remain = TimeManager.GetRemainingTimeFormatted(DataManager.GetLastEnergyAdTime(), energyAdCooldown);
+            NotificationManager.Instance.ShowNotification($"Ad ready in: {remain}");
+        }
+    }
+
+    private void OnBuyEnergyWithCoins(int cost, int amount)
+    {
+        if (ResourceManager.Instance.TryBuyWithCoins(cost))
+        {
+            ResourceManager.Instance.AddEnergy(amount);
+        }
     }
 }

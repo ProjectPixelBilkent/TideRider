@@ -3243,9 +3243,6 @@ MonoBehaviour:
   - id: main_music
     volume: 0.5
     audioClip: {fileID: 8300000, guid: 3df6a060029daad499c532fc2343a1d1, type: 3}
-  world1BgmMultiplier: 0.65
-  world2BgmMultiplier: 1
-  world3BgmMultiplier: 0.1
 --- !u!1 &357272408
 GameObject:
   m_ObjectHideFlags: 0
@@ -11355,6 +11352,7 @@ GameObject:
   - component: {fileID: 1319880918}
   - component: {fileID: 1319880919}
   - component: {fileID: 1319880920}
+  - component: {fileID: 1319880921}
   m_Layer: 0
   m_Name: ScriptController
   m_TagString: Untagged
@@ -11583,6 +11581,46 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   energyToSet: 5
   maxEnergy: 5
+--- !u!114 &1319880921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1319880908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b44e38e38a30184db16c1d2595ce051, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allAvailableWeapons:
+  - {fileID: 11400000, guid: b3e878eb06da4434b9a7e8241f255f8c, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  weaponUIFrames:
+  - weaponIcon: {fileID: 0}
+    weaponNameText: {fileID: 0}
+    levelText: {fileID: 0}
+    costText: {fileID: 0}
+    purchaseButton: {fileID: 0}
+  - weaponIcon: {fileID: 0}
+    weaponNameText: {fileID: 0}
+    levelText: {fileID: 0}
+    costText: {fileID: 0}
+    purchaseButton: {fileID: 0}
+  - weaponIcon: {fileID: 0}
+    weaponNameText: {fileID: 0}
+    levelText: {fileID: 0}
+    costText: {fileID: 0}
+    purchaseButton: {fileID: 0}
+  - weaponIcon: {fileID: 0}
+    weaponNameText: {fileID: 0}
+    levelText: {fileID: 0}
+    costText: {fileID: 0}
+    purchaseButton: {fileID: 0}
 --- !u!1001 &1320192107
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class LevelUpdater : MonoBehaviour
 {
-    private const int FinalGameplayLevelIndex = 8;
+    private const int FinalGameplayLevelIndex = 10;
     private const string BossFightSceneName = "BossFight";
     private const string FinalLevelBossIntroConversationId = "end_of_world_3_boss_fight";
 

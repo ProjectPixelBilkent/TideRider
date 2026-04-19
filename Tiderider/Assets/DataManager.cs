@@ -83,6 +83,11 @@ public static class DataManager
             gameData.highestUnlockedLevelIndex++;
             SaveGameData(gameData);
         }
+        else
+        {
+            gameData.highestUnlockedLevelIndex = completedLevelIndex;
+            SaveGameData(gameData);
+        }
     }
 
     /// <summary>

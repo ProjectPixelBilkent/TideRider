@@ -1,26 +1,36 @@
 using System;
+using System.Globalization;
 
 public static class TimeManager
 {
     /// <summary>
-    /// Gets the current time formatted as a string.
+    /// Gets the current UTC time formatted as an ISO 8601 string to prevent locale parsing errors.
     /// </summary>
     public static string GetCurrentTimeString()
     {
-        return DateTime.Now.ToString();
+        return DateTime.UtcNow.ToString("O", CultureInfo.InvariantCulture);
     }
 
     /// <summary>
-    /// Calculates how much time has passed since a saved time string.
+    /// Gets an ISO 8601 string offset by a specific number of seconds. Useful for offline recovery math.
+    /// </summary>
+    public static string GetAdjustedTimeString(double secondsOffset)
+    {
+        return DateTime.UtcNow.AddSeconds(secondsOffset).ToString("O", CultureInfo.InvariantCulture);
+    }
+
+    /// <summary>
+    /// Calculates how much time has passed since a saved UTC time string.
     /// </summary>
     public static TimeSpan GetTimePassed(string savedTimeString)
     {
         if (string.IsNullOrEmpty(savedTimeString))
             return TimeSpan.MaxValue; // If no time was saved, assume a very long time has passed
 
-        if (DateTime.TryParse(savedTimeString, out DateTime savedTime))
+        // RoundtripKind ensures it respects the UTC formatting from the "O" string
+        if (DateTime.TryParse(savedTimeString, null, DateTimeStyles.RoundtripKind, out DateTime savedTime))
         {
-            return DateTime.Now - savedTime;
+            return DateTime.UtcNow - savedTime.ToUniversalTime();
         }
 
         return TimeSpan.Zero;
@@ -35,7 +45,7 @@ public static class TimeManager
     }
 
     /// <summary>
-    /// Returns a formatted string (MM:SS) for remaining cooldown time.
+    /// Returns a formatted string (MM:SS or HH:MM:SS) for remaining cooldown time.
     /// </summary>
     public static string GetRemainingTimeFormatted(string savedTimeString, TimeSpan duration)
     {

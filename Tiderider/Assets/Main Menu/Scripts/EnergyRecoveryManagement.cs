@@ -72,7 +72,7 @@ public class EnergyRecoveryManager : MonoBehaviour
             else
             {
                 timer = RecoverySeconds - remainingSeconds;
-                data.lastEnergyUpdateTime = DateTime.Now.AddSeconds(-remainingSeconds).ToString();
+                data.lastEnergyUpdateTime = TimeManager.GetAdjustedTimeString(-remainingSeconds);
             }
 
             LocalBackupManager.SaveGameData(data);

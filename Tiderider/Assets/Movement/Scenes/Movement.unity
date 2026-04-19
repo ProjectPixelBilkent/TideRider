@@ -520,6 +520,7 @@ MonoBehaviour:
     volume: 0.5
     audioClip: {fileID: 8300000, guid: e9f9ed391d7c559419ed5d70c742b7df, type: 3}
   - id: icy_man_hit
+    volume: 0
     audioClip: {fileID: 8300000, guid: 5787572c66274d04297bd2a7d84987c3, type: 3}
   - id: iceberg_hit
     volume: 0.5
@@ -537,7 +538,7 @@ MonoBehaviour:
     volume: 0.5
     audioClip: {fileID: 8300000, guid: 08450c1482620324dbd8540fc42f65be, type: 3}
   - id: ship_damage
-    volume: 0.5
+    volume: 0.3
     audioClip: {fileID: 8300000, guid: 9bb490c3070ad5c4ea547cf24252f037, type: 3}
   - id: speed_boost
     volume: 0.5

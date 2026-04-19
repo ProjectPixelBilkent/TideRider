@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e0b93f7677fc94744b6db3e75b967c5c, type: 3}
-  m_Name: level_misty
+  m_Name: level_normal 3
   m_EditorClassIdentifier: 
-  levelDisplayName: Mist Level
-  levelJson: {fileID: 4900000, guid: b2d04c3b83f02284b842cd9d6b14ebc0, type: 3}
-  levelIndex: 3
-  islandSprite: {fileID: -6452261991283526066, guid: 922d48b9e7cefe345954d3e721915fff, type: 3}
+  levelDisplayName: Third Level
+  levelJson: {fileID: 4900000, guid: c088c325508f0c9439eddeba884bbf86, type: 3}
+  levelIndex: 2
+  islandSprite: {fileID: 0}
   activeColor: {r: 1, g: 1, b: 1, a: 1}

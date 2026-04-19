@@ -1,68 +1,101 @@
+using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class ShopItem : MonoBehaviour
 {
-    [Header("Item Data")]
+    [Header("Item Data (ONLY for Energy & Coin)")]
     public ShopItemData itemData;
-
-    [Tooltip("Only Weapon: 0, 1, 2, 3")]
-    public int frameIndex;
 
     [HideInInspector] public Button entireFrameButton;
     [HideInInspector] public TMP_Text nameText;
     [HideInInspector] public Image iconImage;
-    [HideInInspector] public TMP_Text costText;
     [HideInInspector] public TMP_Text levelOrDescText;
+    [HideInInspector] public TMP_Text costText;
 
     private void Awake()
     {
         entireFrameButton = GetComponent<Button>();
-
         entireFrameButton.onClick.AddListener(OnItemClicked);
 
-        nameText = transform.Find("WeaponName")?.GetComponent<TMP_Text>();
-        iconImage = transform.Find("WeaponIcon")?.GetComponent<Image>();
-        levelOrDescText = transform.Find("WeaponDescription")?.GetComponent<TMP_Text>();
-        costText = transform.Find("Upgrade/Text (TMP)")?.GetComponent<TMP_Text>();
+        if (transform.childCount >= 4)
+        {
+            nameText = transform.GetChild(0).GetComponent<TMP_Text>();
+            iconImage = transform.GetChild(1).GetComponent<Image>();
+            levelOrDescText = transform.GetChild(2).GetComponent<TMP_Text>();
+            costText = transform.GetChild(3).GetComponent<TMP_Text>();
+        }
+        else
+        {
+            Debug.LogWarning("ShopItem prefab hierarchy child count is less than 4. UI references will fail.", this);
+        }
     }
 
     private void Start()
     {
-        if (itemData != null && itemData.type != ShopItemData.ItemType.Weapon)
+        if (itemData != null)
         {
             SetupStaticUI();
+        }
+    }
+
+    private void Update()
+    {
+        if (itemData is EnergyItemData energy && energy.isAdReward)
+        {
+            UpdateEnergyAdUI(energy);
         }
     }
 
     private void SetupStaticUI()
     {
         if (nameText != null) nameText.text = itemData.itemName;
-        if (iconImage != null && itemData.itemIcon != null) iconImage.sprite = itemData.itemIcon;
+        if (iconImage != null && itemData.itemIcon != null)
+            iconImage.sprite = itemData.itemIcon;
 
-        if (itemData.type == ShopItemData.ItemType.Energy)
+        switch (itemData)
         {
-            if (itemData.isAdReward)
-            {
-                if (costText != null) costText.text = "FREE (AD)";
-                if (levelOrDescText != null) levelOrDescText.text = $"+{itemData.amountToGive} Energy";
-            }
-            else
-            {
-                if (costText != null) costText.text = $"{itemData.coinCost} COINS";
-                if (levelOrDescText != null) levelOrDescText.text = $"+{itemData.amountToGive} Energy";
-            }
+            case EnergyItemData energy:
+                levelOrDescText.text = $"+{energy.amountToGive} Energy";
+                costText.text = energy.isAdReward ? "FREE (AD)" : $"{energy.coinCost} COINS";
+                break;
+
+            case CoinItemData coin:
+                levelOrDescText.text = $"{coin.amountToGive} Coins";
+                costText.text = "BUY";
+                break;
         }
-        else if (itemData.type == ShopItemData.ItemType.Coin)
+    }
+
+    private void UpdateEnergyAdUI(EnergyItemData energy)
+    {
+        bool ready = TimeManager.HasPassed(
+            DataManager.GetLastEnergyAdTime(),
+            TimeSpan.FromHours(1)
+        );
+
+        if (costText != null)
         {
-            if (costText != null) costText.text = "BUY";
-            if (levelOrDescText != null) levelOrDescText.text = $"{itemData.amountToGive} Coins";
+            costText.text = ready
+            ? "FREE (AD)"
+            : TimeManager.GetRemainingTimeFormatted(
+                DataManager.GetLastEnergyAdTime(),
+                TimeSpan.FromHours(1)
+              );
+        }
+
+        if (entireFrameButton != null)
+        {
+            entireFrameButton.interactable = ready;
         }
     }
 
     private void OnItemClicked()
     {
-        ShopManager.Instance.ProcessPurchase(this);
+        if (itemData != null)
+        {
+            ShopManager.Instance.ProcessPurchase(this);
+        }
     }
 }

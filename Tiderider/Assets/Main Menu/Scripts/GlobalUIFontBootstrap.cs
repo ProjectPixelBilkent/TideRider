@@ -9,9 +9,11 @@ public class GlobalUIFontBootstrap : MonoBehaviour
 {
     private const string ConfigResourcePath = "GlobalUIFontConfig";
     private const float RefreshIntervalSeconds = 0.5f;
+    private static readonly char[] TurkishCharacters = { '\u00C7', '\u00E7', '\u011E', '\u011F', '\u0130', '\u0131', '\u00D6', '\u00F6', '\u015E', '\u015F', '\u00DC', '\u00FC' };
 
     private static GlobalUIFontBootstrap instance;
     private static TMP_FontAsset runtimeFontAsset;
+    private static TMP_FontAsset fallbackFontAsset;
     private static Font unityFont;
     private static bool initialized;
 
@@ -77,7 +79,7 @@ public class GlobalUIFontBootstrap : MonoBehaviour
 
         unityFont = config.sourceFont;
 
-        TMP_FontAsset previousDefaultFont = TMP_Settings.defaultFontAsset;
+        fallbackFontAsset = TMP_Settings.defaultFontAsset;
         runtimeFontAsset = TMP_FontAsset.CreateFontAsset(
             config.sourceFont,
             config.samplingPointSize,
@@ -91,9 +93,9 @@ public class GlobalUIFontBootstrap : MonoBehaviour
 
         runtimeFontAsset.name = $"{config.sourceFont.name} Runtime SDF";
 
-        if (previousDefaultFont != null && previousDefaultFont != runtimeFontAsset)
+        if (fallbackFontAsset != null && fallbackFontAsset != runtimeFontAsset)
         {
-            runtimeFontAsset.fallbackFontAssetTable = new List<TMP_FontAsset> { previousDefaultFont };
+            runtimeFontAsset.fallbackFontAssetTable = new List<TMP_FontAsset> { fallbackFontAsset };
         }
 
         TMP_Settings.defaultFontAsset = runtimeFontAsset;
@@ -111,8 +113,15 @@ public class GlobalUIFontBootstrap : MonoBehaviour
             if (tmpText == null)
                 continue;
 
-            if (tmpText.font != runtimeFontAsset)
-                tmpText.font = runtimeFontAsset;
+            if (tmpText.GetComponentInParent<ExcludeFromGlobalUIFontSwap>(true) != null)
+                continue;
+
+            TMP_FontAsset targetFont = ShouldUseFallbackFont(tmpText.text) && fallbackFontAsset != null
+                ? fallbackFontAsset
+                : runtimeFontAsset;
+
+            if (tmpText.font != targetFont)
+                tmpText.font = targetFont;
 
             tmpText.SetMaterialDirty();
             tmpText.SetVerticesDirty();
@@ -129,5 +138,18 @@ public class GlobalUIFontBootstrap : MonoBehaviour
 
             legacyText.SetAllDirty();
         }
+    }
+
+    private static bool ShouldUseFallbackFont(string text)
+    {
+        if (string.IsNullOrEmpty(text))
+            return false;
+
+        return text.IndexOfAny(TurkishCharacters) >= 0;
+    }
+
+    public static TMP_FontAsset GetFallbackFontAsset()
+    {
+        return fallbackFontAsset;
     }
 }

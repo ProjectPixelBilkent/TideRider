@@ -114,7 +114,6 @@ public class Monster : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        print("Monster collided with " + collision.gameObject.name);
         HandlePlayerContact(collision.gameObject);
     }
 

@@ -32,11 +32,12 @@ public class AspectRatioController : MonoBehaviour
         float deviceAspect = (float)Screen.width / Screen.height;
 
         // Always print so you can read the design ratio during development.
+#if UNITY_EDITOR
         Debug.Log(
             $"[AspectRatioController] Device aspect (width/height) = {deviceAspect:F6}  " +
             $"({Screen.width} x {Screen.height})  |  " +
             $"Set DESIGN_ASPECT to this value, then rebuild.");
-
+#endif
         if (DESIGN_ASPECT > 0f)
         {
             // Ensure the full designed width is always visible.

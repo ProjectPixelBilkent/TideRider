@@ -39,11 +39,6 @@ public class WeaponManager : MonoBehaviour
 
     public Weapon[] GetPlayerArmory()
     {
-        Debug.Log("Getting player armory");
-        foreach (var weapon in playerArmory)
-        {
-            Debug.Log(weapon ? weapon.weaponName : "Empty slot");
-        }
         return playerArmory;
     }
 }

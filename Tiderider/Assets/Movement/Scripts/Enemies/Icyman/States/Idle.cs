@@ -19,7 +19,6 @@ public class Idle : State
 
     public override void Enter()
     {
-        Debug.Log("Icyman -> Idle");
         next = Random.Range(1, 5);
         if (next == 1)
         {

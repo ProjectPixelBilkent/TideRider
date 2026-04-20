@@ -422,7 +422,7 @@ public class SceneObjectSpawner : MonoBehaviour
 
         nextSpawnIndex = 0;
 
-        Debug.Log($"Loaded {objectsToSpawn.Count} objects from assigned TextAsset: {(sceneJsonFile == null ? jsonForTesting: sceneJsonFile).name}");
+        //Debug.Log($"Loaded {objectsToSpawn.Count} objects from assigned TextAsset: {(sceneJsonFile == null ? jsonForTesting: sceneJsonFile).name}");
     }
 
     private Vector3 GetSpawnPosition(SavedObjectData data)

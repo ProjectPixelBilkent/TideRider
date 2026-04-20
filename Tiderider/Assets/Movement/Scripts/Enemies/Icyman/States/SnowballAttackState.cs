@@ -15,7 +15,6 @@ public class SnowballAttackState : State
 
     public override void Enter()
     {
-        Debug.Log("Icyman -> SnowballAttackState");
         shot = false;
         timer = 0f;
         ((Icyman)machine.Enemy).SetSnowballWindupSprite();

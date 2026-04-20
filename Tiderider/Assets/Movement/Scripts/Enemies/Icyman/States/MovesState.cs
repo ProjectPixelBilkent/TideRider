@@ -17,7 +17,6 @@ public class MovesState : State
 
     public override void Enter()
     {
-        Debug.Log("Icyman -> MovesState");
         timeInState = 0f;
         maxMoveDuration = ((Icyman)machine.Enemy).maxMoveDuration;
     }

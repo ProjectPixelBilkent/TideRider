@@ -76,7 +76,6 @@ public class Jellyfish : Enemy
     protected override void Start()
     {
         base.Start();
-        Debug.Log("JELLYFISH START: " + gameObject.name);
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer != null)

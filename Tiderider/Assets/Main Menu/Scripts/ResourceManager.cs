@@ -5,6 +5,8 @@ public class ResourceManager : MonoBehaviour
 {
     public static ResourceManager Instance { get; private set; }
 
+    [SerializeField] private Weapon[] weaponList = new Weapon[6];
+
     [Header("UI Elements")]
     [SerializeField] private TMP_Text energyAmount;
     [SerializeField] private TMP_Text energyTimerText;
@@ -63,7 +65,8 @@ public class ResourceManager : MonoBehaviour
 
     public static void UpgradeWeapon(Weapon weapon)
     {
-        int currentLevel = DataManager.GetWeaponLevels()[WeaponManager.Instance.GetWeaponIndex(weapon)];
+        int weaponIndex = GetWeaponIndex(weapon);
+        int currentLevel = DataManager.GetWeaponLevels()[weaponIndex];
 
         if (currentLevel >= weapon.weaponLevels.Length) return;
 
@@ -76,8 +79,31 @@ public class ResourceManager : MonoBehaviour
         else
         {
             DataManager.SubtractCoinAmount(cost);
+            switch (weaponIndex)
+            {
+                case 0: DataManager.IncrementCanonLevel(); break;
+                case 1: DataManager.IncrementMinigunLevel(); break;
+                case 2: DataManager.IncrementShieldLevel(); break;
+                case 3: DataManager.IncrementLasergunLevel(); break;
+                case 4: DataManager.IncrementFlamethrowerLevel(); break;
+                case 5: DataManager.IncrementIcegunLevel(); break;
+            }
+            NotificationManager.Instance.ShowNotification("Weapon Upgraded!");
             Instance.UpdateUI();
         }
+    }
+
+    private static int GetWeaponIndex(Weapon weapon)
+    {
+        for (int i = 0; i < Instance.weaponList.Length; i++)
+        {
+            Debug.Log($"Checking weapon at index {i}: {Instance.weaponList[i].weaponName}");
+            if (Instance.weaponList[i] == weapon)
+            {
+                return i;
+            }
+        }
+        return -1;
     }
 
     private static void HandleNoCoin()

@@ -73,6 +73,24 @@
             "conversationId": ""
         },
         {
+            "prefabId": "silver_coin",
+            "name": "Silver Coin",
+            "objectType": 4,
+            "spriteNo": -1,
+            "typeOfTerrain": 0,
+            "posX": 2.2294275760650636,
+            "posY": 13.722491264343262,
+            "posZ": 0.0,
+            "rotX": 0.0,
+            "rotY": 0.0,
+            "rotZ": 0.0,
+            "rotW": 1.0,
+            "scaleX": 1.2599999904632569,
+            "scaleY": 1.2599999904632569,
+            "scaleZ": 1.2599999904632569,
+            "conversationId": ""
+        },
+        {
             "prefabId": "big",
             "name": "Big_Obstacle (1)",
             "objectType": 0,

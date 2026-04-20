@@ -39,7 +39,7 @@ public class EndingObject : MonoBehaviour
         {
             Player player = collision.GetComponent<Player>();
             if (player != null)
-                player.TakeDamage(int.MaxValue);
+                player.TakeDamage(int.MaxValue, bypassInvincibility: true);
             return;
         }
 

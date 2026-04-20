@@ -1,4 +1,5 @@
 using UnityEngine;
+using DG.Tweening;
 #if UNITY_EDITOR
 using System.Linq;
 using System.Collections.Generic;
@@ -124,8 +125,7 @@ public class Monster : MonoBehaviour
         {
             if (SoundLibrary.Instance != null)
                 SoundLibrary.Instance.Play("kraken");
-
-            player.TakeDamage(player.MaxHealth);
+            player.TakeDamage(player.MaxHealth, bypassInvincibility: true);
         }
     }
 

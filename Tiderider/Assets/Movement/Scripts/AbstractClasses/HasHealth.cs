@@ -21,6 +21,9 @@ public class HasHealth: MonoBehaviour
     private Color[] baseRendererColors;
     private Coroutine damageFlashRoutine;
 
+    private bool isInvincible;
+    private const float invincibilityDuration = 0.5f;
+
 
     protected virtual void Start()
     {
@@ -47,7 +50,7 @@ public class HasHealth: MonoBehaviour
         currentHealth = restoreToFull ? maxHealth : Mathf.Clamp(currentHealth, 0, maxHealth);
     }
 
-    public int TakeDamage(int damage)
+    public int TakeDamage(int damage, bool bypassInvincibility = false)
     {
         SoundLibrary.Instance.Play("ship_damage");
 
@@ -56,15 +59,33 @@ public class HasHealth: MonoBehaviour
             return currentHealth;
         }
 
+        if (!bypassInvincibility && isInvincible && CompareTag("Player"))
+        {
+            return currentHealth;
+        }
+
         currentHealth = Mathf.Clamp(currentHealth - damage, 0, maxHealth);
         HealthChanged?.Invoke();
         TriggerDamageFlash();
+
+        if (CompareTag("Player"))
+        {
+            StartCoroutine(InvincibilityRoutine());
+        }
+
         if (currentHealth <= 0)
         {
             Die();
         }
 
         return currentHealth;
+    }
+
+    private IEnumerator InvincibilityRoutine()
+    {
+        isInvincible = true;
+        yield return new WaitForSeconds(invincibilityDuration);
+        isInvincible = false;
     }
 
     public int Heal(int amount)

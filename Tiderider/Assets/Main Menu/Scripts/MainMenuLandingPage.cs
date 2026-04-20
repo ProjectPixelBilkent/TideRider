@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 public class MainMenuLandingPage : MonoBehaviour
 {
+    private const string CreditsFontResourcePath = "Fonts & Materials/LiberationSans SDF";
     private readonly struct HiddenObjectState
     {
         public HiddenObjectState(GameObject gameObject, bool wasActive)
@@ -371,14 +372,15 @@ public class MainMenuLandingPage : MonoBehaviour
         RectTransform popup = CreateImage(
             "CreditsPopup",
             root,
-            new Color(0.08f, 0.1f, 0.13f, 0.96f),
-            new Vector2(0f, -60f),
-            new Vector2(760f, 980f),
+            new Color(0.08f, 0.1f, 0.13f, 0.98f),
+            new Vector2(0f, -20f),
+            new Vector2(980f, 1320f),
             new Vector2(0.5f, 0.5f),
             new Vector2(0.5f, 0.5f)
         );
         creditsPopup = popup.gameObject;
         creditsPopup.SetActive(false);
+        creditsPopup.AddComponent<ExcludeFromGlobalUIFontSwap>();
 
         Outline outline = popup.gameObject.AddComponent<Outline>();
         outline.effectColor = new Color(0.82f, 0.68f, 0.38f, 0.35f);
@@ -388,7 +390,7 @@ public class MainMenuLandingPage : MonoBehaviour
             "CreditsPopupTitle",
             popup,
             "Credits",
-            74f,
+            62f,
             FontStyles.Bold,
             new Color(0.98f, 0.96f, 0.91f, 1f),
             TextAlignmentOptions.Center
@@ -396,35 +398,77 @@ public class MainMenuLandingPage : MonoBehaviour
         RectTransform titleRect = title.rectTransform;
         titleRect.anchorMin = new Vector2(0f, 1f);
         titleRect.anchorMax = new Vector2(1f, 1f);
-        titleRect.offsetMin = new Vector2(40f, -150f);
-        titleRect.offsetMax = new Vector2(-40f, -40f);
+        titleRect.offsetMin = new Vector2(40f, -130f);
+        titleRect.offsetMax = new Vector2(-40f, -30f);
 
-        TMP_Text body = CreateText(
-            "CreditsBody",
+        TMP_Text leftColumn = CreateText(
+            "CreditsLeftColumn",
             popup,
-            BuildCreditsText(),
-            34f,
+            BuildCreditsLeftColumnText(),
+            31f,
             FontStyles.Normal,
             new Color(0.93f, 0.91f, 0.84f, 1f),
             TextAlignmentOptions.TopLeft
         );
-        RectTransform bodyRect = body.rectTransform;
-        bodyRect.anchorMin = new Vector2(0f, 0f);
-        bodyRect.anchorMax = new Vector2(1f, 1f);
-        bodyRect.offsetMin = new Vector2(50f, 160f);
-        bodyRect.offsetMax = new Vector2(-50f, -170f);
-        body.enableWordWrapping = true;
-        body.lineSpacing = -6f;
+        RectTransform leftRect = leftColumn.rectTransform;
+        leftRect.anchorMin = new Vector2(0f, 0f);
+        leftRect.anchorMax = new Vector2(0.46f, 1f);
+        leftRect.offsetMin = new Vector2(28f, 200f);
+        leftRect.offsetMax = new Vector2(-6f, -300f);
+        leftColumn.enableAutoSizing = false;
+        leftColumn.enableWordWrapping = true;
+        leftColumn.lineSpacing = -5f;
+        ApplyCreditsBodyFont(leftColumn);
+
+        TMP_Text rightColumn = CreateText(
+            "CreditsRightColumn",
+            popup,
+            BuildCreditsRightColumnText(),
+            31f,
+            FontStyles.Normal,
+            new Color(0.93f, 0.91f, 0.84f, 1f),
+            TextAlignmentOptions.TopLeft
+        );
+        RectTransform rightRect = rightColumn.rectTransform;
+        rightRect.anchorMin = new Vector2(0.46f, 0f);
+        rightRect.anchorMax = new Vector2(1f, 1f);
+        rightRect.offsetMin = new Vector2(6f, 200f);
+        rightRect.offsetMax = new Vector2(-28f, -300f);
+        rightColumn.enableAutoSizing = false;
+        rightColumn.enableWordWrapping = true;
+        rightColumn.lineSpacing = -5f;
+        ApplyCreditsBodyFont(rightColumn);
+
+        TMP_Text supportNote = CreateText(
+            "CreditsSupportNote",
+            popup,
+            BuildCreditsSupportNoteText(),
+            30f,
+            FontStyles.Normal,
+            new Color(0.93f, 0.91f, 0.84f, 1f),
+            TextAlignmentOptions.TopLeft
+        );
+        RectTransform noteRect = supportNote.rectTransform;
+        noteRect.anchorMin = new Vector2(0f, 0.5f);
+        noteRect.anchorMax = new Vector2(1f, 0.5f);
+        noteRect.anchoredPosition = new Vector2(0f, -430f);
+        noteRect.sizeDelta = new Vector2(-56f, 120f);
+        supportNote.enableAutoSizing = false;
+        supportNote.enableWordWrapping = true;
+        supportNote.lineSpacing = -4f;
+        ApplyCreditsBodyFont(supportNote);
 
         CreateButton(
             popup,
             "BackCreditsButton",
             "Back",
-            new Vector2(0f, -390f),
+            new Vector2(0f, -560f),
             new Color(0.82f, 0.6f, 0.22f, 1f),
             new Color(0.17f, 0.11f, 0.04f, 1f),
             HideCreditsPopup
         );
+
+        ApplyCreditsPopupFonts(popup);
     }
 
     private void CreateSliderRow(RectTransform parent, string labelText, string playerPrefsKey, Vector2 anchoredPosition)
@@ -607,51 +651,152 @@ public class MainMenuLandingPage : MonoBehaviour
 
     private static string BuildCreditsText()
     {
-        HashSet<string> seen = new HashSet<string>();
-        List<string> lines = new List<string>();
-
-        CollectTextFromObjectNamed("CreditsPanel", seen, lines);
-        CollectTextFromObjectNamed("CreditsMenu", seen, lines);
-
-        if (lines.Count == 0)
-            return "Credits are available in the main menu settings panel.";
-
-        return string.Join("\n", lines);
+        return
+            "Game Design Team\n" +
+            "Sherzod Sobirov\n" +
+            "Işık Dönger\n" +
+            "Ege Ateş\n" +
+            "Nehir Konaş\n" +
+            "Göknil Beyza Kelleroğlu\n\n" +
+            "Programming Team\n" +
+            "Ata Uzay Kuzey\n" +
+            "Ege Ateş\n" +
+            "Sherzod Sobirov\n" +
+            "Leyli Shadurdyyeva\n" +
+            "Eren Batu\n\n" +
+            "Graphic Design\n" +
+            "Çiçek Ertuğrul\n" +
+            "Duygu Moran\n" +
+            "Hazal Nisan Söylemez\n" +
+            "Gizem Yetişkin\n" +
+            "Burak Asır Duman\n" +
+            "Göknil Beyza Kelleroğlu\n" +
+            "Hevin Beydeş\n" +
+            "A. Eren Gökalp\n" +
+            "Ece Boran\n\n" +
+            "Music\n" +
+            "Damla Hastekkeşin\n" +
+            "Rüzgar Tecelli\n" +
+            "Aslı Kuterdem\n" +
+            "Umut Pekel\n\n" +
+            "PR\n" +
+            "Saida Rustamova\n" +
+            "Sara Zebardast\n" +
+            "Hibah Shabbir\n" +
+            "Orkun Kuşvuran\n\n" +
+            "Sponsor\n" +
+            "Emre Batu";
     }
 
-    private static void CollectTextFromObjectNamed(string objectName, HashSet<string> seen, List<string> lines)
+    private static string BuildCreditsPageText()
     {
-        Scene scene = SceneManager.GetActiveScene();
-        foreach (GameObject root in scene.GetRootGameObjects())
+        return
+            "Game Design Team\n" +
+            "Sherzod Sobirov\n" +
+            "I\u015F\u0131k D\u00F6nger\n" +
+            "Ege Ate\u015F\n" +
+            "Nehir Kona\u015F\n" +
+            "G\u00F6knil Beyza Kellero\u011Flu\n\n" +
+            "Programming Team\n" +
+            "Ata Uzay Kuzey\n" +
+            "I\u015F\u0131k D\u00F6nger\n" +
+            "Sherzod Sobirov\n" +
+            "Leyli Shadurdyyeva\n" +
+            "Eren Batu\n" +
+            "Ege Ate\u015F\n\n" +
+            "Graphic Design\n" +
+            "\u00C7i\u00E7ek Ertu\u011Frul\n" +
+            "Duygu Moran\n" +
+            "Hazal Nisan S\u00F6ylemez\n" +
+            "Gizem Yeti\u015Fkin\n" +
+            "Burak As\u0131r Duman\n" +
+            "G\u00F6knil Beyza Kellero\u011Flu\n" +
+            "Hevin Beyde\u015F\n" +
+            "A. Eren G\u00F6kalp\n" +
+            "Ece Boran\n\n" +
+            "Music\n" +
+            "Damla Hastekke\u015Fin\n" +
+            "R\u00FCzgar Tecelli\n" +
+            "Asl\u0131 Kuterdem\n" +
+            "Umut Pekel\n\n" +
+            "PR\n" +
+            "Saida Rustamova\n" +
+            "Sara Zebardast\n" +
+            "Hibah Shabbir\n" +
+            "Orkun Ku\u015Fvuran\n\n" +
+            "Sponsor\n" +
+            "Emre Batu";
+    }
+
+    private static string BuildCreditsLeftColumnText()
+    {
+        return
+            "Game Design Team\n" +
+            "Sherzod Sobirov\n" +
+            "I\u015F\u0131k D\u00F6nger\n" +
+            "Ege Ate\u015F\n" +
+            "Nehir Kona\u015F\n" +
+            "G\u00F6knil Beyza Kellero\u011Flu\n\n" +
+            "Programming Team\n" +
+            "Ata Uzay Kuzey\n" +
+            "I\u015F\u0131k D\u00F6nger\n" +
+            "Sherzod Sobirov\n" +
+            "Leyli Shadurdyyeva\n" +
+            "Eren Batu\n" +
+            "Ege Ate\u015F\n\n" +
+            "PR\n" +
+            "Saida Rustamova\n" +
+            "Sara Zebardast\n" +
+            "Hibah Shabbir\n" +
+            "Orkun Ku\u015Fvuran";
+    }
+
+    private static string BuildCreditsRightColumnText()
+    {
+        return
+            "Graphic Design\n" +
+            "\u00C7i\u00E7ek Ertu\u011Frul\n" +
+            "Duygu Moran\n" +
+            "Hazal Nisan S\u00F6ylemez\n" +
+            "Gizem Yeti\u015Fkin\n" +
+            "Burak As\u0131r Duman\n" +
+            "G\u00F6knil Beyza Kellero\u011Flu\n" +
+            "Hevin Beyde\u015F\n" +
+            "A. Eren G\u00F6kalp\n" +
+            "Ece Boran\n\n" +
+            "Music\n" +
+            "Damla Hastekke\u015Fin\n" +
+            "R\u00FCzgar Tecelli\n" +
+            "Asl\u0131 Kuterdem\n" +
+            "Umut Pekel\n\n" +
+            "Sponsor\n" +
+            "Emre Batu";
+    }
+
+    private static string BuildCreditsSupportNoteText()
+    {
+        return
+            "Through our partnership with K1LO, any money generated through the game will be used to support their needs by purchasing materials such as balloons, clay, and other activity supplies.";
+    }
+
+    private static void ApplyCreditsBodyFont(TMP_Text text)
+    {
+        TMP_FontAsset creditsFont = Resources.Load<TMP_FontAsset>(CreditsFontResourcePath);
+        if (creditsFont != null)
         {
-            foreach (Transform child in root.GetComponentsInChildren<Transform>(true))
-            {
-                if (child.name != objectName)
-                    continue;
-
-                foreach (TMP_Text tmpText in child.GetComponentsInChildren<TMP_Text>(true))
-                    AddCreditLine(tmpText.text, seen, lines);
-
-                foreach (Text uiText in child.GetComponentsInChildren<Text>(true))
-                    AddCreditLine(uiText.text, seen, lines);
-            }
+            text.font = creditsFont;
+            return;
         }
+
+        TMP_FontAsset fallbackFont = GlobalUIFontBootstrap.GetFallbackFontAsset();
+        if (fallbackFont != null)
+            text.font = fallbackFont;
     }
 
-    private static void AddCreditLine(string value, HashSet<string> seen, List<string> lines)
+    private static void ApplyCreditsPopupFonts(RectTransform popup)
     {
-        string text = value?.Trim();
-        if (string.IsNullOrWhiteSpace(text))
-            return;
-
-        if (text.Equals("Credits", System.StringComparison.OrdinalIgnoreCase))
-            return;
-
-        if (text.Equals("Back", System.StringComparison.OrdinalIgnoreCase))
-            return;
-
-        if (seen.Add(text))
-            lines.Add(text);
+        foreach (TMP_Text text in popup.GetComponentsInChildren<TMP_Text>(true))
+            ApplyCreditsBodyFont(text);
     }
 
     private static Button FindButtonByName(string buttonName)

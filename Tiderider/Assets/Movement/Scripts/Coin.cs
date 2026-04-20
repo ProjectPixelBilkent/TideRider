@@ -10,8 +10,8 @@ public class Coin : MonoBehaviour
 {
     public enum CoinType
     {
-        Silver = 1,
-        Gold = 3
+        Silver = 10,
+        Gold = 30
     };
 
     public string prefabId;

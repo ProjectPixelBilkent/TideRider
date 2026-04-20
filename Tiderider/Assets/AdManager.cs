@@ -7,8 +7,14 @@ public class AdManager : MonoBehaviour
     public static AdManager Instance { get; private set; }
 
     [Header("LevelPlay Settings")]
-    [SerializeField] private string appKey = "YOUR_APP_KEY";
-    [SerializeField] private string adUnitId = "YOUR_REWARDED_UNIT_ID"; // From Dashboard
+    [SerializeField] private string androidAppKey = "261284bd5";
+    [SerializeField] private string androidAdUnitId = "pivv358jdy1664z4";
+
+    [SerializeField] private string iosAppKey = "26127d8c5";
+    [SerializeField] private string iosAdUnitId = "d1b1phyldw8ffqnl";
+
+    private string currentAppKey;
+    private string currentAdUnitId;
 
     private LevelPlayRewardedAd rewardedAd;
     private Action onRewardSuccess;
@@ -16,15 +22,28 @@ public class AdManager : MonoBehaviour
     private void Awake()
     {
         if (Instance == null) { Instance = this; DontDestroyOnLoad(gameObject); }
-        else Destroy(gameObject);
+        else { Destroy(gameObject); return; }
+
+#if UNITY_ANDROID
+        currentAppKey = androidAppKey;
+        currentAdUnitId = androidAdUnitId;
+#elif UNITY_IOS
+            currentAppKey = iosAppKey;
+            currentAdUnitId = iosAdUnitId;
+#else
+            currentAppKey = "UNUSED";
+            currentAdUnitId = "UNUSED";
+#endif
     }
 
     void Start()
     {
-        // 1. Initialize LevelPlay
+        // Setup initialization callbacks
         LevelPlay.OnInitSuccess += OnLevelPlayInitSuccess;
         LevelPlay.OnInitFailed += OnLevelPlayInitFailed;
-        LevelPlay.Init(appKey);
+
+        // Start the SDK
+        LevelPlay.Init(currentAppKey);
     }
 
     private void OnLevelPlayInitSuccess(LevelPlayConfiguration config)
@@ -41,27 +60,30 @@ public class AdManager : MonoBehaviour
     private void CreateRewardedAd()
     {
         // Create the ad object
-        rewardedAd = new LevelPlayRewardedAd(adUnitId);
+        rewardedAd = new LevelPlayRewardedAd(currentAdUnitId);
 
-        // Subscribe to events
-        rewardedAd.OnAdLoaded += (adInfo) => Debug.Log("Ad Loaded");
-        rewardedAd.OnAdDisplayed += (adInfo) => Debug.Log("Ad Displayed");
-        rewardedAd.OnAdDisplayFailed += (error, adInfo) => Debug.LogError("Ad Failed");
-
-        // THE REWARD CALLBACK
+        // Subscribe to reward event
         rewardedAd.OnAdRewarded += (reward, adInfo) => {
+            Debug.Log("Ad Rewarded - Executing Callback");
             onRewardSuccess?.Invoke();
             onRewardSuccess = null;
-            rewardedAd.LoadAd(); // Preload next ad
+
+            // Immediately start loading the next one
+            rewardedAd.LoadAd();
         };
 
-        // Load the first ad
+        // Subscribe to failed display to clean up the action if the ad crashes
+        rewardedAd.OnAdDisplayFailed += (error, adInfo) => {
+            onRewardSuccess = null;
+        };
+
+        // Load the initial ad
         rewardedAd.LoadAd();
     }
 
     public void ShowRewardedAd(Action onSuccess)
     {
-        // Bypass if user has No-Ads
+        // Bypass if user has "No-Ads" purchased
         if (DataManager.HasRemovedAds())
         {
             onSuccess?.Invoke();
@@ -75,7 +97,7 @@ public class AdManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Ad not ready. Trying to load...");
+            Debug.LogWarning("Ad not ready yet. Reloading...");
             rewardedAd?.LoadAd();
         }
     }

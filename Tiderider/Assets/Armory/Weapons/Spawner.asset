@@ -16,14 +16,14 @@ MonoBehaviour:
   weaponDescription: This is a mini ship spawner.
   weaponLevels:
   - cost: 0
-    damage: 4
+    damage: 3
     fireRate: 3
     speedOfBullet: 10
     range: 0
     HP: 0
     duration: 0
   - cost: 0
-    damage: 7
+    damage: 6
     fireRate: 3
     speedOfBullet: 10
     range: 0
@@ -39,7 +39,7 @@ MonoBehaviour:
   weaponIcon: {fileID: 551922136590985906, guid: fce70b10d467ddc44a1403c105334662, type: 3}
   projectilePrefab: {fileID: 2743745310613609813, guid: 4a0a3511a9caf8b478963a6a31babd51, type: 3}
   onCollisionWithBulletMethodName: MiniShipBullet
-  spawningSound: {fileID: 8300000, guid: 786e69c8f4b04a04a930891e89a3bfc3, type: 3}
+  spawningSound: {fileID: 0}
   volume: 0.5
   extraSounds:
   - {fileID: 8300000, guid: 2e641ddb6bcc529408a6193388784815, type: 3}

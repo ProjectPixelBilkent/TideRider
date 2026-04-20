@@ -8,13 +8,13 @@ public class MiniShipBullet : Bullet
 
     void Start()
     {
-
+        transform.SetParent(Camera.main.transform, true);
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.position += 0.5f * Time.deltaTime * SceneObjectSpawner.UpwardsMovement;
+        
     }
 
     private float timer = 0;
@@ -29,7 +29,8 @@ public class MiniShipBullet : Bullet
             timer = 0;
             if(Enemy!=null)
             {
-                var ab = Enemy.transform.position - transform.position;
+                Vector3 target = Enemy.transform.position - Camera.main.transform.position;
+                var ab = target - transform.localPosition;
                 direction = (ab + 1.3f * Random.onUnitSphere / (ab.magnitude + 1)).normalized;
             }
 

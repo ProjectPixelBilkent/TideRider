@@ -29,9 +29,14 @@ public class MiniShipBullet : Bullet
             timer = 0;
             if(Enemy!=null)
             {
-                Vector3 target = Enemy.transform.position - Camera.main.transform.position;
-                var ab = target - transform.localPosition;
-                direction = (ab + 1.3f * Random.onUnitSphere / (ab.magnitude + 1)).normalized;
+                GhostShip ghostShip = Enemy.GetComponent<GhostShip>();
+                bool ghostInvisible = ghostShip != null && !ghostShip.IsVisible;
+                if (!ghostInvisible)
+                {
+                    Vector3 target = Enemy.transform.position - Camera.main.transform.position;
+                    var ab = target - transform.localPosition;
+                    direction = (ab + 1.3f * Random.onUnitSphere / (ab.magnitude + 1)).normalized;
+                }
             }
 
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f; 

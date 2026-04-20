@@ -29,6 +29,7 @@ public class Coin : MonoBehaviour
         if (player != null)
         {
             DataManager.IncrementCoinAmount((int) coinValue);
+            SoundLibrary.Instance.Play("coin");
             Destroy(gameObject);
         }
     }

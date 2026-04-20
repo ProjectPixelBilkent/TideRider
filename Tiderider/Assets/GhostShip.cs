@@ -502,4 +502,6 @@ public class GhostShip : Enemy
         shipSprite.color = color;
         shipSprite.enabled = visible;
     }
+
+    public bool IsVisible => shipSprite != null && shipSprite.enabled && shipSprite.color.a > 0.15f;
 }

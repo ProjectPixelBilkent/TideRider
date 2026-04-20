@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
@@ -7,6 +8,8 @@ public class LevelManager : MonoBehaviour
     public static LevelManager Instance;
 
     public static int CurrentPlayingLevelIndex = -1;
+
+    private bool canInteract = false;
 
     [Header("UI Map References")]
     [SerializeField] private RectTransform mapContentContainer;
@@ -34,6 +37,16 @@ public class LevelManager : MonoBehaviour
     private void Start()
     {
         InitializeMapPosition();
+        StartCoroutine(EnableInteractionAfterDelay());
+    }
+
+    private IEnumerator EnableInteractionAfterDelay()
+    {
+        // Skip two frames so any leftover pointer events from the previous scene
+        // (phantom clicks) are consumed before we allow island interactions.
+        yield return null;
+        yield return null;
+        canInteract = true;
     }
 
     private void InitializeMapPosition()
@@ -65,6 +78,11 @@ public class LevelManager : MonoBehaviour
 
     public void LoadLevel(LevelData data)
     {
+        if (!canInteract) return;
+
+#if UNITY_EDITOR
+        Debug.Log("Loading level: " + data.name);
+#endif
         if (!ArmoryManager.Instance.isArmoryComplete())
         {
             NotificationManager.Instance.ShowNotification("Complete your armory!", NotificationManager.UITab.Armory);

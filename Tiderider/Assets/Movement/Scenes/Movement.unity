@@ -546,6 +546,9 @@ MonoBehaviour:
   - id: final_victory
     volume: 0.5
     audioClip: {fileID: 8300000, guid: 496147ab2439e9d4c9e9dcbc94c6f3b4, type: 3}
+  - id: coin
+    volume: 0.75
+    audioClip: {fileID: 8300000, guid: 941d31e4325f6074888ef7a97c256fab, type: 3}
 --- !u!1 &127158725
 GameObject:
   m_ObjectHideFlags: 0

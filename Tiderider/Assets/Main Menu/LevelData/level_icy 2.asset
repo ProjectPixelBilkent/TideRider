@@ -15,5 +15,5 @@ MonoBehaviour:
   levelDisplayName: "F\u0130nal Icy Level"
   levelJson: {fileID: 4900000, guid: 8a39a4e4be466a74394e03b05496591d, type: 3}
   levelIndex: 8
-  islandSprite: {fileID: 0}
+  islandSprite: {fileID: 6719487334901803963, guid: 3227f6e3ab99c87428749baa80a704df, type: 3}
   activeColor: {r: 1, g: 1, b: 1, a: 1}

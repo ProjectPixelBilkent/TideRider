@@ -5,9 +5,16 @@ using UnityEngine.UI;
 public class ScaleManager : MonoBehaviour
 {
     public Camera Camera;
-    private const int ORIGINAL_WIDTH = 1080, ORIGINAL_HEIGHT = 2400, TOP_MENU_HEIGHT = 200, TOP_MENU_PADDING = 25, TOP_MENU_GAP = 25, GEAR_ICON_SIZE = 100, ICON_MENU_HEIGHT = 200;
+    private const int ORIGINAL_WIDTH = 1080, ORIGINAL_HEIGHT = 2400, ICON_MENU_HEIGHT = 200;
+    private const float NAV_MENU_HEIGHT = 150f;
+    private const float TOP_RESOURCE_SIDE_MARGIN = 30f, TOP_RESOURCE_TOP_MARGIN = 30f;
+    private static readonly Color ResourceChipColor = new(0.08f, 0.11f, 0.17f, 0.78f);
+    private static readonly Color NavSelectedPanelColor = new(0.69f, 0.52f, 0.20f, 0.78f);
+    private static readonly Color NavSidePanelColor = new(0.08f, 0.11f, 0.17f, 0.68f);
+    private static readonly Color NavSelectedGlyphColor = new(1f, 0.96f, 0.88f, 1f);
+    private static readonly Color NavSideGlyphColor = new(1f, 1f, 1f, 0.68f);
     public static float Width, Height, FrameWidth, FrameHeight, SelectedIconWidth, SideIconWidth;
-    public static Color SelectedColor, SideColor;
+    public static Color SelectedColor, SideColor, SelectedGlyphColor, SideGlyphColor;
 
     [SerializeField] private RectTransform topMenu, navigationMenu;
     [SerializeField] private RectTransform menuCanvas, viewport, menuParent;
@@ -23,6 +30,7 @@ public class ScaleManager : MonoBehaviour
     private const float SHOP_SIDE_MARGIN = 65f, SHOP_ROW_HEIGHT_RATIO = 650f / 2000f, SHOP_FRAME_ASPECT = 400f / 650f, SHOP_CONTENT_ASPECT = 1700f / 650f;
 
     private float scaleX;
+    private float topInset;
 
     private void Awake()
     {
@@ -41,26 +49,58 @@ public class ScaleManager : MonoBehaviour
 
     private void ScaleTopMenu()
     {
+        Image topMenuImage = topMenu.GetComponent<Image>();
         RectTransform accountFrameRect = topMenu.transform.GetChild(0).GetComponent<RectTransform>();
         RectTransform resourcePanelRect = topMenu.transform.GetChild(1).GetComponent<RectTransform>();
         RectTransform energyFrameRect = resourcePanelRect.transform.GetChild(0).GetComponent<RectTransform>();
         RectTransform moneyFrameRect = resourcePanelRect.transform.GetChild(1).GetComponent<RectTransform>();
+        Image energyFrameImage = energyFrameRect.GetComponent<Image>();
+        Image moneyFrameImage = moneyFrameRect.GetComponent<Image>();
+        RectTransform settingsIconRect = resourcePanelRect.childCount > 2
+            ? resourcePanelRect.transform.GetChild(2).GetComponent<RectTransform>()
+            : null;
 
-        topMenu.sizeDelta = new Vector2(Width, TOP_MENU_HEIGHT);
-        topMenu.anchoredPosition = new Vector2(0, -TOP_MENU_HEIGHT / 2);
+        float frameWidth = energyFrameRect.sizeDelta.x * scaleX;
+        float frameHeight = energyFrameRect.sizeDelta.y * scaleX;
+        float sideMargin = TOP_RESOURCE_SIDE_MARGIN * scaleX;
+        float topMargin = TOP_RESOURCE_TOP_MARGIN * scaleX;
 
-        accountFrameRect.sizeDelta = new Vector2(accountFrameRect.sizeDelta.x * scaleX, TOP_MENU_HEIGHT);
-        accountFrameRect.anchoredPosition = new Vector2(accountFrameRect.sizeDelta.x / 2, 0);
+        topInset = frameHeight + (topMargin * 2f);
 
-        resourcePanelRect.sizeDelta = new Vector2(resourcePanelRect.sizeDelta.x * scaleX, resourcePanelRect.sizeDelta.y);
-        resourcePanelRect.anchoredPosition = new Vector2(-resourcePanelRect.sizeDelta.x / 2 - TOP_MENU_PADDING, 0);
+        if (topMenuImage != null)
+        {
+            topMenuImage.enabled = false;
+            topMenuImage.raycastTarget = false;
+        }
 
-        float resourceWidth = (resourcePanelRect.sizeDelta.x - GEAR_ICON_SIZE - TOP_MENU_GAP * 2) / 2;
-        energyFrameRect.sizeDelta = new Vector2(resourceWidth, energyFrameRect.sizeDelta.y);
-        energyFrameRect.anchoredPosition = new Vector2(energyFrameRect.sizeDelta.x / 2, 0);
+        accountFrameRect.gameObject.SetActive(false);
+        if (settingsIconRect != null)
+            settingsIconRect.gameObject.SetActive(false);
 
-        moneyFrameRect.sizeDelta = new Vector2(resourceWidth, moneyFrameRect.sizeDelta.y);
-        moneyFrameRect.anchoredPosition = new Vector2(moneyFrameRect.sizeDelta.x * 1.5f + TOP_MENU_GAP, 0);
+        topMenu.sizeDelta = new Vector2(Width, topInset);
+        topMenu.anchoredPosition = new Vector2(0, -topInset / 2f);
+
+        resourcePanelRect.anchorMin = new Vector2(0f, 0.5f);
+        resourcePanelRect.anchorMax = new Vector2(1f, 0.5f);
+        resourcePanelRect.pivot = new Vector2(0.5f, 0.5f);
+        resourcePanelRect.sizeDelta = new Vector2(0f, frameHeight);
+        resourcePanelRect.anchoredPosition = Vector2.zero;
+
+        energyFrameRect.anchorMin = new Vector2(0f, 0.5f);
+        energyFrameRect.anchorMax = new Vector2(0f, 0.5f);
+        energyFrameRect.pivot = new Vector2(0.5f, 0.5f);
+        energyFrameRect.sizeDelta = new Vector2(frameWidth, frameHeight);
+        energyFrameRect.anchoredPosition = new Vector2(sideMargin + frameWidth / 2f, 0f);
+        if (energyFrameImage != null)
+            energyFrameImage.color = ResourceChipColor;
+
+        moneyFrameRect.anchorMin = new Vector2(1f, 0.5f);
+        moneyFrameRect.anchorMax = new Vector2(1f, 0.5f);
+        moneyFrameRect.pivot = new Vector2(0.5f, 0.5f);
+        moneyFrameRect.sizeDelta = new Vector2(frameWidth, frameHeight);
+        moneyFrameRect.anchoredPosition = new Vector2(-(sideMargin + frameWidth / 2f), 0f);
+        if (moneyFrameImage != null)
+            moneyFrameImage.color = ResourceChipColor;
     }
 
     private void ScaleMenuPanel()
@@ -137,7 +177,7 @@ public class ScaleManager : MonoBehaviour
 
         if (levelMiddleCanvas != null)
         {
-            levelMiddleCanvas.offsetMax = new Vector2(0, -TOP_MENU_HEIGHT);
+            levelMiddleCanvas.offsetMax = new Vector2(0, -topInset);
             levelMiddleCanvas.offsetMin = new Vector2(0, ICON_MENU_HEIGHT);
         }
 
@@ -176,7 +216,7 @@ public class ScaleManager : MonoBehaviour
 
         if (shopMiddleCanvas != null)
         {
-            shopMiddleCanvas.offsetMax = new Vector2(0, -TOP_MENU_HEIGHT);
+            shopMiddleCanvas.offsetMax = new Vector2(0, -topInset);
             shopMiddleCanvas.offsetMin = new Vector2(0, ICON_MENU_HEIGHT);
 
             float rowHeight = shopMiddleCanvas.rect.height * SHOP_ROW_HEIGHT_RATIO;
@@ -251,21 +291,34 @@ public class ScaleManager : MonoBehaviour
         RectTransform armoryIconRect = navigationMenu.transform.GetChild(0).GetComponent<RectTransform>();
         RectTransform mainMenuIconRect = navigationMenu.transform.GetChild(1).GetComponent<RectTransform>();
         RectTransform shopIconRect = navigationMenu.transform.GetChild(2).GetComponent<RectTransform>();
+        Image armoryPanelImage = armoryIconRect.GetComponent<Image>();
+        Image mainMenuPanelImage = mainMenuIconRect.GetComponent<Image>();
+        Image shopPanelImage = shopIconRect.GetComponent<Image>();
 
-        navigationMenu.sizeDelta = new Vector2(Width, ICON_MENU_HEIGHT);
-        navigationMenu.anchoredPosition = new Vector2(0, ICON_MENU_HEIGHT / 2);
+        navigationMenu.sizeDelta = new Vector2(Width, NAV_MENU_HEIGHT * scaleX);
+        navigationMenu.anchoredPosition = new Vector2(0, navigationMenu.sizeDelta.y / 2f);
 
-        armoryIconRect.sizeDelta = new Vector2(armoryIconRect.sizeDelta.x * scaleX, ICON_MENU_HEIGHT);
+        armoryIconRect.sizeDelta = new Vector2(armoryIconRect.sizeDelta.x * scaleX, navigationMenu.sizeDelta.y);
         armoryIconRect.anchoredPosition = new Vector2(armoryIconRect.sizeDelta.x / 2, 0);
         SideIconWidth = armoryIconRect.sizeDelta.x;
-        SideColor = armoryIconRect.GetComponent<Image>().color;
+        SideColor = NavSidePanelColor;
 
-        mainMenuIconRect.sizeDelta = new Vector2(mainMenuIconRect.sizeDelta.x * scaleX, ICON_MENU_HEIGHT);
+        mainMenuIconRect.sizeDelta = new Vector2(mainMenuIconRect.sizeDelta.x * scaleX, navigationMenu.sizeDelta.y);
         mainMenuIconRect.anchoredPosition = Vector2.zero;
         SelectedIconWidth = mainMenuIconRect.sizeDelta.x;
-        SelectedColor = mainMenuIconRect.GetComponent<Image>().color;
+        SelectedColor = NavSelectedPanelColor;
 
-        shopIconRect.sizeDelta = new Vector2(shopIconRect.sizeDelta.x * scaleX, ICON_MENU_HEIGHT);
+        shopIconRect.sizeDelta = new Vector2(shopIconRect.sizeDelta.x * scaleX, navigationMenu.sizeDelta.y);
         shopIconRect.anchoredPosition = new Vector2(-shopIconRect.sizeDelta.x / 2, 0);
+
+        SelectedGlyphColor = NavSelectedGlyphColor;
+        SideGlyphColor = NavSideGlyphColor;
+
+        if (armoryPanelImage != null)
+            armoryPanelImage.color = NavSidePanelColor;
+        if (mainMenuPanelImage != null)
+            mainMenuPanelImage.color = NavSelectedPanelColor;
+        if (shopPanelImage != null)
+            shopPanelImage.color = NavSidePanelColor;
     }
 }

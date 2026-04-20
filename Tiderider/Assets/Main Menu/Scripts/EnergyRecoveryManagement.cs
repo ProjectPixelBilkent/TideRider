@@ -112,7 +112,7 @@ public class EnergyRecoveryManager : MonoBehaviour
 
     public string GetFormattedTime()
     {
-        if (DataManager.GetEnergyAmount() >= MaxEnergy) return "FULL";
+        if (DataManager.GetEnergyAmount() >= MaxEnergy) return string.Empty;
         TimeSpan t = TimeSpan.FromSeconds(timer);
         return string.Format("{0:D2}:{1:D2}", t.Minutes, t.Seconds);
     }

@@ -19,7 +19,8 @@ public class CentralUIController : MonoBehaviour
 
     // --- CACHED REFERENCES ---
     private RectTransform[] navIcons;
-    private Image[] navImages;
+    private Image[] navPanelImages;
+    private Image[] navGlyphImages;
 
     private void Awake()
     {
@@ -35,11 +36,20 @@ public class CentralUIController : MonoBehaviour
         activeCanvas = LevelCanvas.GetComponentInChildren<CanvasGroup>();
 
         navIcons = new RectTransform[3];
-        navImages = new Image[3];
+        navPanelImages = new Image[3];
+        navGlyphImages = new Image[3];
         for (int i = 0; i < 3; i++)
         {
             navIcons[i] = IconPanel.transform.GetChild(i).GetComponent<RectTransform>();
-            navImages[i] = navIcons[i].GetComponent<Image>();
+            navPanelImages[i] = navIcons[i].GetComponent<Image>();
+            navGlyphImages[i] = navIcons[i].childCount > 0
+                ? navIcons[i].GetChild(0).GetComponent<Image>()
+                : null;
+
+            bool isSelected = i == 1;
+            navPanelImages[i].color = isSelected ? ScaleManager.SelectedColor : ScaleManager.SideColor;
+            if (navGlyphImages[i] != null)
+                navGlyphImages[i].color = isSelected ? ScaleManager.SelectedGlyphColor : ScaleManager.SideGlyphColor;
         }
 
         SoundLibrary.Instance.PlayBGM("main_music");
@@ -130,14 +140,17 @@ public class CentralUIController : MonoBehaviour
         for (int i = 0; i < 3; i++)
         {
             navIcons[i].DOKill();
-            navImages[i].DOKill();
+            navPanelImages[i].DOKill();
+            navGlyphImages[i]?.DOKill();
 
             bool isSelected = (i == selectedIndex);
             float targetWidth = isSelected ? ScaleManager.SelectedIconWidth : ScaleManager.SideIconWidth;
-            Color targetColor = isSelected ? ScaleManager.SelectedColor : ScaleManager.SideColor;
+            Color targetPanelColor = isSelected ? ScaleManager.SelectedColor : ScaleManager.SideColor;
+            Color targetGlyphColor = isSelected ? ScaleManager.SelectedGlyphColor : ScaleManager.SideGlyphColor;
 
             navIcons[i].DOSizeDelta(new Vector2(targetWidth, navIcons[i].sizeDelta.y), 0.5f);
-            navImages[i].DOColor(targetColor, 0.5f);
+            navPanelImages[i].DOColor(targetPanelColor, 0.5f);
+            navGlyphImages[i]?.DOColor(targetGlyphColor, 0.5f);
 
             float targetPosX = GetIconPositionX(i, selectedIndex);
             navIcons[i].DOAnchorPosX(targetPosX, 0.5f);

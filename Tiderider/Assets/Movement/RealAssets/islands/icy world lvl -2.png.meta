@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 3c356c61739c8784c82db267a1da9f4d
+guid: 061cb02bd8eb31449b1b74cc7e68b318
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7165280747866315319
-    second: no_ads_0
+      213: 666718685443084127
+    second: icy world lvl -2_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: no_ads_0
+      name: icy world lvl -2_0
       rect:
         serializedVersion: 2
-        x: 137
-        y: 652
-        width: 2758
-        height: 1603
+        x: 101
+        y: 171
+        width: 1235
+        height: 1192
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 73a548c70e0307360800000000000000
-      internalID: 7165280747866315319
+      spriteID: f5f43faac19a04900800000000000000
+      internalID: 666718685443084127
       vertices: []
       indices: 
       edges: []
@@ -147,8 +147,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      no_ads_0: 7165280747866315319
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

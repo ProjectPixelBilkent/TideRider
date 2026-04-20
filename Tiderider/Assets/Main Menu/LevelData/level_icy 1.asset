@@ -15,5 +15,5 @@ MonoBehaviour:
   levelDisplayName: Second Icy Level
   levelJson: {fileID: 4900000, guid: 2b9431ee7db87444585e4f3b92707df8, type: 3}
   levelIndex: 7
-  islandSprite: {fileID: 0}
+  islandSprite: {fileID: 666718685443084127, guid: 061cb02bd8eb31449b1b74cc7e68b318, type: 3}
   activeColor: {r: 1, g: 1, b: 1, a: 1}

@@ -175,4 +175,4 @@ MonoBehaviour:
   maxTurnDegreesPerSecond: 1440
   returnAcceleration: 9
   catchDistance: 0.6
-  spinSpeed: 540
+  spinSpeed: 1080

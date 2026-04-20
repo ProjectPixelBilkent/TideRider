@@ -44,13 +44,10 @@ public class ResourceManager : MonoBehaviour
         hasLoggedMissingReferences = false;
         energyAmount.text = DataManager.GetEnergyAmount() + "/5";
         coinAmount.text = DataManager.GetCoinAmount().ToString();
-    }
 
-    void Update()
-    {
-        if (energyTimerText != null && EnergyRecoveryManager.Instance != null)
+        if (energyTimerText != null)
         {
-            energyTimerText.text = EnergyRecoveryManager.Instance.GetFormattedTime();
+            energyTimerText.text = string.Empty;
         }
     }
 

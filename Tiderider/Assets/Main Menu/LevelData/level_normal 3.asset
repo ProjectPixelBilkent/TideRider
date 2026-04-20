@@ -15,5 +15,5 @@ MonoBehaviour:
   levelDisplayName: Third Level
   levelJson: {fileID: 4900000, guid: c088c325508f0c9439eddeba884bbf86, type: 3}
   levelIndex: 2
-  islandSprite: {fileID: 0}
+  islandSprite: {fileID: 6214397130264357555, guid: 15eaa0c7c77f77e4fb31c99bae780b35, type: 3}
   activeColor: {r: 1, g: 1, b: 1, a: 1}

@@ -1805,6 +1805,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1953655990}
     m_Modifications:
+    - target: {fileID: 79451283072287917, guid: 1a292a5329629ce4881fe3d93363cff2, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 1497749243138541333, guid: 72d3a9d3bc546d64ab70e06795e711b8, type: 3}
     - target: {fileID: 484549473620229198, guid: 1a292a5329629ce4881fe3d93363cff2, type: 3}
       propertyPath: m_Name
       value: IconPanel
@@ -14444,15 +14448,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1945889463253871705, guid: a8b92042a0f8b0746922bce3a3d7644a, type: 3}
       propertyPath: m_Color.b
-      value: 1
+      value: 0.6666667
       objectReference: {fileID: 0}
     - target: {fileID: 1945889463253871705, guid: a8b92042a0f8b0746922bce3a3d7644a, type: 3}
       propertyPath: m_Color.g
-      value: 1
+      value: 0.54901963
       objectReference: {fileID: 0}
     - target: {fileID: 1945889463253871705, guid: a8b92042a0f8b0746922bce3a3d7644a, type: 3}
       propertyPath: m_Color.r
-      value: 1
+      value: 0.4509804
       objectReference: {fileID: 0}
     - target: {fileID: 4086930084955528152, guid: a8b92042a0f8b0746922bce3a3d7644a, type: 3}
       propertyPath: useUnscaledTime
@@ -15750,7 +15754,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c5e3e6d874745f44b19742d0abb4feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: 882abd43185c90849a212b4b5462360d, type: 2}
+  itemData: {fileID: 0}
   entireFrameButton: {fileID: 0}
   nameText: {fileID: 0}
   iconImage: {fileID: 0}
@@ -16578,7 +16582,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c5e3e6d874745f44b19742d0abb4feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: 15666c57bbb00ec478ae8675c8b99422, type: 2}
+  itemData: {fileID: 0}
   entireFrameButton: {fileID: 0}
   nameText: {fileID: 0}
   iconImage: {fileID: 0}
@@ -17731,7 +17735,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c5e3e6d874745f44b19742d0abb4feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: d4813804f639288458ac60f3aa87c254, type: 2}
+  itemData: {fileID: 0}
   entireFrameButton: {fileID: 0}
   nameText: {fileID: 0}
   iconImage: {fileID: 0}
@@ -22758,7 +22762,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c5e3e6d874745f44b19742d0abb4feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: 173aee8bec1e7604288196c5b0f41f7d, type: 2}
+  itemData: {fileID: 0}
   entireFrameButton: {fileID: 0}
   nameText: {fileID: 0}
   iconImage: {fileID: 0}
@@ -23027,7 +23031,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c5e3e6d874745f44b19742d0abb4feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: 9ec21a1a45c9c384cbc2f6ee468bebda, type: 2}
+  itemData: {fileID: 0}
   entireFrameButton: {fileID: 0}
   nameText: {fileID: 0}
   iconImage: {fileID: 0}

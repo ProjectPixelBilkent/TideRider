@@ -15,5 +15,5 @@ MonoBehaviour:
   levelDisplayName: Mist Level
   levelJson: {fileID: 4900000, guid: 59f14a8c85851e8439d56073ffb86580, type: 3}
   levelIndex: 4
-  islandSprite: {fileID: 0}
+  islandSprite: {fileID: -6588761991242193393, guid: c83701811c56be24abea5724da3166ec, type: 3}
   activeColor: {r: 1, g: 1, b: 1, a: 1}

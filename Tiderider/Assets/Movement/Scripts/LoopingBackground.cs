@@ -7,6 +7,8 @@ public class LoopingBackground : MonoBehaviour
     [SerializeField] private int sortingOrder = -100;
     [SerializeField] private float zPosition = 10f;
     [SerializeField] private bool lockXToCamera = true;
+    [SerializeField] private float verticalScrollSpeed = 0f;
+    [SerializeField] private bool useUnscaledTime = false;
 
     private SpriteRenderer primaryRenderer;
     private SpriteRenderer secondaryRenderer;
@@ -39,11 +41,27 @@ public class LoopingBackground : MonoBehaviour
             return;
         }
 
+        float primaryY = primaryTransform.position.y;
+        float secondaryY = secondaryTransform.position.y;
+
+        if (!Mathf.Approximately(verticalScrollSpeed, 0f))
+        {
+            float deltaTime = useUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
+            float scrollDistance = verticalScrollSpeed * deltaTime;
+            primaryY -= scrollDistance;
+            secondaryY -= scrollDistance;
+        }
+
         if (lockXToCamera)
         {
             float x = targetCamera.transform.position.x;
-            primaryTransform.position = new Vector3(x, primaryTransform.position.y, zPosition);
-            secondaryTransform.position = new Vector3(x, secondaryTransform.position.y, zPosition);
+            primaryTransform.position = new Vector3(x, primaryY, zPosition);
+            secondaryTransform.position = new Vector3(x, secondaryY, zPosition);
+        }
+        else
+        {
+            primaryTransform.position = new Vector3(primaryTransform.position.x, primaryY, zPosition);
+            secondaryTransform.position = new Vector3(secondaryTransform.position.x, secondaryY, zPosition);
         }
 
         float cameraBottom = targetCamera.transform.position.y - targetCamera.orthographicSize;

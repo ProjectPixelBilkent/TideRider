@@ -6,7 +6,7 @@ public class NoAds : MonoBehaviour
     private void Awake()
     {
         // Check if already bought on startup to hide the button
-        CheckAndHideIfPurchased();
+        //CheckAndHideIfPurchased();
     }
 
     /// <summary>

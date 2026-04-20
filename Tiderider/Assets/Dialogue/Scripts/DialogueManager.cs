@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class DialogueManager : MonoBehaviour
 {
+    private const string AlwaysReplayConversationId = "reunion_scene";
+
     [SerializeField] private DialogueController dialogueController;
     [SerializeField] private CharacterSpriteDatabase spriteDatabase;
     [SerializeField] private KeyCode continueKey = KeyCode.Space;
@@ -86,7 +88,10 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        if (DataManager.IsConversationCompleted(conversationId))
+        bool shouldSkipBecauseCompleted = !string.Equals(conversationId, AlwaysReplayConversationId, StringComparison.OrdinalIgnoreCase)
+            && DataManager.IsConversationCompleted(conversationId);
+
+        if (shouldSkipBecauseCompleted)
         {
             Debug.Log($"Conversation '{conversationId}' has already been played. Skipping.");
             return;

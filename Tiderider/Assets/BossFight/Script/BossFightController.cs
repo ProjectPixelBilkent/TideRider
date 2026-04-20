@@ -1,4 +1,5 @@
 using System.Collections;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,6 +8,7 @@ public class BossFightController : MonoBehaviour
 {
     private const string MovementSceneName = "Movement";
     private const string MainMenuSceneName = "MainMenu";
+    private const string BossFightSceneName = "BossFight";
     private const int FinalGameplayLevelIndex = 2;
 
     private enum SirenPhase
@@ -44,6 +46,11 @@ public class BossFightController : MonoBehaviour
     [SerializeField] private Sprite aldricDialogueSadSprite;
     [SerializeField] private Sprite aldricDialogueAngrySprite;
 
+    [Header("Game Over UI")]
+    [SerializeField] private GameObject gameOverMenuUI;
+    [SerializeField] private Button restartButtonGameOverMenu;
+    [SerializeField] private Button quitButtonGameOverMenu;
+
     [Header("Audio")]
     [SerializeField] private AudioClip bossFightMusic;
     [SerializeField, Range(0f, 1f)] private float bossFightMusicMultiplier = 1f;
@@ -66,6 +73,9 @@ public class BossFightController : MonoBehaviour
     [SerializeField] private float warningDuration = 0.8f;
     [SerializeField] private float attackDuration = 0.35f;
     [SerializeField] private float attackSpriteHoldDuration = 0.2f;
+    [SerializeField, Min(0f)] private float attackEarlyTolerance = 0.15f;
+    [SerializeField, Min(0f)] private float attackLateTolerance = 0.15f;
+    private float attackDamageDelay = 0.35f;
 
     [Header("Scene References")]
     [SerializeField] private SpriteRenderer sirenRenderer;
@@ -105,6 +115,10 @@ public class BossFightController : MonoBehaviour
     [SerializeField] private float sirenWaveDistanceY;
     [SerializeField] private float sirenWaveSpeedY;
 
+    [Header("Tutorial Indicators")]
+    [SerializeField] private GameObject horizontalSwipeIndicator;
+    [SerializeField] private GameObject verticalSwipeIndicator;
+
     [Header("Telegraph")]
     [SerializeField] private float idleLineLengthMultiplier = 0.22f;
     [SerializeField] private float lineSpacing = 0.24f;
@@ -143,6 +157,9 @@ public class BossFightController : MonoBehaviour
     private float punchCooldownTimer;
     private float phaseTimer;
     private float returnToMiddleTimer;
+    private float attackDamageDelayTimer;
+    private float attackDamageElapsedTimer;
+    private bool playerWasSafeDuringToleranceWindow;
     private float aldrichDamageFlashTimer;
     private float sirenDamageFlashTimer;
     private Vector3 aldricPunchAnchorPosition;
@@ -152,13 +169,18 @@ public class BossFightController : MonoBehaviour
     private bool isPausedForDialogue;
     private bool fightEnded;
     private bool playerWonFight;
+    private bool isCompletingFightFlow;
     private AudioSource bossMusicSource;
     private AudioSource bossSfxSource;
     private AudioSource bossSfxSourceAlt;
     private float sirenLaughTimer;
+    private bool hasLearnedHorizontalSwipe;
+    private bool hasLearnedVerticalSwipe;
 
     private void Awake()
     {
+        Time.timeScale = 1f;
+
         if (lanePositions == null || lanePositions.Length < 3)
         {
             Debug.LogWarning("BossFightController requires exactly three lane positions.");
@@ -172,6 +194,13 @@ public class BossFightController : MonoBehaviour
         currentSirenHp = Mathf.Max(0, sirenStartingHp);
         sirenBasePosition = sirenRenderer != null ? sirenRenderer.transform.position : Vector3.zero;
         EnsureDialogueSetup();
+        EnsureGameOverMenuSetup();
+        BindGameOverMenuButtons();
+
+        if (gameOverMenuUI != null)
+        {
+            gameOverMenuUI.SetActive(false);
+        }
 
         SetupLineRenderer(ref topLineRenderer, telegraphLineTop, "TelegraphLineTopRenderer");
         SetupLineRenderer(ref bottomLineRenderer, telegraphLineBottom, "TelegraphLineBottomRenderer");
@@ -195,6 +224,7 @@ public class BossFightController : MonoBehaviour
         SetupBossAudioSources();
         SetupBossMusic();
         ResetSirenLaughTimer();
+        ShowTutorialIndicatorsAtStart();
         SetTelegraphVisible(false);
         EnterStandingPhase();
     }
@@ -285,13 +315,59 @@ public class BossFightController : MonoBehaviour
 
         if (Mathf.Abs(swipeDelta.y) > Mathf.Abs(swipeDelta.x) && swipeDelta.y > 0f)
         {
+            MarkVerticalSwipeLearned();
             TriggerPunch();
             return;
         }
 
         if (Mathf.Abs(swipeDelta.x) >= Mathf.Abs(swipeDelta.y))
         {
+            MarkHorizontalSwipeLearned();
             MoveLane(swipeDelta.x > 0f ? 1 : -1);
+        }
+    }
+
+    private void ShowTutorialIndicatorsAtStart()
+    {
+        hasLearnedHorizontalSwipe = false;
+        hasLearnedVerticalSwipe = false;
+
+        if (horizontalSwipeIndicator != null)
+        {
+            horizontalSwipeIndicator.SetActive(true);
+        }
+
+        if (verticalSwipeIndicator != null)
+        {
+            verticalSwipeIndicator.SetActive(true);
+        }
+    }
+
+    private void MarkHorizontalSwipeLearned()
+    {
+        if (hasLearnedHorizontalSwipe)
+        {
+            return;
+        }
+
+        hasLearnedHorizontalSwipe = true;
+        if (horizontalSwipeIndicator != null)
+        {
+            horizontalSwipeIndicator.SetActive(false);
+        }
+    }
+
+    private void MarkVerticalSwipeLearned()
+    {
+        if (hasLearnedVerticalSwipe)
+        {
+            return;
+        }
+
+        hasLearnedVerticalSwipe = true;
+        if (verticalSwipeIndicator != null)
+        {
+            verticalSwipeIndicator.SetActive(false);
         }
     }
 
@@ -393,6 +469,11 @@ public class BossFightController : MonoBehaviour
             return;
         }
 
+        if (currentPhase == SirenPhase.Warning || currentPhase == SirenPhase.Attack)
+        {
+            return;
+        }
+
         if (returnToMiddleTimer < 0f)
         {
             return;
@@ -466,7 +547,10 @@ public class BossFightController : MonoBehaviour
     private void EnterAttackPhase()
     {
         currentPhase = SirenPhase.Attack;
-        phaseTimer = attackDuration;
+        phaseTimer = attackDamageDelay + attackLateTolerance + attackDuration;
+        attackDamageDelayTimer = attackDamageDelay;
+        attackDamageElapsedTimer = 0f;
+        playerWasSafeDuringToleranceWindow = false;
         sirenAttackHasDamagedAldrich = false;
 
         if (sirenRenderer != null)
@@ -492,12 +576,29 @@ public class BossFightController : MonoBehaviour
             return;
         }
 
-        if (!IsAldrichInCurrentAttackLanes())
+        attackDamageElapsedTimer += Time.deltaTime;
+        attackDamageDelayTimer = Mathf.Max(0f, attackDamageDelay - attackDamageElapsedTimer);
+
+        float toleranceWindowStart = Mathf.Max(0f, attackDamageDelay - attackEarlyTolerance);
+        float toleranceWindowEnd = attackDamageDelay + attackLateTolerance;
+        bool isWithinToleranceWindow = attackDamageElapsedTimer >= toleranceWindowStart
+            && attackDamageElapsedTimer <= toleranceWindowEnd;
+
+        if (isWithinToleranceWindow && !IsAldrichInCurrentAttackLanes())
+        {
+            playerWasSafeDuringToleranceWindow = true;
+        }
+
+        if (attackDamageElapsedTimer < toleranceWindowEnd)
         {
             return;
         }
 
-        ApplyDamageToAldrich(sirenAttackDamage);
+        if (!playerWasSafeDuringToleranceWindow && IsAldrichInCurrentAttackLanes())
+        {
+            ApplyDamageToAldrich(sirenAttackDamage);
+        }
+
         sirenAttackHasDamagedAldrich = true;
     }
 
@@ -546,8 +647,17 @@ public class BossFightController : MonoBehaviour
         {
             float collapseProgress = 1f - Mathf.Clamp01(phaseTimer / Mathf.Max(0.0001f, attackDuration));
 
-            lineColor = attackColor;
-            fillColor = attackFillColor;
+            if (attackDamageDelayTimer > 0f)
+            {
+                lineColor = warningEndColor;
+                fillColor = warningFillEndColor;
+            }
+            else
+            {
+                lineColor = attackColor;
+                fillColor = attackFillColor;
+            }
+
             topLineStart = Vector3.Lerp(origin, fullLeftEnd, collapseProgress);
             bottomLineStart = Vector3.Lerp(origin, fullRightEnd, collapseProgress);
             shortenedLeftTarget = fullLeftEnd;
@@ -631,7 +741,9 @@ public class BossFightController : MonoBehaviour
             return;
         }
 
+        int previousHp = currentAldricHp;
         currentAldricHp = Mathf.Max(0, currentAldricHp - damage);
+        Debug.Log($"[BossFight] Player hit for {damage}. HP: {previousHp} -> {currentAldricHp}");
         aldrichDamageFlashTimer = damageFlashDuration;
     }
 
@@ -650,7 +762,8 @@ public class BossFightController : MonoBehaviour
 
         if (timer <= 0f || damageFlashDuration <= 0f)
         {
-            renderer.color = Color.white;
+            Color currentColor = renderer.color;
+            renderer.color = new Color(1f, 1f, 1f, currentColor.a);
             return;
         }
 
@@ -972,8 +1085,60 @@ public class BossFightController : MonoBehaviour
 
         if (currentAldricHp <= 0)
         {
-            StartOutcomeDialogue(false);
+            ShowLossGameOverMenu();
         }
+    }
+
+    private void ShowLossGameOverMenu()
+    {
+        if (fightEnded)
+        {
+            return;
+        }
+
+        fightEnded = true;
+        playerWonFight = false;
+        isPausedForDialogue = true;
+        isPunching = false;
+        punchTimer = 0f;
+        punchCooldownTimer = 0f;
+        returnToMiddleTimer = -1f;
+        sirenAttackHasDamagedAldrich = true;
+        swipeInProgress = false;
+
+        if (dialogueManager != null)
+        {
+            dialogueManager.ConversationFinished -= HandleMidFightDialogueFinished;
+            dialogueManager.ConversationFinished -= HandleOutcomeDialogueFinished;
+        }
+
+        if (dialogueCanvas != null)
+        {
+            dialogueCanvas.SetActive(false);
+        }
+
+        if (aldricRenderer != null && aldricIdleSprite != null)
+        {
+            aldricRenderer.sprite = aldricIdleSprite;
+        }
+
+        if (sirenRenderer != null)
+        {
+            sirenRenderer.sprite = ResolveStandingSprite();
+        }
+
+        SetTelegraphVisible(false);
+        StopBossMusic();
+
+        if (gameOverMenuUI != null)
+        {
+            gameOverMenuUI.SetActive(true);
+            Time.timeScale = 0f;
+            return;
+        }
+
+        Debug.LogWarning("BossFightController could not find GameOverMenu. Reloading boss fight scene as fallback.");
+        RestartBossFightFromGameOver();
     }
 
     private void StartOutcomeDialogue(bool didPlayerWin)
@@ -1037,6 +1202,12 @@ public class BossFightController : MonoBehaviour
 
     private void CompleteFightFlow()
     {
+        if (isCompletingFightFlow)
+        {
+            return;
+        }
+
+        isCompletingFightFlow = true;
         StopBossMusic();
         isPausedForDialogue = false;
 
@@ -1047,18 +1218,7 @@ public class BossFightController : MonoBehaviour
 
         if (playerWonFight)
         {
-            DataManager.IncrementEnergyAmount();
-            DataManager.CompleteLevel(LevelManager.CurrentPlayingLevelIndex);
-            if (finaleLevelJson == null)
-            {
-                Debug.LogWarning("Boss win could not find level_finale JSON. Returning to main menu instead.");
-                SceneManager.LoadScene(MainMenuSceneName);
-                return;
-            }
-
-            LevelManager.CurrentPlayingLevelIndex = -1;
-            SceneObjectSpawner.sceneJsonFile = finaleLevelJson;
-            SceneManager.LoadScene(MovementSceneName);
+            StartCoroutine(HandleWinFightFlowRoutine());
             return;
         }
 
@@ -1067,10 +1227,33 @@ public class BossFightController : MonoBehaviour
         if (SceneObjectSpawner.sceneJsonFile == null)
         {
             Debug.LogWarning("Boss loss retry could not find the saved level JSON. Returning to main menu instead.");
-            SceneManager.LoadScene(MainMenuSceneName);
+            SceneManager.LoadScene(BossFightSceneName);
             return;
         }
 
+        SceneManager.LoadScene(BossFightSceneName);
+    }
+
+    private IEnumerator HandleWinFightFlowRoutine()
+    {
+        if (sirenRenderer != null)
+        {
+            Color sirenColor = sirenRenderer.color;
+            sirenRenderer.color = new Color(sirenColor.r, sirenColor.g, sirenColor.b, 1f);
+            yield return sirenRenderer.DOFade(0f, 0.5f).SetEase(Ease.Linear).WaitForCompletion();
+        }
+
+        DataManager.IncrementEnergyAmount();
+        DataManager.CompleteLevel(LevelManager.CurrentPlayingLevelIndex);
+        if (finaleLevelJson == null)
+        {
+            Debug.LogWarning("Boss win could not find level_finale JSON. Returning to main menu instead.");
+            SceneManager.LoadScene(MainMenuSceneName);
+            yield break;
+        }
+
+        LevelManager.CurrentPlayingLevelIndex = -1;
+        SceneObjectSpawner.sceneJsonFile = finaleLevelJson;
         SceneManager.LoadScene(MovementSceneName);
     }
 
@@ -1269,6 +1452,7 @@ public class BossFightController : MonoBehaviour
 
     private void OnDestroy()
     {
+        UnbindGameOverMenuButtons();
         StopBossMusic();
     }
 
@@ -1373,5 +1557,73 @@ public class BossFightController : MonoBehaviour
 
         dialogueCanvas = canvasRoot;
         dialogueCanvas.SetActive(false);
+    }
+
+    private void EnsureGameOverMenuSetup()
+    {
+        if (gameOverMenuUI == null)
+        {
+            GameObject foundMenu = GameObject.Find("GameOverMenu");
+            if (foundMenu != null)
+            {
+                gameOverMenuUI = foundMenu;
+            }
+        }
+
+        if (gameOverMenuUI == null)
+        {
+            return;
+        }
+
+        if (restartButtonGameOverMenu == null)
+        {
+            restartButtonGameOverMenu = gameOverMenuUI.transform.Find("RestartButton")?.GetComponent<Button>();
+        }
+
+        if (quitButtonGameOverMenu == null)
+        {
+            quitButtonGameOverMenu = gameOverMenuUI.transform.Find("QuitButton")?.GetComponent<Button>();
+        }
+    }
+
+    private void BindGameOverMenuButtons()
+    {
+        if (restartButtonGameOverMenu != null)
+        {
+            restartButtonGameOverMenu.onClick.RemoveListener(RestartBossFightFromGameOver);
+            restartButtonGameOverMenu.onClick.AddListener(RestartBossFightFromGameOver);
+        }
+
+        if (quitButtonGameOverMenu != null)
+        {
+            quitButtonGameOverMenu.onClick.RemoveListener(GoToMainMenuFromGameOver);
+            quitButtonGameOverMenu.onClick.AddListener(GoToMainMenuFromGameOver);
+        }
+    }
+
+    private void UnbindGameOverMenuButtons()
+    {
+        if (restartButtonGameOverMenu != null)
+        {
+            restartButtonGameOverMenu.onClick.RemoveListener(RestartBossFightFromGameOver);
+        }
+
+        if (quitButtonGameOverMenu != null)
+        {
+            quitButtonGameOverMenu.onClick.RemoveListener(GoToMainMenuFromGameOver);
+        }
+    }
+
+    private void RestartBossFightFromGameOver()
+    {
+        Time.timeScale = 1f;
+        LevelManager.CurrentPlayingLevelIndex = FinalGameplayLevelIndex;
+        SceneManager.LoadScene(BossFightSceneName);
+    }
+
+    private void GoToMainMenuFromGameOver()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(MainMenuSceneName);
     }
 }

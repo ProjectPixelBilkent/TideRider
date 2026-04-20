@@ -96,7 +96,7 @@ public class SceneObjectSpawner : MonoBehaviour
         edgeCollider.isTrigger = false;
         gameObject.layer = LayerMask.NameToLayer("Default");
 
-        currentTerrain = GetLevelTerrain();
+        currentTerrain = GetLevelTerrain() == null ? TerrainType.General: (TerrainType) GetLevelTerrain();
         SpawnBackgrounds();
         EnsureTapToStartPrompt();
         UpdateTapToStartPrompt();
@@ -108,24 +108,36 @@ public class SceneObjectSpawner : MonoBehaviour
         if (SoundLibrary.Instance == null || objectsToSpawn == null)
             return;
 
-        string bgmId = GetLevelTerrain() switch
+        string bgmId;
+        if(GetLevelTerrain() == null)
         {
-            TerrainType.General => "world_1",
-            TerrainType.Ice => "world_3",
-            TerrainType.Misty => "world_2",
-            _ => "world_1"
+            return;
+        }
+        switch(GetLevelTerrain())
+        {
+            case TerrainType.General:
+                bgmId = "world_1";
+                break;
+            case TerrainType.Ice:
+                bgmId = "world_3";
+                break;
+            case TerrainType.Misty:
+                bgmId = "world_2";
+                break;
+            default:
+                return;
         };
 
         SoundLibrary.Instance.PlayBGM(bgmId);
     }
 
-    private TerrainType GetLevelTerrain()
+    private TerrainType? GetLevelTerrain()
     {
         var firstObstacle = objectsToSpawn.FirstOrDefault(o => o.objectType == SpawnObjectType.Obstacle);
         if (firstObstacle == null)
         {
             Debug.LogWarning("No obstacle found in level data. Defaulting terrain to General.");
-            return TerrainType.General;
+            return null;
         }
 
         return firstObstacle.typeOfTerrain;

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 0f338a30e7d59124387bbc2560381134
+guid: 8693574c9c33b7f4c91d06f5fdbb9ffc
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6540375112890018149
-    second: aldritch_idle_0
+      213: -7481772871784431553
+    second: vertical_indicator_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 4
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: aldritch_idle_0
+      name: vertical_indicator_0
       rect:
         serializedVersion: 2
-        x: 30
-        y: 7
-        width: 55
-        height: 70
+        x: 0
+        y: 0
+        width: 7
+        height: 11
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b96926abc7beb35a0800000000000000
-      internalID: -6540375112890018149
+      spriteID: f30822796376b2890800000000000000
+      internalID: -7481772871784431553
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      aldritch_idle_0: -6540375112890018149
+      vertical_indicator_0: -7481772871784431553
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

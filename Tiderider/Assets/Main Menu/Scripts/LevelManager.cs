@@ -24,12 +24,11 @@ public class LevelManager : MonoBehaviour
         Instance = this;
 
         shipNavigator = ship.GetComponent<ShipNavigator>();
+
         if (shipNavigator == null)
         {
             shipNavigator = ship.gameObject.AddComponent<ShipNavigator>();
         }
-
-        DataManager.CompleteLevel(9);
     }
 
     private void Start()
@@ -91,10 +90,5 @@ public class LevelManager : MonoBehaviour
         CurrentPlayingLevelIndex = data.levelIndex;
         SceneObjectSpawner.sceneJsonFile = data.levelJson;
         SceneManager.LoadScene("Movement");
-    }
-
-    public void LoadBossFight()
-    {
-        SceneManager.LoadScene("BossFight");
     }
 }

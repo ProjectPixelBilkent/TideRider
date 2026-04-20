@@ -41,10 +41,10 @@ public static class DataManager
     /// Created by: Işık Dönger
     /// Maintained by: Işık Dönger
     /// </remarks>
-    public static void IncrementEnergyAmount()
+    public static void IncrementEnergyAmount(int amount = 1)
     {
         GameData gameData = LoadGameData();
-        gameData.energyAmount += 1;
+        gameData.energyAmount += amount;
         SaveGameData(gameData);
     }
 
@@ -146,6 +146,13 @@ public static class DataManager
         GameData data = LoadGameData();
         data.lastWeaponAdTime = time;
         SaveGameData(data);
+    }
+
+    public static void UnlockNoAds()
+    {
+        GameData gameData = LoadGameData();
+        gameData.hasRemovedAds = true;
+        SaveGameData(gameData);
     }
 
     /// <summary>
@@ -286,6 +293,8 @@ public static class DataManager
     /// Maintained by: Işık Dönger
     /// </remarks>
     public static Weapon[] GetPlayerArmory() => LoadGameData().playerArmory;
+
+    public static bool HasRemovedAds() => LoadGameData().hasRemovedAds;
 
     /// <summary>
     /// Loads the current canon level from the local backup.

@@ -20,14 +20,22 @@ public class EnergyItemData : ShopItemData
     {
         if (isAdReward)
         {
+            if (DataManager.HasRemovedAds())
+            {
+                ResourceManager.Instance.AddEnergy(amountToGive);
+                return;
+            }
+
             if (!TimeManager.HasPassed(DataManager.GetLastEnergyAdTime(), TimeSpan.FromHours(1)))
             {
                 NotificationManager.Instance.ShowNotification("Ad not ready yet!");
                 return;
             }
 
-            ResourceManager.Instance.AddEnergy(amountToGive);
-            DataManager.SetLastEnergyAdTime(TimeManager.GetCurrentTimeString());
+            AdManager.Instance.ShowRewardedAd(() => {
+                ResourceManager.Instance.AddEnergy(amountToGive);
+                DataManager.SetLastEnergyAdTime(TimeManager.GetCurrentTimeString());
+            });
         }
         else
         {

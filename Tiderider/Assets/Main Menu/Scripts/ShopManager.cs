@@ -116,8 +116,11 @@ public class ShopManager : MonoBehaviour
                 return;
             }
 
-            ResourceManager.Instance.UpgradeWeaponDirectly(weaponIdx);
-            DataManager.SetLastWeaponAdTime(TimeManager.GetCurrentTimeString());
+            AdManager.Instance.ShowRewardedAd(() => {
+                ResourceManager.Instance.UpgradeWeaponDirectly(weaponIdx);
+                DataManager.SetLastWeaponAdTime(TimeManager.GetCurrentTimeString());
+                UpdateWeaponShopUI();
+            });
         }
         else
         {
@@ -130,5 +133,11 @@ public class ShopManager : MonoBehaviour
     public void ProcessPurchase(ShopItem item)
     {
         item.itemData.Purchase();
+    }
+
+    public void UnlockNoAds()
+    {
+        DataManager.UnlockNoAds();
+        Debug.Log("IAP Bridge: No Ads Unlocked!");
     }
 }

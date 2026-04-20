@@ -90,9 +90,7 @@ public class ResourceManager : MonoBehaviour
 
     public void AddEnergy(int amount)
     {
-        GameData data = LocalBackupManager.LoadGameData();
-        data.energyAmount += amount;
-        LocalBackupManager.SaveGameData(data);
+        DataManager.IncrementEnergyAmount(amount);
         UpdateUI();
         NotificationManager.Instance.ShowNotification($"+{amount} Energy!");
     }

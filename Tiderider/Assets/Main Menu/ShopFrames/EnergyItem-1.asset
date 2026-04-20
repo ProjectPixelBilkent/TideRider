@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: EnergyItem-1
   m_EditorClassIdentifier: Assembly-CSharp::EnergyItemData
-  itemName: 
-  itemIcon: {fileID: 0}
-  isAdReward: 0
+  itemName: Energy Offer 1
+  itemIcon: {fileID: -5564248608999137188, guid: a3ff54d99d8fe8e428ec4e3e34fdf454, type: 3}
+  isAdReward: 1
   amountToGive: 0
   coinCost: 0

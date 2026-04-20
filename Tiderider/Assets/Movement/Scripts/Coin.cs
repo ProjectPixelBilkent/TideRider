@@ -10,12 +10,31 @@ public class Coin : MonoBehaviour
 {
     public enum CoinType
     {
-        Silver = 10,
-        Gold = 30
+        Silver,
+        Gold
     };
 
+    public static int GetValue(CoinType type)
+    {
+        int result;
+        switch (type)
+        {
+            case CoinType.Silver:
+                result = 10;
+                break;
+            case CoinType.Gold:
+                result = 30; 
+                break;
+            default:
+                Debug.LogError("Undefined coin value.");
+                result = 0; 
+                break;
+        }
+        return result;
+    }
+
     public string prefabId;
-    [SerializeField] private CoinType coinValue;
+    [SerializeField] private CoinType coinType;
 
     private void Awake()
     {
@@ -28,7 +47,7 @@ public class Coin : MonoBehaviour
         Player player = other.GetComponent<Player>();
         if (player != null)
         {
-            DataManager.IncrementCoinAmount((int) coinValue);
+            DataManager.IncrementCoinAmount(GetValue(coinType));
             SoundLibrary.Instance.Play("coin");
             Destroy(gameObject);
         }
@@ -55,10 +74,10 @@ public class Coin : MonoBehaviour
             switch (obj.prefabId)
             {
                 case "gold_coin":
-                    total += (int)CoinType.Gold;
+                    total += GetValue(CoinType.Gold);
                     break;
                 case "silver_coin":
-                    total += (int)CoinType.Silver;
+                    total += GetValue(CoinType.Silver);
                     break;
             }
         }

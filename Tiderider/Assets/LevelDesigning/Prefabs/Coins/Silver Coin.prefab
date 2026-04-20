@@ -138,4 +138,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabId: silver_coin
-  coinValue: 10
+  coinValue: 0

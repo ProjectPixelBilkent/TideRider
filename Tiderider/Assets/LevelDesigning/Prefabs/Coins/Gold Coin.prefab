@@ -138,4 +138,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabId: gold_coin
-  coinValue: 30
+  coinType: 1

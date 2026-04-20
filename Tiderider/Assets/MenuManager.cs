@@ -17,6 +17,7 @@ public class MenuManager : MonoBehaviour
     private Button resumeButtonPauseMenu;
     private Button pauseButton;
     private Button mainMenuButtonGameOverMenu;
+    private Button mainMenuButtonPauseMenu;
 
     private bool isPaused = false;
 
@@ -29,7 +30,8 @@ public class MenuManager : MonoBehaviour
         restartButtonGameOverMenu = transform.Find("SafeArea/GameOverMenu/RestartButton")?.GetComponent<Button>();
         resumeButtonPauseMenu = transform.Find("SafeArea/PauseMenu/ResumeButton")?.GetComponent<Button>();
         pauseButton = transform.Find("SafeArea/PauseButton")?.GetComponent<Button>();
-        mainMenuButtonGameOverMenu = transform.Find("SafeArea/GameOverMenu/MainMenuButton")?.GetComponent<Button>();
+        mainMenuButtonGameOverMenu = transform.Find("SafeArea/GameOverMenu/QuitButton")?.GetComponent<Button>();
+        mainMenuButtonPauseMenu = transform.Find("SafeArea/PauseMenu/QuitButton")?.GetComponent<Button>();
     }
 
     void Start()
@@ -43,6 +45,9 @@ public class MenuManager : MonoBehaviour
 
         if (mainMenuButtonGameOverMenu != null)
             mainMenuButtonGameOverMenu.onClick.AddListener(GoToMainMenu);
+
+        if(mainMenuButtonPauseMenu != null)
+            mainMenuButtonPauseMenu.onClick.AddListener(GoToMainMenu);
 
         if (resumeButtonPauseMenu != null)
             resumeButtonPauseMenu.onClick.AddListener(Resume);
@@ -109,7 +114,7 @@ public class MenuManager : MonoBehaviour
     public void GoToMainMenu()
     {
         Time.timeScale = 1f;
-        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
     }
 
     public void RestartScene()

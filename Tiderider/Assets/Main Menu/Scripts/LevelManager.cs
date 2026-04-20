@@ -71,6 +71,13 @@ public class LevelManager : MonoBehaviour
             return;
         }
 
+        int highestUnlocked = DataManager.GetHighestUnlockedIndex();
+        if (data.levelIndex > highestUnlocked)
+        {
+            NotificationManager.Instance?.ShowNotification("This island is locked.");
+            return;
+        }
+
         if (!ResourceManager.isEnergyLeft())
         {
             ResourceManager.HandleNoEnergy();

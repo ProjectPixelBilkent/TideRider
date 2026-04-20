@@ -14,17 +14,23 @@ public class SoundLibrary : MonoBehaviour
 {
     [SerializeField] private SoundEntry[] entries;
 
-    // Mapping IDs to the full entry so we can access volume easily
     private Dictionary<string, SoundEntry> entriesDict;
     private AudioSource bgmSource;
-    private AudioSource sfxSource; // Dedicated source for SFX
+    private AudioSource sfxSource;
 
     public static SoundLibrary Instance;
 
     void Awake()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
 
         entriesDict = new Dictionary<string, SoundEntry>();
         for (int i = 0; i < entries.Length; i++)
@@ -32,23 +38,45 @@ public class SoundLibrary : MonoBehaviour
             entriesDict[entries[i].id] = entries[i];
         }
 
-        // Setup BGM Source
         bgmSource = gameObject.AddComponent<AudioSource>();
         bgmSource.loop = true;
         bgmSource.playOnAwake = false;
-        bgmSource.spatialBlend = 0; // 2D
+        bgmSource.spatialBlend = 0;
 
-        // Setup SFX Source
         sfxSource = gameObject.AddComponent<AudioSource>();
         sfxSource.playOnAwake = false;
         sfxSource.spatialBlend = 0;
+    }
+
+    private void Update()
+    {
+        if (bgmSource.isPlaying)
+        {
+            string currentClipId = GetCurrentBGMId();
+            if (currentClipId != null && entriesDict.TryGetValue(currentClipId, out SoundEntry entry))
+            {
+                float globalMusicVol = PlayerPrefs.GetFloat("MusicVolume", 1f);
+                bgmSource.volume = entry.volume * globalMusicVol;
+            }
+        }
+    }
+
+    private string GetCurrentBGMId()
+    {
+        foreach (var kvp in entriesDict)
+        {
+            if (bgmSource.clip == kvp.Value.audioClip) return kvp.Key;
+        }
+        return null;
     }
 
     public void Play(string id, float volumeMultiplier = 1f, float startOffset = 0f)
     {
         if (entriesDict.TryGetValue(id, out SoundEntry entry))
         {
-            sfxSource.PlayOneShot(entry.audioClip, entry.volume);
+            float globalSfxVol = PlayerPrefs.GetFloat("SFXVolume", 1f);
+            float finalVolume = entry.volume * globalSfxVol * volumeMultiplier;
+            sfxSource.PlayOneShot(entry.audioClip, finalVolume);
         }
         else
         {
@@ -64,7 +92,8 @@ public class SoundLibrary : MonoBehaviour
                 return;
 
             bgmSource.clip = entry.audioClip;
-            bgmSource.volume = entry.volume;
+            float globalMusicVol = PlayerPrefs.GetFloat("MusicVolume", 1f);
+            bgmSource.volume = entry.volume * globalMusicVol;
             bgmSource.Play();
         }
     }

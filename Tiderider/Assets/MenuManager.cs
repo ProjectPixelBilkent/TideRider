@@ -114,7 +114,7 @@ public class MenuManager : MonoBehaviour
     public void GoToMainMenu()
     {
         Time.timeScale = 1f;
-        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
 
     public void RestartScene()

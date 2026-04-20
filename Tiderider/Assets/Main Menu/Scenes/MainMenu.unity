@@ -9262,7 +9262,6 @@ GameObject:
   - component: {fileID: 1319880916}
   - component: {fileID: 1319880917}
   - component: {fileID: 1319880918}
-  - component: {fileID: 1319880919}
   - component: {fileID: 1319880920}
   - component: {fileID: 1319880921}
   m_Layer: 0
@@ -9481,18 +9480,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   notificationPrefab: {fileID: 5256738014107654808, guid: 8ab5ed6f29fbc3443a83e10c2dd8932d, type: 3}
   notificationPanel: {fileID: 710446840}
---- !u!114 &1319880919
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1319880908}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc8a7de4eb4bb814ea8a37499bd5fa99, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1319880920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11933,6 +11920,65 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1718306881
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1718306884}
+  - component: {fileID: 1718306883}
+  - component: {fileID: 1718306882}
+  m_Layer: 0
+  m_Name: PersistentScriptController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1718306882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718306881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5472a8071ff1de448b526104066a5921, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  appKey: YOUR_APP_KEY
+  adUnitId: YOUR_REWARDED_UNIT_ID
+--- !u!114 &1718306883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718306881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc8a7de4eb4bb814ea8a37499bd5fa99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1718306884
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718306881}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 957.9784, y: 1162.8461, z: -6.8470845}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &1729858503 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3083333123093107273, guid: 0e17bc1e4c99edf4cb1820c13291b480, type: 3}
@@ -15583,7 +15629,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c5e3e6d874745f44b19742d0abb4feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: 882abd43185c90849a212b4b5462360d, type: 2}
+  itemData: {fileID: 0}
   entireFrameButton: {fileID: 0}
   nameText: {fileID: 0}
   iconImage: {fileID: 0}
@@ -15855,7 +15901,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c5e3e6d874745f44b19742d0abb4feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: c78847dbb453afd4caabbd0bbaa45aff, type: 2}
+  itemData: {fileID: 0}
   entireFrameButton: {fileID: 0}
   nameText: {fileID: 0}
   iconImage: {fileID: 0}
@@ -16411,7 +16457,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c5e3e6d874745f44b19742d0abb4feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: 15666c57bbb00ec478ae8675c8b99422, type: 2}
+  itemData: {fileID: 0}
   entireFrameButton: {fileID: 0}
   nameText: {fileID: 0}
   iconImage: {fileID: 0}
@@ -17564,7 +17610,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c5e3e6d874745f44b19742d0abb4feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: d4813804f639288458ac60f3aa87c254, type: 2}
+  itemData: {fileID: 0}
   entireFrameButton: {fileID: 0}
   nameText: {fileID: 0}
   iconImage: {fileID: 0}
@@ -21927,7 +21973,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 1050.0004}
+  m_AnchoredPosition: {x: 0, y: 1049.9999}
   m_SizeDelta: {x: 1080, y: 4050}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6682358847573548301
@@ -22591,7 +22637,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c5e3e6d874745f44b19742d0abb4feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: 173aee8bec1e7604288196c5b0f41f7d, type: 2}
+  itemData: {fileID: 0}
   entireFrameButton: {fileID: 0}
   nameText: {fileID: 0}
   iconImage: {fileID: 0}
@@ -22860,7 +22906,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c5e3e6d874745f44b19742d0abb4feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: 9ec21a1a45c9c384cbc2f6ee468bebda, type: 2}
+  itemData: {fileID: 0}
   entireFrameButton: {fileID: 0}
   nameText: {fileID: 0}
   iconImage: {fileID: 0}
@@ -23227,7 +23273,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c5e3e6d874745f44b19742d0abb4feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: b0cda4d21157c724ea442c8595afcc15, type: 2}
+  itemData: {fileID: 0}
   entireFrameButton: {fileID: 0}
   nameText: {fileID: 0}
   iconImage: {fileID: 0}
@@ -24087,7 +24133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c5e3e6d874745f44b19742d0abb4feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: 28d2d552634eeeb4a8c3204cb871060d, type: 2}
+  itemData: {fileID: 0}
   entireFrameButton: {fileID: 0}
   nameText: {fileID: 0}
   iconImage: {fileID: 0}
@@ -25264,3 +25310,4 @@ SceneRoots:
   - {fileID: 1002231342}
   - {fileID: 1653420799}
   - {fileID: 1319880911}
+  - {fileID: 1718306884}

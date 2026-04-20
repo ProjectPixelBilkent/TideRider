@@ -8,8 +8,14 @@ using UnityEngine;
 [RequireComponent(typeof(CircleCollider2D))]
 public class Coin : MonoBehaviour
 {
+    public enum CoinType
+    {
+        Silver = 1,
+        Gold = 3
+    };
+
     public string prefabId;
-    [SerializeField] private int coinValue = 1;
+    [SerializeField] private CoinType coinValue;
 
     private void Awake()
     {
@@ -22,7 +28,7 @@ public class Coin : MonoBehaviour
         Player player = other.GetComponent<Player>();
         if (player != null)
         {
-            DataManager.IncrementCoinAmount(coinValue);
+            DataManager.IncrementCoinAmount((int) coinValue);
             Destroy(gameObject);
         }
     }
@@ -30,5 +36,31 @@ public class Coin : MonoBehaviour
     private void OnBecameInvisible()
     {
         Destroy(gameObject);
+    }
+
+    public static int GetTotalCoinValue(TextAsset levelJsonFile)
+    {
+        return GetTotalCoinValue(levelJsonFile.text);
+    }
+
+    public static int GetTotalCoinValue(string levelJson)
+    {
+        SavedSceneData sceneData = JsonUtility.FromJson<SavedSceneData>(levelJson);
+        int total = 0;
+        foreach (SavedObjectData obj in sceneData.objects)
+        {
+            if (obj.objectType != SpawnObjectType.Coin) continue;
+
+            switch (obj.prefabId)
+            {
+                case "gold_coin":
+                    total += (int)CoinType.Gold;
+                    break;
+                case "silver_coin":
+                    total += (int)CoinType.Silver;
+                    break;
+            }
+        }
+        return total;
     }
 }

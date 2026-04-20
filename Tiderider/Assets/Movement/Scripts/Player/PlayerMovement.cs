@@ -29,7 +29,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float bounceDuration = 0.15f;
 
     [Header("Post-Bounce Slow")]
-    [SerializeField] private float postBounceSpeedMultiplier = 0.5f;
+    [SerializeField] private float postBounceSpeedMultiplier = 0.75f;
     [SerializeField] private float postBounceSlowDuration = 1.25f;
 
     private Rigidbody2D rb;

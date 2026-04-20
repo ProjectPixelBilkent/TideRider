@@ -78,8 +78,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: 8b06968604bccda438ad16ff6e35916d, type: 3}
-  m_Color: {r: 1, g: 0.84313726, b: 0, a: 1}
+  m_Sprite: {fileID: 7675826601332790545, guid: cce9dc385e1bb7c4295851b4458e90d1, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -139,5 +139,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabId: gold_coin
   coinValue: 3
-  collectDuration: 0.5
-  flyDistance: 2

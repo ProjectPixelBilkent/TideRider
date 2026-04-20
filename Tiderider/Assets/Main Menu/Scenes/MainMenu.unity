@@ -18522,7 +18522,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Content: {fileID: 0}
+  m_Content: {fileID: 3408229430811824998}
   m_Horizontal: 1
   m_Vertical: 0
   m_MovementType: 1
@@ -23450,7 +23450,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Content: {fileID: 0}
+  m_Content: {fileID: 2780006462963484830}
   m_Horizontal: 1
   m_Vertical: 0
   m_MovementType: 1

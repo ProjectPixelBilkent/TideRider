@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using UnityEngine;
 
 /// <summary>
@@ -58,8 +59,33 @@ public class Coin : MonoBehaviour
         Destroy(gameObject);
     }
 
+    public static int GetTotalCoinValue(System.Collections.Generic.List<TextAsset> assets)
+    {
+        int result = 0;
+        foreach(var asset in assets)
+        {
+            result += GetTotalCoinValue(asset);
+        }
+        return result;
+    }
+
+    public static int GetTotalCoinValue(System.Collections.Generic.List<string> strings)
+    {
+        int result = 0;
+        foreach (var str in strings)
+        {
+            result += GetTotalCoinValue(str);
+        }
+        return result;
+    }
+
     public static int GetTotalCoinValue(TextAsset levelJsonFile)
     {
+        if(levelJsonFile == null)
+        {
+            Debug.LogError("Null json file.");
+            return 0;
+        }
         return GetTotalCoinValue(levelJsonFile.text);
     }
 
@@ -78,6 +104,10 @@ public class Coin : MonoBehaviour
                     break;
                 case "silver_coin":
                     total += GetValue(CoinType.Silver);
+                    break;
+                default:
+                    Debug.LogError("Undefined coin in json file: " + obj.prefabId);
+                    total += 0;
                     break;
             }
         }

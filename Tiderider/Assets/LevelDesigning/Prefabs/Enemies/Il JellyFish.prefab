@@ -65,8 +65,8 @@ MonoBehaviour:
   lingerTime: 20
   downSpeed: 1
   bottomOffsetFromCamera: -6
-  shockRadius: 3.7
-  visualShockRadius: 2.2
+  shockRadius: 2
+  visualShockRadius: 2.1
   shockDamage: 10
   shockDuration: 3
   shockCooldown: 3

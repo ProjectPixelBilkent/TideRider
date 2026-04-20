@@ -256,18 +256,14 @@ public class PlayerMovement : MonoBehaviour
         if (collision.contactCount == 0)
             return;
 
-        if(collision.gameObject.GetComponent<ExternalEffect>()!=null)
+        Obstacle obstacle = collision.collider.gameObject.GetComponent<Obstacle>();
+        if (obstacle == null)
         {
             return;
         }
 
 
         Vector2 normal = collision.GetContact(0).normal;
-
-        if(collision.gameObject.GetComponent<Monster>() != null)
-        {
-            normal = new Vector3(0, 5, 0);
-        }
 
         bounceVelocity = normal * bounceForce;
 

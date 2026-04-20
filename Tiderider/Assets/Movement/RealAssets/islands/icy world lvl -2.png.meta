@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      icy world lvl -2_0: 666718685443084127
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

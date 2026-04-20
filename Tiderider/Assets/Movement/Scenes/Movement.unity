@@ -14628,7 +14628,7 @@ MonoBehaviour:
   mouseButton: 0
   bounceForce: 10
   bounceDuration: 0.15
-  postBounceSpeedMultiplier: 0.5
+  postBounceSpeedMultiplier: 0.75
   postBounceSlowDuration: 1.25
   currentVelocity: {x: 0, y: 0, z: 0}
 --- !u!114 &2062790735

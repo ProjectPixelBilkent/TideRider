@@ -166,6 +166,7 @@ PlayerSettings:
   applicationIdentifier:
     Android: com.ProjectPixel.Tiderider
     Standalone: com.DefaultCompany.2D-URP
+    iPhone: com.ProjectPixel.Tiderider
   buildNumber:
     Standalone: 0
     VisionOS: 0
@@ -240,7 +241,7 @@ PlayerSettings:
   metalCompileShaderBinary: 0
   iOSRenderExtraFrameOnPause: 0
   iosCopyPluginsCodeInsteadOfSymlink: 0
-  appleDeveloperTeamID: 
+  appleDeveloperTeamID: J6M6U959C7
   iOSManualSigningProvisioningProfileID: 
   tvOSManualSigningProvisioningProfileID: 
   VisionOSManualSigningProvisioningProfileID: 

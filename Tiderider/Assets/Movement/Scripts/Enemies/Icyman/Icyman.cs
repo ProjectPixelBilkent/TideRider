@@ -66,7 +66,7 @@ public class Icyman : Enemy
         fsm.Init(new Idle(fsm, rb, speed), this);
     }
 
-    private void Update()
+    private new void Update()
     {
         UpdateFacing();
     }

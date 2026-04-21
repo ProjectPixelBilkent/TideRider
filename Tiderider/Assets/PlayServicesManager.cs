@@ -1,5 +1,7 @@
+#if UNITY_ANDROID
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
+#endif
 using Firebase.Auth;
 using UnityEngine;
 using System.Threading.Tasks;
@@ -35,6 +37,7 @@ public static class PlayServicesManager
         // }
     }
 
+#if UNITY_ANDROID
     private static void LinkWithFirebase(string authCode)
     {
         Credential credential = PlayGamesAuthProvider.GetCredential(authCode);
@@ -50,4 +53,5 @@ public static class PlayServicesManager
             }
         });
     }
+#endif
 }

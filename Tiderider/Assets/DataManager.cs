@@ -298,6 +298,15 @@ public static class DataManager
 
     public static bool HasRemovedAds() => LoadGameData().hasRemovedAds;
 
+    public static bool GetHasSeenIntro() => LoadGameData().hasSeenIntro;
+
+    public static void SetHasSeenIntro()
+    {
+        GameData gameData = LoadGameData();
+        gameData.hasSeenIntro = true;
+        SaveGameData(gameData);
+    }
+
     /// <summary>
     /// Loads the current canon level from the local backup.
     /// </summary>

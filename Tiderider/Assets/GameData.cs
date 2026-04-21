@@ -23,6 +23,7 @@ public class GameData
     public string lastWeaponAdTime = "";
     public List<int> dailyShopWeaponIndices = new List<int>();
     public bool hasRemovedAds = false;
+    public bool hasSeenIntro = false;
 }
 
 /// <summary>

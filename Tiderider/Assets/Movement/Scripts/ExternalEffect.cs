@@ -18,20 +18,9 @@ public class ExternalEffect : MonoBehaviour
 
     [SerializeField] private Direction direction;
     [SerializeField] protected float speed;
+    [SerializeField] public string prefabId;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public virtual Vector3 GetAddition(ShipController ship)
+    public virtual Vector3 GetAddition(PlayerMovement ship)
     {
         return directionVectors[direction] * speed;
     }

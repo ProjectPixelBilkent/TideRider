@@ -8,13 +8,13 @@ public class MiniShipBullet : Bullet
 
     void Start()
     {
-
+        transform.SetParent(Camera.main.transform, true);
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.position += 0.5f * Time.deltaTime * LevelController.UpwardsMovement;
+        
     }
 
     private float timer = 0;
@@ -29,14 +29,20 @@ public class MiniShipBullet : Bullet
             timer = 0;
             if(Enemy!=null)
             {
-                var ab = Enemy.transform.position - transform.position;
-                direction = (ab + 1.3f * Random.onUnitSphere / (ab.magnitude + 1)).normalized;
+                GhostShip ghostShip = Enemy.GetComponent<GhostShip>();
+                bool ghostInvisible = ghostShip != null && !ghostShip.IsVisible;
+                if (!ghostInvisible)
+                {
+                    Vector3 target = Enemy.transform.position - Camera.main.transform.position;
+                    var ab = target - transform.localPosition;
+                    direction = (ab + 1.3f * Random.onUnitSphere / (ab.magnitude + 1)).normalized;
+                }
             }
 
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f; 
             transform.rotation = Quaternion.Euler(0, 0, angle);
         }
-        rigidBody.linearVelocity = Enemy==null ? Vector3.zero: (direction * WeaponLevel.speedOfBullet);
+        rigidBody.linearVelocity = direction * WeaponLevel.speedOfBullet;
     }
 
     public override void Activate(Vector3 direction, Vector3 shipSpeed)
@@ -60,6 +66,9 @@ public class MiniShipBullet : Bullet
         timer = 1000;
     }
     
-    protected override void OnCollisionEnter2D(Collision2D collision) { }
+    protected override void OnCollisionEnter2D(Collision2D collision)
+    {
+        base.OnCollisionEnter2D(collision);
+    }
     
 }

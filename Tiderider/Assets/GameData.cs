@@ -12,8 +12,17 @@ using JetBrains.Annotations;
 [Serializable]
 public class GameData
 {
-    public int coinAmount;
+    public int coinAmount = 0;
+    public int energyAmount = 5;
     public Weapon[] playerArmory = new Weapon[6];
+    public int highestUnlockedLevelIndex = 0;
+    public List<string> completedConversations = new List<string>();
+    public string lastEnergyUpdateTime = "";
+    public string lastDailyResetTime = "";
+    public string lastEnergyAdTime = "";
+    public string lastWeaponAdTime = "";
+    public List<int> dailyShopWeaponIndices = new List<int>();
+    public bool hasRemovedAds = false;
 }
 
 /// <summary>
@@ -25,10 +34,10 @@ public class GameData
 [Serializable]
 public class WeaponData
 {
-    public int canonLevel;
-    public int minigunLevel;
-    public int shieldLevel;
-    public int lasergunLevel;
-    public int flamethrowerLevel;
-    public int icegunLevel;
+    public int canonLevel = 0;
+    public int minigunLevel = 0;
+    public int shieldLevel = 0;
+    public int lasergunLevel = 0;
+    public int flamethrowerLevel = 0;
+    public int icegunLevel = 0;
 }

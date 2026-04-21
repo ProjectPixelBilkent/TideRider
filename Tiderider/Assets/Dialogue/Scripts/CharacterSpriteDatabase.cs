@@ -1,0 +1,34 @@
+using System;
+using UnityEngine;
+
+[Serializable]
+public class CharacterEmotionSprite
+{
+    public string characterId;
+    public string emotion;
+    public Sprite sprite;
+}
+
+public class CharacterSpriteDatabase : MonoBehaviour
+{
+    [SerializeField] private CharacterEmotionSprite[] spriteEntries;
+
+    public void ConfigureEntries(CharacterEmotionSprite[] entries)
+    {
+        spriteEntries = entries;
+    }
+
+    public Sprite GetSprite(string characterId, string emotion)
+    {
+        foreach (var entry in spriteEntries)
+        {
+            if (entry.characterId == characterId && entry.emotion == emotion)
+            {
+                return entry.sprite;
+            }
+        }
+
+        Debug.LogWarning($"No sprite found for characterId='{characterId}', emotion='{emotion}'.");
+        return null;
+    }
+}

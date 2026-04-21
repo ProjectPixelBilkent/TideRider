@@ -18,7 +18,12 @@ public class BigObstacle : Obstacle
     protected override void Start()
     {
         base.Start(); // Ensure Obstacle's Start() runs
-        transform.localScale = bigSize;
+        //transform.localScale = bigSize;
+    }
+
+    protected override void DestructionForSmallObstacle()
+    {
+        // Big obstacles stay — do not destroy
     }
 }
 

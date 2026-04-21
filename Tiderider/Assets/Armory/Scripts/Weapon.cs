@@ -27,7 +27,23 @@ public struct WeaponStat
     public Weapon weaponInfo;
     public int level;
 
-    public WeaponLevel WeaponLevel { get { return weaponInfo.weaponLevels[level]; } }
+    public WeaponLevel WeaponLevel
+    {
+        get
+        {
+            if (weaponInfo == null || weaponInfo.weaponLevels == null)
+            {
+                return null;
+            }
+
+            if (level < 0 || level >= weaponInfo.weaponLevels.Length)
+            {
+                return null;
+            }
+
+            return weaponInfo.weaponLevels[level];
+        }
+    }
 
     public WeaponStat(Weapon weaponInfo, int level)
     {
@@ -56,6 +72,7 @@ public class Weapon : ScriptableObject
     public GameObject projectilePrefab; // Prefab for the projectile fired by the weapon
     [SerializeField] private string onCollisionWithBulletMethodName;
     public AudioClip spawningSound;
+    [Range(0f, 1f)] public float volume;
     public AudioClip[] extraSounds;
     public Sprite[] extraSprites;
 

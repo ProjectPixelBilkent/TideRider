@@ -1,0 +1,12 @@
+# ninja log v5
+140	461	7982277947324298	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	11e38184a729f360
+464	744	7982277950199534	C:/Programming Projects/Project Pixel/Project-Pixel/Tiderider/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/Debug/4c6s5k2m/obj/arm64-v8a/libswappywrapper.so	4ab6de17b818a0e5
+2	2430	7982277967032142	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	b576066f14e20963
+82	2458	7982277967001373	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	26856693161ac2b7
+46	2466	7982277967113551	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	d048e1c73cc4baf0
+31	2492	7982277967497930	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	ee7cafa6990b7153
+120	2625	7982277968954544	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	c7a0d4998a096560
+103	2669	7982277969414201	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	256075c9f33bb716
+65	2773	7982277970428883	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	e71a223d5acfddd9
+17	2898	7982277971630869	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	16ce717b5f00eb22
+2899	3158	7982277974288886	C:/Programming Projects/Project Pixel/Project-Pixel/Tiderider/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/Debug/4c6s5k2m/obj/arm64-v8a/libgame.so	5522e88e1d0b6193

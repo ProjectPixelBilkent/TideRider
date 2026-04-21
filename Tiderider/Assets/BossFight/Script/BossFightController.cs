@@ -1,0 +1,1629 @@
+using System.Collections;
+using DG.Tweening;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+public class BossFightController : MonoBehaviour
+{
+    private const string MovementSceneName = "Movement";
+    private const string MainMenuSceneName = "MainMenu";
+    private const string BossFightSceneName = "BossFight";
+    private const int FinalGameplayLevelIndex = 2;
+
+    private enum SirenPhase
+    {
+        Standing,
+        Warning,
+        Attack,
+        AttackRecovery
+    }
+
+    [Header("Combat State")]
+    [SerializeField] private int currentAldricHp;
+    [SerializeField] private int currentSirenHp;
+
+    [Header("Combat Settings")]
+    [SerializeField] private int aldricStartingHp = 10;
+    [SerializeField] private int sirenStartingHp = 10;
+    [SerializeField] private int aldricPunchDamage = 1;
+    [SerializeField] private int sirenAttackDamage = 1;
+
+    [Header("Boss Dialogue")]
+    [SerializeField] private int dialogueTriggerSirenHp = 10;
+    [SerializeField] private string midFightConversationId = "boss_phase_2_intro";
+    [SerializeField] private string bossWinConversationId = "boss_fight_win";
+    [SerializeField] private string bossLoseConversationId = "boss_fight_losing";
+    [SerializeField] private TextAsset finaleLevelJson;
+    [SerializeField] private DialogueManager dialogueManager;
+    [SerializeField] private GameObject dialogueCanvas;
+    [SerializeField] private Sprite dialogueFrameSprite;
+    [SerializeField] private Sprite sirenDialogueHappySprite;
+    [SerializeField] private Sprite sirenDialogueSadSprite;
+    [SerializeField] private Sprite sirenDialogueAngrySprite;
+    [SerializeField] private Sprite sirenDialogueScarySprite;
+    [SerializeField] private Sprite aldricDialogueHappySprite;
+    [SerializeField] private Sprite aldricDialogueSadSprite;
+    [SerializeField] private Sprite aldricDialogueAngrySprite;
+
+    [Header("Game Over UI")]
+    [SerializeField] private GameObject gameOverMenuUI;
+    [SerializeField] private Button restartButtonGameOverMenu;
+    [SerializeField] private Button quitButtonGameOverMenu;
+
+    [Header("Audio")]
+    [SerializeField] private AudioClip bossFightMusic;
+    [SerializeField, Range(0f, 1f)] private float bossFightMusicMultiplier = 1f;
+    [SerializeField] private AudioClip[] sirenDamageSounds;
+    [SerializeField, Range(0f, 1f)] private float sirenDamageSoundMultiplier = 1f;
+    [SerializeField, Min(0f)] private float sirenDamageSoundStartOffset = 0.2f;
+    [SerializeField] private AudioClip[] sirenEvilLaughSounds;
+    [SerializeField, Range(0f, 1f)] private float sirenEvilLaughSoundMultiplier = 1f;
+    [SerializeField, Min(0f)] private float sirenEvilLaughInterval = 20f;
+    [SerializeField] private AudioClip[] sirenAttackSounds;
+    [SerializeField, Range(0f, 1f)] private float sirenAttackSoundMultiplier = 1f;
+    [SerializeField] private AudioClip[] sirenManiacalLaughSounds;
+    [SerializeField, Range(0f, 1f)] private float sirenManiacalLaughSoundMultiplier = 1f;
+
+    [Header("Gameplay Timing")]
+    [SerializeField] private float punchDuration = 0.25f;
+    [SerializeField] private float aldricPunchCooldown = 0.4f;
+    [SerializeField] private float returnToMiddleDelay = 0.5f;
+    [SerializeField] private float standingDuration = 1.1f;
+    [SerializeField] private float warningDuration = 0.8f;
+    [SerializeField] private float attackDuration = 0.35f;
+    [SerializeField] private float attackSpriteHoldDuration = 0.2f;
+    [SerializeField, Min(0f)] private float attackEarlyTolerance = 0.15f;
+    [SerializeField, Min(0f)] private float attackLateTolerance = 0.15f;
+    private float attackDamageDelay = 0.35f;
+
+    [Header("Scene References")]
+    [SerializeField] private SpriteRenderer sirenRenderer;
+    [SerializeField] private SpriteRenderer aldricRenderer;
+    [SerializeField] private Transform[] lanePositions;
+    [SerializeField] private Transform sirenAttackOriginLeft;
+    [SerializeField] private Transform sirenAttackOriginRight;
+    [SerializeField] private Transform aldricHitTarget;
+    [SerializeField] private Transform telegraphLineTop;
+    [SerializeField] private Transform telegraphLineBottom;
+
+    [Header("Siren Sprites")]
+    [SerializeField] private Sprite sirenStandingSprite;
+    [SerializeField] private Sprite sirenIdleLeftSprite;
+    [SerializeField] private Sprite sirenIdleRightSprite;
+    [SerializeField] private Sprite sirenAttackLeftSprite;
+    [SerializeField] private Sprite sirenAttackRightSprite;
+
+    [Header("Aldric Sprites")]
+    [SerializeField] private Sprite aldricIdleSprite;
+    [SerializeField] private Sprite aldricPunchSprite;
+    [SerializeField] private Vector2 aldricPositionOffset;
+    [SerializeField] private float aldricPunchForwardDistance;
+
+    [Header("Player Movement")]
+    [SerializeField] private int startingLaneIndex = 1;
+    [SerializeField] private float laneMoveSpeed = 12f;
+    [SerializeField] private float swipeThresholdPixels = 60f;
+    [SerializeField] private float aldricWaveDistanceX;
+    [SerializeField] private float aldricWaveSpeedX;
+    [SerializeField] private float aldricWaveEdgePauseX;
+    [SerializeField] private float aldricWaveDistanceY;
+    [SerializeField] private float aldricWaveSpeedY;
+    [SerializeField] private float sirenWaveDistanceX;
+    [SerializeField] private float sirenWaveSpeedX;
+    [SerializeField] private float sirenWaveEdgePauseX;
+    [SerializeField] private float sirenWaveDistanceY;
+    [SerializeField] private float sirenWaveSpeedY;
+
+    [Header("Tutorial Indicators")]
+    [SerializeField] private GameObject horizontalSwipeIndicator;
+    [SerializeField] private GameObject verticalSwipeIndicator;
+
+    [Header("Telegraph")]
+    [SerializeField] private float idleLineLengthMultiplier = 0.22f;
+    [SerializeField] private float lineSpacing = 0.24f;
+    [SerializeField] private float lineWidth = 0.08f;
+    [SerializeField] private float lineTargetYOffset = 0.5f;
+    [SerializeField] private float attackAreaWidth = 2.2f;
+    [SerializeField] private float lineDistanceMultiplier = 1f;
+    [SerializeField] private Vector2 leftAttackOriginOffset;
+    [SerializeField] private Vector2 rightAttackOriginOffset;
+    [SerializeField] private float topLineAngleOffset;
+    [SerializeField] private float bottomLineAngleOffset;
+    [SerializeField] private Color warningFillStartColor = new Color(1f, 0.3f, 0.3f, 0.08f);
+    [SerializeField] private Color warningFillEndColor = new Color(1f, 0.15f, 0.15f, 0.2f);
+    [SerializeField] private Color attackFillColor = new Color(1f, 0.05f, 0.05f, 0.45f);
+    [SerializeField] private Color warningStartColor = new Color(1f, 0.45f, 0.45f, 0.55f);
+    [SerializeField] private Color warningEndColor = new Color(1f, 0.28f, 0.28f, 0.8f);
+    [SerializeField] private Color attackColor = new Color(1f, 0f, 0f, 1f);
+
+    [Header("Damage Flash")]
+    [SerializeField] private Color aldrichDamageFlashColor = new Color(1f, 0.5f, 0.5f, 1f);
+    [SerializeField] private Color sirenDamageFlashColor = new Color(1f, 0.5f, 0.5f, 1f);
+    [SerializeField] private float damageFlashDuration = 0.12f;
+
+    private LineRenderer topLineRenderer;
+    private LineRenderer bottomLineRenderer;
+    private MeshFilter telegraphFillMeshFilter;
+    private MeshRenderer telegraphFillMeshRenderer;
+    private Mesh telegraphFillMesh;
+    private Vector2 swipeStartPosition;
+    private bool swipeInProgress;
+    private int currentLaneIndex;
+    private bool isPunching;
+    private bool attackUsesRightSprite;
+    private bool sirenAttackHasDamagedAldrich;
+    private float punchTimer;
+    private float punchCooldownTimer;
+    private float phaseTimer;
+    private float returnToMiddleTimer;
+    private float attackDamageDelayTimer;
+    private float attackDamageElapsedTimer;
+    private bool playerWasSafeDuringToleranceWindow;
+    private float aldrichDamageFlashTimer;
+    private float sirenDamageFlashTimer;
+    private Vector3 aldricPunchAnchorPosition;
+    private Vector3 sirenBasePosition;
+    private SirenPhase currentPhase;
+    private bool hasTriggeredMidFightDialogue;
+    private bool isPausedForDialogue;
+    private bool fightEnded;
+    private bool playerWonFight;
+    private bool isCompletingFightFlow;
+    private AudioSource bossMusicSource;
+    private AudioSource bossSfxSource;
+    private AudioSource bossSfxSourceAlt;
+    private float sirenLaughTimer;
+    private bool hasLearnedHorizontalSwipe;
+    private bool hasLearnedVerticalSwipe;
+
+    private void Awake()
+    {
+        Time.timeScale = 1f;
+
+        if (lanePositions == null || lanePositions.Length < 3)
+        {
+            Debug.LogWarning("BossFightController requires exactly three lane positions.");
+            enabled = false;
+            return;
+        }
+
+        currentLaneIndex = Mathf.Clamp(startingLaneIndex, 0, lanePositions.Length - 1);
+        returnToMiddleTimer = -1f;
+        currentAldricHp = Mathf.Max(0, aldricStartingHp);
+        currentSirenHp = Mathf.Max(0, sirenStartingHp);
+        sirenBasePosition = sirenRenderer != null ? sirenRenderer.transform.position : Vector3.zero;
+        EnsureDialogueSetup();
+        EnsureGameOverMenuSetup();
+        BindGameOverMenuButtons();
+
+        if (gameOverMenuUI != null)
+        {
+            gameOverMenuUI.SetActive(false);
+        }
+
+        SetupLineRenderer(ref topLineRenderer, telegraphLineTop, "TelegraphLineTopRenderer");
+        SetupLineRenderer(ref bottomLineRenderer, telegraphLineBottom, "TelegraphLineBottomRenderer");
+        SetupTelegraphFill();
+
+        if (aldricRenderer != null && aldricIdleSprite != null)
+        {
+            aldricRenderer.sprite = aldricIdleSprite;
+        }
+
+        if (sirenRenderer != null)
+        {
+            sirenRenderer.sprite = ResolveStandingSprite();
+        }
+
+        if (lanePositions[currentLaneIndex] != null && aldricRenderer != null)
+        {
+            aldricRenderer.transform.position = ResolveAldricLanePosition(currentLaneIndex);
+        }
+
+        SetupBossAudioSources();
+        SetupBossMusic();
+        ResetSirenLaughTimer();
+        ShowTutorialIndicatorsAtStart();
+        SetTelegraphVisible(false);
+        EnterStandingPhase();
+    }
+
+    private void Update()
+    {
+        if (!enabled)
+        {
+            return;
+        }
+
+        UpdateSirenMovement();
+        UpdateAldricMovement();
+        UpdateDamageFlash();
+        UpdateSirenLaughTimer();
+
+        if (isPausedForDialogue)
+        {
+            SetTelegraphVisible(false);
+            return;
+        }
+
+        TryTriggerMidFightDialogue();
+
+        if (isPausedForDialogue)
+        {
+            SetTelegraphVisible(false);
+            return;
+        }
+
+        TryHandleFightOutcome();
+
+        if (isPausedForDialogue || fightEnded)
+        {
+            SetTelegraphVisible(false);
+            return;
+        }
+
+        HandleSwipeInput();
+        UpdateReturnToMiddle();
+        UpdatePunchState();
+        UpdatePunchCooldown();
+        UpdateSirenState();
+        UpdateSirenAttackDamage();
+        UpdateTelegraphVisual();
+    }
+
+    private void HandleSwipeInput()
+    {
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+
+            if (touch.phase == TouchPhase.Began)
+            {
+                swipeStartPosition = touch.position;
+                swipeInProgress = true;
+            }
+            else if (swipeInProgress && (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled))
+            {
+                EvaluateSwipe(touch.position);
+                swipeInProgress = false;
+            }
+
+            return;
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            swipeStartPosition = Input.mousePosition;
+            swipeInProgress = true;
+        }
+        else if (swipeInProgress && Input.GetMouseButtonUp(0))
+        {
+            EvaluateSwipe(Input.mousePosition);
+            swipeInProgress = false;
+        }
+    }
+
+    private void EvaluateSwipe(Vector2 endPosition)
+    {
+        Vector2 swipeDelta = endPosition - swipeStartPosition;
+
+        if (swipeDelta.magnitude < swipeThresholdPixels)
+        {
+            return;
+        }
+
+        if (Mathf.Abs(swipeDelta.y) > Mathf.Abs(swipeDelta.x) && swipeDelta.y > 0f)
+        {
+            MarkVerticalSwipeLearned();
+            TriggerPunch();
+            return;
+        }
+
+        if (Mathf.Abs(swipeDelta.x) >= Mathf.Abs(swipeDelta.y))
+        {
+            MarkHorizontalSwipeLearned();
+            MoveLane(swipeDelta.x > 0f ? 1 : -1);
+        }
+    }
+
+    private void ShowTutorialIndicatorsAtStart()
+    {
+        hasLearnedHorizontalSwipe = false;
+        hasLearnedVerticalSwipe = false;
+
+        if (horizontalSwipeIndicator != null)
+        {
+            horizontalSwipeIndicator.SetActive(true);
+        }
+
+        if (verticalSwipeIndicator != null)
+        {
+            verticalSwipeIndicator.SetActive(true);
+        }
+    }
+
+    private void MarkHorizontalSwipeLearned()
+    {
+        if (hasLearnedHorizontalSwipe)
+        {
+            return;
+        }
+
+        hasLearnedHorizontalSwipe = true;
+        if (horizontalSwipeIndicator != null)
+        {
+            horizontalSwipeIndicator.SetActive(false);
+        }
+    }
+
+    private void MarkVerticalSwipeLearned()
+    {
+        if (hasLearnedVerticalSwipe)
+        {
+            return;
+        }
+
+        hasLearnedVerticalSwipe = true;
+        if (verticalSwipeIndicator != null)
+        {
+            verticalSwipeIndicator.SetActive(false);
+        }
+    }
+
+    private void MoveLane(int direction)
+    {
+        currentLaneIndex = Mathf.Clamp(currentLaneIndex + direction, 0, lanePositions.Length - 1);
+
+        if (currentLaneIndex == GetMiddleLaneIndex())
+        {
+            returnToMiddleTimer = -1f;
+            return;
+        }
+
+        returnToMiddleTimer = Mathf.Max(0f, returnToMiddleDelay);
+    }
+
+    private void TriggerPunch()
+    {
+        if (isPunching || punchCooldownTimer > 0f)
+        {
+            return;
+        }
+
+        isPunching = true;
+        punchTimer = punchDuration;
+        punchCooldownTimer = aldricPunchCooldown;
+        aldricPunchAnchorPosition = aldricRenderer != null ? aldricRenderer.transform.position : Vector3.zero;
+        ApplyDamageToSiren(aldricPunchDamage);
+
+        if (aldricRenderer != null && aldricPunchSprite != null)
+        {
+            aldricRenderer.sprite = aldricPunchSprite;
+        }
+    }
+
+    private void UpdateAldricMovement()
+    {
+        if (aldricRenderer == null)
+        {
+            return;
+        }
+
+        Vector3 targetPosition = isPunching
+            ? aldricPunchAnchorPosition + (Vector3.up * aldricPunchForwardDistance)
+            : ResolveAldricLanePosition(currentLaneIndex);
+
+        aldricRenderer.transform.position = Vector3.MoveTowards(
+            aldricRenderer.transform.position,
+            targetPosition,
+            laneMoveSpeed * Time.deltaTime);
+    }
+
+    private void UpdateSirenMovement()
+    {
+        if (sirenRenderer == null)
+        {
+            return;
+        }
+
+        sirenRenderer.transform.position = sirenBasePosition + ResolveSirenWaveOffset();
+    }
+
+    private void UpdatePunchState()
+    {
+        if (!isPunching)
+        {
+            return;
+        }
+
+        punchTimer -= Time.deltaTime;
+        if (punchTimer > 0f)
+        {
+            return;
+        }
+
+        isPunching = false;
+
+        if (aldricRenderer != null && aldricIdleSprite != null)
+        {
+            aldricRenderer.sprite = aldricIdleSprite;
+        }
+    }
+
+    private void UpdatePunchCooldown()
+    {
+        if (punchCooldownTimer <= 0f)
+        {
+            return;
+        }
+
+        punchCooldownTimer = Mathf.Max(0f, punchCooldownTimer - Time.deltaTime);
+    }
+
+    private void UpdateReturnToMiddle()
+    {
+        if (currentLaneIndex == GetMiddleLaneIndex())
+        {
+            returnToMiddleTimer = -1f;
+            return;
+        }
+
+        if (currentPhase == SirenPhase.Warning || currentPhase == SirenPhase.Attack)
+        {
+            return;
+        }
+
+        if (returnToMiddleTimer < 0f)
+        {
+            return;
+        }
+
+        returnToMiddleTimer -= Time.deltaTime;
+        if (returnToMiddleTimer > 0f)
+        {
+            return;
+        }
+
+        currentLaneIndex = GetMiddleLaneIndex();
+        returnToMiddleTimer = -1f;
+    }
+
+    private void UpdateSirenState()
+    {
+        phaseTimer -= Time.deltaTime;
+
+        if (phaseTimer > 0f)
+        {
+            return;
+        }
+
+        switch (currentPhase)
+        {
+            case SirenPhase.Standing:
+                EnterWarningPhase();
+                break;
+            case SirenPhase.Warning:
+                EnterAttackPhase();
+                break;
+            case SirenPhase.Attack:
+                EnterAttackRecoveryPhase();
+                break;
+            default:
+                EnterStandingPhase();
+                break;
+        }
+    }
+
+    private void EnterStandingPhase()
+    {
+        currentPhase = SirenPhase.Standing;
+        phaseTimer = standingDuration;
+
+        if (sirenRenderer != null)
+        {
+            sirenRenderer.sprite = ResolveStandingSprite();
+        }
+
+        SetTelegraphVisible(false);
+    }
+
+    private void EnterWarningPhase()
+    {
+        currentPhase = SirenPhase.Warning;
+        phaseTimer = warningDuration;
+        attackUsesRightSprite = Random.value > 0.5f;
+        PlayRandomSirenAttackSound();
+
+        if (sirenRenderer != null)
+        {
+            sirenRenderer.sprite = attackUsesRightSprite ? sirenIdleRightSprite : sirenIdleLeftSprite;
+        }
+
+        SetTelegraphVisible(true);
+        UpdateTelegraphVisual();
+    }
+
+    private void EnterAttackPhase()
+    {
+        currentPhase = SirenPhase.Attack;
+        phaseTimer = attackDamageDelay + attackLateTolerance + attackDuration;
+        attackDamageDelayTimer = attackDamageDelay;
+        attackDamageElapsedTimer = 0f;
+        playerWasSafeDuringToleranceWindow = false;
+        sirenAttackHasDamagedAldrich = false;
+
+        if (sirenRenderer != null)
+        {
+            sirenRenderer.sprite = attackUsesRightSprite ? sirenAttackRightSprite : sirenAttackLeftSprite;
+        }
+
+        UpdateTelegraphVisual();
+    }
+
+    private void EnterAttackRecoveryPhase()
+    {
+        currentPhase = SirenPhase.AttackRecovery;
+        phaseTimer = attackSpriteHoldDuration;
+        sirenAttackHasDamagedAldrich = false;
+        SetTelegraphVisible(false);
+    }
+
+    private void UpdateSirenAttackDamage()
+    {
+        if (currentPhase != SirenPhase.Attack || sirenAttackHasDamagedAldrich)
+        {
+            return;
+        }
+
+        attackDamageElapsedTimer += Time.deltaTime;
+        attackDamageDelayTimer = Mathf.Max(0f, attackDamageDelay - attackDamageElapsedTimer);
+
+        float toleranceWindowStart = Mathf.Max(0f, attackDamageDelay - attackEarlyTolerance);
+        float toleranceWindowEnd = attackDamageDelay + attackLateTolerance;
+        bool isWithinToleranceWindow = attackDamageElapsedTimer >= toleranceWindowStart
+            && attackDamageElapsedTimer <= toleranceWindowEnd;
+
+        if (isWithinToleranceWindow && !IsAldrichInCurrentAttackLanes())
+        {
+            playerWasSafeDuringToleranceWindow = true;
+        }
+
+        if (attackDamageElapsedTimer < toleranceWindowEnd)
+        {
+            return;
+        }
+
+        if (!playerWasSafeDuringToleranceWindow && IsAldrichInCurrentAttackLanes())
+        {
+            ApplyDamageToAldrich(sirenAttackDamage);
+        }
+
+        sirenAttackHasDamagedAldrich = true;
+    }
+
+    private void UpdateTelegraphVisual()
+    {
+        if (topLineRenderer == null || bottomLineRenderer == null)
+        {
+            return;
+        }
+
+        if (currentPhase == SirenPhase.Standing || currentPhase == SirenPhase.AttackRecovery)
+        {
+            SetTelegraphVisible(false);
+            return;
+        }
+
+        SetTelegraphVisible(true);
+
+        Vector3 origin = ResolveAttackOrigin();
+        Vector3 attackCenter = ResolveAttackCenterPoint();
+        Vector3 targetOffset = Vector3.right * attackAreaWidth;
+        Vector3 fullLeftTarget = attackUsesRightSprite ? attackCenter : attackCenter - targetOffset;
+        Vector3 fullRightTarget = attackUsesRightSprite ? attackCenter + targetOffset : attackCenter;
+        Vector3 fullLeftEnd = ResolveAngledLineEnd(origin, fullLeftTarget, topLineAngleOffset, lineDistanceMultiplier);
+        Vector3 fullRightEnd = ResolveAngledLineEnd(origin, fullRightTarget, bottomLineAngleOffset, lineDistanceMultiplier);
+        Vector3 topLineStart;
+        Vector3 bottomLineStart;
+        Vector3 shortenedLeftTarget;
+        Vector3 shortenedRightTarget;
+        Color lineColor;
+        Color fillColor;
+
+        if (currentPhase == SirenPhase.Warning)
+        {
+            float progress = 1f - Mathf.Clamp01(phaseTimer / Mathf.Max(0.0001f, warningDuration));
+            float lengthMultiplier = Mathf.Lerp(idleLineLengthMultiplier, 1f, progress);
+
+            lineColor = Color.Lerp(warningStartColor, warningEndColor, progress);
+            fillColor = Color.Lerp(warningFillStartColor, warningFillEndColor, progress);
+            topLineStart = origin;
+            bottomLineStart = origin;
+            shortenedLeftTarget = Vector3.Lerp(origin, fullLeftEnd, lengthMultiplier);
+            shortenedRightTarget = Vector3.Lerp(origin, fullRightEnd, lengthMultiplier);
+        }
+        else
+        {
+            float collapseProgress = 1f - Mathf.Clamp01(phaseTimer / Mathf.Max(0.0001f, attackDuration));
+
+            if (attackDamageDelayTimer > 0f)
+            {
+                lineColor = warningEndColor;
+                fillColor = warningFillEndColor;
+            }
+            else
+            {
+                lineColor = attackColor;
+                fillColor = attackFillColor;
+            }
+
+            topLineStart = Vector3.Lerp(origin, fullLeftEnd, collapseProgress);
+            bottomLineStart = Vector3.Lerp(origin, fullRightEnd, collapseProgress);
+            shortenedLeftTarget = fullLeftEnd;
+            shortenedRightTarget = fullRightEnd;
+        }
+
+        ApplyLine(topLineRenderer, topLineStart, shortenedLeftTarget, lineColor);
+        ApplyLine(bottomLineRenderer, bottomLineStart, shortenedRightTarget, lineColor);
+        ApplyTelegraphFill(topLineStart, bottomLineStart, shortenedRightTarget, shortenedLeftTarget, fillColor);
+    }
+
+    private Vector3 ResolveAngledLineEnd(Vector3 start, Vector3 target, float angleOffsetDegrees, float lengthMultiplier)
+    {
+        Vector3 direction = target - start;
+        float distance = direction.magnitude * lengthMultiplier;
+
+        if (distance <= 0.0001f)
+        {
+            return start;
+        }
+
+        Vector3 rotatedDirection = Quaternion.Euler(0f, 0f, angleOffsetDegrees) * direction.normalized;
+        return start + rotatedDirection * distance;
+    }
+
+    private Vector3 ResolveAttackOrigin()
+    {
+        Transform origin = attackUsesRightSprite ? sirenAttackOriginRight : sirenAttackOriginLeft;
+        Vector2 originOffset = attackUsesRightSprite ? rightAttackOriginOffset : leftAttackOriginOffset;
+        Vector3 waveOffset = ResolveSirenWaveOffset();
+
+        if (origin == null)
+        {
+            return waveOffset + new Vector3(originOffset.x, originOffset.y, 0f);
+        }
+
+        return origin.position + waveOffset + new Vector3(originOffset.x, originOffset.y, 0f);
+    }
+
+    private Vector3 ResolveAttackCenterPoint()
+    {
+        int middleLaneIndex = GetMiddleLaneIndex();
+        Vector3 lanePosition = lanePositions[middleLaneIndex] != null ? lanePositions[middleLaneIndex].position : Vector3.zero;
+
+        if (aldricHitTarget == null)
+        {
+            lanePosition.y += lineTargetYOffset;
+            return lanePosition;
+        }
+
+        return new Vector3(
+            lanePosition.x,
+            aldricHitTarget.position.y,
+            aldricHitTarget.position.z);
+    }
+
+    private Vector3 ResolveAldricLanePosition(int laneIndex)
+    {
+        int clampedLaneIndex = Mathf.Clamp(laneIndex, 0, lanePositions.Length - 1);
+        Vector3 lanePosition = lanePositions[clampedLaneIndex] != null ? lanePositions[clampedLaneIndex].position : Vector3.zero;
+        Vector3 punchOffset = isPunching ? Vector3.up * aldricPunchForwardDistance : Vector3.zero;
+        return lanePosition + new Vector3(aldricPositionOffset.x, aldricPositionOffset.y, 0f) + ResolveAldricWaveOffset() + punchOffset;
+    }
+
+    private void ApplyDamageToSiren(int damage)
+    {
+        if (damage <= 0 || currentSirenHp <= 0)
+        {
+            return;
+        }
+
+        currentSirenHp = Mathf.Max(0, currentSirenHp - damage);
+        sirenDamageFlashTimer = damageFlashDuration;
+        PlayRandomSirenDamageSound();
+    }
+
+    private void ApplyDamageToAldrich(int damage)
+    {
+        if (damage <= 0 || currentAldricHp <= 0)
+        {
+            return;
+        }
+
+        int previousHp = currentAldricHp;
+        currentAldricHp = Mathf.Max(0, currentAldricHp - damage);
+        Debug.Log($"[BossFight] Player hit for {damage}. HP: {previousHp} -> {currentAldricHp}");
+        aldrichDamageFlashTimer = damageFlashDuration;
+    }
+
+    private void UpdateDamageFlash()
+    {
+        UpdateDamageFlashForRenderer(aldricRenderer, aldrichDamageFlashColor, ref aldrichDamageFlashTimer);
+        UpdateDamageFlashForRenderer(sirenRenderer, sirenDamageFlashColor, ref sirenDamageFlashTimer);
+    }
+
+    private void UpdateDamageFlashForRenderer(SpriteRenderer renderer, Color flashColor, ref float timer)
+    {
+        if (renderer == null)
+        {
+            return;
+        }
+
+        if (timer <= 0f || damageFlashDuration <= 0f)
+        {
+            Color currentColor = renderer.color;
+            renderer.color = new Color(1f, 1f, 1f, currentColor.a);
+            return;
+        }
+
+        timer = Mathf.Max(0f, timer - Time.deltaTime);
+        float normalized = Mathf.Clamp01(timer / damageFlashDuration);
+        renderer.color = Color.Lerp(Color.white, flashColor, normalized);
+    }
+
+    private bool IsAldrichInCurrentAttackLanes()
+    {
+        int middleLaneIndex = GetMiddleLaneIndex();
+
+        if (attackUsesRightSprite)
+        {
+            return currentLaneIndex >= middleLaneIndex;
+        }
+
+        return currentLaneIndex <= middleLaneIndex;
+    }
+
+    private Vector3 ResolveAldricWaveOffset()
+    {
+        return ResolveWaveOffset(
+            aldricWaveDistanceX,
+            aldricWaveSpeedX,
+            aldricWaveEdgePauseX,
+            aldricWaveDistanceY,
+            aldricWaveSpeedY,
+            false);
+    }
+
+    private Vector3 ResolveSirenWaveOffset()
+    {
+        return ResolveWaveOffset(
+            sirenWaveDistanceX,
+            sirenWaveSpeedX,
+            sirenWaveEdgePauseX,
+            sirenWaveDistanceY,
+            sirenWaveSpeedY,
+            true);
+    }
+
+    private Vector3 ResolveWaveOffset(
+        float distanceX,
+        float speedX,
+        float edgePauseX,
+        float distanceY,
+        float speedY,
+        bool reverseDirection)
+    {
+        if (Mathf.Abs(distanceX) <= 0f && Mathf.Abs(distanceY) <= 0f)
+        {
+            return Vector3.zero;
+        }
+
+        float directionMultiplier = reverseDirection ? -1f : 1f;
+        float xOffset = 0f;
+        float yOffset = 0f;
+
+        if (Mathf.Abs(distanceX) > 0f && speedX > 0f)
+        {
+            float progressX = ResolvePausedPingPongProgress(speedX, edgePauseX);
+            if (reverseDirection)
+            {
+                progressX = 1f - progressX;
+            }
+
+            xOffset = Mathf.Lerp(-distanceX * 0.5f, distanceX * 0.5f, progressX);
+        }
+
+        if (Mathf.Abs(distanceY) > 0f && speedY > 0f)
+        {
+            yOffset = Mathf.Sin(Time.time * speedY * directionMultiplier) * distanceY;
+        }
+
+        return new Vector3(
+            xOffset,
+            yOffset,
+            0f);
+    }
+
+    private float ResolvePausedPingPongProgress(float speed, float edgePause)
+    {
+        float clampedPause = Mathf.Max(0f, edgePause);
+        float travelDuration = 1f / speed;
+        float cycleDuration = (travelDuration * 2f) + (clampedPause * 2f);
+        float cycleTime = Mathf.Repeat(Time.time, cycleDuration);
+
+        if (cycleTime < clampedPause)
+        {
+            return 0f;
+        }
+
+        cycleTime -= clampedPause;
+        if (cycleTime < travelDuration)
+        {
+            return cycleTime / travelDuration;
+        }
+
+        cycleTime -= travelDuration;
+        if (cycleTime < clampedPause)
+        {
+            return 1f;
+        }
+
+        cycleTime -= clampedPause;
+        return 1f - (cycleTime / travelDuration);
+    }
+
+    private Sprite ResolveStandingSprite()
+    {
+        if (sirenStandingSprite != null)
+        {
+            return sirenStandingSprite;
+        }
+
+        return sirenIdleLeftSprite != null ? sirenIdleLeftSprite : sirenRenderer != null ? sirenRenderer.sprite : null;
+    }
+
+    private int GetMiddleLaneIndex()
+    {
+        return Mathf.Clamp(1, 0, lanePositions.Length - 1);
+    }
+
+    private void SetupTelegraphFill()
+    {
+        Transform host = telegraphLineTop != null ? telegraphLineTop.parent : transform;
+        GameObject fillObject = new GameObject("TelegraphFill");
+        fillObject.transform.SetParent(host, false);
+
+        telegraphFillMeshFilter = fillObject.AddComponent<MeshFilter>();
+        telegraphFillMeshRenderer = fillObject.AddComponent<MeshRenderer>();
+        telegraphFillMesh = new Mesh
+        {
+            name = "TelegraphFillMesh"
+        };
+        telegraphFillMesh.MarkDynamic();
+        telegraphFillMeshFilter.sharedMesh = telegraphFillMesh;
+
+        telegraphFillMeshRenderer.sortingLayerName = sirenRenderer != null ? sirenRenderer.sortingLayerName : "Default";
+        telegraphFillMeshRenderer.sortingOrder = sirenRenderer != null ? sirenRenderer.sortingOrder : 5;
+        telegraphFillMeshRenderer.sharedMaterial = new Material(Shader.Find("Sprites/Default"));
+        telegraphFillMeshRenderer.enabled = false;
+    }
+
+    private void ApplyTelegraphFill(Vector3 topLeft, Vector3 topRight, Vector3 bottomRight, Vector3 bottomLeft, Color color)
+    {
+        if (telegraphFillMesh == null || telegraphFillMeshRenderer == null)
+        {
+            return;
+        }
+
+        Vector3[] vertices =
+        {
+            topLeft,
+            topRight,
+            bottomRight,
+            bottomLeft
+        };
+
+        int[] triangles =
+        {
+            0, 1, 2,
+            0, 2, 3
+        };
+
+        Color[] colors =
+        {
+            color,
+            color,
+            color,
+            color
+        };
+
+        telegraphFillMesh.Clear();
+        telegraphFillMesh.vertices = vertices;
+        telegraphFillMesh.triangles = triangles;
+        telegraphFillMesh.colors = colors;
+        telegraphFillMesh.RecalculateBounds();
+        telegraphFillMeshRenderer.enabled = true;
+    }
+
+    private void SetupLineRenderer(ref LineRenderer lineRenderer, Transform host, string childName)
+    {
+        if (host == null)
+        {
+            return;
+        }
+
+        lineRenderer = host.GetComponent<LineRenderer>();
+        if (lineRenderer == null)
+        {
+            lineRenderer = host.gameObject.AddComponent<LineRenderer>();
+        }
+
+        lineRenderer.positionCount = 2;
+        lineRenderer.useWorldSpace = true;
+        lineRenderer.startWidth = lineWidth;
+        lineRenderer.endWidth = lineWidth;
+        lineRenderer.numCapVertices = 4;
+        lineRenderer.sortingLayerName = sirenRenderer != null ? sirenRenderer.sortingLayerName : "Default";
+        lineRenderer.sortingOrder = sirenRenderer != null ? sirenRenderer.sortingOrder + 1 : 6;
+        lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+        lineRenderer.enabled = false;
+
+        if (host.name != childName)
+        {
+            host.name = childName;
+        }
+    }
+
+    private void ApplyLine(LineRenderer lineRenderer, Vector3 start, Vector3 end, Color color)
+    {
+        if (lineRenderer == null)
+        {
+            return;
+        }
+
+        lineRenderer.startColor = color;
+        lineRenderer.endColor = color;
+        lineRenderer.SetPosition(0, start);
+        lineRenderer.SetPosition(1, end);
+    }
+
+    private void SetTelegraphVisible(bool visible)
+    {
+        if (topLineRenderer != null)
+        {
+            topLineRenderer.enabled = visible;
+        }
+
+        if (bottomLineRenderer != null)
+        {
+            bottomLineRenderer.enabled = visible;
+        }
+
+        if (telegraphFillMeshRenderer != null)
+        {
+            telegraphFillMeshRenderer.enabled = visible;
+        }
+    }
+
+    private void TryTriggerMidFightDialogue()
+    {
+        if (hasTriggeredMidFightDialogue || currentSirenHp != dialogueTriggerSirenHp)
+        {
+            return;
+        }
+
+        hasTriggeredMidFightDialogue = true;
+        isPausedForDialogue = true;
+        isPunching = false;
+        punchTimer = 0f;
+        sirenAttackHasDamagedAldrich = true;
+        returnToMiddleTimer = -1f;
+
+        if (aldricRenderer != null && aldricIdleSprite != null)
+        {
+            aldricRenderer.sprite = aldricIdleSprite;
+        }
+
+        if (sirenRenderer != null)
+        {
+            sirenRenderer.sprite = ResolveStandingSprite();
+        }
+
+        SetTelegraphVisible(false);
+        EnsureDialogueSetup();
+
+        if (dialogueCanvas != null)
+        {
+            dialogueCanvas.SetActive(true);
+        }
+
+        if (dialogueManager == null)
+        {
+            Debug.LogWarning("BossFightController could not find a DialogueManager. Mid-fight dialogue was skipped.");
+            ResumeAfterMidFightDialogue();
+            return;
+        }
+
+        StartCoroutine(PlayMidFightManiacalLaughsThenDialogue());
+    }
+
+    private void HandleMidFightDialogueFinished()
+    {
+        if (dialogueManager != null)
+        {
+            dialogueManager.ConversationFinished -= HandleMidFightDialogueFinished;
+        }
+
+        ResumeAfterMidFightDialogue();
+    }
+
+    private void ResumeAfterMidFightDialogue()
+    {
+        isPausedForDialogue = false;
+
+        if (dialogueCanvas != null)
+        {
+            dialogueCanvas.SetActive(false);
+        }
+
+        EnterStandingPhase();
+    }
+
+    private void TryHandleFightOutcome()
+    {
+        if (fightEnded)
+        {
+            return;
+        }
+
+        if (currentSirenHp <= 0)
+        {
+            StartOutcomeDialogue(true);
+            return;
+        }
+
+        if (currentAldricHp <= 0)
+        {
+            ShowLossGameOverMenu();
+        }
+    }
+
+    private void ShowLossGameOverMenu()
+    {
+        if (fightEnded)
+        {
+            return;
+        }
+
+        fightEnded = true;
+        playerWonFight = false;
+        isPausedForDialogue = true;
+        isPunching = false;
+        punchTimer = 0f;
+        punchCooldownTimer = 0f;
+        returnToMiddleTimer = -1f;
+        sirenAttackHasDamagedAldrich = true;
+        swipeInProgress = false;
+
+        if (dialogueManager != null)
+        {
+            dialogueManager.ConversationFinished -= HandleMidFightDialogueFinished;
+            dialogueManager.ConversationFinished -= HandleOutcomeDialogueFinished;
+        }
+
+        if (dialogueCanvas != null)
+        {
+            dialogueCanvas.SetActive(false);
+        }
+
+        if (aldricRenderer != null && aldricIdleSprite != null)
+        {
+            aldricRenderer.sprite = aldricIdleSprite;
+        }
+
+        if (sirenRenderer != null)
+        {
+            sirenRenderer.sprite = ResolveStandingSprite();
+        }
+
+        SetTelegraphVisible(false);
+        StopBossMusic();
+
+        if (gameOverMenuUI != null)
+        {
+            gameOverMenuUI.SetActive(true);
+            Time.timeScale = 0f;
+            return;
+        }
+
+        Debug.LogWarning("BossFightController could not find GameOverMenu. Reloading boss fight scene as fallback.");
+        RestartBossFightFromGameOver();
+    }
+
+    private void StartOutcomeDialogue(bool didPlayerWin)
+    {
+        fightEnded = true;
+        playerWonFight = didPlayerWin;
+        isPausedForDialogue = true;
+        isPunching = false;
+        punchTimer = 0f;
+        punchCooldownTimer = 0f;
+        returnToMiddleTimer = -1f;
+        sirenAttackHasDamagedAldrich = true;
+        swipeInProgress = false;
+
+        if (aldricRenderer != null && aldricIdleSprite != null)
+        {
+            aldricRenderer.sprite = aldricIdleSprite;
+        }
+
+        if (sirenRenderer != null)
+        {
+            sirenRenderer.sprite = ResolveStandingSprite();
+        }
+
+        SetTelegraphVisible(false);
+        EnsureDialogueSetup();
+
+        if (dialogueCanvas != null)
+        {
+            dialogueCanvas.SetActive(true);
+        }
+
+        if (dialogueManager == null)
+        {
+            CompleteFightFlow();
+            return;
+        }
+
+        string conversationId = didPlayerWin ? bossWinConversationId : bossLoseConversationId;
+        Debug.Log($"Boss outcome dialogue starting: {conversationId}");
+        dialogueManager.ConversationFinished -= HandleOutcomeDialogueFinished;
+        dialogueManager.ConversationFinished += HandleOutcomeDialogueFinished;
+        dialogueManager.PlayConversation(conversationId, false);
+
+        if (!dialogueManager.IsConversationPlaying)
+        {
+            dialogueManager.ConversationFinished -= HandleOutcomeDialogueFinished;
+            CompleteFightFlow();
+        }
+    }
+
+    private void HandleOutcomeDialogueFinished()
+    {
+        if (dialogueManager != null)
+        {
+            dialogueManager.ConversationFinished -= HandleOutcomeDialogueFinished;
+        }
+
+        CompleteFightFlow();
+    }
+
+    private void CompleteFightFlow()
+    {
+        if (isCompletingFightFlow)
+        {
+            return;
+        }
+
+        isCompletingFightFlow = true;
+        StopBossMusic();
+        isPausedForDialogue = false;
+
+        if (dialogueCanvas != null)
+        {
+            dialogueCanvas.SetActive(false);
+        }
+
+        if (playerWonFight)
+        {
+            StartCoroutine(HandleWinFightFlowRoutine());
+            return;
+        }
+
+        LevelManager.CurrentPlayingLevelIndex = FinalGameplayLevelIndex;
+
+        if (SceneObjectSpawner.sceneJsonFile == null)
+        {
+            Debug.LogWarning("Boss loss retry could not find the saved level JSON. Returning to main menu instead.");
+            SceneManager.LoadScene(BossFightSceneName);
+            return;
+        }
+
+        SceneManager.LoadScene(BossFightSceneName);
+    }
+
+    private IEnumerator HandleWinFightFlowRoutine()
+    {
+        if (sirenRenderer != null)
+        {
+            Color sirenColor = sirenRenderer.color;
+            sirenRenderer.color = new Color(sirenColor.r, sirenColor.g, sirenColor.b, 1f);
+            yield return sirenRenderer.DOFade(0f, 0.5f).SetEase(Ease.Linear).WaitForCompletion();
+        }
+
+        DataManager.IncrementEnergyAmount();
+        DataManager.CompleteLevel(LevelManager.CurrentPlayingLevelIndex);
+        if (finaleLevelJson == null)
+        {
+            Debug.LogWarning("Boss win could not find level_finale JSON. Returning to main menu instead.");
+            SceneManager.LoadScene(MainMenuSceneName);
+            yield break;
+        }
+
+        LevelManager.CurrentPlayingLevelIndex = -1;
+        SceneObjectSpawner.sceneJsonFile = finaleLevelJson;
+        SceneManager.LoadScene(MovementSceneName);
+    }
+
+    private void SetupBossAudioSources()
+    {
+        AudioSource[] audioSources = GetComponents<AudioSource>();
+        bossMusicSource = audioSources.Length > 0 ? audioSources[0] : gameObject.AddComponent<AudioSource>();
+        bossSfxSource = audioSources.Length > 1 ? audioSources[1] : gameObject.AddComponent<AudioSource>();
+        bossSfxSourceAlt = audioSources.Length > 2 ? audioSources[2] : gameObject.AddComponent<AudioSource>();
+
+        ConfigureAudioSource(bossMusicSource, true);
+        ConfigureAudioSource(bossSfxSource, false);
+        ConfigureAudioSource(bossSfxSourceAlt, false);
+    }
+
+    private void ConfigureAudioSource(AudioSource source, bool loop)
+    {
+        if (source == null)
+        {
+            return;
+        }
+
+        source.playOnAwake = false;
+        source.loop = loop;
+        source.spatialBlend = 0f;
+        source.dopplerLevel = 0f;
+        source.rolloffMode = AudioRolloffMode.Linear;
+        source.minDistance = 1f;
+        source.maxDistance = 500f;
+    }
+
+    private void SetupBossMusic()
+    {
+        if (bossFightMusic == null)
+        {
+            return;
+        }
+
+        bossMusicSource.clip = bossFightMusic;
+        UpdateBossAudioVolumes();
+
+        if (!bossMusicSource.isPlaying)
+        {
+            bossMusicSource.Play();
+        }
+    }
+
+    private void StopBossMusic()
+    {
+        if (bossMusicSource != null && bossMusicSource.isPlaying)
+        {
+            bossMusicSource.Stop();
+        }
+    }
+
+    private void PlayRandomSirenDamageSound()
+    {
+        if (sirenDamageSounds == null || sirenDamageSounds.Length == 0)
+        {
+            return;
+        }
+
+        AudioClip clip = sirenDamageSounds[Random.Range(0, sirenDamageSounds.Length)];
+        if (clip == null)
+        {
+            return;
+        }
+
+        PlaySfxClip(clip, sirenDamageSoundMultiplier, sirenDamageSoundStartOffset);
+    }
+
+    private void UpdateSirenLaughTimer()
+    {
+        if (fightEnded || isPausedForDialogue || currentSirenHp <= 0 || sirenEvilLaughInterval <= 0f)
+        {
+            return;
+        }
+
+        sirenLaughTimer -= Time.deltaTime;
+        if (sirenLaughTimer > 0f)
+        {
+            return;
+        }
+
+        PlayRandomSirenEvilLaugh();
+        ResetSirenLaughTimer();
+    }
+
+    private void PlayRandomSirenEvilLaugh()
+    {
+        if (sirenEvilLaughSounds == null || sirenEvilLaughSounds.Length == 0)
+        {
+            return;
+        }
+
+        AudioClip clip = sirenEvilLaughSounds[Random.Range(0, sirenEvilLaughSounds.Length)];
+        if (clip == null)
+        {
+            return;
+        }
+
+        PlaySfxClip(clip, sirenEvilLaughSoundMultiplier, 0f);
+    }
+
+    private void PlayRandomSirenAttackSound()
+    {
+        if (sirenAttackSounds == null || sirenAttackSounds.Length == 0)
+        {
+            return;
+        }
+
+        AudioClip clip = sirenAttackSounds[Random.Range(0, sirenAttackSounds.Length)];
+        if (clip == null)
+        {
+            return;
+        }
+
+        PlaySfxClip(clip, sirenAttackSoundMultiplier, 0f);
+    }
+
+    private void ResetSirenLaughTimer()
+    {
+        if (sirenEvilLaughInterval <= 0f)
+        {
+            sirenLaughTimer = 0f;
+            return;
+        }
+
+        float variation = Mathf.Min(2f, sirenEvilLaughInterval);
+        sirenLaughTimer = Random.Range(
+            Mathf.Max(0.1f, sirenEvilLaughInterval - variation),
+            sirenEvilLaughInterval + variation);
+    }
+
+    private IEnumerator PlayMidFightManiacalLaughsThenDialogue()
+    {
+        if (sirenManiacalLaughSounds != null && sirenManiacalLaughSounds.Length > 0)
+        {
+            for (int i = 0; i < sirenManiacalLaughSounds.Length; i++)
+            {
+                AudioClip clip = sirenManiacalLaughSounds[i];
+                if (clip == null)
+                {
+                    continue;
+                }
+
+                PlaySfxClip(clip, sirenManiacalLaughSoundMultiplier, 0f);
+                yield return new WaitForSeconds(clip.length);
+            }
+        }
+
+        if (dialogueManager == null)
+        {
+            ResumeAfterMidFightDialogue();
+            yield break;
+        }
+
+        dialogueManager.ConversationFinished -= HandleMidFightDialogueFinished;
+        dialogueManager.ConversationFinished += HandleMidFightDialogueFinished;
+        dialogueManager.PlayConversation(midFightConversationId, false);
+
+        if (!dialogueManager.IsConversationPlaying)
+        {
+            dialogueManager.ConversationFinished -= HandleMidFightDialogueFinished;
+            ResumeAfterMidFightDialogue();
+        }
+    }
+
+    private void PlaySfxClip(AudioClip clip, float volumeMultiplier, float startOffset)
+    {
+        if (clip == null)
+        {
+            return;
+        }
+
+        if (bossSfxSource == null || bossSfxSourceAlt == null)
+        {
+            SetupBossAudioSources();
+        }
+
+        AudioSource sourceToUse = bossSfxSource.isPlaying ? bossSfxSourceAlt : bossSfxSource;
+        sourceToUse.Stop();
+        sourceToUse.clip = clip;
+        sourceToUse.volume = volumeMultiplier * PlayerPrefs.GetFloat("SFXVolume", 1f);
+        sourceToUse.time = Mathf.Clamp(startOffset, 0f, Mathf.Max(0f, clip.length - 0.01f));
+        sourceToUse.Play();
+    }
+
+    private void UpdateBossAudioVolumes()
+    {
+        if (bossMusicSource != null)
+        {
+            bossMusicSource.volume = bossFightMusicMultiplier * PlayerPrefs.GetFloat("MusicVolume", 1f);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        UnbindGameOverMenuButtons();
+        StopBossMusic();
+    }
+
+    private void OnValidate()
+    {
+        UpdateBossAudioVolumes();
+    }
+
+    private void EnsureDialogueSetup()
+    {
+        if (dialogueManager == null)
+        {
+            dialogueManager = FindFirstObjectByType<DialogueManager>();
+        }
+
+        if (dialogueCanvas == null)
+        {
+            Canvas existingCanvas = FindFirstObjectByType<Canvas>();
+            if (existingCanvas != null && existingCanvas.gameObject.name == "BossFightDialogueCanvas")
+            {
+                dialogueCanvas = existingCanvas.gameObject;
+            }
+        }
+
+        if (dialogueManager != null && dialogueCanvas != null)
+        {
+            return;
+        }
+
+        GameObject canvasRoot = new GameObject("BossFightDialogueCanvas");
+        Canvas canvas = canvasRoot.AddComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.sortingOrder = 500;
+        canvasRoot.AddComponent<CanvasScaler>().uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        canvasRoot.GetComponent<CanvasScaler>().referenceResolution = new Vector2(1080f, 1920f);
+        canvasRoot.AddComponent<GraphicRaycaster>();
+
+        GameObject frameObject = new GameObject("DialogueFrame");
+        frameObject.transform.SetParent(canvasRoot.transform, false);
+        RectTransform frameRect = frameObject.AddComponent<RectTransform>();
+        frameRect.anchorMin = new Vector2(0.5f, 0f);
+        frameRect.anchorMax = new Vector2(0.5f, 0f);
+        frameRect.pivot = new Vector2(0.5f, 0f);
+        frameRect.anchoredPosition = new Vector2(0.6079f, 150f);
+        frameRect.sizeDelta = new Vector2(1064.227f, 989.105f);
+        frameRect.localScale = new Vector3(0.8459f, 0.8459f, 0.8459f);
+        Image frameImage = frameObject.AddComponent<Image>();
+        frameImage.sprite = dialogueFrameSprite;
+        frameImage.preserveAspect = true;
+
+        GameObject textObject = new GameObject("DialogueText");
+        textObject.transform.SetParent(frameObject.transform, false);
+        RectTransform textRect = textObject.AddComponent<RectTransform>();
+        textRect.anchorMin = new Vector2(0f, 0f);
+        textRect.anchorMax = new Vector2(1f, 1f);
+        textRect.offsetMin = new Vector2(110f, -264f);
+        textRect.offsetMax = new Vector2(-110f, -794f);
+
+        TextMeshProUGUI dialogueTextComponent = textObject.AddComponent<TextMeshProUGUI>();
+        TMP_FontAsset runtimeFont = Resources.Load<TMP_FontAsset>("Fonts & Materials/LiberationSans SDF");
+        if (runtimeFont != null)
+        {
+            dialogueTextComponent.font = runtimeFont;
+        }
+        else
+        {
+            dialogueTextComponent.font = TMPro.TMP_Settings.defaultFontAsset;
+            Debug.LogWarning("BossFightController could not load LiberationSans SDF from Resources. Falling back to TMP default font.");
+        }
+        dialogueTextComponent.fontSize = 50f;
+        dialogueTextComponent.alignment = TextAlignmentOptions.TopLeft;
+        dialogueTextComponent.enableWordWrapping = true;
+        dialogueTextComponent.color = new Color(0.10943389f, 0.101381205f, 0.101381205f, 1f);
+
+        GameObject managerObject = new GameObject("BossFightDialogueManager");
+        DialogueController controller = managerObject.AddComponent<DialogueController>();
+        controller.ConfigureReferences(frameRect, frameImage, dialogueTextComponent);
+        controller.ConfigurePositions(
+            new Vector2(0.6079f, 150f),
+            new Vector2(0.6079f, 150f),
+            new Vector2(0.6079f, 150f),
+            new Vector2(-1200f, 150f),
+            new Vector2(1200f, 150f),
+            new Vector2(0f, -1400f));
+
+        CharacterSpriteDatabase database = managerObject.AddComponent<CharacterSpriteDatabase>();
+        database.ConfigureEntries(new[]
+        {
+            new CharacterEmotionSprite { characterId = "siren", emotion = "default", sprite = sirenDialogueHappySprite != null ? sirenDialogueHappySprite : ResolveStandingSprite() },
+            new CharacterEmotionSprite { characterId = "siren", emotion = "happy", sprite = sirenDialogueHappySprite != null ? sirenDialogueHappySprite : ResolveStandingSprite() },
+            new CharacterEmotionSprite { characterId = "siren", emotion = "sad", sprite = sirenDialogueSadSprite != null ? sirenDialogueSadSprite : ResolveStandingSprite() },
+            new CharacterEmotionSprite { characterId = "siren", emotion = "angry", sprite = sirenDialogueAngrySprite != null ? sirenDialogueAngrySprite : ResolveStandingSprite() },
+            new CharacterEmotionSprite { characterId = "siren", emotion = "scary", sprite = sirenDialogueScarySprite != null ? sirenDialogueScarySprite : ResolveStandingSprite() },
+            new CharacterEmotionSprite { characterId = "aldric", emotion = "default", sprite = aldricDialogueSadSprite != null ? aldricDialogueSadSprite : aldricIdleSprite },
+            new CharacterEmotionSprite { characterId = "aldric", emotion = "happy", sprite = aldricDialogueHappySprite != null ? aldricDialogueHappySprite : aldricIdleSprite },
+            new CharacterEmotionSprite { characterId = "aldric", emotion = "sad", sprite = aldricDialogueSadSprite != null ? aldricDialogueSadSprite : aldricIdleSprite },
+            new CharacterEmotionSprite { characterId = "aldric", emotion = "angry", sprite = aldricDialogueAngrySprite != null ? aldricDialogueAngrySprite : aldricIdleSprite }
+        });
+
+        dialogueManager = managerObject.AddComponent<DialogueManager>();
+        dialogueManager.ConfigureDependencies(controller, database);
+
+        dialogueCanvas = canvasRoot;
+        dialogueCanvas.SetActive(false);
+    }
+
+    private void EnsureGameOverMenuSetup()
+    {
+        if (gameOverMenuUI == null)
+        {
+            GameObject foundMenu = GameObject.Find("GameOverMenu");
+            if (foundMenu != null)
+            {
+                gameOverMenuUI = foundMenu;
+            }
+        }
+
+        if (gameOverMenuUI == null)
+        {
+            return;
+        }
+
+        if (restartButtonGameOverMenu == null)
+        {
+            restartButtonGameOverMenu = gameOverMenuUI.transform.Find("RestartButton")?.GetComponent<Button>();
+        }
+
+        if (quitButtonGameOverMenu == null)
+        {
+            quitButtonGameOverMenu = gameOverMenuUI.transform.Find("QuitButton")?.GetComponent<Button>();
+        }
+    }
+
+    private void BindGameOverMenuButtons()
+    {
+        if (restartButtonGameOverMenu != null)
+        {
+            restartButtonGameOverMenu.onClick.RemoveListener(RestartBossFightFromGameOver);
+            restartButtonGameOverMenu.onClick.AddListener(RestartBossFightFromGameOver);
+        }
+
+        if (quitButtonGameOverMenu != null)
+        {
+            quitButtonGameOverMenu.onClick.RemoveListener(GoToMainMenuFromGameOver);
+            quitButtonGameOverMenu.onClick.AddListener(GoToMainMenuFromGameOver);
+        }
+    }
+
+    private void UnbindGameOverMenuButtons()
+    {
+        if (restartButtonGameOverMenu != null)
+        {
+            restartButtonGameOverMenu.onClick.RemoveListener(RestartBossFightFromGameOver);
+        }
+
+        if (quitButtonGameOverMenu != null)
+        {
+            quitButtonGameOverMenu.onClick.RemoveListener(GoToMainMenuFromGameOver);
+        }
+    }
+
+    private void RestartBossFightFromGameOver()
+    {
+        Time.timeScale = 1f;
+        LevelManager.CurrentPlayingLevelIndex = FinalGameplayLevelIndex;
+        SceneManager.LoadScene(BossFightSceneName);
+    }
+
+    private void GoToMainMenuFromGameOver()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(MainMenuSceneName);
+    }
+}

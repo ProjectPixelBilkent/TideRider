@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46bf63e65f13fc34f97bbefa8f67464c, type: 3}
+  m_Name: CoinItem-2
+  m_EditorClassIdentifier: Assembly-CSharp::CoinItemData
+  itemName: 200 Coins
+  itemIcon: {fileID: 7675826601332790545, guid: 7ea1f4cafc1f74e4184023f8b5761193, type: 3}
+  isAdReward: 0
+  amountToGive: 200
+  productId: com.light.game.coins_2

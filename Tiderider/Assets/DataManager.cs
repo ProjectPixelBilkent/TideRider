@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
-using UnityEngine;
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 using static LocalBackupManager;
 
 public static class DataManager
@@ -26,11 +27,91 @@ public static class DataManager
     /// Created by: Ata Uzay Kuzey
     /// Maintained by: Işık Dönger
     /// </remarks>
-    public static void SubtractCoinAmount(int amount)
+    public static void SubtractCoinAmount(int amount = 1)
     {
         GameData gameData = LoadGameData();
         gameData.coinAmount -= amount;
         SaveGameData(gameData);
+    }
+
+    /// <summary>
+    /// Increments the energy amount in game data.
+    /// </summary>
+    /// <remarks>
+    /// Created by: Işık Dönger
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public static void IncrementEnergyAmount(int amount = 1)
+    {
+        GameData gameData = LoadGameData();
+        if (gameData.energyAmount + amount > 5)
+            {
+            gameData.energyAmount = 5;
+        }
+        else
+        {
+            gameData.energyAmount += amount;
+        }
+        SaveGameData(gameData);
+    }
+
+    /// <summary>
+    /// Substracts from the energy amount in game data.
+    /// </summary>
+    /// <remarks>
+    /// Created by: Işık Dönger
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public static void DecrementEnergyAmount()
+    {
+        GameData gameData = LoadGameData();
+        gameData.energyAmount -= 1;
+
+        if (string.IsNullOrEmpty(gameData.lastEnergyUpdateTime))
+        {
+            gameData.lastEnergyUpdateTime = DateTime.Now.ToString();
+        }
+
+        SaveGameData(gameData);
+    }
+
+    /// <summary>
+    /// Updates the highest level unlocked only if the player completes their current furthest level.
+    /// </summary>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public static void CompleteLevel(int completedLevelIndex)
+    {
+        GameData gameData = LoadGameData();
+
+        if (completedLevelIndex == gameData.highestUnlockedLevelIndex)
+        {
+            gameData.highestUnlockedLevelIndex++;
+            SaveGameData(gameData);
+        }
+    }
+
+    /// <summary>
+    /// Adds the conversation to the completed list and saves the game data.
+    /// </summary>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public static void MarkConversationCompleted(string conversationId)
+    {
+        GameData gameData = LoadGameData();
+
+        if (gameData.completedConversations == null)
+        {
+            gameData.completedConversations = new List<string>();
+        }
+
+        if (!gameData.completedConversations.Contains(conversationId))
+        {
+            gameData.completedConversations.Add(conversationId);
+            SaveGameData(gameData);
+        }
     }
 
     /// <summary>
@@ -44,6 +125,35 @@ public static class DataManager
     {
         GameData gameData = LoadGameData();
         gameData.playerArmory[index] = weapon;
+        SaveGameData(gameData);
+    }
+
+    public static void SetDailyShopData(string resetTime, List<int> weaponIndices)
+    {
+        GameData data = LoadGameData();
+        data.lastDailyResetTime = resetTime;
+        data.dailyShopWeaponIndices = weaponIndices;
+        SaveGameData(data);
+    }
+
+    public static void SetLastEnergyAdTime(string time)
+    {
+        GameData data = LoadGameData();
+        data.lastEnergyAdTime = time;
+        SaveGameData(data);
+    }
+
+    public static void SetLastWeaponAdTime(string time)
+    {
+        GameData data = LoadGameData();
+        data.lastWeaponAdTime = time;
+        SaveGameData(data);
+    }
+
+    public static void UnlockNoAds()
+    {
+        GameData gameData = LoadGameData();
+        gameData.hasRemovedAds = true;
         SaveGameData(gameData);
     }
 
@@ -136,6 +246,47 @@ public static class DataManager
     public static int GetCoinAmount() => LoadGameData().coinAmount;
 
     /// <summary>
+    /// Loads the energy amount from the local backup.
+    /// </summary>
+    /// <returns>Coin Amount.</returns>
+    /// <remarks>
+    /// Created by: Işık Dönger
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public static int GetEnergyAmount() => LoadGameData().energyAmount;
+
+    /// <summary>
+    /// Loads the current highest unlocked level index from the local backup.
+    /// </summary>
+    /// <returns>Highest Unlocked Level Index.</returns>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public static int GetHighestUnlockedIndex() => LoadGameData().highestUnlockedLevelIndex;
+
+    /// <summary>
+    /// Checks if a conversation has already been shown based on the local backup.
+    /// </summary>
+    /// <returns>True if completed, false otherwise.</returns>
+    /// <remarks>
+    /// Maintained by: Işık Dönger
+    /// </remarks>
+    public static bool IsConversationCompleted(string conversationId)
+    {
+        GameData gameData = LoadGameData();
+
+        if (gameData.completedConversations == null)
+            return false;
+
+        return gameData.completedConversations.Contains(conversationId);
+    }
+
+    public static string GetLastDailyResetTime() => LoadGameData().lastDailyResetTime;
+    public static string GetLastEnergyAdTime() => LoadGameData().lastEnergyAdTime;
+    public static string GetLastWeaponAdTime() => LoadGameData().lastWeaponAdTime;
+    public static List<int> GetDailyShopWeapons() => LoadGameData().dailyShopWeaponIndices;
+
+    /// <summary>
     /// Loads the player armory from the local backup.
     /// </summary>
     /// <returns>Player Armory.</returns>
@@ -144,6 +295,8 @@ public static class DataManager
     /// Maintained by: Işık Dönger
     /// </remarks>
     public static Weapon[] GetPlayerArmory() => LoadGameData().playerArmory;
+
+    public static bool HasRemovedAds() => LoadGameData().hasRemovedAds;
 
     /// <summary>
     /// Loads the current canon level from the local backup.

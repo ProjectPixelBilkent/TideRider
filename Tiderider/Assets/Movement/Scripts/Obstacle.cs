@@ -1,72 +1,177 @@
-// Obstacle.cs
-
 using UnityEngine;
 
-
-
 /// <summary>
-/// Base class for obstacles. Handles random sprite assignment, collider setup, and downward movement.
+/// Base class for obstacles. Handles sprite assignment, collider setup, and downward movement.
 /// </summary>
 /// <remarks>
 /// Maintained by: Obstacle System
 /// </remarks>
-/// 
 [RequireComponent(typeof(SpriteRenderer))]
 public class Obstacle : MonoBehaviour
 {
-    [SerializeField] private float speed = 3f; // Match your ship's forwardSpeed
-    [SerializeField] private Sprite[] sprites;
-
-    /// <summary>
-    /// Assigns a random sprite and updates collider to match.
-    /// </summary>
-    protected virtual void Start()
+    public enum TerrainType
     {
-        SpriteRenderer sr = GetComponent<SpriteRenderer>();
-        if (sprites != null && sprites.Length > 0 && sr != null)
-        {
-            sr.sprite = sprites[Random.Range(0, sprites.Length)];
-            UpdateColliderToMatchSprite(sr.sprite);
-        }
+        General,
+        Ice,
+        Misty
     }
 
-    /// <summary>
-    /// Moves the obstacle downward.
-    /// </summary>
+    public string prefabId;
+
+    [SerializeField] private float speed = 3f;
+    [SerializeField] protected int damageAmount = 10;
+
+    [Header("Sprites By Terrain")]
+    [SerializeField] private Sprite[] generalSprites;
+    [SerializeField] private Sprite[] iceSprites;
+    [SerializeField] private Sprite[] mistySprites;
+
+    [SerializeField] private TerrainType typeOfTerrain = TerrainType.General;
+
+    private int spriteIndex;
+
+    public TerrainType TypeOfTerrain => typeOfTerrain;
+
+    public TerrainType GetTerrainTypeFromCurrentSprite()
+    {
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        if (sr == null || sr.sprite == null)
+            return TerrainType.General;
+
+        return GetTerrainTypeFromSpriteName(sr.sprite.name);
+    }
+
+    public void SetTerrainType(TerrainType terrainType)
+    {
+        typeOfTerrain = terrainType;
+    }
+
+    public void SetSpriteIndex(int index)
+    {
+        spriteIndex = index;
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        if (sr == null)
+            return;
+
+        Sprite[] terrainSprites = GetSpritesByTerrain(typeOfTerrain);
+        if (terrainSprites == null || terrainSprites.Length == 0)
+        {
+            Debug.LogWarning($"{name}: No sprites assigned for terrain type {typeOfTerrain}.");
+            return;
+        }
+
+        index = Mathf.Clamp(index, 0, terrainSprites.Length - 1);
+        spriteIndex = index;
+
+        sr.sprite = terrainSprites[index];
+        UpdateColliderToMatchSprite(sr.sprite);
+    }
+
+    protected virtual void Start()
+    {
+    }
+
     protected virtual void Update()
     {
-        // Move downward
         transform.position += Vector3.down * speed * Time.deltaTime;
     }
 
-    /// <summary>
-    /// Updates the CircleCollider2D to fit the current sprite.
-    /// </summary>
-    /// <param name="sprite">The sprite to fit the collider to.</param>
     protected virtual void UpdateColliderToMatchSprite(Sprite sprite)
     {
-        // Remove existing CircleCollider2D if present
-        var existingCollider = GetComponent<CircleCollider2D>();
-        if (existingCollider != null)
-        {
-            Destroy(existingCollider);
-        }
+        var existingCircle = GetComponent<CircleCollider2D>();
+        if (existingCircle != null)
+            Destroy(existingCircle);
 
-        // Add a new CircleCollider2D and fit it to the sprite's bounds
-        var newCollider = gameObject.AddComponent<CircleCollider2D>();
-        if (sprite != null)
+        var existingPoly = GetComponent<PolygonCollider2D>();
+        if (existingPoly != null)
+            Destroy(existingPoly);
+
+        if (sprite == null)
+            return;
+
+        var newCollider = gameObject.AddComponent<PolygonCollider2D>();
+        int pathCount = sprite.GetPhysicsShapeCount();
+        newCollider.pathCount = pathCount;
+        var pathPoints = new System.Collections.Generic.List<Vector2>();
+        for (int i = 0; i < pathCount; i++)
         {
-            // Set the radius to fit the sprite's bounds (half the max of width/height)
-            float pixelsPerUnit = sprite.pixelsPerUnit;
-            Vector2 size = sprite.bounds.size;
-            newCollider.radius = Mathf.Max(size.x, size.y) / 2f;
-            newCollider.offset = sprite.bounds.center;
+            pathPoints.Clear();
+            sprite.GetPhysicsShape(i, pathPoints);
+            newCollider.SetPath(i, pathPoints);
         }
     }
 
-    /// <summary>
-    /// Destroys the obstacle when it goes off-screen.
-    /// </summary>
+    private Sprite[] GetSpritesByTerrain(TerrainType terrainType)
+    {
+        switch (terrainType)
+        {
+            case TerrainType.Ice:
+                return iceSprites;
+            case TerrainType.Misty:
+                return mistySprites;
+            case TerrainType.General:
+            default:
+                return generalSprites;
+        }
+    }
+
+    private TerrainType GetTerrainTypeFromSpriteName(string spriteName)
+    {
+        if (string.IsNullOrEmpty(spriteName))
+            return TerrainType.General;
+
+        string lowerName = spriteName.ToLowerInvariant();
+
+        if (lowerName.Contains("ice"))
+            return TerrainType.Ice;
+
+        if (lowerName.Contains("misty"))
+            return TerrainType.Misty;
+
+        if (lowerName.Contains("general"))
+            return TerrainType.General;
+
+        return TerrainType.General;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Player player = collision.gameObject.GetComponent<Player>();
+        if (player != null)
+        {
+            OnHitByPlayer(player);
+        }
+    }
+
+    protected virtual void OnHitByPlayer(Player player)
+    {
+        player.TakeDamage(damageAmount);
+
+        if (SoundLibrary.Instance != null)
+        {
+            switch (typeOfTerrain)
+            {
+                case TerrainType.Ice:
+                    SoundLibrary.Instance.Play("iceberg_hit");
+                    break;
+                case TerrainType.Misty:
+                    SoundLibrary.Instance.Play("rock_hit");
+                    break;
+                case TerrainType.General:
+                default:
+                    SoundLibrary.Instance.Play("island_hit");
+                    break;
+            }
+        }
+
+        DestructionForSmallObstacle();
+    }
+
+    protected virtual void DestructionForSmallObstacle()
+    {
+        Destroy(gameObject);
+    }
+
     void OnBecameInvisible()
     {
         Destroy(gameObject);

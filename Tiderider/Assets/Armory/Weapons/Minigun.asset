@@ -14,5 +14,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: Minigun
   weaponDescription: This is a minigun
-  weaponLevels: []
+  weaponLevels:
+  - cost: 100
+    damage: 4
+    fireRate: 1.5
+    speedOfBullet: 1
+    range: 1
+    HP: 1
+    duration: 1
+  - cost: 500
+    damage: 5
+    fireRate: 1.35
+    speedOfBullet: 1
+    range: 1
+    HP: 1
+    duration: 1
+  - cost: 1000
+    damage: 6
+    fireRate: 1.2
+    speedOfBullet: 1
+    range: 1
+    HP: 1
+    duration: 1
   weaponIcon: {fileID: 3631692291817558035, guid: ed6af446b4bcba44f846d7ff4d24efd0, type: 3}
+  projectilePrefab: {fileID: 2743745310613609813, guid: 731b724c1eab64e4b8cd888ab03898be, type: 3}
+  onCollisionWithBulletMethodName: NormalBullet
+  spawningSound: {fileID: 8300000, guid: 976212922e2437540b506283afd78d38, type: 3}
+  volume: 0.5
+  extraSounds: []
+  extraSprites: []

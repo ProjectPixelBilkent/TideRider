@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3072c3a54cef1f042a71f17bef705c2f, type: 3}
+  m_Name: EnergyItem-3
+  m_EditorClassIdentifier: Assembly-CSharp::EnergyItemData
+  itemName: 3 Energy
+  itemIcon: {fileID: -5564248608999137188, guid: a3ff54d99d8fe8e428ec4e3e34fdf454, type: 3}
+  isAdReward: 0
+  amountToGive: 3
+  coinCost: 150

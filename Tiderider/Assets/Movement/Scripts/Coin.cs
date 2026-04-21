@@ -1,0 +1,116 @@
+using NUnit.Framework;
+using UnityEngine;
+
+/// <summary>
+/// A collectible coin that moves downward with the level and is collected when the player touches it.
+/// Add this component to a coin prefab with a trigger CircleCollider2D.
+/// </summary>
+[RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(CircleCollider2D))]
+public class Coin : MonoBehaviour
+{
+    public enum CoinType
+    {
+        Silver,
+        Gold
+    };
+
+    public static int GetValue(CoinType type)
+    {
+        int result;
+        switch (type)
+        {
+            case CoinType.Silver:
+                result = 5;
+                break;
+            case CoinType.Gold:
+                result = 10; 
+                break;
+            default:
+                Debug.LogError("Undefined coin value.");
+                result = 0; 
+                break;
+        }
+        return result;
+    }
+
+    public string prefabId;
+    [SerializeField] private CoinType coinType;
+
+    private void Awake()
+    {
+        CircleCollider2D col = GetComponent<CircleCollider2D>();
+        col.isTrigger = true;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        Player player = other.GetComponent<Player>();
+        if (player != null)
+        {
+            DataManager.IncrementCoinAmount(GetValue(coinType));
+            SoundLibrary.Instance.Play("coin");
+            Destroy(gameObject);
+        }
+    }
+
+    private void OnBecameInvisible()
+    {
+        Destroy(gameObject);
+    }
+
+    public static int GetTotalCoinValue(System.Collections.Generic.List<TextAsset> assets)
+    {
+        int result = 0;
+        foreach(var asset in assets)
+        {
+            result += GetTotalCoinValue(asset);
+        }
+        return result;
+    }
+
+    public static int GetTotalCoinValue(System.Collections.Generic.List<string> strings)
+    {
+        int result = 0;
+        foreach (var str in strings)
+        {
+            result += GetTotalCoinValue(str);
+        }
+        return result;
+    }
+
+    public static int GetTotalCoinValue(TextAsset levelJsonFile)
+    {
+        if(levelJsonFile == null)
+        {
+            Debug.LogError("Null json file.");
+            return 0;
+        }
+        return GetTotalCoinValue(levelJsonFile.text);
+    }
+
+    public static int GetTotalCoinValue(string levelJson)
+    {
+        SavedSceneData sceneData = JsonUtility.FromJson<SavedSceneData>(levelJson);
+        int total = 0;
+        foreach (SavedObjectData obj in sceneData.objects)
+        {
+            if (obj.objectType != SpawnObjectType.Coin) continue;
+
+            switch (obj.prefabId)
+            {
+                case "gold_coin":
+                    total += GetValue(CoinType.Gold);
+                    break;
+                case "silver_coin":
+                    total += GetValue(CoinType.Silver);
+                    break;
+                default:
+                    Debug.LogError("Undefined coin in json file: " + obj.prefabId);
+                    total += 0;
+                    break;
+            }
+        }
+        return total;
+    }
+}

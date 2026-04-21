@@ -15,21 +15,21 @@ MonoBehaviour:
   weaponName: Minigun
   weaponDescription: This is a minigun
   weaponLevels:
-  - cost: 1
+  - cost: 100
     damage: 4
     fireRate: 1.5
     speedOfBullet: 1
     range: 1
     HP: 1
     duration: 1
-  - cost: 1
+  - cost: 500
     damage: 5
     fireRate: 1.35
     speedOfBullet: 1
     range: 1
     HP: 1
     duration: 1
-  - cost: 1
+  - cost: 1000
     damage: 6
     fireRate: 1.2
     speedOfBullet: 1

@@ -15,21 +15,21 @@ MonoBehaviour:
   weaponName: Boomerang
   weaponDescription: This is a boomerang.
   weaponLevels:
-  - cost: 0
+  - cost: 100
     damage: 10
     fireRate: 1
     speedOfBullet: 1
     range: 1
     HP: 1
     duration: 1
-  - cost: 0
+  - cost: 500
     damage: 12
     fireRate: 0.9
     speedOfBullet: 1
     range: 1
     HP: 1
     duration: 1
-  - cost: 0
+  - cost: 1000
     damage: 14
     fireRate: 0.8
     speedOfBullet: 1

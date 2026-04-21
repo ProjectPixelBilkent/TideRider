@@ -15,21 +15,21 @@ MonoBehaviour:
   weaponName: Spawner
   weaponDescription: This is a mini ship spawner.
   weaponLevels:
-  - cost: 0
+  - cost: 100
     damage: 3
     fireRate: 3
     speedOfBullet: 7
     range: 0
     HP: 0
     duration: 0
-  - cost: 0
+  - cost: 500
     damage: 5
     fireRate: 3
     speedOfBullet: 7
     range: 0
     HP: 0
     duration: 0
-  - cost: 0
+  - cost: 1000
     damage: 8
     fireRate: 3
     speedOfBullet: 7

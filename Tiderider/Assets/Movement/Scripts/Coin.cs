@@ -21,10 +21,10 @@ public class Coin : MonoBehaviour
         switch (type)
         {
             case CoinType.Silver:
-                result = 10;
+                result = 5;
                 break;
             case CoinType.Gold:
-                result = 30; 
+                result = 10; 
                 break;
             default:
                 Debug.LogError("Undefined coin value.");

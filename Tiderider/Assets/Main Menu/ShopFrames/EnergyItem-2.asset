@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 3072c3a54cef1f042a71f17bef705c2f, type: 3}
   m_Name: EnergyItem-2
   m_EditorClassIdentifier: Assembly-CSharp::EnergyItemData
-  itemName: Energy Offer 2
+  itemName: 3 Energy
   itemIcon: {fileID: -5564248608999137188, guid: a3ff54d99d8fe8e428ec4e3e34fdf454, type: 3}
   isAdReward: 0
-  amountToGive: 0
-  coinCost: 0
+  amountToGive: 1
+  coinCost: 50

@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 46bf63e65f13fc34f97bbefa8f67464c, type: 3}
   m_Name: CoinItem-1
-  m_EditorClassIdentifier: Assembly-CSharp::CoinItemData
-  itemName: Coin Offer 1
-  itemIcon: {fileID: 7675826601332790545, guid: b27eb980cec8acd42a4482223cd41e1f, type: 3}
+  m_EditorClassIdentifier: 
+  itemName: 50 Coins
+  itemIcon: {fileID: 7675826601332790545, guid: 7ea1f4cafc1f74e4184023f8b5761193, type: 3}
   isAdReward: 0
   amountToGive: 50
-  productId: com.light.game.coins_1
+  productId: com.light.games.coins_1

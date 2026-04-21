@@ -44,7 +44,14 @@ public static class DataManager
     public static void IncrementEnergyAmount(int amount = 1)
     {
         GameData gameData = LoadGameData();
-        gameData.energyAmount += amount;
+        if (gameData.energyAmount + amount > 5)
+            {
+            gameData.energyAmount = 5;
+        }
+        else
+        {
+            gameData.energyAmount += amount;
+        }
         SaveGameData(gameData);
     }
 

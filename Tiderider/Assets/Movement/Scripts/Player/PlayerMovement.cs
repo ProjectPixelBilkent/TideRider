@@ -110,7 +110,7 @@ public class PlayerMovement : MonoBehaviour
         if (hasInput)
         {
             Vector3 mouseScreenPos = isTouching ? (Vector3)Input.GetTouch(0).position : Input.mousePosition;
-            Vector3 mouseWorldPos = mainCam.ScreenToWorldPoint(mouseScreenPos) + new Vector3(0, 1, 0);
+            Vector3 mouseWorldPos = mainCam.ScreenToWorldPoint(mouseScreenPos) + new Vector3(0, 3, 0);
             mouseWorldPos.z = 0f;
 
             Vector2 shipPos = rb.position;

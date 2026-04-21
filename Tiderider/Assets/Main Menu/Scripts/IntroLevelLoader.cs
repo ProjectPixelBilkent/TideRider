@@ -10,6 +10,8 @@ public class IntroLevelLoader : MonoBehaviour
 {
     private const string MovementSceneName = "Movement";
 
+    public static bool IsPlayingIntro = false;
+
     [SerializeField] private TextAsset introLevelJson;
 
     private void Start()
@@ -23,6 +25,7 @@ public class IntroLevelLoader : MonoBehaviour
         if (!DataManager.GetHasSeenIntro())
         {
             DataManager.SetHasSeenIntro();
+            IsPlayingIntro = true;
             LevelManager.CurrentPlayingLevelIndex = 0;
             SceneObjectSpawner.sceneJsonFile = introLevelJson;
             SceneManager.LoadScene(MovementSceneName);

@@ -32,7 +32,11 @@ public class LevelUpdater : MonoBehaviour
             return;
         }
 
-        DataManager.CompleteLevel(LevelManager.CurrentPlayingLevelIndex);
+        if (!IntroLevelLoader.IsPlayingIntro)
+        {
+            DataManager.CompleteLevel(LevelManager.CurrentPlayingLevelIndex);
+        }
+        IntroLevelLoader.IsPlayingIntro = false;
         SceneManager.LoadScene("MainMenu");
     }
 

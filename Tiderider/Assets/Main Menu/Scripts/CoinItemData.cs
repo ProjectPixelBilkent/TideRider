@@ -8,6 +8,5 @@ public class CoinItemData : ShopItemData
 
     public override void Purchase()
     {
-        ResourceManager.Instance.AddCoins(amountToGive);
     }
 }

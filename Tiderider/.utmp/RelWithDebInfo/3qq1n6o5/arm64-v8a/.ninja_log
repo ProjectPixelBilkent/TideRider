@@ -1,23 +1,23 @@
 # ninja log v5
-18	6755	7984900664520190	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	dbb309e3ed2441cb
-179	1237	7984900609527897	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	3e38c7122f8c2b32
-65	6405	7984900661103457	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	4de85e1b7d639848
-1240	1708	7984900613867489	C:/Programming Projects/Project Pixel/Project-Pixel/Tiderider/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/3qq1n6o5/obj/arm64-v8a/libswappywrapper.so	61ac9fa6b28af963
-83	5613	7984900653122609	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	8da299ec3eb4b45a
-49	5658	7984900653617537	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	427d8a86796e5e6b
-162	6706	7984900664125119	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	28ad9288ea459fc3
-35	5722	7984900654189524	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	c3c2af79469dc989
-2	5882	7984900655869991	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	e3687623e64cdb5e
-105	5759	7984900654646648	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	bbb95cc8717b04bc
-6756	7016	7984900667250424	C:/Programming Projects/Project Pixel/Project-Pixel/Tiderider/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/3qq1n6o5/obj/arm64-v8a/libgame.so	9c7eeb5d42448d88
+43	24296	7985000909361131	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	dbb309e3ed2441cb
 181	1711	7985000683592978	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	3e38c7122f8c2b32
 1712	2317	7985000689665804	C:/Programming Projects/Project Pixel/Project-Pixel/Tiderider/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/3qq1n6o5/obj/arm64-v8a/libswappywrapper.so	61ac9fa6b28af963
+122	24148	7985000907923195	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	4de85e1b7d639848
 136	23458	7985000900867520	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	8da299ec3eb4b45a
 72	23479	7985000901171738	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	427d8a86796e5e6b
 101	23513	7985000901561310	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	c3c2af79469dc989
-151	23524	7985000901646957	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	bbb95cc8717b04bc
-86	23663	7985000903062409	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	e3687623e64cdb5e
-122	24148	7985000907923195	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	4de85e1b7d639848
-43	24296	7985000909361131	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	dbb309e3ed2441cb
 165	24601	7985000912413726	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	28ad9288ea459fc3
+86	23663	7985000903062409	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	e3687623e64cdb5e
+151	23524	7985000901646957	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	bbb95cc8717b04bc
 24602	24854	7985000914986312	C:/Programming Projects/Project Pixel/Project-Pixel/Tiderider/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/3qq1n6o5/obj/arm64-v8a/libgame.so	9c7eeb5d42448d88
+119	919	7986657379884753	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	3e38c7122f8c2b32
+920	1222	7986657382798740	C:/Programming Projects/Project Pixel/Project-Pixel/Tiderider/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/3qq1n6o5/obj/arm64-v8a/libswappywrapper.so	61ac9fa6b28af963
+65	2710	7986657397746646	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	8da299ec3eb4b45a
+43	2731	7986657397938092	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	427d8a86796e5e6b
+89	2757	7986657398247859	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	bbb95cc8717b04bc
+33	2767	7986657398274909	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	c3c2af79469dc989
+54	2873	7986657399392855	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	e3687623e64cdb5e
+102	3083	7986657401551344	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	28ad9288ea459fc3
+78	3116	7986657401882293	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	4de85e1b7d639848
+22	3216	7986657402874990	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	dbb309e3ed2441cb
+3216	3321	7986657403974865	C:/Programming Projects/Project Pixel/Project-Pixel/Tiderider/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/3qq1n6o5/obj/arm64-v8a/libgame.so	9c7eeb5d42448d88

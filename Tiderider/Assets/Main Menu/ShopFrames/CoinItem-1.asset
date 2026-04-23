@@ -16,4 +16,4 @@ MonoBehaviour:
   itemIcon: {fileID: 7675826601332790545, guid: 7ea1f4cafc1f74e4184023f8b5761193, type: 3}
   isAdReward: 0
   amountToGive: 50
-  productId: com.light.games.coins_1
+  productId: com.light.game.coins_1

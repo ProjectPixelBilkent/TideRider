@@ -62,6 +62,8 @@ public class AdManager : MonoBehaviour
         // Create the ad object
         rewardedAd = new LevelPlayRewardedAd(currentAdUnitId);
 
+        rewardedAd.OnAdLoaded += (adInfo) => { Debug.Log("REWARDED AD LOADED AND READY"); };
+
         // Subscribe to reward event
         rewardedAd.OnAdRewarded += (reward, adInfo) => {
             Debug.Log("Ad Rewarded - Executing Callback");

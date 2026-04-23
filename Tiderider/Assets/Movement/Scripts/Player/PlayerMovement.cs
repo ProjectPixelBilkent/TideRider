@@ -118,11 +118,11 @@ public class PlayerMovement : MonoBehaviour
 
             Vector2 localClick = transform.InverseTransformPoint(mouseWorldPos);
 
-            float horizontalFactor = Mathf.Clamp(localClick.x / 2.5f, -1f, 1f);
+            float horizontalFactor = Mathf.Clamp(localClick.x / 2f, -1f, 1f);
             targetZRotation = -horizontalFactor * maxTiltAngle;
             targetMouseAngle = Vector2.SignedAngle(transform.up, toClick);
 
-            float aheadDistance = Mathf.Max(0f, Vector2.Dot(toClick, transform.up));
+            float aheadDistance = Mathf.Max(1.25f, Vector2.Dot(toClick, transform.up));
             float speedT = Mathf.Clamp01(aheadDistance / maxAheadDistance);
             targetSpeed = Mathf.Lerp(minForwardSpeed, maxVelocity, speedT);
         }

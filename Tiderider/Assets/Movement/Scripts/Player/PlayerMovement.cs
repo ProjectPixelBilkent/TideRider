@@ -118,7 +118,9 @@ public class PlayerMovement : MonoBehaviour
 
             Vector2 localClick = transform.InverseTransformPoint(mouseWorldPos);
 
-            float horizontalFactor = Mathf.Clamp(localClick.x / 2f, -1f, 1f);
+            const float horizontalDeadZone = 0.75f;
+            float clampedX = Mathf.Abs(localClick.x) < horizontalDeadZone ? 0f : localClick.x;
+            float horizontalFactor = Mathf.Clamp(clampedX / 2f, -1f, 1f);
             targetZRotation = -horizontalFactor * maxTiltAngle;
             targetMouseAngle = Vector2.SignedAngle(transform.up, toClick);
 

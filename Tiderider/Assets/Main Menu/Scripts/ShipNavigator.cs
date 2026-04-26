@@ -25,7 +25,7 @@ public class ShipNavigator : MonoBehaviour
         Vector3 finalDestination = targetPos + offset;
 
         float distance = Vector3.Distance(transform.position, finalDestination);
-        float travelDuration = distance / speed;
+        float travelDuration = Mathf.Min(distance / speed, 2f);
 
         if (distance < 10f)
         {

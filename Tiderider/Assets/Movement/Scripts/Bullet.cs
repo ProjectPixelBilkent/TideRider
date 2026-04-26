@@ -50,6 +50,17 @@ public class Bullet : MonoBehaviour
 
         UpdateRotation();
         rigidBody.linearVelocity = (direction * WeaponLevel.speedOfBullet * 5f + shipSpeed);
+        EnforceMinimumSpeed();
+    }
+
+    protected void EnforceMinimumSpeed()
+    {
+        const float minSpeed = 0.3f;
+        Vector3 speed = new Vector3(rigidBody.linearVelocity.x, rigidBody.linearVelocity.y, 0f) - Camera.main.velocity;
+        if (speed.magnitude < minSpeed)
+        {
+            rigidBody.linearVelocity = (speed + new Vector3(0.01f, 0.01f, 0)).normalized * minSpeed + Camera.main.velocity;
+        }
     }
 
     public virtual void Activate(Vector3 direction, Vector3 shipSpeed)

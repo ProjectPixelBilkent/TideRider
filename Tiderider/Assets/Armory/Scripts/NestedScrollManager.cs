@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class NestedScrollManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+    public static NestedScrollManager Instance { get; private set; }
+
     public ScrollRect horizontalScroll;
     public ScrollRect verticalScroll;
     public float horizontalThreshold = 0.5f;
@@ -14,6 +16,7 @@ public class NestedScrollManager : MonoBehaviour, IBeginDragHandler, IDragHandle
 
     void Awake()
     {
+        Instance = this;
         thisScrollRect = GetComponent<ScrollRect>();
 
         // If references aren't set in inspector, try to find them
@@ -100,6 +103,18 @@ public class NestedScrollManager : MonoBehaviour, IBeginDragHandler, IDragHandle
 
         activeScrollRect = null;
         isDragging = false;
+    }
+
+    public void LockAll()
+    {
+        if (horizontalScroll != null) horizontalScroll.enabled = false;
+        if (verticalScroll != null) verticalScroll.enabled = false;
+    }
+
+    public void UnlockAll()
+    {
+        if (horizontalScroll != null) horizontalScroll.enabled = true;
+        if (verticalScroll != null) verticalScroll.enabled = true;
     }
 
     // Helper method to check if this scroll rect should process events

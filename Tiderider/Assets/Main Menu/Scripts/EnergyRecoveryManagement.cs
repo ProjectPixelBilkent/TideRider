@@ -6,7 +6,7 @@ public class EnergyRecoveryManager : MonoBehaviour
     public static EnergyRecoveryManager Instance { get; private set; }
 
     private const int MaxEnergy = 5;
-    private const int RecoverySeconds = 300; // 5 minutes
+    private const int RecoverySeconds = 5; // 5 seconds for testing purposes, change to 300 for 5 minutes in production
     private float timer;
 
     private void Awake()

@@ -116,9 +116,7 @@ public class PlayerMovement : MonoBehaviour
             Vector2 shipPos = rb.position;
             Vector2 toClick = (Vector2)mouseWorldPos - shipPos;
 
-            Vector2 localClick = transform.InverseTransformPoint(mouseWorldPos);
-
-            float horizontalFactor = Mathf.Clamp(localClick.x / 2f, -1f, 1f);
+            float horizontalFactor = Mathf.Clamp(toClick.x / 2f, -1f, 1f);
             targetZRotation = -horizontalFactor * maxTiltAngle;
             targetMouseAngle = Vector2.SignedAngle(transform.up, toClick);
 
@@ -134,6 +132,8 @@ public class PlayerMovement : MonoBehaviour
         }
 
         UpdateTurnSprite();
+
+        rb.rotation = Mathf.Clamp(rb.rotation, -maxTiltAngle, maxTiltAngle);
     }
 
     private void FixedUpdate()

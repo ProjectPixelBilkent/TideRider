@@ -104,6 +104,10 @@ public class LevelManager : MonoBehaviour
 
         DataManager.DecrementEnergyAmount();
 
+        canInteract = false;
+        NestedScrollManager.Instance?.LockAll();
+        CentralUIController.Instance?.SetInteractable(false);
+
         shipNavigator.NavigateTo(
             levelObjects[data.levelIndex],
             () => StartGameplay(data)

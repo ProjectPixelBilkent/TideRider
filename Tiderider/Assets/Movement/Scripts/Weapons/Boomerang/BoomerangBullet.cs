@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BoomerangBullet : Bullet
@@ -17,6 +18,8 @@ public class BoomerangBullet : Bullet
     private float curveSign;
     private bool returning;
 
+    private readonly HashSet<HasHealth> hitThisPhase = new HashSet<HasHealth>();
+
     protected override void FixedUpdate()
     {
         if (rigidBody == null || WeaponLevel == null)
@@ -29,6 +32,7 @@ public class BoomerangBullet : Bullet
         if (!returning && stateTimer >= outwardDuration)
         {
             returning = true;
+            hitThisPhase.Clear();
         }
 
         Vector3 velocityDirection = travelDirection;
@@ -82,21 +86,37 @@ public class BoomerangBullet : Bullet
         currentSpeedMultiplier = outwardSpeedMultiplier;
         curveSign = this.direction.x < 0f ? -1f : 1f;
         returning = false;
+        hitThisPhase.Clear();
+
+        if (circleCollider != null)
+        {
+            circleCollider.isTrigger = true;
+        }
     }
 
-    protected override void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (collision.collider.gameObject.name == "LevelManager")
+        if (other.gameObject.name == "LevelManager")
         {
             Destroy(gameObject);
             return;
         }
 
-        if (collision.collider.TryGetComponent(out HasHealth health) && ShouldDamageTargetOnce(health))
+        if (WeaponLevel == null)
         {
-            health.TakeDamage(WeaponLevel.damage);
-            returning = true;
+            return;
         }
+
+        if (other.TryGetComponent(out HasHealth health) && ShouldDamageTargetOnce(health) && !hitThisPhase.Contains(health))
+        {
+            hitThisPhase.Add(health);
+            health.TakeDamage(WeaponLevel.damage);
+        }
+    }
+
+    protected override void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Intentionally empty — boomerang uses trigger-based detection only.
     }
 
     private bool ShouldDamageTargetOnce(HasHealth health)

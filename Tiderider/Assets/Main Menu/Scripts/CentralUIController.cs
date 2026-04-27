@@ -110,6 +110,15 @@ public class CentralUIController : MonoBehaviour
         else OpenShop();
     }
 
+    public void SetInteractable(bool value)
+    {
+        CanvasGroup iconPanelGroup = IconPanel.GetComponent<CanvasGroup>();
+        if (iconPanelGroup == null)
+            iconPanelGroup = IconPanel.AddComponent<CanvasGroup>();
+        iconPanelGroup.interactable = value;
+        iconPanelGroup.blocksRaycasts = value;
+    }
+
     public void OpenArmory() => SwitchTab(0, ArmoryCanvas, -ScaleManager.Width * 0.5f);
     public void OpenMainMenu() => SwitchTab(1, LevelCanvas, -ScaleManager.Width * 1.5f);
     public void OpenShop() => SwitchTab(2, ShopCanvas, -ScaleManager.Width * 2.5f);

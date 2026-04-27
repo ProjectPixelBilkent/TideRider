@@ -46,7 +46,7 @@ public class EndingObject : MonoBehaviour
         InvokeOnLevelCompleted();
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         if(transform.parent==null)
         {

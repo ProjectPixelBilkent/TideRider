@@ -85,8 +85,16 @@ public class ShopManager : MonoBehaviour
                 frame.levelOrDescText.text = $"Lv. {level} → {level + 1}";
                 frame.entireFrameButton.interactable = true;
 
-                int cost = weapon.weaponLevels[level].cost;
-                frame.costText.text = $"{cost} COINS";
+                if (i == 0)
+                {
+                    bool ready = TimeManager.HasPassed(DataManager.GetLastWeaponAdTime(), weaponAdCooldown);
+                    frame.costText.text = ready ? "FREE (AD)" : "COOLDOWN";
+                }
+                else
+                {
+                    int cost = weapon.weaponLevels[level].cost;
+                    frame.costText.text = $"{cost} COINS";
+                }
 
                 // Assign click behavior dynamically
                 frame.entireFrameButton.onClick.RemoveAllListeners();
@@ -100,7 +108,24 @@ public class ShopManager : MonoBehaviour
 
     private void HandleWeaponPurchase(int frameIndex, int weaponIdx, Weapon weapon, int level)
     {
-        ResourceManager.UpgradeWeapon(weapon);
+        if (frameIndex == 0)
+        {
+            if (!TimeManager.HasPassed(DataManager.GetLastWeaponAdTime(), weaponAdCooldown))
+            {
+                NotificationManager.Instance.ShowNotification("Ad not ready yet!");
+                return;
+            }
+
+            AdManager.Instance.ShowRewardedAd(() => {
+                ResourceManager.Instance.UpgradeWeaponDirectly(weaponIdx);
+                DataManager.SetLastWeaponAdTime(TimeManager.GetCurrentTimeString());
+                UpdateWeaponShopUI();
+            });
+        }
+        else
+        {
+            ResourceManager.UpgradeWeapon(weapon);
+        }
 
         UpdateWeaponShopUI();
     }

@@ -40,25 +40,30 @@ public class ScaleManager : MonoBehaviour
         Width = Camera.pixelWidth;
         Height = Camera.pixelHeight;
 
-        float originalAspect = (float)ORIGINAL_WIDTH / ORIGINAL_HEIGHT;
+        // Legal portrait aspect range: 9:21 (tallest) to 9:16 (widest)
+        const float MIN_ASPECT = 9f / 21f;
+        const float MAX_ASPECT = 9f / 19f;
         float currentAspect = Width / Height;
 
-        if (currentAspect > originalAspect)
+        if (currentAspect < MIN_ASPECT)
         {
-            virtualHeight = Height;
-            virtualWidth = Height * originalAspect;
-            hInset = (Width - virtualWidth) / 2f;
-            vInset = 0f;
-        }
-        else if (currentAspect < originalAspect)
-        {
+            // Screen taller than 21:9 — add top/bottom bars
             virtualWidth = Width;
-            virtualHeight = Width / originalAspect;
+            virtualHeight = Width / MIN_ASPECT;
             hInset = 0f;
             vInset = (Height - virtualHeight) / 2f;
         }
+        else if (currentAspect > MAX_ASPECT)
+        {
+            // Screen wider than 16:9 — add left/right bars
+            virtualHeight = Height;
+            virtualWidth = Height * MAX_ASPECT;
+            hInset = (Width - virtualWidth) / 2f;
+            vInset = 0f;
+        }
         else
         {
+            // Within legal range — use full screen, no bars
             virtualWidth = Width;
             virtualHeight = Height;
             hInset = 0f;

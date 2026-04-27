@@ -7,17 +7,19 @@ public class ScaleManager : MonoBehaviour
     public Camera Camera;
     private const int ORIGINAL_WIDTH = 1080, ORIGINAL_HEIGHT = 2400, ICON_MENU_HEIGHT = 200;
     private const float NAV_MENU_HEIGHT = 150f;
-    private const float TOP_RESOURCE_SIDE_MARGIN = 30f, TOP_RESOURCE_TOP_MARGIN = 30f;
+    private const float TOP_RESOURCE_SIDE_MARGIN = 30f, TOP_RESOURCE_TOP_MARGIN = 30f, TOP_RESOURCE_WIDTH_SCALE = 1.4f;
     private static readonly Color ResourceChipColor = new(0.08f, 0.11f, 0.17f, 0.78f);
     private static readonly Color NavSelectedPanelColor = new(0.69f, 0.52f, 0.20f, 0.78f);
     private static readonly Color NavSidePanelColor = new(0.08f, 0.11f, 0.17f, 0.68f);
     private static readonly Color NavSelectedGlyphColor = new(1f, 0.96f, 0.88f, 1f);
     private static readonly Color NavSideGlyphColor = new(1f, 1f, 1f, 0.68f);
     public static float Width, Height, FrameWidth, FrameHeight, SelectedIconWidth, SideIconWidth;
+    public static float VirtualWidth, VirtualHeight, HInset, VInset;
     public static Color SelectedColor, SideColor, SelectedGlyphColor, SideGlyphColor;
 
     [SerializeField] private RectTransform topMenu, navigationMenu;
     [SerializeField] private RectTransform menuCanvas, viewport, menuParent;
+    [SerializeField] private RawImage edgeLeft, edgeRight, edgeTop, edgeBottom;
 
     [SerializeField] private RectTransform armoryCanvas, armoryTopCanvas, armoryBottomCanvas, Ship, weaponsPanel, firstRow, secondRow;
     [SerializeField] private RectTransform[] shipSlots, weaponFrames;
@@ -31,12 +33,44 @@ public class ScaleManager : MonoBehaviour
 
     private float scaleX;
     private float topInset;
+    private float virtualWidth, virtualHeight, hInset, vInset;
 
     private void Awake()
     {
         Width = Camera.pixelWidth;
         Height = Camera.pixelHeight;
-        scaleX = Width / (float)ORIGINAL_WIDTH;
+
+        float originalAspect = (float)ORIGINAL_WIDTH / ORIGINAL_HEIGHT;
+        float currentAspect = Width / Height;
+
+        if (currentAspect > originalAspect)
+        {
+            virtualHeight = Height;
+            virtualWidth = Height * originalAspect;
+            hInset = (Width - virtualWidth) / 2f;
+            vInset = 0f;
+        }
+        else if (currentAspect < originalAspect)
+        {
+            virtualWidth = Width;
+            virtualHeight = Width / originalAspect;
+            hInset = 0f;
+            vInset = (Height - virtualHeight) / 2f;
+        }
+        else
+        {
+            virtualWidth = Width;
+            virtualHeight = Height;
+            hInset = 0f;
+            vInset = 0f;
+        }
+
+        scaleX = virtualWidth / (float)ORIGINAL_WIDTH;
+
+        VirtualWidth = virtualWidth;
+        VirtualHeight = virtualHeight;
+        HInset = hInset;
+        VInset = vInset;
 
         ScaleTopMenu();
         ScaleMenuPanel();
@@ -45,6 +79,7 @@ public class ScaleManager : MonoBehaviour
         ScaleShop();
         ScaleNavigationMenu();
         InitializeMapShipPosition();
+        ScaleEdgeBars();
     }
 
     private void ScaleTopMenu()
@@ -60,7 +95,7 @@ public class ScaleManager : MonoBehaviour
             ? resourcePanelRect.transform.GetChild(2).GetComponent<RectTransform>()
             : null;
 
-        float frameWidth = energyFrameRect.sizeDelta.x * scaleX;
+        float frameWidth = energyFrameRect.sizeDelta.x * scaleX * TOP_RESOURCE_WIDTH_SCALE;
         float frameHeight = energyFrameRect.sizeDelta.y * scaleX;
         float sideMargin = TOP_RESOURCE_SIDE_MARGIN * scaleX;
         float topMargin = TOP_RESOURCE_TOP_MARGIN * scaleX;
@@ -77,8 +112,8 @@ public class ScaleManager : MonoBehaviour
         if (settingsIconRect != null)
             settingsIconRect.gameObject.SetActive(false);
 
-        topMenu.sizeDelta = new Vector2(Width, topInset);
-        topMenu.anchoredPosition = new Vector2(0, -topInset / 2f);
+        topMenu.sizeDelta = new Vector2(virtualWidth, topInset);
+        topMenu.anchoredPosition = new Vector2(0, -(topInset / 2f + vInset));
 
         resourcePanelRect.anchorMin = new Vector2(0f, 0.5f);
         resourcePanelRect.anchorMax = new Vector2(1f, 0.5f);
@@ -117,10 +152,16 @@ public class ScaleManager : MonoBehaviour
     {
         armoryCanvas.sizeDelta = new Vector2(Width, Height);
         armoryCanvas.anchoredPosition = new Vector2(-Width, 0);
-        armoryTopCanvas.sizeDelta = new Vector2(0, Width);
-        armoryTopCanvas.anchoredPosition = new Vector2(0, -Width / 2);
-        armoryBottomCanvas.sizeDelta = new Vector2(0, Width);
-        armoryBottomCanvas.anchoredPosition = new Vector2(0, Width / 2);
+
+        // armoryTopCanvas: top-stretch anchors (0,1)-(1,1)
+        // Starts just below the top bar and extends virtualWidth downward, inset by hInset on sides.
+        armoryTopCanvas.offsetMax = new Vector2(-hInset, -(topInset + vInset));
+        armoryTopCanvas.offsetMin = new Vector2(hInset, -(topInset + vInset + virtualWidth));
+
+        // armoryBottomCanvas: bottom-stretch anchors (0,0)-(1,0)
+        // Starts vInset above the screen bottom and extends virtualWidth upward, inset by hInset on sides.
+        armoryBottomCanvas.offsetMin = new Vector2(hInset, vInset);
+        armoryBottomCanvas.offsetMax = new Vector2(-hInset, vInset + virtualWidth);
 
         Ship.sizeDelta = new Vector2(Ship.rect.height * SHIP_RATIO, 0);
 
@@ -142,7 +183,7 @@ public class ScaleManager : MonoBehaviour
         secondRow.sizeDelta = new Vector2(0, rowHeight);
         secondRow.anchoredPosition = new Vector2(0, secondRow.sizeDelta.y / 2 + WEAPONS_PANEL_MARGIN);
 
-        float frameWidthVal = (Width - ARMORY_SLOT_GAP * 2) / 3;
+        float frameWidthVal = (virtualWidth - ARMORY_SLOT_GAP * 2) / 3;
 
         for (int i = 0; i < weaponFrames.Length; i++)
         {
@@ -177,8 +218,8 @@ public class ScaleManager : MonoBehaviour
 
         if (levelMiddleCanvas != null)
         {
-            levelMiddleCanvas.offsetMax = new Vector2(0, -topInset);
-            levelMiddleCanvas.offsetMin = new Vector2(0, ICON_MENU_HEIGHT);
+            levelMiddleCanvas.offsetMax = new Vector2(-hInset, -topInset - vInset);
+            levelMiddleCanvas.offsetMin = new Vector2(hInset, ICON_MENU_HEIGHT + vInset);
         }
 
         if (levelContent != null)
@@ -216,8 +257,8 @@ public class ScaleManager : MonoBehaviour
 
         if (shopMiddleCanvas != null)
         {
-            shopMiddleCanvas.offsetMax = new Vector2(0, -topInset);
-            shopMiddleCanvas.offsetMin = new Vector2(0, ICON_MENU_HEIGHT);
+            shopMiddleCanvas.offsetMax = new Vector2(-hInset, -topInset - vInset);
+            shopMiddleCanvas.offsetMin = new Vector2(hInset, ICON_MENU_HEIGHT + vInset);
 
             float rowHeight = shopMiddleCanvas.rect.height * SHOP_ROW_HEIGHT_RATIO;
             float sideMargin = SHOP_SIDE_MARGIN * scaleX;
@@ -286,6 +327,25 @@ public class ScaleManager : MonoBehaviour
         }
     }
 
+    private void ScaleEdgeBars()
+    {
+        ApplyEdgeBar(edgeLeft,   new Vector2(0f, 0f), new Vector2(0f, 1f), new Vector2(0f, 0.5f), new Vector2(hInset, 0f));
+        ApplyEdgeBar(edgeRight,  new Vector2(1f, 0f), new Vector2(1f, 1f), new Vector2(1f, 0.5f), new Vector2(hInset, 0f));
+        ApplyEdgeBar(edgeTop,    new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, vInset));
+        ApplyEdgeBar(edgeBottom, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, vInset));
+    }
+
+    private static void ApplyEdgeBar(RawImage bar, Vector2 anchorMin, Vector2 anchorMax, Vector2 pivot, Vector2 sizeDelta)
+    {
+        if (bar == null) return;
+        RectTransform rt = bar.rectTransform;
+        rt.anchorMin = anchorMin;
+        rt.anchorMax = anchorMax;
+        rt.pivot = pivot;
+        rt.sizeDelta = sizeDelta;
+        rt.anchoredPosition = Vector2.zero;
+    }
+
     private void ScaleNavigationMenu()
     {
         RectTransform armoryIconRect = navigationMenu.transform.GetChild(0).GetComponent<RectTransform>();
@@ -295,8 +355,8 @@ public class ScaleManager : MonoBehaviour
         Image mainMenuPanelImage = mainMenuIconRect.GetComponent<Image>();
         Image shopPanelImage = shopIconRect.GetComponent<Image>();
 
-        navigationMenu.sizeDelta = new Vector2(Width, NAV_MENU_HEIGHT * scaleX);
-        navigationMenu.anchoredPosition = new Vector2(0, navigationMenu.sizeDelta.y / 2f);
+        navigationMenu.sizeDelta = new Vector2(virtualWidth, NAV_MENU_HEIGHT * scaleX);
+        navigationMenu.anchoredPosition = new Vector2(0, navigationMenu.sizeDelta.y / 2f + vInset);
 
         armoryIconRect.sizeDelta = new Vector2(armoryIconRect.sizeDelta.x * scaleX, navigationMenu.sizeDelta.y);
         armoryIconRect.anchoredPosition = new Vector2(armoryIconRect.sizeDelta.x / 2, 0);

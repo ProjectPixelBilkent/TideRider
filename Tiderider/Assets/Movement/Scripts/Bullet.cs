@@ -55,7 +55,7 @@ public class Bullet : MonoBehaviour
 
     protected void EnforceMinimumSpeed()
     {
-        const float minSpeed = 0.3f;
+        const float minSpeed = 0.6f;
         Vector3 speed = new Vector3(rigidBody.linearVelocity.x, rigidBody.linearVelocity.y, 0f) - Camera.main.velocity;
         if (speed.magnitude < minSpeed)
         {

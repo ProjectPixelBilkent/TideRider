@@ -132,6 +132,8 @@ public class PlayerMovement : MonoBehaviour
         }
 
         UpdateTurnSprite();
+
+        rb.rotation = Mathf.Clamp(rb.rotation, -maxTiltAngle, maxTiltAngle);
     }
 
     private void FixedUpdate()

@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< Updated upstream
 guid: d8486d8b9f5393c4594186cbe410e2dc
+=======
+guid: 745a46a45271cc241b4433c4b7819d95
+>>>>>>> Stashed changes
 TextScriptImporter:
   externalObjects: {}
   userData: 

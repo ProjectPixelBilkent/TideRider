@@ -2,7 +2,6 @@
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
 #endif
-using Firebase.Auth;
 using UnityEngine;
 using System.Threading.Tasks;
 
@@ -11,15 +10,6 @@ public static class PlayServicesManager
     public static async Task Init()
     {
         // PlayGamesPlatform.Activate();
-        var dependencyStatus = await Firebase.FirebaseApp.CheckAndFixDependenciesAsync();
-        if (dependencyStatus == Firebase.DependencyStatus.Available)
-        {
-            var auth = FirebaseAuth.DefaultInstance;
-        }
-        else
-        {
-            Debug.LogError($"Firebase Error: {dependencyStatus}");
-        }
     }
 
     public static void SignIn()
@@ -36,22 +26,4 @@ public static class PlayServicesManager
         //     });
         // }
     }
-
-#if UNITY_ANDROID
-    private static void LinkWithFirebase(string authCode)
-    {
-        Credential credential = PlayGamesAuthProvider.GetCredential(authCode);
-        FirebaseAuth.DefaultInstance.SignInAndRetrieveDataWithCredentialAsync(credential).ContinueWith(task =>
-        {
-            if (task.IsCompleted && !task.IsFaulted)
-            {
-                Debug.Log("Firebase Link Success");
-            }
-            else
-            {
-                Debug.LogError($"Firebase Link Failed: {task.Exception}");
-            }
-        });
-    }
-#endif
 }

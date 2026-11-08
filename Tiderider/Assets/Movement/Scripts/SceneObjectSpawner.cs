@@ -42,15 +42,27 @@ public class SceneObjectSpawner : MonoBehaviour
     [SerializeField] private GameObject icyWaterBackgroundPrefab;
 
     [Header("Misty Atmosphere")]
+    [Tooltip("Cloud sprites cropped tightly to the cloud (pivot in the centre).")]
     [SerializeField] private List<Sprite> mistOverlaySprites = new List<Sprite>();
-    [SerializeField] private Vector2 mistSpawnIntervalRange = new Vector2(1f, 2.5f);
-    [SerializeField] private Vector2 mistLifetimeRange = new Vector2(3.5f, 6f);
+    [Tooltip("Empty vertical space between one cloud and the next, in world units.")]
+    [SerializeField] private Vector2 mistVerticalGapRange = new Vector2(1.5f, 6f);
     [SerializeField] private Vector2 mistScaleRange = new Vector2(0.7f, 1.2f);
-    [SerializeField] private float mistMaxAlpha = 0.5f;
+    [Tooltip("Material using the TideRider/CloudBlur shader: blurs and greys out what is under the cloud. Blur and tint are set on the material.")]
+    [SerializeField] private Material mistMaterial;
+    [Tooltip("How strongly the blurred, greyed view replaces the sharp view under a cloud (1 = fully blurred).")]
+    [SerializeField] private Vector2 mistAlphaRange = new Vector2(0.8f, 0.92f);
+    [Tooltip("How fast clouds scroll compared to the sea. Above 1 makes them feel closer to the camera than the ship.")]
+    [SerializeField] private float mistParallax = 1.3f;
+    [Tooltip("Random sideways drift speed, in world units per second.")]
+    [SerializeField] private float mistMaxSideDrift = 0.3f;
+    [Tooltip("How far a cloud's centre may sit from the middle, as a fraction of half the playfield width.")]
+    [SerializeField, Range(0f, 1f)] private float mistHorizontalSpread = 0.6f;
+    [Tooltip("Minimum sideways shift from the previous cloud so consecutive clouds don't line up.")]
+    [SerializeField] private float mistMinHorizontalShift = 1.2f;
+    [Tooltip("Sorting layer for clouds. Must come after the 2D Renderer's 'Foremost Sorting Layer' (GameObjects) so everything up to the ship is blurred; 'PermaUI' (borders/UI) stays above.")]
+    [SerializeField] private string mistSortingLayer = "Clouds";
+    [Tooltip("Order within the sorting layer; keep it above everything else on that layer.")]
     [SerializeField] private float mistSortingOrder = 200f;
-    [SerializeField] private float mistZPosition = 8f;
-    [SerializeField] private float mistDriftDistance = 0.75f;
-    [SerializeField] private float mistMinDistanceFromRecent = 3.5f;
 
     private EdgeCollider2D edgeCollider;
 
@@ -73,8 +85,17 @@ public class SceneObjectSpawner : MonoBehaviour
 
     public bool HasGameplayStarted { get; private set; }
     private TerrainType currentTerrain;
-    private float mistSpawnTimer;
-    private readonly Queue<Vector2> recentMistPositions = new Queue<Vector2>(2);
+    private class MistCloud
+    {
+        public Transform Transform;
+        public float HalfHeight;
+        public Vector2 Velocity;
+    }
+
+    private readonly List<MistCloud> activeMistClouds = new List<MistCloud>();
+    private Transform mistContainer;
+    private MistCloud lastMistCloud;
+    private float nextMistGap;
     private TMP_Text tapToStartText;
 
     private void Awake()
@@ -98,6 +119,7 @@ public class SceneObjectSpawner : MonoBehaviour
 
         currentTerrain = GetLevelTerrain() == null ? TerrainType.General: (TerrainType) GetLevelTerrain();
         SpawnBackgrounds();
+        PrewarmMistClouds();
         EnsureTapToStartPrompt();
         UpdateTapToStartPrompt();
         PlayBGMForTerrain();
@@ -265,102 +287,150 @@ public class SceneObjectSpawner : MonoBehaviour
         }
     }
 
-    private void HandleMistyAtmosphere()
+    // ---------------------------------------------------------------------------------------------
+    // Misty atmosphere: clouds live in world space, enter from above the screen, scroll down a bit
+    // faster than the sea (parallax) and are removed once they leave the bottom of the screen.
+    // They sit above every gameplay object and, via the CloudBlur material, blur and grey out what is beneath.
+    // ---------------------------------------------------------------------------------------------
+
+    private bool IsMistActive => currentTerrain == TerrainType.Misty && mainCamera != null && mistOverlaySprites.Count > 0;
+
+    /// <summary>Fills the starting screen with clouds so the level doesn't begin with empty sky.</summary>
+    private void PrewarmMistClouds()
     {
-        if (currentTerrain != TerrainType.Misty || mainCamera == null || mistOverlaySprites.Count == 0)
+        if (!IsMistActive)
             return;
 
-        mistSpawnTimer -= Time.deltaTime;
-        if (mistSpawnTimer > 0f)
-            return;
+        float camY = mainCamera.transform.position.y;
+        float halfView = mainCamera.orthographicSize;
+        float bottom = camY - halfView;
+        float top = camY + halfView;
 
-        SpawnMistOverlay();
-        ResetMistSpawnTimer();
-    }
-
-    private void ResetMistSpawnTimer()
-    {
-        mistSpawnTimer = Random.Range(mistSpawnIntervalRange.x, mistSpawnIntervalRange.y);
-    }
-
-    private void SpawnMistOverlay()
-    {
-        Sprite mistSprite = mistOverlaySprites[Random.Range(0, mistOverlaySprites.Count)];
-        if (mistSprite == null)
-            return;
-
-        float camHeight = 2f * mainCamera.orthographicSize;
-        float camWidth = camHeight * mainCamera.aspect;
-
-        Vector2 localPosition = FindMistSpawnPosition(camWidth, camHeight);
-        float localX = localPosition.x;
-        float localY = localPosition.y;
-        float scale = Random.Range(mistScaleRange.x, mistScaleRange.y);
-        float lifetime = Random.Range(mistLifetimeRange.x, mistLifetimeRange.y);
-
-        GameObject mistObject = new GameObject("MistyFogOverlay");
-        mistObject.transform.SetParent(mainCamera.transform, false);
-        mistObject.transform.localPosition = new Vector3(localX, localY, mistZPosition);
-        mistObject.transform.localScale = new Vector3(scale, scale, 1f);
-
-        SpriteRenderer renderer = mistObject.AddComponent<SpriteRenderer>();
-        renderer.sprite = mistSprite;
-        renderer.sortingOrder = Mathf.RoundToInt(mistSortingOrder);
-        renderer.color = new Color(1f, 1f, 1f, 0f);
-
-        float fadeDuration = lifetime * 0.3f;
-        float visibleDuration = lifetime - (fadeDuration * 2f);
-
-        DG.Tweening.Sequence sequence = DOTween.Sequence();
-        sequence.Append(renderer.DOFade(mistMaxAlpha, fadeDuration));
-        sequence.Join(mistObject.transform.DOLocalMoveY(localY + mistDriftDistance, lifetime).SetEase(Ease.Linear));
-        sequence.AppendInterval(Mathf.Max(0f, visibleDuration));
-        sequence.Append(renderer.DOFade(0f, fadeDuration));
-        sequence.OnComplete(() => Destroy(mistObject));
-    }
-
-    private Vector2 FindMistSpawnPosition(float camWidth, float camHeight)
-    {
-        const int maxAttempts = 10;
-
-        for (int attempt = 0; attempt < maxAttempts; attempt++)
+        float cursor = bottom + Random.Range(0f, mistVerticalGapRange.y);
+        while (cursor < top)
         {
-            Vector2 candidate = new Vector2(
-                Random.Range(-camWidth * 0.5f, camWidth * 0.5f),
-                Random.Range(-camHeight * 0.4f, camHeight * 0.25f)
-            );
+            MistCloud cloud = SpawnMistCloud(0f);
+            if (cloud == null)
+                return;
 
-            bool tooClose = false;
-            foreach (Vector2 recentPosition in recentMistPositions)
-            {
-                if (Vector2.Distance(candidate, recentPosition) < mistMinDistanceFromRecent)
-                {
-                    tooClose = true;
-                    break;
-                }
-            }
-
-            if (tooClose)
-                continue;
-
-            RememberMistPosition(candidate);
-            return candidate;
+            cloud.Transform.position = new Vector3(cloud.Transform.position.x, cursor + cloud.HalfHeight, 0f);
+            cursor += cloud.HalfHeight * 2f + RandomMistGap();
         }
 
-        Vector2 fallback = new Vector2(
-            Random.Range(-camWidth * 0.5f, camWidth * 0.5f),
-            Random.Range(-camHeight * 0.4f, camHeight * 0.25f)
-        );
-        RememberMistPosition(fallback);
-        return fallback;
+        nextMistGap = RandomMistGap();
     }
 
-    private void RememberMistPosition(Vector2 position)
+    private void HandleMistyAtmosphere()
     {
-        if (recentMistPositions.Count >= 2)
-            recentMistPositions.Dequeue();
+        if (!IsMistActive)
+            return;
 
-        recentMistPositions.Enqueue(position);
+        float camY = mainCamera.transform.position.y;
+        float halfView = mainCamera.orthographicSize;
+        float screenTop = camY + halfView;
+        float screenBottom = camY - halfView;
+
+        // Clouds stay put in the world (so they scroll with the sea) plus extra downward speed for parallax.
+        for (int i = activeMistClouds.Count - 1; i >= 0; i--)
+        {
+            MistCloud cloud = activeMistClouds[i];
+            if (cloud.Transform == null)
+            {
+                activeMistClouds.RemoveAt(i);
+                continue;
+            }
+
+            cloud.Transform.position += (Vector3)(cloud.Velocity * Time.deltaTime);
+
+            if (cloud.Transform.position.y + cloud.HalfHeight < screenBottom)
+            {
+                Destroy(cloud.Transform.gameObject);
+                activeMistClouds.RemoveAt(i);
+            }
+        }
+
+        // Spawn the next cloud just above the screen once the previous one has moved far enough down.
+        float lastCloudTop = lastMistCloud != null && lastMistCloud.Transform != null
+            ? lastMistCloud.Transform.position.y + lastMistCloud.HalfHeight
+            : float.MinValue;
+
+        if (screenTop - lastCloudTop >= nextMistGap)
+        {
+            MistCloud cloud = SpawnMistCloud(screenTop);
+            if (cloud != null)
+                nextMistGap = RandomMistGap();
+        }
+    }
+
+    /// <summary>Creates one cloud whose bottom edge sits at <paramref name="bottomY"/>.</summary>
+    private MistCloud SpawnMistCloud(float bottomY)
+    {
+        Sprite sprite = mistOverlaySprites[Random.Range(0, mistOverlaySprites.Count)];
+        if (sprite == null)
+            return null;
+
+        if (mistContainer == null)
+            mistContainer = new GameObject("MistClouds").transform;
+
+        float scale = Random.Range(mistScaleRange.x, mistScaleRange.y);
+        float halfHeight = sprite.bounds.extents.y * scale;
+
+        GameObject cloudObject = new GameObject("MistCloud");
+        cloudObject.transform.SetParent(mistContainer, false);
+        cloudObject.transform.position = new Vector3(PickMistX(), bottomY + halfHeight, 0f);
+        cloudObject.transform.localScale = new Vector3(scale, scale, 1f);
+
+        SpriteRenderer renderer = cloudObject.AddComponent<SpriteRenderer>();
+        renderer.sprite = sprite;
+        if (mistMaterial != null)
+            renderer.sharedMaterial = mistMaterial;
+        renderer.flipX = Random.value < 0.5f;
+        renderer.sortingLayerName = mistSortingLayer;
+        renderer.sortingOrder = Mathf.RoundToInt(mistSortingOrder);
+        renderer.color = new Color(1f, 1f, 1f, Random.Range(mistAlphaRange.x, mistAlphaRange.y));
+
+        // The camera climbs at moveSpeed, so a cloud standing still in the world already scrolls with the sea.
+        // Moving it down by (parallax - 1) * moveSpeed makes it pass by faster, i.e. nearer the camera.
+        float extraDownSpeed = Mathf.Max(0f, mistParallax - 1f) * moveSpeed;
+        float sideDrift = Random.Range(-mistMaxSideDrift, mistMaxSideDrift);
+
+        MistCloud cloud = new MistCloud
+        {
+            Transform = cloudObject.transform,
+            HalfHeight = halfHeight,
+            Velocity = new Vector2(sideDrift, -extraDownSpeed)
+        };
+
+        activeMistClouds.Add(cloud);
+        lastMistCloud = cloud;
+        return cloud;
+    }
+
+    private float PickMistX()
+    {
+        float halfWidth = AspectRatioController.DesignedHalfWidth > 0f
+            ? AspectRatioController.DesignedHalfWidth
+            : mainCamera.orthographicSize * mainCamera.aspect;
+        float range = halfWidth * mistHorizontalSpread;
+        float centerX = mainCamera.transform.position.x;
+        float previousX = lastMistCloud != null && lastMistCloud.Transform != null
+            ? lastMistCloud.Transform.position.x
+            : float.NaN;
+
+        float x = centerX;
+        for (int attempt = 0; attempt < 10; attempt++)
+        {
+            x = centerX + Random.Range(-range, range);
+            if (float.IsNaN(previousX) || Mathf.Abs(x - previousX) >= mistMinHorizontalShift)
+                break;
+        }
+
+        return x;
+    }
+
+    private float RandomMistGap()
+    {
+        return Random.Range(mistVerticalGapRange.x, mistVerticalGapRange.y);
     }
 
     private void BuildPrefabMap()

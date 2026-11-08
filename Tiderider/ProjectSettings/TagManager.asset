@@ -54,6 +54,9 @@ TagManager:
   - name: GameObjects
     uniqueID: 1512527175
     locked: 0
+  - name: Clouds
+    uniqueID: 585333016
+    locked: 0
   - name: PermaUI
     uniqueID: 805993197
     locked: 0

@@ -38,6 +38,7 @@ public class CentralUIController : MonoBehaviour
         navIcons = new RectTransform[3];
         navPanelImages = new Image[3];
         navGlyphImages = new Image[3];
+        // Initial tab colours are set in the scene (Main Menu selected); SwitchTab animates them afterwards.
         for (int i = 0; i < 3; i++)
         {
             navIcons[i] = IconPanel.transform.GetChild(i).GetComponent<RectTransform>();
@@ -45,11 +46,6 @@ public class CentralUIController : MonoBehaviour
             navGlyphImages[i] = navIcons[i].childCount > 0
                 ? navIcons[i].GetChild(0).GetComponent<Image>()
                 : null;
-
-            bool isSelected = i == 1;
-            navPanelImages[i].color = isSelected ? ScaleManager.SelectedColor : ScaleManager.SideColor;
-            if (navGlyphImages[i] != null)
-                navGlyphImages[i].color = isSelected ? ScaleManager.SelectedGlyphColor : ScaleManager.SideGlyphColor;
         }
 
         SoundLibrary.Instance.PlayBGM("main_music");

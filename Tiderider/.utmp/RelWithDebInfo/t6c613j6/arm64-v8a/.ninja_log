@@ -1,0 +1,23 @@
+# ninja log v5
+1	1595	8118721884635929	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	9e43e8ca872dc61d
+89	252	8118721871349233	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	3d5a98ab6ab8e0c1
+55	1164	8118721880392891	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	bea41e3353a5f2ec
+254	425	8118721872871557	D:/Projects/Personal/TideRider/Tiderider/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/t6c613j6/obj/arm64-v8a/libswappywrapper.so	8a107c1217ea79be
+34	1173	8118721880535873	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	47d3822e7bdc45f5
+65	1331	8118721882076964	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	6f1c2c64ddc32384
+22	1195	8118721880748043	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	c42c1180606f1a14
+11	1260	8118721881383148	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	5a0273bccdeab4cf
+77	1228	8118721881044564	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	1c2af2f3c0c1ebbd
+44	1480	8118721883585406	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	32571ceb5fce166c
+1595	1761	8118721886321669	D:/Projects/Personal/TideRider/Tiderider/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/t6c613j6/obj/arm64-v8a/libgame.so	b9a47dc09bbdbbca
+106	269	8118725388640939	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	3d5a98ab6ab8e0c1
+270	450	8118725390369524	D:/Projects/Personal/TideRider/Tiderider/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/t6c613j6/obj/arm64-v8a/libswappywrapper.so	8a107c1217ea79be
+69	1260	8118725398566789	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	bea41e3353a5f2ec
+23	1266	8118725398661784	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	47d3822e7bdc45f5
+45	1289	8118725398886046	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	c42c1180606f1a14
+58	1296	8118725398931602	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	1c2af2f3c0c1ebbd
+36	1375	8118725399699307	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	5a0273bccdeab4cf
+94	1475	8118725400712922	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	6f1c2c64ddc32384
+81	1670	8118725402634600	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	32571ceb5fce166c
+11	1868	8118725404516019	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	9e43e8ca872dc61d
+1868	2044	8118725406299652	D:/Projects/Personal/TideRider/Tiderider/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/t6c613j6/obj/arm64-v8a/libgame.so	b9a47dc09bbdbbca

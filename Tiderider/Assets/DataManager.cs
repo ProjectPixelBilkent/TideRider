@@ -90,6 +90,9 @@ public static class DataManager
             gameData.highestUnlockedLevelIndex++;
             SaveGameData(gameData);
         }
+
+        gameData.highestUnlockedLevelIndex++;
+        SaveGameData(gameData);
     }
 
     /// <summary>

@@ -33,6 +33,27 @@ public class ResourceManager : MonoBehaviour
         UpdateUI();
     }
 
+    void Update()
+    {
+        UpdateEnergyTimer();
+    }
+
+    /// <summary>
+    /// Shows the time left until the next energy point, or nothing when energy is full.
+    /// </summary>
+    private void UpdateEnergyTimer()
+    {
+        if (energyTimerText == null)
+            return;
+
+        string time = EnergyRecoveryManager.Instance != null
+            ? EnergyRecoveryManager.Instance.GetFormattedTime()
+            : string.Empty;
+
+        if (energyTimerText.text != time)
+            energyTimerText.text = time;
+    }
+
     public void UpdateUI()
     {
         if (energyAmount == null || coinAmount == null)
@@ -49,10 +70,7 @@ public class ResourceManager : MonoBehaviour
         energyAmount.text = DataManager.GetEnergyAmount() + "/5";
         coinAmount.text = DataManager.GetCoinAmount().ToString();
 
-        if (energyTimerText != null)
-        {
-            energyTimerText.text = string.Empty;
-        }
+        UpdateEnergyTimer();
     }
 
     public static bool isEnergyLeft()

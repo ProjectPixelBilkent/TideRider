@@ -7,10 +7,10 @@ public class AdManager : MonoBehaviour
     public static AdManager Instance { get; private set; }
 
     [Header("LevelPlay Settings")]
-    [SerializeField] private string androidAppKey = "261284bd5";
-    [SerializeField] private string androidAdUnitId = "pivv358jdy1664z4";
+    [SerializeField] private string androidAppKey = "26127d8c5";
+    [SerializeField] private string androidAdUnitId = "pb2f85umo62ggzzy";
 
-    [SerializeField] private string iosAppKey = "26127d8c5";
+    [SerializeField] private string iosAppKey = "261284bd5";
     [SerializeField] private string iosAdUnitId = "d1b1phyldw8ffqnl";
 
     private string currentAppKey;

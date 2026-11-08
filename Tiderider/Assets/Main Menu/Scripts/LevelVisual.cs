@@ -11,6 +11,7 @@ public class LevelVisual : MonoBehaviour
     private void Start()
     {
         image = GetComponent<Image>();
+        DataManager.CompleteLevel(9);
         UpdateVisuals();
     }
 
